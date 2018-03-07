@@ -68,6 +68,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
 
         if (v.getId() == R.id.dragTV) {
             Toast.makeText(this, "drag TV said Hello !!!!!", Toast.LENGTH_SHORT).show();
+            ((TestApplication) getApplication()).setActivity(this);
             startActivity(new Intent(this, TestActivity2BlurBg.class));
             return;
         }
@@ -75,7 +76,6 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
         if (v == blackBgIV) {
             isSee = !isSee;
             showShareLayout(isSee);
-//            Toast.makeText(this, "you click black?????????????????", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -120,8 +120,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
             shareLayout.setAnimation(translateInAnimation);
 
             shareLayout.setVisibility(View.VISIBLE);
-//            blackBgIV.setVisibility(View.VISIBLE);
-            bgIV.setImageBitmap(null);
+            blackBgIV.setVisibility(View.VISIBLE);
 
         } else {
             AlphaAnimation alphaOutAnimation = new AlphaAnimation(0.9f, 0.0f);
@@ -136,8 +135,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
             shareLayout.setAnimation(translateOutAnimation);
 
             shareLayout.setVisibility(View.GONE);
-//            blackBgIV.setVisibility(View.GONE);
-            bgIV.setImageResource(R.mipmap.img2);
+            blackBgIV.setVisibility(View.GONE);
 
         }
     }

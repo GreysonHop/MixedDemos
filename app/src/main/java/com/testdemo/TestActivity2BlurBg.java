@@ -2,12 +2,19 @@ package com.testdemo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.testdemo.blurbehind.Blur;
 import com.testdemo.blurbehind.BlurBehind;
+import com.testdemo.blurbehind.FileUtil;
 import com.testdemo.blurbehind.OnBlurCompleteListener;
 import com.wonderkiln.blurkit.BlurLayout;
 
@@ -25,25 +32,61 @@ public class TestActivity2BlurBg extends Activity {
         setContentView(R.layout.test_act2_blur_bg);
 
         container = (FrameLayout) findViewById(R.id.container);
-        blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
+//        blurLayout = (BlurLayout) findViewById(R.id.blurLayout);
 
         Log.i("greyson", "" + getCallingActivity() + "\n" + getParent());
 
+        final Activity activity = ((TestApplication) getApplication()).getActivity();
+        Log.i("greyson", "TestActivity2BlurBg last activity = " + activity);
 
-        blurLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        blurBackground(activity);
+    }
 
-                BlurBehind.getInstance().execute(TestActivity2BlurBg.this, new OnBlurCompleteListener() {
-                    @Override
-                    public void onBlurComplete() {
-                        BlurBehind.getInstance()
-//                .withAlpha(100)
-//                .withFilterColor(Color.parseColor("#FF171619"))
-                                .setBackground(TestActivity2BlurBg.this);
-                    }
-                });
-            }
-        });
+    private void blurBackground(final Activity activity) {
+        CacheBlurBehindAndExecuteTask cacheBlurBehindAndExecuteTask = new CacheBlurBehindAndExecuteTask(activity);
+        cacheBlurBehindAndExecuteTask.execute();
+    }
+
+    class CacheBlurBehindAndExecuteTask extends AsyncTask<Void, Void, Void> {
+        private Activity activity;
+
+        private View decorView;
+        private Bitmap image;
+        private BitmapDrawable result;
+
+        public CacheBlurBehindAndExecuteTask(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            decorView = activity.getWindow().getDecorView();
+            decorView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+            decorView.setDrawingCacheEnabled(true);
+            decorView.buildDrawingCache();
+
+            image = decorView.getDrawingCache();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            result = new BitmapDrawable(activity.getResources(), Blur.apply(activity, image));
+            result.setColorFilter(Color.parseColor("#77171619"), PorterDuff.Mode.DST_ATOP);
+            image.recycle();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            container.setBackground(result);
+
+            decorView.destroyDrawingCache();
+            decorView.setDrawingCacheEnabled(false);
+
+            activity = null;
+        }
     }
 }
