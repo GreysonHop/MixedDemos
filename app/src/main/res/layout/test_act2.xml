@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/bgIV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/galata"
+        android:scaleType="fitXY"/>
+
+    <Button
+        android:id="@+id/clickBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="click me!" />
+
+    <View
+        android:id="@+id/blackBgIV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.9"
+        android:background="#FF171619"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/shareLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/button"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello!!!" />
+    </LinearLayout>
+
+    <com.wonderkiln.blurkit.BlurLayout
+        xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/blurLayout"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+
+        android:layout_gravity="center_horizontal|bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hulalahulalahulalalala"
+            android:textColor="@android:color/holo_green_light"
+            android:layout_gravity="center"
+            android:textSize="20sp"/>
+
+    </com.wonderkiln.blurkit.BlurLayout>
+
+    <com.testdemo.testCanDragLayout.DraggableLayout
+        android:id="@+id/dragLayout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="touch me"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/dragTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="drag me!!!"
+            android:textColor="#fff"
+            android:textSize="28sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/contact_image" />
+    </com.testdemo.testCanDragLayout.DraggableLayout>
+
+</FrameLayout>

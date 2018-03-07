@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:three="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/containLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/userIconIV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/galata"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/shadow_top_bottom"/>
+
+    <View
+        android:id="@+id/blurBgIV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="#FF171619"/>
+
+    <com.testdemo.testVerticalScrollView.ThreeScrollView
+        android:id="@+id/threeScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="75dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
+        <com.testdemo.testVerticalScrollView.ThreePageLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            three:marginBottom="75dp">
+
+            <include layout="@layout/view_first"/>
+            <include layout="@layout/view_second"/>
+            <include layout="@layout/view_third"/>
+            <include layout="@layout/view_forth"/>
+        </com.testdemo.testVerticalScrollView.ThreePageLinearLayout>
+    </com.testdemo.testVerticalScrollView.ThreeScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/button"
+        android:layout_gravity="bottom"/>
+</FrameLayout>
