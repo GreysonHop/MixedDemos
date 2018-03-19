@@ -21,7 +21,7 @@ public class Blur {
 	@SuppressLint("NewApi")
 	public static Bitmap apply(Context context, Bitmap sentBitmap, int radius) {
 
-        Bitmap bitmap = Bitmap.createScaledBitmap(sentBitmap, sentBitmap.getWidth()/2, sentBitmap.getHeight()/2, false);
+        Bitmap bitmap = Bitmap.createScaledBitmap(sentBitmap, sentBitmap.getWidth()/3, sentBitmap.getHeight()/3, false);
 
 		if (VERSION.SDK_INT > 16) {
 			final RenderScript rs = RenderScript.create(context);

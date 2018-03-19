@@ -6,6 +6,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.ScrollView;
 
@@ -17,11 +18,10 @@ import java.util.ArrayList;
  */
 public class ThreeScrollView extends ScrollView {
     private final static String TAG = "ThreeScroll-greyson";
-    private final static int INDEX_FIRST_VIEW = 0;//显示第几屏的对应下标
-    private final static int INDEX_SECOND_VIEW = 1;
-    private final static int INDEX_THIRD_VIEW = 2;
 
     private ArrayList<View> childViewList = new ArrayList<>();
+    private VelocityTracker mVelocityTracker;
+    private int mPointId;
 
     private float firstTouchY;//第一次触摸屏幕的点
     private float lastY;//每次滑动的上一次触摸点
@@ -29,43 +29,66 @@ public class ThreeScrollView extends ScrollView {
      * 上一次滚动结束时scroll所在位置
      */
     private float lastScrolledY = 0;
-    private float canScrollGap = 120;//像素点，在构造方法中换算成dp
-    private int windowHeight;
 
-    private int displayIndex = INDEX_FIRST_VIEW;//表示显示第几屏
+    private int windowHeight;
+    private int displayIndex = 0;//表示显示第几屏
+    private boolean mIsDragging;
+    private float mCanScrollGap = 140;//超过此像素点长度自动滚动到下一个目标屏，在构造方法中换算成dp
+    private int mCanScrollVelocity = 880;//超过此速度自动滚动
 
     public ThreeScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         windowHeight = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
-        canScrollGap = dip2px(context, (int)canScrollGap);
-        Log.i(TAG, "windowHeight=" + windowHeight + " - canScrollGap=" + canScrollGap);
+        mCanScrollGap = dip2px(context, (int) mCanScrollGap);
+        Log.i(TAG, "windowHeight=" + windowHeight + " - mCanScrollGap=" + mCanScrollGap);
     }
 
     public void addChildView(View childView) {
         childViewList.add(childView);
     }
+
     public static int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
     }
 
+    /**
+     * 回收速度追踪器
+     */
+    private void recycleVelocityTracker() {
+        if (mVelocityTracker != null) {
+            mVelocityTracker.clear();
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-//        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-//            onTouchEvent(ev);
-//        }
         float y = ev.getY();
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.i(TAG, "event down y = " + getY());
                 lastY = y;
                 firstTouchY = y;
+                if (mVelocityTracker == null) {
+                    mVelocityTracker = VelocityTracker.obtain();
+                }
+                mVelocityTracker.addMovement(ev);
+                mPointId = ev.getPointerId(0);
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 if (Math.abs(lastY - y) > 3) {
+                    mIsDragging = true;
                     return true;
                 }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (!mIsDragging) {
+                    recycleVelocityTracker();
+                }
+
                 break;
         }
         return super.onInterceptTouchEvent(ev);
@@ -76,56 +99,61 @@ public class ThreeScrollView extends ScrollView {
         super.onScrollChanged(l, t, oldl, oldt);
         if (mOnScrollChangeListener != null) {
             mOnScrollChangeListener.onScrollChanged(l, t, oldl, oldt);
-            if (displayIndex == INDEX_FIRST_VIEW || displayIndex == INDEX_SECOND_VIEW) {
+            if (displayIndex == 0 || displayIndex == 1) {
                 mOnScrollChangeListener.onFirstScrollToSecondChange((float) t, 0.0f, childViewList.get(1).getY());
             }
         }
-        Log.i(TAG, "onScrollChanged || t=" +t+ " - oldt=" + oldt);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if (mVelocityTracker != null) {
+            mVelocityTracker.addMovement(event);
+        }
+
         float y = event.getY();
 
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                Log.i(TAG, "onTouchEvent Down");
-
-//                lastY = firstTouchY = y;
-                break;
-
             case MotionEvent.ACTION_UP:
-                Log.i(TAG, "onTouchEvent Up");
+                final VelocityTracker velocityTracker = mVelocityTracker;
+                velocityTracker.computeCurrentVelocity(1000);
+                int initialVelocity = (int) velocityTracker.getYVelocity(mPointId);
+                System.out.println("greyson initialVelocity = " + initialVelocity);
 
-                float offsetTotal = y - firstTouchY;//负数为向上划
+                float offsetTotal = y - firstTouchY;//滑动偏移量，负数为向上划
 
                 float scrollStart = 0;
                 float scrollEnd = 0;
-                if (offsetTotal < -canScrollGap) {
-                    if (displayIndex + 1 < childViewList.size()) {
+                if (offsetTotal < 0 && displayIndex + 1 < childViewList.size()) {
+                    if (offsetTotal < -mCanScrollGap || initialVelocity < -mCanScrollVelocity) {
                         displayIndex++;
                     }
-                } else if (offsetTotal > canScrollGap) {
-                    if (displayIndex - 1 >= 0) {
+                } else if (offsetTotal > 0 && displayIndex - 1 >= 0) {
+                    if (offsetTotal > mCanScrollGap || initialVelocity > mCanScrollVelocity) {
                         displayIndex--;
                     }
                 }
+
                 scrollStart = lastScrolledY;
                 scrollEnd = childViewList.get(displayIndex).getY();
                 scrollFromTo(scrollStart, scrollEnd);
                 lastScrolledY = scrollEnd;
 
+                recycleVelocityTracker();
+                mIsDragging = false;
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 float moveOffset = lastY - y;//滚动是将view往屏幕上面移动，所以坐标是递减
                 lastY = y;
-                lastScrolledY += moveOffset;
-                if (lastScrolledY > 0 ) {
+                lastScrolledY += moveOffset / 2;
+                if (lastScrolledY > 0) {
                     scrollTo(0, (int) lastScrolledY);
                 } else {
                     lastScrolledY = 0;
                 }
+
                 break;
         }
         return true;
@@ -154,6 +182,7 @@ public class ThreeScrollView extends ScrollView {
 
     public interface OnScrollChangeListener {
         void onScrollChanged(int l, int t, int oldl, int oldt);
+
         void onFirstScrollToSecondChange(float nowY, float startY, float endY);
     }
 }

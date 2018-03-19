@@ -27,7 +27,7 @@ public class MainActivity2 extends Activity {
 
         BlurBehind.getInstance()
 //                .withAlpha(100)
-//                .withFilterColor(Color.parseColor("#FF171619"))
+                .withFilterColor(Color.parseColor("#FF171619"))
                 .setBackground(this);
         background = (RelativeLayout) findViewById(R.id.background);
         initBroken();
