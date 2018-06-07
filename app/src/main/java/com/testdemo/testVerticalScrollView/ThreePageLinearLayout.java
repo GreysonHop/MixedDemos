@@ -19,16 +19,18 @@ public class ThreePageLinearLayout extends LinearLayout {
     private int mWindowHeight;
     private int mStatusBarHeight;
     private int mMarginBottom;//每个子View的marginBottom值
+    private int mMarginTop;//每个子View的marginTop值
 
     public ThreePageLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ThreePageLinearLayout);
         mMarginBottom = (int) array.getDimension(R.styleable.ThreePageLinearLayout_marginBottom, 0);
+        mMarginTop = (int) array.getDimension(R.styleable.ThreePageLinearLayout_marginTop, 0);
 
         mWindowHeight = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
         mStatusBarHeight = (int) getStatusBarHeight(getContext());
 
-        Log.i(TAG, "mWindowHeight="+mWindowHeight + " - " +mMarginBottom);
+        Log.i(TAG, "mWindowHeight="+mWindowHeight + " - " +mMarginBottom + mMarginTop);
         array.recycle();
     }
 
@@ -41,7 +43,7 @@ public class ThreePageLinearLayout extends LinearLayout {
         for (int i = 0; i < count; i++) {
             View childView = getChildAt(i);
             if (i == 0) {
-                int displayHeight = mWindowHeight - mMarginBottom - mStatusBarHeight;
+                int displayHeight = mWindowHeight - mMarginBottom - mStatusBarHeight - mMarginTop;
                 Log.i(TAG, "onMeasure's display = " + displayHeight);
                 currentHeight += displayHeight;
                 childView.measure(widthMeasureSpec, heightMeasureSpec);
@@ -64,7 +66,7 @@ public class ThreePageLinearLayout extends LinearLayout {
             if (i == 0) {
                 int viewHeight = childView.getMeasuredHeight();
 //                int viewTopY = mWindowHeight - mMarginBottom - viewHeight - mStatusBarHeight;
-                int viewBottomY = layoutY + mWindowHeight - mMarginBottom - mStatusBarHeight;
+                int viewBottomY = layoutY + mWindowHeight - mMarginBottom - mMarginTop - mStatusBarHeight;
 
                 childView.layout(l, layoutY, r, viewBottomY);
                 layoutY = viewBottomY;

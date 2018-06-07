@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/pictureIV"
+        android:layout_width="120dp"
+        android:layout_height="190dp"
+        android:scaleType="centerCrop"
+        android:src="@color/bar_grey_90" />
+
+    <LinearLayout
+        android:id="@+id/checkLL"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_gravity="right"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/checkTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/def_qq"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/buybuybuy" />
+
+    <ImageView
+        android:id="@+id/videoIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/video_icon"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/durationTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp"
+        android:text="00:00"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:visibility="invisible" />
+
+</FrameLayout>

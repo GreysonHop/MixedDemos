@@ -2,5 +2,8 @@
 <resources>
     <declare-styleable name="ThreePageLinearLayout">
         <attr name="marginBottom" format="dimension"/>
+        <attr name="marginTop" format="dimension"/>
     </declare-styleable>
+
+    <attr name="picture.preview.complete.textColor" format="reference|color" />
 </resources>

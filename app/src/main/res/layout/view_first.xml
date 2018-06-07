@@ -2,18 +2,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/firstView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/holdUpView"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="50dp"
         android:layout_gravity="bottom"
-        android:onClick="onClick">
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,13 +54,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@drawable/bg_content"
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="6"
             android:text="1963年进入东映动画公司，从事动画师工作。
             1971年加入手冢治虫成立的““虫Production动画部”。"
-            android:textSize="12sp"
-            android:background="@drawable/bg_content"/>
+            android:textSize="12sp" />
 
     </LinearLayout>
 </FrameLayout>

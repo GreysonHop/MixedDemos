@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.testdemo"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.testdemo">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".TestApplication"
         android:allowBackup="true"
@@ -14,40 +14,45 @@
         android:theme="@style/AppTheme">
         <activity android:name=".TestActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".TestActivity2BlurBg"/>
-        <activity android:name=".TestActivity2"/>
-        <activity android:name=".testCanDragLayout.TestDragViewActivity"/>
-        <activity android:name=".testVerticalScrollView.TestActivity3"/>
+        <activity android:name=".TestActivity2BlurBg" />
+        <activity android:name=".TestActivity2" />
+        <activity android:name=".testCanDragLayout.TestDragViewActivity" />
+        <activity android:name=".testVerticalScrollView.TestActivity3" />
 
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".MainActivity2">
             <!--模糊背景界面-->
         </activity>
-        <activity android:name=".MainActivity_Blur">
-        </activity>
-        <activity android:name=".MainActivity_Broken">
-        </activity>
+        <activity android:name=".MainActivity_Blur"></activity>
+        <activity android:name=".MainActivity_Broken"></activity>
 
         <!--textview中制定字段变红-->
-        <activity android:name=".MainActivityColor">
-        </activity>
+        <activity android:name=".MainActivityColor"></activity>
 
         <!--3d滚动的listview-->
-        <activity android:name=".MainActivity3DListview">
-        </activity>
+        <activity android:name=".MainActivity3DListview"></activity>
         <!--搜索结果中指定字段变色-->
-        <activity android:name=".MainActivitySearchTextColor"/>
+        <activity android:name=".MainActivitySearchTextColor" />
         <!--自定义图片滤镜效果-->
-        <activity android:name=".MainActivityImgFliter"/>
+        <activity android:name=".MainActivityImgFliter" />
         <!--自定义图片滤镜效果,通过颜色矩阵-->
-        <activity android:name=".MainActivityImgFliter_JuZhen"/>
+        <activity android:name=".MainActivityImgFliter_JuZhen" />
+
+        <activity android:name=".testCanDragScrollView.DraggableScrollViewAct" />
+
+        <activity android:name=".testCenterRefresh.CollapsingToolbarLayoutActivity" />
+        <activity android:name=".testCenterRefresh.CollapsingRecyclerActivity" />
+
+        <activity android:name=".testPictureSelect.TestPictureSelectAct" />
+        <activity android:name=".testPictureSelect.PicturePreviewActivity" />
+        <activity android:name=".testPictureSelect.PictureVideoPlayActivity" />
     </application>
 
 </manifest>
