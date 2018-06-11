@@ -28,8 +28,8 @@
         android:id="@+id/threeScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="44dp"
         android:layout_marginBottom="75dp"
+        android:layout_marginTop="44dp"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -50,6 +50,10 @@
         </com.testdemo.testVerticalScrollView.ThreePageLinearLayout>
     </com.testdemo.testVerticalScrollView.ThreeScrollView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#5fc3" />
 
     <LinearLayout
         android:layout_width="match_parent"

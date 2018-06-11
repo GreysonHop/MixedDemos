@@ -64,7 +64,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
                 managerServiceInfoLayout.setVisibility(View.GONE);
                 showCallerServiceInfo = true;
             }
-            handler.postDelayed(this, 1500);
+            handler.postDelayed(this, 2500);
         }
     };
 
@@ -99,7 +99,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
             }
         });
 
-        handler.postDelayed(myRunnable, 1500);
+        handler.postDelayed(myRunnable, 2500);
 
     }
 
