@@ -12,12 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.compress.CompressConfig;
+import com.luck.picture.lib.compress.CompressImageOptions;
+import com.luck.picture.lib.compress.CompressInterface;
+import com.luck.picture.lib.compress.LubanOptions;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
 import com.luck.picture.lib.model.LocalMediaLoader;
-import com.luck.picture.lib.observable.ImagesObservable;
 import com.luck.picture.lib.permissions.RxPermissions;
 import com.luck.picture.lib.tools.DoubleUtils;
 import com.testdemo.R;
@@ -43,13 +46,13 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
     private HorizontalPictureSelectAdapter adapter;
     private LocalMediaLoader mediaLoader;
     protected List<LocalMedia> selectionMedias = new ArrayList<>();
-        private List<LocalMedia> images = new ArrayList<>();
+    private List<LocalMedia> images = new ArrayList<>();
     private List<LocalMediaFolder> foldersList = new ArrayList<>();
 
     private RxPermissions rxPermissions;
 
     private TextView albumTV;
-    private TextView originPictureTV;
+    private TextView originPictureTV;//原图选择按钮
     private TextView sendPictureTV;
 
     public PictureSelectPanel(FragmentActivity activity, View rootView) {
@@ -77,7 +80,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
 
     private void initEvent() {
         rxPermissions = new RxPermissions(activity);
-        mediaLoader = new LocalMediaLoader(activity, PictureMimeType.ofAll(), false, 20);
+        mediaLoader = new LocalMediaLoader(activity, PictureMimeType.ofAll(), false, 1);
 
         rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .subscribe(new Observer<Boolean>() {
@@ -105,6 +108,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
 
         albumTV.setOnClickListener(this);
         originPictureTV.setOnClickListener(this);
+        sendPictureTV.setOnClickListener(this);
     }
 
     /**
@@ -172,6 +176,12 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
                     // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
                     for (LocalMedia media : selectList) {
                         Log.i("从相册回来，直接发送：", media.getPath() + " - " + media.getCompressPath());
+                    }
+                    String pictureType = selectList.get(0).getPictureType();
+                    if (PictureMimeType.isPictureType(pictureType) == PictureConfig.TYPE_IMAGE) {
+                        onSendClickListener.onSendImage(selectList);
+                    } else {
+                        onSendClickListener.onSendVideo(selectList);
                     }
                     /*adapter.setList(selectList);
                     adapter.notifyDataSetChanged();*/
@@ -268,6 +278,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
         if (v == albumTV) {
             PictureSelector.create(activity)
                     .openGallery(PictureMimeType.ofAll())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                    .theme(R.style.picture_my_style)
                     .maxSelectNum(maxSelectNum)// 最大图片选择数量
                     .minSelectNum(1)// 最小选择数量
                     .imageSpanCount(4)// 每行显示个数
@@ -278,13 +289,13 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
                     //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                     //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径
                     .enableCrop(false)// 是否裁剪
-                    .compress(false)// 是否压缩
-                    //.compressSavePath(getPath())//压缩图片保存地址
+                    .compress(!originPictureTV.isSelected())// 是否压缩
                     //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
-//                    .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
-//                    .selectionMedia(adapter == null ? selectionMedias : adapter.getSelectedImages())// 是否传入已选图片
+                    .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
+                    .selectionMedia(adapter == null ? selectionMedias : adapter.getSelectedImages())// 是否传入已选图片
+//                        .videoMaxSecond(15)
+//                        .videoMinSecond(10)
                     //.previewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
-//                    .minimumCompressSize(100)// 小于100kb的图片不压缩
                     .videoSecond(20)//显示多少秒以内的视频or音频也可适用
                     .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
             return;
@@ -296,7 +307,62 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
                 LocalMedia localMedia = list.get(0);//如何获取图片的大小？
                 originPictureTV.setSelected(!originPictureTV.isSelected());
             }
+            return;
         }
+
+        if (v == sendPictureTV) {
+            if (onSendClickListener == null) {
+                return;
+            }
+
+            List<LocalMedia> selectedList = adapter.getSelectedImages();
+            if (selectedList != null && selectedList.size() > 0) {
+                String pictureType = selectedList.get(0).getPictureType();
+                if (PictureMimeType.isPictureType(pictureType) == PictureConfig.TYPE_IMAGE) {
+                    if (originPictureTV.isSelected()) {
+                        onSendClickListener.onSendImage(selectedList);
+                    } else {
+                        compressImage(selectedList);
+                    }
+                } else {
+                    onSendClickListener.onSendVideo(selectedList);
+                }
+            }
+
+        }
+    }
+
+    private void compressImage(final List<LocalMedia> result) {
+        CompressConfig compress_config = CompressConfig.ofDefaultConfig();
+        LubanOptions option = (new LubanOptions.Builder())/*.setMaxHeight(this.compressHeight)
+                .setMaxWidth(this.compressWidth).setMaxSize(this.compressMaxKB)
+                .setGrade(this.compressGrade)*/.create();
+        compress_config = CompressConfig.ofLuban(option);
+
+        CompressImageOptions.compress(activity, compress_config, result, new CompressInterface.CompressListener() {
+            public void onCompressSuccess(List<LocalMedia> images) {
+                onSendClickListener.onSendImage(images);
+            }
+
+            public void onCompressError(List<LocalMedia> images, String msg) {
+                onSendClickListener.onSendImage(result);
+            }
+        }).compress();
+    }
+
+    public boolean isCompressMode() {
+        return !originPictureTV.isSelected();
+    }
+
+    private OnSendClickListener onSendClickListener;
+
+    public void setOnSendClickListener(OnSendClickListener onSendClickListener) {
+        this.onSendClickListener = onSendClickListener;
+    }
+
+    public interface OnSendClickListener {
+        void onSendImage(List<LocalMedia> list);
+        void onSendVideo(List<LocalMedia> list);
     }
 
     public void show() {
