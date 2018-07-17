@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ import com.testdemo.testVerticalScrollView.ThreeScrollView;
  */
 public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollChangeListener, DialogViewPresenter.OnViewClickListener {
     private final static String TAG = "Test3-greyson";
+
+    IndexPointLayout indexPointLayout;
 
     private View blurBgIV;
     private FrameLayout containLayout;
@@ -101,6 +104,30 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
 
         handler.postDelayed(myRunnable, 2500);
 
+
+        //
+        indexPointLayout = (IndexPointLayout) findViewById(R.id.indexPointLayout);
+        indexPointLayout.setPointCount(4, 1);
+
+        ProgressBar ratingPB = (ProgressBar) findViewById(R.id.ratingPB);
+        ratingPB.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB.setMax(10);
+        ratingPB.setProgress(7);
+
+        ProgressBar ratingPB2 = (ProgressBar) findViewById(R.id.ratingPB2);
+        ratingPB2.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB2.setMax(10);
+        ratingPB2.setProgress(5);
+
+        ProgressBar ratingPB3 = (ProgressBar) findViewById(R.id.ratingPB3);
+        ratingPB3.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB3.setMax(10);
+        ratingPB3.setProgress(3);
+
+        ProgressBar ratingPB4 = (ProgressBar) findViewById(R.id.ratingPB4);
+        ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB4.setMax(10);
+        ratingPB4.setProgress(1);
     }
 
     @Override
@@ -156,6 +183,12 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
     public void onFirstScrollToSecondChange(float nowY, float startY, float endY) {
         float value = (nowY - startY) / (endY - startY);
         blurBgIV.setAlpha(value);
+
+        if (nowY < endY) {
+            indexPointLayout.setSelection(1);
+        } else {
+            indexPointLayout.setSelection(3);
+        }
     }
 
     public void onClick(View view) {

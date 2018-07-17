@@ -55,6 +55,13 @@
         android:layout_height="44dp"
         android:background="#5fc3" />
 
+    <com.testdemo.testVerticalScrollView.IndexPointLayout
+        android:id="@+id/indexPointLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="75dp"
@@ -207,7 +214,7 @@
                 android:layout_width="90dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:background="@drawable/shape_ova_orange_grad"
+                android:background="@drawable/bg_corner18_grad_fe820f"
                 android:gravity="center"
                 android:text="我要服务"
                 android:textColor="@color/white"

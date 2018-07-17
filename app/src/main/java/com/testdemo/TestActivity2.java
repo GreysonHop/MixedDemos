@@ -6,21 +6,31 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.drawable.DrawableResource;
+import com.testdemo.broken_lib.Utils;
+
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,10 +44,14 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
     LinearLayout shareLayout;
     ImageView bgIV;
     View blackBgIV;
-    Button clickBtn;
+    TextView clickBtn;
+    TextView popupTV;
     boolean isSee = false;
 
     private View dragLayout;
+
+    private PopupWindow popupWindow;
+    private ListView popupMenuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +61,8 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
         bgIV = (ImageView) findViewById(R.id.bgIV);
         blackBgIV = findViewById(R.id.blackBgIV);
         shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
-        clickBtn = (Button) findViewById(R.id.clickBtn);
+        clickBtn = (TextView) findViewById(R.id.clickBtn);
+        popupTV = (TextView) findViewById(R.id.popupTV);
 
         dragLayout = findViewById(R.id.dragLayout);
         findViewById(R.id.dragTV).setOnClickListener(this);
@@ -55,6 +70,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
 //        bgIV.setOnClickListener(this);
         blackBgIV.setOnClickListener(this);
         clickBtn.setOnClickListener(this);
+        popupTV.setOnClickListener(this);
         shareLayout.setOnClickListener(this);
 
         ObjectAnimator scaleAnim = ObjectAnimator.ofFloat(dragLayout, "center", 0f, 1f);
@@ -100,10 +116,39 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
             translateAnimation.setFillAfter(true);
             dragLayout.startAnimation(translateAnimation);*/
 
+            clickBtn.setSelected(!clickBtn.isSelected());
 
             isSee = !isSee;
             showShareLayout(isSee);
             return;
+        }
+
+        if (v == popupTV) {
+            if (popupMenuView == null) {
+                popupMenuView = new ListView(this);
+//                popupMenuView.setBackgroundResource(R.drawable.menu);
+                ArrayList<String> menuList = new ArrayList<>();
+                menuList.add("日榜单");
+                menuList.add("周榜单");
+                menuList.add("月榜单");
+                popupMenuView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, menuList));
+                popupMenuView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Toast.makeText(TestActivity2.this, "you click " + position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                popupWindow = new PopupWindow(this);
+                popupWindow.setContentView(popupMenuView);
+                popupWindow.setWidth(Utils.dp2px(86));
+                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_popup));
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setFocusable(true);
+//                popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+            }
+            popupWindow.showAsDropDown(popupTV);
         }
     }
 

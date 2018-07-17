@@ -8,14 +8,33 @@
         android:id="@+id/bgIV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/galata"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/galata" />
 
-    <Button
+    <TextView
         android:id="@+id/clickBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="click me!" />
+        android:background="@drawable/bg_layer_list_selector"
+        android:paddingBottom="9dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="13dp"
+        android:paddingTop="9dp"
+        android:text="anim btn" />
+
+    <TextView
+        android:id="@+id/popupTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@drawable/orange_oval"
+        android:layout_marginRight="30dp"
+        android:paddingBottom="9dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="13dp"
+        android:paddingTop="9dp"
+        android:text="anim btn"
+        android:textColor="#fff"/>
 
     <View
         android:id="@+id/blackBgIV"
@@ -49,10 +68,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="hulalahulalahulalalala"
             android:textColor="@android:color/holo_green_light"
-            android:layout_gravity="center"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
     </com.wonderkiln.blurkit.BlurLayout>
 
