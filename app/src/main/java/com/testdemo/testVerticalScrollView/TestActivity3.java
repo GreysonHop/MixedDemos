@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 
 import com.testdemo.R;
 import com.testdemo.testVerticalScrollView.ThreeScrollView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2018/1/25.
@@ -105,7 +108,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         handler.postDelayed(myRunnable, 2500);
 
 
-        //
+        //多页面切换时的小点点
         indexPointLayout = (IndexPointLayout) findViewById(R.id.indexPointLayout);
         indexPointLayout.setPointCount(4, 1);
 
@@ -128,6 +131,26 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
         ratingPB4.setMax(10);
         ratingPB4.setProgress(1);
+
+
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(R.drawable.ic_launcher);
+        list.add(R.mipmap.ic_launcher);
+        list.add(R.drawable.ic_camera);
+        OverlayListLayout overlayListLayout = (OverlayListLayout) findViewById(R.id.overlayListLayout);
+        overlayListLayout.setAdapter(new AvatarListAdapter(this, list));
+        /*ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.drawable.ic_launcher);
+        overlayListLayout.addView(imageView);
+        ImageView imageView2 = new ImageView(this);
+        imageView2.setImageResource(R.mipmap.ic_launcher);
+        imageView2.setBackgroundResource(R.drawable.bg_corner18_grad_fe820f);
+        overlayListLayout.addView(imageView2);
+
+        ImageView imageView3 = new ImageView(this);
+        imageView3.setImageResource(R.drawable.ic_camera);
+        imageView3.setBackgroundResource(R.drawable.bg_popup);
+        overlayListLayout.addView(imageView3);*/
     }
 
     @Override
