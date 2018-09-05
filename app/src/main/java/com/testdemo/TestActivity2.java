@@ -1,6 +1,7 @@
 package com.testdemo;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ClipboardManager;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
@@ -19,6 +21,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,6 +56,8 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
     private PopupWindow popupWindow;
     private ListView popupMenuView;
 
+    private Chronometer chronometer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +69,24 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
         clickBtn = (TextView) findViewById(R.id.clickBtn);
         popupTV = (TextView) findViewById(R.id.popupTV);
 
+        chronometer = (Chronometer) findViewById(R.id.chronometer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                Log.i("greyson", "base = " + chronometer.getBase() + " - "
+                        + chronometer.getText().toString() + " - " + timeTick2Second(chronometer.getText().toString()));
+                popupTV.setText(second2Minute(timeTick2Second(chronometer.getText().toString())));
+            }
+        });
+        chronometer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chronometer.setBase(SystemClock.elapsedRealtime() - (9 * 3600 + 59 * 60 + 55) * 1000);
+                chronometer.start();
+            }
+        });
+
         dragLayout = findViewById(R.id.dragLayout);
         findViewById(R.id.dragTV).setOnClickListener(this);
 
@@ -73,11 +96,50 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
         popupTV.setOnClickListener(this);
         shareLayout.setOnClickListener(this);
 
-        ObjectAnimator scaleAnim = ObjectAnimator.ofFloat(dragLayout, "center", 0f, 1f);
-        scaleAnim.setDuration(1000);
-        scaleAnim.start();
+        ObjectAnimator scaleAnim = ObjectAnimator.ofFloat(dragLayout, "scaleX", 0f, 1f);
+        ObjectAnimator scaleAnim2 = ObjectAnimator.ofFloat(dragLayout, "scaleY", 0f, 1f);
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(800);
+        set.setTarget(dragLayout);
+        set.playTogether(scaleAnim, scaleAnim2);
+        set.start();
+    }
+    public static int timeTick2Second(String time) {
+        String h, m, s;
+        int index1 = time.indexOf(":");
+        int index2 = time.lastIndexOf(":");
+
+        if (index2 == -1) {
+            return 0;
+        }
+        if (index1 == index2) {//时间不到1小时,00:00
+            h = "0";
+            m = time.substring(0, index2);
+        } else {//格式 1:00:00 或 111:00:00
+            h = time.substring(0, index1);
+            m = time.substring(index1 + 1, index2);
+        }
+        s = time.substring(index2 + 1);
+
+        return Integer.valueOf(h) * 3600 + Integer.valueOf(m) * 60 + Integer.valueOf(s);
     }
 
+    public static String second2Minute(long second) {
+        int hour = (int) (second / 3600);
+        second -= hour * 3600;
+
+        int minute = (int) (second / 60);
+        second -= minute * 60;
+
+        String minuteStr = minute < 10 ? "0" + minute : String.valueOf(minute);
+        String secondStr = second < 10 ? "0" + second : String.valueOf(second);
+
+        if (hour == 0) {
+            return minuteStr + ":" + secondStr;
+        } else {
+            return hour + ":" + minuteStr + ":" + secondStr;
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -107,15 +169,6 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
 
         if (v == clickBtn) {
             Log.i(TAG, "click button dragLayout's y=" + dragLayout.getY() + " - top=" + dragLayout.getTop());
-//            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(dragLayout, "translationY", 110f);
-//            objectAnimator.setDuration(500);
-//            objectAnimator.start();
-            /*TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0
-                    , Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1);
-            translateAnimation.setDuration(500);
-            translateAnimation.setFillAfter(true);
-            dragLayout.startAnimation(translateAnimation);*/
-
             clickBtn.setSelected(!clickBtn.isSelected());
 
             isSee = !isSee;

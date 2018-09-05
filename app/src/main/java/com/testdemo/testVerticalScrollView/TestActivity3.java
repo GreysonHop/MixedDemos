@@ -13,14 +13,17 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.testdemo.R;
+import com.testdemo.TestActivity;
 import com.testdemo.testVerticalScrollView.ThreeScrollView;
 
 import java.util.ArrayList;
@@ -35,7 +38,6 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
 
     private View blurBgIV;
     private FrameLayout containLayout;
-    //    private boolean isAdd;
     private DialogViewPresenter dialogViewPresenter;
 
     private boolean showCallerServiceInfo;
@@ -151,6 +153,14 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         imageView3.setImageResource(R.drawable.ic_camera);
         imageView3.setBackgroundResource(R.drawable.bg_popup);
         overlayListLayout.addView(imageView3);*/
+
+        final PhoneEditText etPhone = (PhoneEditText) findViewById(R.id.et_phone);
+        findViewById(R.id.btn_print_phone).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(TestActivity3.this, etPhone.getPhone(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
