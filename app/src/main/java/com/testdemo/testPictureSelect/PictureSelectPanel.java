@@ -80,7 +80,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
 
     private void initEvent() {
         rxPermissions = new RxPermissions(activity);
-        mediaLoader = new LocalMediaLoader(activity, PictureMimeType.ofAll(), false, 1);
+        mediaLoader = new LocalMediaLoader(activity, PictureMimeType.ofAll(), false, 20000);//20秒以内的短视频
 
         rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .subscribe(new Observer<Boolean>() {

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.DragEvent;
@@ -33,7 +34,11 @@ import android.widget.Toast;
 import com.bumptech.glide.load.resource.drawable.DrawableResource;
 import com.testdemo.broken_lib.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,7 +81,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
             public void onChronometerTick(Chronometer chronometer) {
                 Log.i("greyson", "base = " + chronometer.getBase() + " - "
                         + chronometer.getText().toString() + " - " + timeTick2Second(chronometer.getText().toString()));
-                popupTV.setText(second2Minute(timeTick2Second(chronometer.getText().toString())));
+//                popupTV.setText(second2Minute(timeTick2Second(chronometer.getText().toString())));
             }
         });
         chronometer.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +91,32 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
                 chronometer.start();
             }
         });
+
+        //倒计时
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
+        try {
+            Date date = sdf.parse("2018-10-09 08:29:00");
+            long expireMilliseconds = date.getTime();
+            long currentMilliseconds = System.currentTimeMillis();
+            if (expireMilliseconds <= currentMilliseconds) {
+                return;
+            }
+            CountDownTimer countDownTimer = new CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    popupTV.setText(second2Minute(millisUntilFinished / 1000));
+                }
+
+                @Override
+                public void onFinish() {
+                    Toast.makeText(TestActivity2.this, "倒计时完成！！！", Toast.LENGTH_SHORT).show();
+                    popupTV.setText("已过期");
+                }
+            };
+            countDownTimer.start();
+        } catch (Exception e) {
+        }
+
 
         dragLayout = findViewById(R.id.dragLayout);
         findViewById(R.id.dragTV).setOnClickListener(this);
@@ -104,6 +135,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
         set.playTogether(scaleAnim, scaleAnim2);
         set.start();
     }
+
     public static int timeTick2Second(String time) {
         String h, m, s;
         int index1 = time.indexOf(":");
