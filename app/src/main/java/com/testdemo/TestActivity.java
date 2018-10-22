@@ -12,6 +12,7 @@ import com.testdemo.testCanDragScrollView.DraggableScrollViewAct;
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity;
 import com.testdemo.testCenterRefresh.CollapsingToolbarLayoutActivity;
 import com.testdemo.testPictureSelect.TestPictureSelectAct;
+import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct;
 import com.testdemo.testVerticalScrollView.TestActivity3;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class TestActivity extends ListActivity {
         classList.add(DraggableScrollViewAct.class);
         classList.add(CollapsingRecyclerActivity.class);
         classList.add(TestPictureSelectAct.class);
+        classList.add(SpecialEditLayoutAct.class);
 
         classNameList.add("高斯模糊和玻璃破碎效果");
         classNameList.add("动画实现弹窗");
@@ -43,6 +45,7 @@ public class TestActivity extends ListActivity {
         classNameList.add("子View可被拉伸回弹的ScrollView");
         classNameList.add("中间刷新的List");
         classNameList.add("仿QQ横向图片选择器");
+        classNameList.add("可滚动缩放的编辑器");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, classNameList);
         setListAdapter(adapter);

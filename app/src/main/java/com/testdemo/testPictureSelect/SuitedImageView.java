@@ -1,6 +1,7 @@
 package com.testdemo.testPictureSelect;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
@@ -8,37 +9,64 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.testdemo.R;
+
 /**
  * Created by Greyson on 2018/9/24.
  */
 public class SuitedImageView extends AppCompatImageView {
 
+    private int resize_base_on = -1;
+    private final int RESIZE_BASE_ON_WIDTH = 0;
+    private final int RESIZE_BASE_ON_HEIGHT = 1;
+
     public SuitedImageView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public SuitedImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public SuitedImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SuitedImageView);
+        resize_base_on = ta.getInt(R.styleable.SuitedImageView_resize_base_on, -1);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (getDrawable() == null) {
+        if (resize_base_on == -1 || getDrawable() == null) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
         }
+
         Drawable drawable = getDrawable();
         int dWidth = drawable.getIntrinsicWidth();
         int dHeight = drawable.getIntrinsicHeight();
         //图片宽高比
-        float dScale = (float) dWidth / dHeight;
+        float dScale = (float) dWidth / (float) dHeight;
+//        float finalScale = dScale /*> 1.5 ? 1.5f : dScale*/;
 
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        setMeasuredDimension((int) (height * dScale), height);
+        int widthSize;
+        int heightSize;
+        widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        System.out.println("greyson's maxHeight = " + getMaxHeight() + " - " + getMaxWidth());
+        switch (resize_base_on) {
+            case RESIZE_BASE_ON_WIDTH:
+                heightSize = (int) (widthSize / dScale);
+                heightSize = getMaxHeight() > heightSize ? heightSize : getMaxHeight();
+                break;
+
+            case RESIZE_BASE_ON_HEIGHT:
+                widthSize = (int) (heightSize * dScale);
+                widthSize = getMaxWidth() > widthSize ? widthSize : getMaxWidth();
+                break;
+        }
+
+//        int height = MeasureSpec.getSize(heightMeasureSpec);
+        setMeasuredDimension(widthSize, heightSize);
     }
 
     public class ImageViewUtil {

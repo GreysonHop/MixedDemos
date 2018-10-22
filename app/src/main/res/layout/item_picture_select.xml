@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -12,7 +13,10 @@
         android:id="@+id/pictureIV"
         android:layout_width="wrap_content"
         android:layout_height="190dp"
-        android:background="@color/grey" />
+        android:background="@color/grey"
+        android:maxWidth="290dp"
+        android:scaleType="fitStart"
+        app:resize_base_on="height" />
 
     <LinearLayout
         android:id="@+id/checkLL"
