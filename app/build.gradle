@@ -38,4 +38,5 @@ dependencies {
 
     compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
     compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.0.0'
+    compile 'com.github.yyued:SVGAPlayer-Android:2.1.8'
 }

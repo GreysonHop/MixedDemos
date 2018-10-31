@@ -55,6 +55,8 @@
         <activity android:name=".testPictureSelect.PictureVideoPlayActivity" />
 
         <activity android:name=".testSpecialEditLayout.SpecialEditLayoutAct" />
+
+        <activity android:name=".testGiftAnim.TestGiftAnimAct" />
     </application>
 
 </manifest>
