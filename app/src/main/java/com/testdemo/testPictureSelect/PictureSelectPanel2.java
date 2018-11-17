@@ -35,15 +35,16 @@ import io.reactivex.disposables.Disposable;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by Greyson on 2018/6/6.
+ * Created by Greyson on 2018/11/15.
+ * 把外部RecyclerView对Adapter的操作，即选中与未选中的UI变化的逻辑放到Adapter里面
  */
-public class PictureSelectPanel implements View.OnClickListener, HorizontalPictureSelectAdapter.OnImageSelectChangeListener {
+public class PictureSelectPanel2 implements View.OnClickListener, HorizontalPictureSelectAdapter2.OnImageSelectChangeListener {
 
     private FragmentActivity activity;
     private View pictureLayout;
 
     private int maxSelectNum = 9;
-    private HorizontalPictureSelectAdapter adapter;
+    private HorizontalPictureSelectAdapter2 adapter;
     private LocalMediaLoader mediaLoader;
     protected List<LocalMedia> selectionMedias = new ArrayList<>();
     private List<LocalMedia> images = new ArrayList<>();
@@ -55,7 +56,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
     private TextView originPictureTV;//原图选择按钮
     private TextView sendPictureTV;
 
-    public PictureSelectPanel(FragmentActivity activity, View rootView) {
+    public PictureSelectPanel2(FragmentActivity activity, View rootView) {
         if (rootView != null) {
             this.activity = activity;
             pictureLayout = rootView.findViewById(R.id.pictureLayout);
@@ -71,7 +72,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.pictureRV);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
 
-        adapter = new HorizontalPictureSelectAdapter(activity);
+        adapter = new HorizontalPictureSelectAdapter2(activity);
         adapter.updateImagesData(new ArrayList<LocalMedia>());
         adapter.setImageSelectChangeListener(this);
         recyclerView.setAdapter(adapter);
