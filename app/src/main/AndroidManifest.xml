@@ -57,6 +57,7 @@
         <activity android:name=".testSpecialEditLayout.SpecialEditLayoutAct" />
 
         <activity android:name=".testGiftAnim.TestGiftAnimAct" />
+        <activity android:name=".testGiftAnim.GiftAnimActivity" />
     </application>
 
 </manifest>

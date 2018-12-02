@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -119,8 +120,29 @@ public class TestGiftAnimAct extends Activity implements View.OnClickListener {
     }
 
     public void onClick(View v) {
-        if (imageView != null) {
-            imageView.startAnimation();
+        switch (v.getId()) {
+            case R.id.btn_serial:
+                final String[] strings = new String[]{"http://public-file.nos-eastchina1.126.net/1541664355000.0068.svga"
+                        , "http://public-file.nos-eastchina1.126.net/1541665358000.4536.svga"
+                        , "http://public-file.nos-eastchina1.126.net/1541729977000.0105.svga"};
+                new CountDownTimer(60000, 6000) {
+                    public void onTick(long millisUntilFinished) {
+                        int index = (int) (millisUntilFinished / 6000) % 3;
+                        Log.i("greyson", "millis = " + millisUntilFinished + " -- index = " + index);
+                        GiftAnimDialogManager.getInstance().addGiftAnim(TestGiftAnimAct.this, strings[index], "");
+                    }
+
+                    public void onFinish() {
+//                        button.setEnabled(true);
+                    }
+                }.start();
+                break;
+
+            case R.id.btn_show:
+                if (imageView != null) {
+                    imageView.startAnimation();
+                }
+                break;
         }
     }
 

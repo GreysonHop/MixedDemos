@@ -28,7 +28,8 @@ import java.util.List;
 
 /**
  * Created by Greyson on 2018/11/15.
- * 把外部RecyclerView对Adapter的操作，即选中与未选中的UI变化的逻辑放到Adapter里面
+ * 把外部RecyclerView对Adapter的操作，即选中与未选中的UI变化的逻辑放到Adapter里面<br>
+ * 并且图片选中状态的变化是通过改变item的CheckBox（部分组件）来进行的
  */
 public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<HorizontalPictureSelectAdapter2.ViewHolder> {
 
@@ -58,28 +59,15 @@ public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<Horizo
         final String path = localMedia.getPath();
         String pictureType = localMedia.getPictureType();
 
-
         contentHolder.checkTV.setText("");
-        LocalMedia selectedMedia = isSelected(localMedia);
+        LocalMedia selectedMedia = findOneInSelectList(localMedia);
         if (selectedMedia != null) {
             localMedia.setNum(selectedMedia.getNum());
             selectedMedia.setPosition(localMedia.getPosition());
-//                contentHolder.checkTV.setText(String.valueOf(localMedia.getNum()));
             selectImage(contentHolder, localMedia.getNum(), false);
         } else {
             selectImage(contentHolder, 0, false);
         }
-
-        for (LocalMedia media : selectImages) {
-            if (media.getPath().equals(localMedia.getPath())) {
-
-                break;
-            } else {
-
-            }
-        }
-//        selectImage(contentHolder, isSelected(localMedia), false);
-
 
         final int mediaMimeType = PictureMimeType.isPictureType(pictureType);
         if (mediaMimeType == PictureConfig.TYPE_VIDEO) {
@@ -178,8 +166,6 @@ public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<Horizo
             VoiceUtils.playVoice(context, false);
 //            zoom(contentHolder.pictureIV);
         }
-        //通知点击项发生了改变
-//        notifyItemChanged(contentHolder.getAdapterPosition());
 
         selectImage(contentHolder, isChecked ? 0 : selectImages.size(), true);
 
@@ -217,7 +203,11 @@ public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<Horizo
         }
     }
 
-    public LocalMedia isSelected(LocalMedia image) {
+    public boolean isSelected(LocalMedia image) {
+        return findOneInSelectList(image) != null;
+    }
+
+    public LocalMedia findOneInSelectList(LocalMedia image) {
         for (LocalMedia media : selectImages) {
             if (media.getPath().equals(image.getPath())) {
                 return media;
@@ -234,7 +224,6 @@ public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<Horizo
         for (int index = 0; index < size; index++) {
             LocalMedia media = selectImages.get(index);
             media.setNum(index + 1);
-//            notifyItemChanged(media.position);
 
             if (recyclerView != null) {
                 ViewHolder viewHolder = (ViewHolder) recyclerView.findViewHolderForLayoutPosition(media.position);
@@ -280,7 +269,7 @@ public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<Horizo
         super.onViewAttachedToWindow(holder);
         if (images != null && images.size() > holder.getAdapterPosition()) {
             LocalMedia localMedia = images.get(holder.getAdapterPosition());
-            selectImage(holder, isSelected(localMedia) == null ? 0 : localMedia.getNum(), false);
+            selectImage(holder, isSelected(localMedia) ? localMedia.getNum() : 0, false);
         }
     }
 

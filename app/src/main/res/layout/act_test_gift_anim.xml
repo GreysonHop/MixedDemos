@@ -14,12 +14,24 @@
         android:singleLine="true" />
 
     <Button
+        android:id="@+id/btn_show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="onClick"
-        android:text="showGiftAnim" />
+        android:text="showGiftAnim"
+        android:layout_alignParentLeft="true"/>
+
+    <Button
+        android:id="@+id/btn_serial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClick"
+        android:text="play_serial_anim"
+        android:layout_alignParentRight="true"/>
 
     <com.opensource.svgaplayer.SVGAImageView
         android:id="@+id/iv_svga"

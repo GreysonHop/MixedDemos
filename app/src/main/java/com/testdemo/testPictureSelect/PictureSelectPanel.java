@@ -37,13 +37,13 @@ import static android.app.Activity.RESULT_OK;
 /**
  * Created by Greyson on 2018/6/6.
  */
-public class PictureSelectPanel implements View.OnClickListener, HorizontalPictureSelectAdapter.OnImageSelectChangeListener {
+public class PictureSelectPanel implements View.OnClickListener, HorizontalPictureSelectAdapter2.OnImageSelectChangeListener {
 
     private FragmentActivity activity;
     private View pictureLayout;
 
     private int maxSelectNum = 9;
-    private HorizontalPictureSelectAdapter adapter;
+    private HorizontalPictureSelectAdapter2 adapter;
     private LocalMediaLoader mediaLoader;
     protected List<LocalMedia> selectionMedias = new ArrayList<>();
     private List<LocalMedia> images = new ArrayList<>();
@@ -71,7 +71,7 @@ public class PictureSelectPanel implements View.OnClickListener, HorizontalPictu
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.pictureRV);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
 
-        adapter = new HorizontalPictureSelectAdapter(activity);
+        adapter = new HorizontalPictureSelectAdapter2(activity);
         adapter.updateImagesData(new ArrayList<LocalMedia>());
         adapter.setImageSelectChangeListener(this);
         recyclerView.setAdapter(adapter);

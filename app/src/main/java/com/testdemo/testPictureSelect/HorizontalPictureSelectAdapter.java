@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * Created by Greyson on 2018/6/5.
+ * 图片选中状态的变化是通过整个item的刷新进行的
  */
 
 public class HorizontalPictureSelectAdapter extends RecyclerView.Adapter<HorizontalPictureSelectAdapter.ViewHolder> {

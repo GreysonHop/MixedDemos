@@ -17,9 +17,9 @@ import java.util.List;
  * Created by Greyson on 2018/6/4.
  */
 
-public class TestPictureSelectAct extends FragmentActivity implements PictureSelectPanel2.OnSendClickListener {
+public class TestPictureSelectAct extends FragmentActivity implements PictureSelectPanel.OnSendClickListener {
 
-    PictureSelectPanel2 panel;
+    PictureSelectPanel panel;
     TextView pictureTV;
 
     @Override
@@ -28,7 +28,7 @@ public class TestPictureSelectAct extends FragmentActivity implements PictureSel
 
         setContentView(R.layout.act_test_picture_select);
         pictureTV = (TextView) findViewById(R.id.pictureTV);
-        panel = new PictureSelectPanel2(this, findViewById(R.id.pictureLayout));
+        panel = new PictureSelectPanel(this, findViewById(R.id.pictureLayout));
         panel.setOnSendClickListener(this);
     }
 
