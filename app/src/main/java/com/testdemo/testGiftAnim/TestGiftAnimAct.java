@@ -27,7 +27,15 @@ import com.testdemo.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Greyson on 2016/4/26.
@@ -71,7 +79,7 @@ public class TestGiftAnimAct extends Activity implements View.OnClickListener {
         try {
 //            parser.parse(new URL("http://public-file.nos-eastchina1.126.net/%E5%9F%8E%E5%A0%A1.svga"), new SVGAParser.ParseCompletion() {
             parser.parse(new URL("https://github.com/yyued/SVGA-Samples/blob/master/kingset.svga?raw=true"), new SVGAParser.ParseCompletion() {
-//            parser.parse("520.svga", new SVGAParser.ParseCompletion() {
+                //parser.parse("520.svga", new SVGAParser.ParseCompletion() {
                 @Override
                 public void onComplete(@NotNull SVGAVideoEntity videoItem) {
                     SVGADrawable drawable = new SVGADrawable(videoItem, requestDynamicItemWithSpannableText());
@@ -183,5 +191,29 @@ public class TestGiftAnimAct extends Activity implements View.OnClickListener {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_vip_gold);
         dynamicEntity.setDynamicImage(bitmap, "boy");
         return dynamicEntity;
+    }
+
+    /**
+     * 设置下载器，这是一个可选的配置项。
+     *
+     * @param parser
+     */
+    private void resetDownloader(SVGAParser parser) {
+        parser.setFileDownloader(new SVGAParser.FileDownloader() {
+            @Override
+            public void resume(final URL url, final Function1<? super InputStream, Unit> complete, final Function1<? super Exception, Unit> failure) {
+                new Thread(() -> {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder().url(url).get().build();
+                    try {
+                        Response response = client.newCall(request).execute();
+                        complete.invoke(response.body().byteStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        failure.invoke(e);
+                    }
+                }).start();
+            }
+        });
     }
 }

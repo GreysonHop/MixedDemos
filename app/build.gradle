@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
         applicationId "com.testdemo"
@@ -14,9 +15,6 @@ android {
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
 
-        jackOptions {
-            enabled true
-        }
     }
     buildTypes {
         release {

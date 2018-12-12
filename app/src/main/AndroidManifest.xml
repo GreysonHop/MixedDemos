@@ -58,6 +58,8 @@
 
         <activity android:name=".testGiftAnim.TestGiftAnimAct" />
         <activity android:name=".testGiftAnim.GiftAnimActivity" />
+
+        <activity android:name=".testShader.TestShaderAct" />
     </application>
 
 </manifest>

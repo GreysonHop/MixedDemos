@@ -23,8 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.testdemo.R;
-import com.testdemo.TestActivity;
-import com.testdemo.testVerticalScrollView.ThreeScrollView;
 
 import java.util.ArrayList;
 

@@ -10,9 +10,9 @@ import android.widget.ListView;
 import com.testdemo.testCanDragLayout.TestDragViewActivity;
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct;
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity;
-import com.testdemo.testCenterRefresh.CollapsingToolbarLayoutActivity;
 import com.testdemo.testGiftAnim.TestGiftAnimAct;
 import com.testdemo.testPictureSelect.TestPictureSelectAct;
+import com.testdemo.testShader.TestShaderAct;
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct;
 import com.testdemo.testVerticalScrollView.TestActivity3;
 
@@ -39,6 +39,7 @@ public class TestActivity extends ListActivity {
         classList.add(TestPictureSelectAct.class);
         classList.add(SpecialEditLayoutAct.class);
         classList.add(TestGiftAnimAct.class);
+        classList.add(TestShaderAct.class);
 
         classNameList.add("高斯模糊和玻璃破碎效果");
         classNameList.add("动画实现弹窗");
@@ -49,6 +50,7 @@ public class TestActivity extends ListActivity {
         classNameList.add("仿QQ横向图片选择器");
         classNameList.add("可滚动缩放的编辑器");
         classNameList.add("礼物动画框架例子SVGA");
+        classNameList.add("自定义组件中的shader应用");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, classNameList);
         setListAdapter(adapter);

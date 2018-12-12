@@ -15,7 +15,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/shadow_top_bottom" />
+        android:background="@drawable/shadow_top_bottom" />
 
     <View
         android:id="@+id/blurBgIV"
