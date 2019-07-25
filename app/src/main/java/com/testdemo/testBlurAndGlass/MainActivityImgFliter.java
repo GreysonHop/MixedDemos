@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.testdemo.R;
 import com.testdemo.fliter_lib.GrayFilter;
 
 public class MainActivityImgFliter extends Activity {

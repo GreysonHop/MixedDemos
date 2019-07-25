@@ -1,9 +1,11 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.testdemo.R;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
