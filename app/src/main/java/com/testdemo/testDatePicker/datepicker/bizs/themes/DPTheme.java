@@ -90,4 +90,6 @@ public abstract class DPTheme {
      * @return 16进制颜色值 hex color
      */
     public abstract int colorHoliday();
+
+    public abstract int colorGridLine();
 }

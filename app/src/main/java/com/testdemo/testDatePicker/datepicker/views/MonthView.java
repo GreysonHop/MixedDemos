@@ -279,7 +279,6 @@ public class MonthView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(mTManager.colorBG());
-        System.out.println("greyson onDraw()");
         draw(canvas, width * indexMonth, (indexYear - 1) * height, topYear, topMonth);
         draw(canvas, width * (indexMonth - 1), height * indexYear, leftYear, leftMonth);
         draw(canvas, width * indexMonth, indexYear * height, centerYear, centerMonth);

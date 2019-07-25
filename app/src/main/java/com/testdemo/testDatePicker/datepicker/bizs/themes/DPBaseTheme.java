@@ -35,7 +35,7 @@ public class DPBaseTheme extends DPTheme {
 
     @Override
     public int colorG() {
-        return 0xEE333333;
+        return 0xFF283851;
     }
 
     @Override
@@ -51,5 +51,10 @@ public class DPBaseTheme extends DPTheme {
     @Override
     public int colorHoliday() {
         return 0x80FED6D6;
+    }
+
+    @Override
+    public int colorGridLine() {
+        return 0xFFF5F9FC;
     }
 }

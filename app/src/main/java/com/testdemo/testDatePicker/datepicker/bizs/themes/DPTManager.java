@@ -106,6 +106,10 @@ public final class DPTManager {
         return theme.colorHoliday();
     }
 
+    public int colorGridLine() {
+        return theme.colorGridLine();
+    }
+
     /**
      * @see DPCNTheme#colorL()
      */
