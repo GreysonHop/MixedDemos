@@ -8,26 +8,44 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.testdemo.R;
 import com.testdemo.testDatePicker.datepicker.bizs.decors.DPDecor;
+import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.cons.DPMode;
 import com.testdemo.testDatePicker.datepicker.views.DatePicker;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class CreateInfoAct extends Activity {
 
     private RadioGroup rgSwitchDateTime;
     private RadioButton cbDateBtn;
     private RadioButton cbTimeBtn;
-
+    private TextView mTvConfirm;
+    private LinearLayout mLlWeek;
     private View vInflater;
     private MyCalendarPicker myCalendarPicker;
     private MyTimePicker myTimePicker;
+
+    private String selectedDate;
+    private String selectedTime;
+
+    private TextView mTvDate;
+
+DPLManager mDPLManager = DPLManager.getInstance();
+    private DatePickDialog datePickDialog;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,10 +57,25 @@ public class CreateInfoAct extends Activity {
         rgSwitchDateTime = findViewById(R.id.rg_switch_date_time);
         cbDateBtn = findViewById(R.id.cb_date_btn);
         cbTimeBtn = findViewById(R.id.cb_time_btn);
+        mTvConfirm = findViewById(R.id.tv_confirm);
 
         vInflater = findViewById(R.id.v_inflater);
         myCalendarPicker = findViewById(R.id.myCalendarPicker);
         myTimePicker = findViewById(R.id.myTimePicker);
+        mTvDate = findViewById(R.id.tv_date);
+
+        mLlWeek = findViewById(R.id.ll_week);
+
+        LinearLayout.LayoutParams lpWeek = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        lpWeek.weight = 1;
+        for (int i = 0; i < 7; i++) {
+            TextView tvWeek = new TextView(this);
+            tvWeek.setText(mDPLManager.titleWeek()[i]);
+            tvWeek.setGravity(Gravity.CENTER);
+            tvWeek.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            tvWeek.setTextColor(Color.parseColor("#283851"));
+            mLlWeek.addView(tvWeek, lpWeek);
+        }
 
         rgSwitchDateTime.setOnCheckedChangeListener((group, checkedId) -> {
             if (cbDateBtn.getId() == checkedId) {
@@ -65,13 +98,55 @@ public class CreateInfoAct extends Activity {
             }
         });
 
+        mTvConfirm.setOnClickListener(clickView -> {
+            Toast.makeText(this, selectedDate + " " + selectedTime, Toast.LENGTH_SHORT).show();
+            mTvDate.setText(selectedDate + " " + selectedTime);
+        });
+
         myCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
             if (TextUtils.isEmpty(clickDay)) {
                 return;
             }
+
+            selectedDate = clickDay;
             String[] dateDatas = clickDay.split("-");
             cbDateBtn.setText(getString(R.string.text_calendar_cn, dateDatas[0], dateDatas[1], dateDatas[2]));
         }));
+
+        myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
+            @Override
+            public void onYearWheeled(int index, String year) {
+            }
+
+            @Override
+            public void onMonthWheeled(int index, String month) {
+            }
+
+            @Override
+            public void onDayWheeled(int index, String day) {
+            }
+
+            @Override
+            public void onHourWheeled(int index, String hour) {
+                String timeStr = cbTimeBtn.getText().toString();
+                selectedTime = timeStr.replaceFirst("^\\w{2}(?=:)", hour);
+                cbTimeBtn.setText(selectedTime);
+            }
+
+            @Override
+            public void onMinuteWheeled(int index, String minute) {
+                String timeStr = cbTimeBtn.getText().toString();
+                selectedTime = timeStr.replaceFirst("(?<=:)\\w{2}$", minute);
+                cbTimeBtn.setText(selectedTime);
+            }
+        });
+
+        /***********************************************************/
+
+        datePickDialog = new DatePickDialog(this);
+        datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
+            mTvDate.setText(dateStr + " " + timeStr);
+        });
 
 
         DatePicker picker = (DatePicker) findViewById(R.id.main_dp);
@@ -132,6 +207,7 @@ public class CreateInfoAct extends Activity {
     }
 
     public void onClick(View view) {
-
+        datePickDialog.show();
+        datePickDialog.setSelectedDate("2019-01-12", "17:15");
     }
 }

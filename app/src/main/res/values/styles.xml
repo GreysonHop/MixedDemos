@@ -125,4 +125,9 @@
 
     </style>
 
+    <style name="animBottomMenu">
+        <item name="android:windowEnterAnimation">@anim/bottom_menu_in</item>
+        <item name="android:windowExitAnimation">@anim/bottom_menu_out</item>
+    </style>
+
 </resources>

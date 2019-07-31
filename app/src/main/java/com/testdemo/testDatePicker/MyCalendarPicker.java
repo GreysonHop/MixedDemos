@@ -20,9 +20,13 @@ import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.bizs.themes.DPTManager;
 import com.testdemo.testDatePicker.datepicker.entities.DPInfo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MyCalendarPicker extends View {
 
@@ -51,15 +55,6 @@ public class MyCalendarPicker extends View {
     private float mCanAutoScrollGapY = 100;
     private float mCanSignScrollGapY = 8;
 
-   /* private String[][] dateOfMonth = new String[][]{
-            new String[]{null, null, "1", "2", "3", "4", "5"},
-            new String[]{"6", "7", "8", "9", "10", "11", "12"},
-            new String[]{"13", "14", "15", "16", "17", "18", "19"},
-            new String[]{"20", "21", "22", "23", "24", "25", "26"},
-            new String[]{"27", "28", "29", "30", "31", null, null},
-            new String[]{null, null, null, null, null, null, null}
-    };*/
-
 
     public MyCalendarPicker(Context context) {
         this(context, null);
@@ -78,31 +73,38 @@ public class MyCalendarPicker extends View {
         mScroller = new Scroller(getContext());
         mPaint.setTextAlign(Paint.Align.CENTER);
         mCanAutoScrollGapY = Utils.dp2px((int) mCanAutoScrollGapY);
+        Calendar calendar = Calendar.getInstance();
+        String defaultSelectDate = new StringBuilder()
+                .append(calendar.get(Calendar.YEAR))
+                .append("-")
+                .append(calendar.get(Calendar.MONTH) + 1)
+                .append("-")
+                .append(calendar.get(Calendar.DAY_OF_MONTH)).toString();
+        mDateSelected.add(defaultSelectDate);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int column;
         if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
-            return;
+            column = 4;
+        } else {
+            DPInfo[][] info = mCManager.obtainDPInfo(mCurrentYear, mCurrentMonth);
+            if (TextUtils.isEmpty(info[4][0].strG)) {
+                column = 4;
+            } else if (TextUtils.isEmpty(info[5][0].strG)) {
+                column = 5;
+            } else {
+                column = 6;
+            }
         }
 
-        DPInfo[][] info = mCManager.obtainDPInfo(mCurrentYear, mCurrentMonth);
-        int column;
-        if (TextUtils.isEmpty(info[4][0].strG)) {
-//            currentMonthWeeks = MONTH_WEEKS_4;
-            column = 4;
-        } else if (TextUtils.isEmpty(info[5][0].strG)) {
-//            currentMonthWeeks = MONTH_WEEKS_5;
-            column = 5;
-        } else {
-//            currentMonthWeeks = MONTH_WEEKS_6;
-            column = 6;
-        }
         int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
         int measuredHeight = (int) (measuredWidth * column / 7f);
         setMeasuredDimension(measuredWidth, measuredHeight);
         System.out.println("greyson MyCalendarPicker onMeasure() measuredHeight=" + measuredHeight
                 + ", column = " + column + " , cYear = " + mCurrentYear + ", cMonth= " + mCurrentMonth);
+
     }
 
     @Override
@@ -151,12 +153,12 @@ public class MyCalendarPicker extends View {
         }
     }
 
-    float mFirstTouchY;
-    float mLastTouchY;
-    int mTotalScrollY;//标志总共纵向滑动多少距离
-    int mLastTotalScrollY;//标志上一次up事件之后的总共纵向滑动多少距离
-    boolean isScrolling;
-//    int verticalIndex;//标志纵向滑动几次
+    private float mFirstTouchY;
+    private float mLastTouchY;
+    private int mTotalScrollY;//标志总共纵向滑动多少距离
+    private int mLastTotalScrollY;//标志上一次up事件之后的总共纵向滑动多少距离
+    private boolean isScrolling;
+//   private  int verticalIndex;//标志纵向滑动几次
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -205,6 +207,7 @@ public class MyCalendarPicker extends View {
                 }
                 smoothScrollTo(0, mTotalScrollY);
                 mLastTotalScrollY = mTotalScrollY;
+                isScrolling = false;
                 break;
         }
         mLastTouchY = y;
@@ -302,12 +305,13 @@ public class MyCalendarPicker extends View {
     }
 
     private void drawDayText(Canvas canvas, Rect rect, DPInfo dpInfo, int year, int month) {
-        mPaint.setTextSize(Utils.dp2px(14));
         String strDay = dpInfo.strG;
+        boolean isMonthFirstDay = TextUtils.equals("1", strDay);
         boolean isToday = dpInfo.isToday;
         boolean isWeekend = dpInfo.isWeekend;
         boolean isSelectedDay = isSelectedDay(year, month, strDay);
 
+        //画背景
         if (isSelectedDay) {
             mPaint.setColor(Color.parseColor("#3E82FB"));
             canvas.drawRect(rect, mPaint);
@@ -319,7 +323,8 @@ public class MyCalendarPicker extends View {
         float y;
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
         if (isToday) {
-            mPaint.setColor(isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
+            mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
+            mPaint.setTextSize(Utils.dp2px(14));
             canvas.drawText("今天", rect.centerX(), rect.centerY(), mPaint);
             y = rect.centerY() + fontMetrics.bottom - fontMetrics.top;
         } else {
@@ -329,14 +334,49 @@ public class MyCalendarPicker extends View {
 //        if (!isFestivalDisplay)
 //            y = rect.centerY() + Math.abs(mPaint.ascent()) - (mPaint.descent() - mPaint.ascent()) / 2F;
 
-        mPaint.setColor(isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
-        if (TextUtils.equals("1", strDay)) {
+        if (isMonthFirstDay) {
             String monthFirstDay = mDPLManager.titleMonth()[month - 1];
             mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));
+            String monthNumber = monthFirstDay.substring(0, monthFirstDay.length() - 1);
+            String monthSign = monthFirstDay.substring(monthFirstDay.length() - 1);
+
+            //测量“四月”中“四”字的大小
+            Rect monthNumberRect = new Rect();
             mPaint.setTextSize(Utils.dp2px(18));
-            canvas.drawText(monthFirstDay, rect.centerX(), y, mPaint);
+            mPaint.getTextBounds(monthNumber, 0, monthNumber.length(), monthNumberRect);
+
+            //测量“月”字的大小
+            Rect monthSignRect = new Rect();
+            mPaint.setTextSize(Utils.dp2px(10));
+            mPaint.getTextBounds(monthSign, 0, monthSign.length(), monthSignRect);
+
+            //计算两种字体的位置
+            int monthNumberX = rect.centerX() - (monthSignRect.width() / 2);
+            int monthSignX = monthNumberRect.width() / 2 + rect.centerX();
+
+            canvas.drawText(monthSign, monthSignX, y, mPaint);
+
+            mPaint.setTextSize(Utils.dp2px(18));
+            canvas.drawText(monthNumber, monthNumberX, y, mPaint);
         } else {
+            mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
             canvas.drawText(strDay, rect.centerX(), y, mPaint);
+        }
+    }
+
+    public void setSelectedDay(String dateStr) {
+        if (dateStr == null) {
+            return;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        try {
+            dateFormat.parse(dateStr);
+            mDateSelected.clear();
+            mDateSelected.add(dateStr);
+            invalidate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("传入的日期格式有问题: " + dateStr);
         }
     }
 

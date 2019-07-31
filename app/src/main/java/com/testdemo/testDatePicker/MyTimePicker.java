@@ -21,6 +21,15 @@ import java.util.ArrayList;
 
 public class MyTimePicker extends LinearLayout {
 
+    final WheelView mHourView = new WheelView(getContext());
+    final WheelView mMinuteView = new WheelView(getContext());
+    private ArrayList<String> mHourList = new ArrayList<>();
+    private ArrayList<String> mMinuteList = new ArrayList<>();
+
+    private OnWheelListener onWheelListener;
+
+    private int mSelectedHourIndex, mSelectedMinuteIndex;
+    private String mSelectedHour, mSelectedMinute;
 
     public MyTimePicker(Context context) {
         this(context, null);
@@ -40,44 +49,40 @@ public class MyTimePicker extends LinearLayout {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
 
-        final WheelView hourView = new WheelView(getContext());
-        final WheelView minuteView = new WheelView(getContext());
 
-        ArrayList<String> hours = new ArrayList<>();
         for (int i = 1; i <= 24; i++) {
-            hours.add(fillZero(i));
-        }
-        ArrayList<String> minutes = new ArrayList<>();
-        for (int i = 0; i < 60; i = i + 15) {
-            minutes.add(fillZero(i));
+            mHourList.add(fillZero(i));
         }
 
-        hourView.setCanLoop(true);
-//        hourView.setSelectedTextColor(textColorFocus);
-//        hourView.setUnSelectedTextColor(textColorNormal);
-        hourView.setDividerType(LineConfig.DividerType.FILL);
-        hourView.setAdapter(new ArrayWheelAdapter<>(hours));
-//        hourView.setCurrentItem(selectedHourIndex);
-//        hourView.setLineConfig(lineConfig);
-        hourView.setLayoutParams(layoutParams);
-        /*hourView.setOnItemPickListener(new OnItemPickListener<String>() {
+        for (int i = 0; i < 60; i = i + 15) {
+            mMinuteList.add(fillZero(i));
+        }
+
+        mHourView.setCanLoop(true);
+//        mHourView.setSelectedTextColor(textColorFocus);
+//        mHourView.setUnSelectedTextColor(textColorNormal);
+        mHourView.setDividerType(LineConfig.DividerType.FILL);
+        mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
+//        mHourView.setCurrentItem(mSelectedHourIndex);
+//        mHourView.setLineConfig(lineConfig);
+        mHourView.setLayoutParams(layoutParams);
+        mHourView.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                selectedHourIndex = index;
-                selectedMinuteIndex = 0;
-                selectedHour = item;
+                mSelectedHourIndex = index;
+                mSelectedHour = item;
                 if (onWheelListener != null) {
                     onWheelListener.onHourWheeled(index, item);
                 }
-                if (!canLinkage) {
+               /* if (!canLinkage) {
                     return;
                 }
 //                changeMinuteData(trimZero(item));
-                minuteView.setAdapter(new ArrayWheelAdapter<>(minutes));
-                minuteView.setCurrentItem(selectedMinuteIndex);
+                mMinuteView.setAdapter(new ArrayWheelAdapter<>(minutes));
+                mMinuteView.setCurrentItem(mSelectedMinuteIndex);*/
             }
-        });*/
-        addView(hourView);
+        });
+        addView(mHourView);
 
         TextView labelView = new TextView(getContext());
         LayoutParams lableLP = new LayoutParams(layoutParams.width, layoutParams.height);
@@ -86,30 +91,30 @@ public class MyTimePicker extends LinearLayout {
         labelView.setLayoutParams(lableLP);
 //        labelView.setTextColor(textColorFocus);
         labelView.setTextSize(getResources().getDimensionPixelSize(R.dimen.text_wheel_time_colon));
-        labelView.setText(" : ");
+        labelView.setText(":");
         addView(labelView);
 
         //分钟
-        minuteView.setCanLoop(true);
-//        minuteView.setTextSize(textSize);//must be called before setDateList
-//        minuteView.setSelectedTextColor(textColorFocus);
-//        minuteView.setUnSelectedTextColor(textColorNormal);
-        minuteView.setAdapter(new ArrayWheelAdapter<>(minutes));
-//        minuteView.setCurrentItem(selectedMinuteIndex);
-        minuteView.setDividerType(LineConfig.DividerType.FILL);
-//        minuteView.setLineConfig(lineConfig);
-        minuteView.setLayoutParams(layoutParams);
-        addView(minuteView);
-       /* minuteView.setOnItemPickListener(new OnItemPickListener<String>() {
+        mMinuteView.setCanLoop(true);
+//        mMinuteView.setTextSize(textSize);//must be called before setDateList
+//        mMinuteView.setSelectedTextColor(textColorFocus);
+//        mMinuteView.setUnSelectedTextColor(textColorNormal);
+        mMinuteView.setAdapter(new ArrayWheelAdapter<>(mMinuteList));
+//        mMinuteView.setCurrentItem(mSelectedMinuteIndex);
+        mMinuteView.setDividerType(LineConfig.DividerType.FILL);
+//        mMinuteView.setLineConfig(lineConfig);
+        mMinuteView.setLayoutParams(layoutParams);
+        addView(mMinuteView);
+        mMinuteView.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                selectedMinuteIndex = index;
-                selectedMinute = item;
+                mSelectedMinuteIndex = index;
+                mSelectedMinute = item;
                 if (onWheelListener != null) {
                     onWheelListener.onMinuteWheeled(index, item);
                 }
             }
-        });*/
+        });
     }
 
 
@@ -156,5 +161,37 @@ public class MyTimePicker extends LinearLayout {
     @NonNull
     public static String fillZero(int number) {
         return number < 10 ? "0" + number : String.valueOf(number);
+    }
+
+    public void setSelectedTime(String timeStr) {
+        if (timeStr == null) {
+            return;
+        }
+
+        if (timeStr.matches("^((0[1-9])|(1[0-9])|(2[0-4])):((00)|(15)|(30)|(45))$")) {
+            String[] times = timeStr.split(":");
+            mSelectedHour = times[0];
+            mSelectedMinute = times[1];
+            mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
+            mMinuteView.setCurrentItem(mMinuteList.indexOf(mSelectedMinute));
+        }
+    }
+
+    public void setOnWheelListener(OnWheelListener onWheelListener) {
+        this.onWheelListener = onWheelListener;
+    }
+
+    public interface OnWheelListener {
+
+        void onYearWheeled(int index, String year);
+
+        void onMonthWheeled(int index, String month);
+
+        void onDayWheeled(int index, String day);
+
+        void onHourWheeled(int index, String hour);
+
+        void onMinuteWheeled(int index, String minute);
+
     }
 }
