@@ -74,10 +74,12 @@ public class MyCalendarPicker extends View {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mCanAutoScrollGapY = Utils.dp2px((int) mCanAutoScrollGapY);
         Calendar calendar = Calendar.getInstance();
+        mCurrentYear = calendar.get(Calendar.YEAR);
+        mCurrentMonth = calendar.get(Calendar.MONTH) + 1;
         String defaultSelectDate = new StringBuilder()
-                .append(calendar.get(Calendar.YEAR))
+                .append(mCurrentYear)
                 .append("-")
-                .append(calendar.get(Calendar.MONTH) + 1)
+                .append(mCurrentMonth)
                 .append("-")
                 .append(calendar.get(Calendar.DAY_OF_MONTH)).toString();
         mDateSelected.add(defaultSelectDate);
@@ -326,7 +328,7 @@ public class MyCalendarPicker extends View {
             mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
             mPaint.setTextSize(Utils.dp2px(14));
             canvas.drawText("今天", rect.centerX(), rect.centerY(), mPaint);
-            y = rect.centerY() + fontMetrics.bottom - fontMetrics.top;
+            y = rect.centerY() + fontMetrics.descent - fontMetrics.ascent;
         } else {
             y = rect.centerY() - fontMetrics.top / 2 - fontMetrics.bottom / 2;
         }
@@ -359,6 +361,7 @@ public class MyCalendarPicker extends View {
             mPaint.setTextSize(Utils.dp2px(18));
             canvas.drawText(monthNumber, monthNumberX, y, mPaint);
         } else {
+            mPaint.setTextSize(Utils.dp2px(14));
             mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
             canvas.drawText(strDay, rect.centerX(), y, mPaint);
         }
