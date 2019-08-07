@@ -24,7 +24,10 @@ import com.luck.picture.lib.tools.ScreenUtils;
 import com.testdemo.R;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -187,13 +190,26 @@ public class DatePickDialog extends Dialog {
      */
     public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {
         if (selectedDateStr != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+            Date selectDate;
+            try {
+                selectDate = dateFormat.parse(selectedDateStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println(String.format("传入的日期\"%s\"格式有问题! ", selectedDateStr));
+                return;
+            }
+//            cbDateBtn.setText(String.format(Locale.CHINA, "%tY年%tm月%td日", selectDate, selectDate, selectDate));
+            cbDateBtn.setText(new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA).format(selectDate));
+
             this.selectedDateStr = selectedDateStr;
             myCalendarPicker.setSelectedDay(selectedDateStr);
-        }
 
+        }
         if (selectedTimeStr != null) {
             this.selectedTimeStr = selectedTimeStr;
             myTimePicker.setSelectedTime(selectedTimeStr);
+            cbTimeBtn.setText(selectedTimeStr);
         }
     }
 
@@ -203,7 +219,7 @@ public class DatePickDialog extends Dialog {
      * @param date
      */
     public void setSelectedDate(Date date) {
-
+        Calendar.getInstance().setTime(date);
     }
 
     private void checkCbDateBtn(boolean isChecked) {

@@ -82,6 +82,7 @@ public class MyCalendarPicker extends View {
                 .append(mCurrentMonth)
                 .append("-")
                 .append(calendar.get(Calendar.DAY_OF_MONTH)).toString();
+        computeDate();
         mDateSelected.add(defaultSelectDate);
     }
 
@@ -371,16 +372,10 @@ public class MyCalendarPicker extends View {
         if (dateStr == null) {
             return;
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-        try {
-            dateFormat.parse(dateStr);
-            mDateSelected.clear();
-            mDateSelected.add(dateStr);
-            invalidate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("传入的日期格式有问题: " + dateStr);
-        }
+
+        mDateSelected.clear();
+        mDateSelected.add(dateStr.replaceAll("(?<=\\d-)0", ""));
+        invalidate();
     }
 
     private boolean isSelectedDay(int year, int month, String day) {
@@ -478,7 +473,7 @@ public class MyCalendarPicker extends View {
         }
     }
 
-    void setDate(int year, int month) {
+    void setShowMonth(int year, int month) {
         mCurrentYear = year;
         mCurrentMonth = month;
         mTotalScrollY = 0;

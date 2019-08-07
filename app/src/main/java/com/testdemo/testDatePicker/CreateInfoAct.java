@@ -140,6 +140,7 @@ DPLManager mDPLManager = DPLManager.getInstance();
                 cbTimeBtn.setText(selectedTime);
             }
         });
+        myCalendarPicker.setShowMonth(2019, 7);
 
         /***********************************************************/
 
@@ -193,7 +194,6 @@ DPLManager mDPLManager = DPLManager.getInstance();
             }
         });
 
-        myCalendarPicker.setDate(2019, 7);
     }
 
     private void checkCbDateBtn(boolean isChecked) {
@@ -208,6 +208,6 @@ DPLManager mDPLManager = DPLManager.getInstance();
 
     public void onClick(View view) {
         datePickDialog.show();
-        datePickDialog.setSelectedDate("2019-01-12", "17:15");
+        datePickDialog.setSelectedDate("2019-06-12", "17:15");
     }
 }
