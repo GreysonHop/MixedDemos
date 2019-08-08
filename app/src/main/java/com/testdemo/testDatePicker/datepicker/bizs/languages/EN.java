@@ -14,7 +14,10 @@ import java.util.Locale;
  * @author AigeStudio 2015-03-28
  */
 public class EN extends DPLManager {
-    private SimpleDateFormat simpleDateFormat;
+
+    public EN(Locale locale) {
+        this.mLocale = locale;
+    }
 
     @Override
     public String[] titleMonth() {
@@ -41,11 +44,4 @@ public class EN extends DPLManager {
         return "MMM d, yyyy";
     }
 
-    @Override
-    public DateFormat getDateFormat() {
-        if (simpleDateFormat == null) {
-            simpleDateFormat = new SimpleDateFormat(getDateFormatStr(), Locale.US);
-        }
-        return simpleDateFormat;
-    }
 }

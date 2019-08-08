@@ -301,7 +301,7 @@ public class MyCalendarPicker extends View {
         boolean isWeekend = dpInfo.isWeekend;
         boolean isSelectedDay = isSelectedDay(year, month, strDay);
         //最后一个字符变小，否则除了第一个字符，其它都变小
-        boolean isLastCharSmaller = Locale.getDefault() == Locale.CHINA || Locale.getDefault() == Locale.JAPAN;
+        boolean isLastCharSmaller = DPLManager.getInstance().isSameLanguage(Locale.getDefault());
 
         //画背景
         if (isSelectedDay) {

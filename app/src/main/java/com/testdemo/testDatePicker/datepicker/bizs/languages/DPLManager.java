@@ -1,5 +1,7 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
+import android.text.TextUtils;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -9,7 +11,7 @@ import java.util.Locale;
  * DatePicker暂且支持中文和英文两种显示语言
  * 如果你需要定义更多的语言可以新建自己的语言类并继承Language重写其方法即可
  * 同时你需要在Language的单例方法{@link #getInstance()}的分支语句中添加自己的语言类判断
- *
+ * <p>
  * The abstract of language.
  * The current language only two support chinese and english in DatePicker.
  * If you need more language you want,you can define your own language class and extends Language
@@ -20,21 +22,24 @@ import java.util.Locale;
  */
 public abstract class DPLManager {
     private static DPLManager sLanguage;
+    private SimpleDateFormat mSimpleDateFormat;
+    protected Locale mLocale;
 
     /**
      * 获取日历语言管理器
-     *
+     * <p>
      * Get DatePicker language manager
      *
      * @return 日历语言管理器 DatePicker language manager
      */
     public static DPLManager getInstance() {
         if (null == sLanguage) {
-            String locale = Locale.getDefault().getLanguage().toLowerCase();
-            if (locale.equals("zh")) {
-                sLanguage = new CN();
+            Locale locale = Locale.getDefault();
+            String language = locale.getLanguage().toLowerCase();
+            if (language.equals("zh")) {
+                sLanguage = new CN(locale);
             } else {
-                sLanguage = new EN();
+                sLanguage = new EN(locale);
             }
         }
         return sLanguage;
@@ -42,7 +47,7 @@ public abstract class DPLManager {
 
     /**
      * 月份标题显示
-     *
+     * <p>
      * Titles of month
      *
      * @return 长度为12的月份标题数组 Array in 12 length of month titles
@@ -51,7 +56,7 @@ public abstract class DPLManager {
 
     /**
      * 确定按钮文本
-     *
+     * <p>
      * Text of ensure button
      *
      * @return Text of ensure button
@@ -60,7 +65,7 @@ public abstract class DPLManager {
 
     /**
      * 公元前文本
-     *
+     * <p>
      * Text of B.C.
      *
      * @return Text of B.C.
@@ -69,7 +74,7 @@ public abstract class DPLManager {
 
     /**
      * 星期标题显示
-     *
+     * <p>
      * Titles of week
      *
      * @return 长度为7的星期标题数组 Array in 7 length of week titles
@@ -78,13 +83,24 @@ public abstract class DPLManager {
 
     /**
      * 获取日历的显示格式，如“2017-09-01”，“Jul 2, 2017”
+     *
      * @return
      */
     public abstract String getDateFormatStr();
 
     /**
      * 获取日历的显示格式，如“2017-09-01”，“Jul 2, 2017”
+     *
      * @return
      */
-    public abstract DateFormat getDateFormat();
+    public DateFormat getDateFormat() {
+        if (mSimpleDateFormat == null) {
+            mSimpleDateFormat = new SimpleDateFormat(getDateFormatStr(), Locale.CHINA);
+        }
+        return mSimpleDateFormat;
+    }
+
+    public boolean isSameLanguage(Locale locale) {
+        return TextUtils.equals(locale.getDisplayLanguage(), mLocale.getDisplayLanguage());
+    }
 }

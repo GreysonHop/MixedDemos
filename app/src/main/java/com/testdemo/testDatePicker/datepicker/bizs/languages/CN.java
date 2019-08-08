@@ -1,5 +1,7 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
+import android.text.TextUtils;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -15,7 +17,9 @@ import java.util.Locale;
  */
 public class CN extends DPLManager {
 
-    private SimpleDateFormat simpleDateFormat;
+    public CN(Locale locale) {
+        mLocale = locale;
+    }
 
     @Override
     public String[] titleMonth() {
@@ -42,11 +46,4 @@ public class CN extends DPLManager {
         return "yyyy年M月d日";
     }
 
-    @Override
-    public DateFormat getDateFormat() {
-        if (simpleDateFormat == null) {
-            simpleDateFormat = new SimpleDateFormat(getDateFormatStr(), Locale.CHINA);
-        }
-        return simpleDateFormat;
-    }
 }
