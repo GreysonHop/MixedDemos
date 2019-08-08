@@ -6,4 +6,6 @@
 
     <string name="text_send_picture_with_num">发送(%d)</string>
     <string name="text_send_picture">发送</string>
+
+    <string name="text_calendar_cn">%1$s年%2$s月%3$s日</string>
 </resources>

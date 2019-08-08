@@ -7,4 +7,9 @@
     <color name="white">#fff</color>
     <color name="button">#FF4081</color>
     <color name="buttonPressed">#e72061</color>
+
+    <color name="blue_date_picker">#3E82FB</color>
+    <color name="grey_date_picker">#F5F9FC</color>
+    <color name="bg_date_picker_today">#AAC8FF</color>
+
 </resources>

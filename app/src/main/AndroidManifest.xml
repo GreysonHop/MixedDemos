@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TestActivity">
+        <activity android:name=".MainTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,24 +26,24 @@
         <activity android:name=".testVerticalScrollView.TestActivity3" />
 
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MainActivity2">
+        <activity android:name=".testBlurAndGlass.MainActivity" />
+        <activity android:name=".testBlurAndGlass.MainActivity2">
             <!--模糊背景界面-->
         </activity>
-        <activity android:name=".MainActivity_Blur"></activity>
-        <activity android:name=".MainActivity_Broken"></activity>
+        <activity android:name=".testBlurAndGlass.MainActivity_Blur"></activity>
+        <activity android:name=".testBlurAndGlass.MainActivity_Broken"></activity>
 
         <!--textview中制定字段变红-->
-        <activity android:name=".MainActivityColor"></activity>
+        <activity android:name=".testBlurAndGlass.MainActivityColor"></activity>
 
         <!--3d滚动的listview-->
-        <activity android:name=".MainActivity3DListview"></activity>
+        <activity android:name=".testBlurAndGlass.MainActivity3DListview"></activity>
         <!--搜索结果中指定字段变色-->
-        <activity android:name=".MainActivitySearchTextColor" />
+        <activity android:name=".testBlurAndGlass.MainActivitySearchTextColor" />
         <!--自定义图片滤镜效果-->
-        <activity android:name=".MainActivityImgFliter" />
+        <activity android:name=".testBlurAndGlass.MainActivityImgFliter" />
         <!--自定义图片滤镜效果,通过颜色矩阵-->
-        <activity android:name=".MainActivityImgFliter_JuZhen" />
+        <activity android:name=".testBlurAndGlass.MainActivityImgFliter_JuZhen" />
 
         <activity android:name=".testCanDragScrollView.DraggableScrollViewAct" />
 
@@ -60,6 +60,8 @@
         <activity android:name=".testGiftAnim.GiftAnimActivity" />
 
         <activity android:name=".testShader.TestShaderAct" />
+
+        <activity android:name=".testDatePicker.CreateInfoAct" />
     </application>
 
 </manifest>

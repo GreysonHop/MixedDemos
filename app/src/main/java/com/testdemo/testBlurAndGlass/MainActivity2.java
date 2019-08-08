@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.testdemo.R;
 import com.testdemo.blurbehind.BlurBehind;
 import com.testdemo.broken_lib.BrokenCallback;
 import com.testdemo.broken_lib.BrokenTouchListener;

@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.testdemo.R;
 import com.testdemo.fliter_lib.ColorView;
 
 public class MainActivityImgFliter_JuZhen extends Activity implements View.OnClickListener {

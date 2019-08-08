@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.testdemo.R;
 import com.testdemo.searchText_red_lib.MyTextView;
 
 public class MainActivitySearchTextColor extends Activity {

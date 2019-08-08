@@ -42,7 +42,7 @@
                 android:dividerHeight="0dp">
             </ListView>
 
-            <com.testdemo.MyView
+            <com.testdemo.testBlurAndGlass.MyView
                 android:id="@+id/demo_myview"
                 android:layout_width="150dp"
                 android:layout_height="160dp"

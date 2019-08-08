@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.testdemo.R;
 import com.testdemo.color_lib.ColorPhrase;
 
 public class MainActivityColor extends Activity {

@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.testdemo.R;
 import com.testdemo.listview3D_lib.util.Dynamics;
 import com.testdemo.listview3D_lib.util.ListView3D;
 

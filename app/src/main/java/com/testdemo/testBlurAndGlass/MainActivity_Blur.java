@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.testdemo.R;
 import com.testdemo.blurbehind.BlurBehind;
 import com.testdemo.blurbehind.OnBlurCompleteListener;
 import com.testdemo.broken_lib.BrokenCallback;

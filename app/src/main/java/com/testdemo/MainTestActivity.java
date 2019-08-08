@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.testdemo.testBlurAndGlass.MainActivity;
 import com.testdemo.testCanDragLayout.TestDragViewActivity;
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct;
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity;
+import com.testdemo.testDatePicker.CreateInfoAct;
 import com.testdemo.testGiftAnim.TestGiftAnimAct;
 import com.testdemo.testPictureSelect.TestPictureSelectAct;
 import com.testdemo.testShader.TestShaderAct;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 2018/1/25.
  */
-public class TestActivity extends ListActivity {
+public class MainTestActivity extends ListActivity {
 
     ArrayList<Class> classList = new ArrayList<Class>();
     ArrayList<String> classNameList = new ArrayList<>();
@@ -40,6 +42,7 @@ public class TestActivity extends ListActivity {
         classList.add(SpecialEditLayoutAct.class);
         classList.add(TestGiftAnimAct.class);
         classList.add(TestShaderAct.class);
+        classList.add(CreateInfoAct.class);
 
         classNameList.add("高斯模糊和玻璃破碎效果");
         classNameList.add("动画实现弹窗");
@@ -51,6 +54,7 @@ public class TestActivity extends ListActivity {
         classNameList.add("可滚动缩放的编辑器");
         classNameList.add("礼物动画框架例子SVGA");
         classNameList.add("自定义组件中的shader应用和圆角ViewGroup");
+        classNameList.add("自定义年月日时分秒选择器");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, classNameList);
         setListAdapter(adapter);

@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testBlurAndGlass;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.testdemo.R;
 import com.testdemo.broken_lib.BrokenCallback;
 import com.testdemo.broken_lib.BrokenTouchListener;
 import com.testdemo.broken_lib.BrokenView;

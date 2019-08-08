@@ -2,8 +2,6 @@ package com.testdemo;
 
 import org.junit.Test;
 
-import java.util.LinkedList;
-
 import static org.junit.Assert.*;
 
 /**
@@ -28,6 +26,13 @@ public class ExampleUnitTest {
         printSomeThing("main");
 
 
+        String regex = "^((0[1-9])|(1[0-9])|(2[0-4])):((00)|(15)|(30)|(45))$";
+        System.out.println("19:05".matches(regex));
+        System.out.println("19:00".matches(regex));
+        System.out.println("10:30".matches(regex));
+        System.out.println("09:49".matches(regex));
+        System.out.println("01:10".matches(regex));
+
         assertEquals(4, 2 + 2);
 
     }
@@ -37,6 +42,7 @@ public class ExampleUnitTest {
     }
 
     volatile int value = 0;
+
     class MyThread extends Thread {
 
         public MyThread() {
