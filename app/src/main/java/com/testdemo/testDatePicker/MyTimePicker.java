@@ -18,6 +18,9 @@ import com.testdemo.testDatePicker.wheelView.WheelView;
 
 import java.util.ArrayList;
 
+/**
+ * Created by Greyson
+ */
 public class MyTimePicker extends LinearLayout {
 
     final WheelView mHourView = new WheelView(getContext());

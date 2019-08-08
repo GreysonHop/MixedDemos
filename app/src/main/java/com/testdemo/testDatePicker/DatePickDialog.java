@@ -22,12 +22,16 @@ import com.testdemo.R;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+/**
+ * Created by Greyson
+ */
 public class DatePickDialog extends Dialog {
 
     private Context activityContext;
@@ -139,7 +143,12 @@ public class DatePickDialog extends Dialog {
 
             selectedDateStr = clickDay;
             String[] dateDatas = clickDay.split("-");
-            cbDateBtn.setText(getContext().getString(R.string.text_calendar_cn, dateDatas[0], dateDatas[1], dateDatas[2]));
+
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.set(Calendar.YEAR, Integer.valueOf(dateDatas[0]));
+            calendar.set(Calendar.MONTH, Integer.valueOf(dateDatas[1]) - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateDatas[2]));
+            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(calendar.getTime()));
         }));
 
         myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {

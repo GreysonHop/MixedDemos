@@ -7,13 +7,15 @@ import java.util.Locale;
 /**
  * 英文的默认实现类
  * 如果你想实现更多的语言请参考Language{@link DPLManager}
- *
+ * <p>
  * The implementation class of english.
  * You can refer to Language{@link DPLManager} if you want to define more language.
  *
  * @author AigeStudio 2015-03-28
  */
 public class EN extends DPLManager {
+    private SimpleDateFormat simpleDateFormat;
+
     @Override
     public String[] titleMonth() {
         return new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -41,6 +43,9 @@ public class EN extends DPLManager {
 
     @Override
     public DateFormat getDateFormat() {
-        return new SimpleDateFormat(getDateFormatStr(), Locale.US);
+        if (simpleDateFormat == null) {
+            simpleDateFormat = new SimpleDateFormat(getDateFormatStr(), Locale.US);
+        }
+        return simpleDateFormat;
     }
 }
