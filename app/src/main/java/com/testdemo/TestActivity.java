@@ -50,7 +50,7 @@ public class TestActivity extends ListActivity {
         classNameList.add("仿QQ横向图片选择器");
         classNameList.add("可滚动缩放的编辑器");
         classNameList.add("礼物动画框架例子SVGA");
-        classNameList.add("自定义组件中的shader应用");
+        classNameList.add("自定义组件中的shader应用和圆角ViewGroup");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, classNameList);
         setListAdapter(adapter);

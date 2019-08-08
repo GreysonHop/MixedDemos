@@ -1,4 +1,4 @@
-package com.testdemo;
+package com.testdemo.testjava;
 
 import android.text.TextUtils;
 
