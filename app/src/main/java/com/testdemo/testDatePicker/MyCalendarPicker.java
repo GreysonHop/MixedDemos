@@ -12,7 +12,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
-import android.widget.Toast;
 
 import com.testdemo.broken_lib.Utils;
 import com.testdemo.testDatePicker.datepicker.bizs.calendars.DPCManager;
@@ -20,14 +19,15 @@ import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.bizs.themes.DPTManager;
 import com.testdemo.testDatePicker.datepicker.entities.DPInfo;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 此类中选中的日期字符串格式中月份和日为单位数时前面没有0
+ */
 public class MyCalendarPicker extends View {
 
     private final Region[][] MONTH_WEEKS_4 = new Region[4][7];
@@ -52,7 +52,7 @@ public class MyCalendarPicker extends View {
     private int mNextYear, mNextMonth;
     private int mPreviousYear, mPreviousMonth;
 
-    private float mCanAutoScrollGapY = 100;
+    private float mCanAutoScrollGapY = 60;
     private float mCanSignScrollGapY = 8;
 
 
@@ -107,7 +107,6 @@ public class MyCalendarPicker extends View {
         setMeasuredDimension(measuredWidth, measuredHeight);
         System.out.println("greyson MyCalendarPicker onMeasure() measuredHeight=" + measuredHeight
                 + ", column = " + column + " , cYear = " + mCurrentYear + ", cMonth= " + mCurrentMonth);
-
     }
 
     @Override
@@ -287,19 +286,6 @@ public class MyCalendarPicker extends View {
         canvas.restore();
     }
 
-    private void getWeeksOfMonth(int year, int month) {
-        DPInfo[][] info = mCManager.obtainDPInfo(year, month);
-        Region[][] tmp;
-        if (TextUtils.isEmpty(info[4][0].strG)) {
-            tmp = MONTH_WEEKS_4;
-        } else if (TextUtils.isEmpty(info[5][0].strG)) {
-            tmp = MONTH_WEEKS_5;
-        } else {
-            tmp = MONTH_WEEKS_6;
-        }
-        return;
-    }
-
     private void drawMonthData(Canvas canvas, Rect rect, DPInfo info, int year, int month) {
 //        drawBG(canvas, rect, info);
         drawDayText(canvas, rect, info, year, month);
@@ -313,6 +299,8 @@ public class MyCalendarPicker extends View {
         boolean isToday = dpInfo.isToday;
         boolean isWeekend = dpInfo.isWeekend;
         boolean isSelectedDay = isSelectedDay(year, month, strDay);
+        //最后一个字符变小，否则除了第一个字符，其它都变小
+        boolean isLastCharSmaller = Locale.getDefault() == Locale.CHINA || Locale.getDefault() == Locale.JAPAN;
 
         //画背景
         if (isSelectedDay) {
@@ -328,7 +316,12 @@ public class MyCalendarPicker extends View {
         if (isToday) {
             mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
             mPaint.setTextSize(Utils.dp2px(14));
-            canvas.drawText("今天", rect.centerX(), rect.centerY(), mPaint);
+            if (isLastCharSmaller) {//temporary deal
+                canvas.drawText("今天", rect.centerX(), rect.centerY(), mPaint);
+            } else {
+                canvas.drawText("Today", rect.centerX(), rect.centerY(), mPaint);
+            }
+
             y = rect.centerY() + fontMetrics.descent - fontMetrics.ascent;
         } else {
             y = rect.centerY() - fontMetrics.top / 2 - fontMetrics.bottom / 2;
@@ -340,15 +333,25 @@ public class MyCalendarPicker extends View {
         if (isMonthFirstDay) {
             String monthFirstDay = mDPLManager.titleMonth()[month - 1];
             mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));
-            String monthNumber = monthFirstDay.substring(0, monthFirstDay.length() - 1);
-            String monthSign = monthFirstDay.substring(monthFirstDay.length() - 1);
 
-            //测量“四月”中“四”字的大小
+            String monthNumber;
+            String monthSign;
+            if (isLastCharSmaller) {
+                monthNumber = monthFirstDay.substring(0, monthFirstDay.length() - 1);
+                monthSign = monthFirstDay.substring(monthFirstDay.length() - 1);
+
+            } else {
+                monthNumber = monthFirstDay.substring(0, 1);
+                monthSign = monthFirstDay.substring(1);
+
+            }
+
+            //测量“十一月”中“十一”字，或者“Jul”中“J”字的大小
             Rect monthNumberRect = new Rect();
             mPaint.setTextSize(Utils.dp2px(18));
             mPaint.getTextBounds(monthNumber, 0, monthNumber.length(), monthNumberRect);
 
-            //测量“月”字的大小
+            //测量“月”字，或“ul”字的大小
             Rect monthSignRect = new Rect();
             mPaint.setTextSize(Utils.dp2px(10));
             mPaint.getTextBounds(monthSign, 0, monthSign.length(), monthSignRect);
@@ -368,6 +371,11 @@ public class MyCalendarPicker extends View {
         }
     }
 
+    /**
+     * 设置选中的年月日，并且显示所在月的视图
+     *
+     * @param dateStr
+     */
     public void setSelectedDay(String dateStr) {
         if (dateStr == null) {
             return;
@@ -375,17 +383,22 @@ public class MyCalendarPicker extends View {
 
         mDateSelected.clear();
         mDateSelected.add(dateStr.replaceAll("(?<=\\d-)0", ""));
-        invalidate();
+
+        String[] dates = dateStr.split("-");
+        setShowMonth(Integer.valueOf(dates[0]), Integer.valueOf(dates[1]));
+//        invalidate();
     }
 
     private boolean isSelectedDay(int year, int month, String day) {
-        String date = new StringBuilder().append(year).append("-").append(month).append("-").append(day).toString();
+//        String date = new StringBuilder().append(year).append("-").append(month).append("-").append(day).toString();
+        String date = String.format("%d-%d-%s", year, month, day);
         for (String s : mDateSelected) {
             if (TextUtils.equals(s, date)) return true;
         }
         return false;
     }
 
+    //绘制条框
     private void drawFrame(Canvas canvas, Rect cellRect, int columnNumber) {
         mPaint.setColor(mTManager.colorGridLine());
         int cellWith = cellRect.width();
@@ -473,11 +486,22 @@ public class MyCalendarPicker extends View {
         }
     }
 
+    /**
+     * 显示某年某月的视图
+     *
+     * @param year  要显示的视图所在的年份
+     * @param month 要显示的视图所在的月份
+     */
     void setShowMonth(int year, int month) {
         mCurrentYear = year;
         mCurrentMonth = month;
         mTotalScrollY = 0;
         mLastTotalScrollY = 0;
+
+        if (mScroller != null) {
+            mScroller.setFinalX(0);
+            mScroller.setFinalY(0);
+        }
 //        indexYear = 0;
 //        indexMonth = 0;
 //        buildRegion();
@@ -517,7 +541,7 @@ public class MyCalendarPicker extends View {
          * 格式都为“****-**-**”
          *
          * @param clickDay     点击的日期
-         * @param selectedDays 所有已经选择的日期
+         * @param selectedDays 所有已经选择的日期，月和日前面不补0，如2019-7-1
          */
         void onDayClickListener(String clickDay, List<String> selectedDays);
     }

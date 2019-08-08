@@ -1,5 +1,9 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * 英文的默认实现类
  * 如果你想实现更多的语言请参考Language{@link DPLManager}
@@ -12,7 +16,7 @@ package com.testdemo.testDatePicker.datepicker.bizs.languages;
 public class EN extends DPLManager {
     @Override
     public String[] titleMonth() {
-        return new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        return new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     }
 
     @Override
@@ -27,6 +31,16 @@ public class EN extends DPLManager {
 
     @Override
     public String[] titleWeek() {
-        return new String[]{"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+        return new String[]{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    }
+
+    @Override
+    public String getDateFormatStr() {
+        return "MMM d, yyyy";
+    }
+
+    @Override
+    public DateFormat getDateFormat() {
+        return new SimpleDateFormat(getDateFormatStr(), Locale.US);
     }
 }

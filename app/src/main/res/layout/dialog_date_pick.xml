@@ -27,7 +27,7 @@
             android:background="@drawable/bg_date_selector"
             android:button="@null"
             android:checked="true"
-            android:paddingLeft="14dp"
+            android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:text="2019年7月25日"

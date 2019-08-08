@@ -1,5 +1,9 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * 中文的默认实现类
  * 如果你想实现更多的语言请参考Language{@link DPLManager}
@@ -27,6 +31,16 @@ public class CN extends DPLManager {
 
     @Override
     public String[] titleWeek() {
-        return new String[]{"日", "一", "二", "三", "四", "五", "六"};
+        return new String[]{"六", "日", "一", "二", "三", "四", "五"};
+    }
+
+    @Override
+    public String getDateFormatStr() {
+        return "yyyy年M月d日";
+    }
+
+    @Override
+    public DateFormat getDateFormat() {
+        return new SimpleDateFormat(getDateFormatStr(), Locale.CHINA);
     }
 }

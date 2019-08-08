@@ -25,6 +25,8 @@ import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.cons.DPMode;
 import com.testdemo.testDatePicker.datepicker.views.DatePicker;
 
+import java.util.Date;
+
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class CreateInfoAct extends Activity {
@@ -38,12 +40,12 @@ public class CreateInfoAct extends Activity {
     private MyCalendarPicker myCalendarPicker;
     private MyTimePicker myTimePicker;
 
-    private String selectedDate;
-    private String selectedTime;
+    private String selectedDate = "2019-06-02";
+    private String selectedTime = "17:15";
 
     private TextView mTvDate;
 
-DPLManager mDPLManager = DPLManager.getInstance();
+    DPLManager mDPLManager = DPLManager.getInstance();
     private DatePickDialog datePickDialog;
 
 
@@ -79,6 +81,7 @@ DPLManager mDPLManager = DPLManager.getInstance();
 
         rgSwitchDateTime.setOnCheckedChangeListener((group, checkedId) -> {
             if (cbDateBtn.getId() == checkedId) {
+                mLlWeek.setVisibility(View.VISIBLE);
                 clDatePicker.setBackgroundColor(getResources().getColor(R.color.grey_date_picker));
                 checkCbDateBtn(true);
 
@@ -88,6 +91,7 @@ DPLManager mDPLManager = DPLManager.getInstance();
                 myTimePicker.setVisibility(View.GONE);
 
             } else if (cbTimeBtn.getId() == checkedId) {
+                mLlWeek.setVisibility(View.GONE);
                 clDatePicker.setBackgroundColor(getResources().getColor(R.color.white));
                 checkCbDateBtn(false);
 
@@ -146,9 +150,12 @@ DPLManager mDPLManager = DPLManager.getInstance();
 
         datePickDialog = new DatePickDialog(this);
         datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
+            selectedDate = dateStr;
+            selectedTime = timeStr;
             mTvDate.setText(dateStr + " " + timeStr);
         });
 
+        /*********************************************************/
 
         DatePicker picker = (DatePicker) findViewById(R.id.main_dp);
         picker.setDate(2019, 7);
@@ -208,6 +215,7 @@ DPLManager mDPLManager = DPLManager.getInstance();
 
     public void onClick(View view) {
         datePickDialog.show();
-        datePickDialog.setSelectedDate("2019-06-12", "17:15");
+        datePickDialog.setSelectedDate(selectedDate, selectedTime);
+//        datePickDialog.setSelectedDate(new Date());
     }
 }

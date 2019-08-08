@@ -1,5 +1,7 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
@@ -73,4 +75,16 @@ public abstract class DPLManager {
      * @return 长度为7的星期标题数组 Array in 7 length of week titles
      */
     public abstract String[] titleWeek();
+
+    /**
+     * 获取日历的显示格式，如“2017-09-01”，“Jul 2, 2017”
+     * @return
+     */
+    public abstract String getDateFormatStr();
+
+    /**
+     * 获取日历的显示格式，如“2017-09-01”，“Jul 2, 2017”
+     * @return
+     */
+    public abstract DateFormat getDateFormat();
 }

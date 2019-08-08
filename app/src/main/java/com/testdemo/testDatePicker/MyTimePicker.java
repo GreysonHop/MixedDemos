@@ -18,7 +18,6 @@ import com.testdemo.testDatePicker.wheelView.WheelView;
 
 import java.util.ArrayList;
 
-
 public class MyTimePicker extends LinearLayout {
 
     final WheelView mHourView = new WheelView(getContext());
@@ -28,7 +27,6 @@ public class MyTimePicker extends LinearLayout {
 
     private OnWheelListener onWheelListener;
 
-    private int mSelectedHourIndex, mSelectedMinuteIndex;
     private String mSelectedHour, mSelectedMinute;
 
     public MyTimePicker(Context context) {
@@ -69,7 +67,6 @@ public class MyTimePicker extends LinearLayout {
         mHourView.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                mSelectedHourIndex = index;
                 mSelectedHour = item;
                 if (onWheelListener != null) {
                     onWheelListener.onHourWheeled(index, item);
@@ -108,7 +105,6 @@ public class MyTimePicker extends LinearLayout {
         mMinuteView.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                mSelectedMinuteIndex = index;
                 mSelectedMinute = item;
                 if (onWheelListener != null) {
                     onWheelListener.onMinuteWheeled(index, item);
@@ -163,6 +159,11 @@ public class MyTimePicker extends LinearLayout {
         return number < 10 ? "0" + number : String.valueOf(number);
     }
 
+    /**
+     * 设置选中的时间
+     *
+     * @param timeStr 时间格式：01:30 / 11:45
+     */
     public void setSelectedTime(String timeStr) {
         if (timeStr == null) {
             return;
@@ -174,6 +175,13 @@ public class MyTimePicker extends LinearLayout {
             mSelectedMinute = times[1];
             mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
             mMinuteView.setCurrentItem(mMinuteList.indexOf(mSelectedMinute));
+
+        } else if (timeStr.matches("^((0[1-9])|(1[0-9])|(2[0-4])):([0-5][0-9])$")) {
+            String[] times = timeStr.split(":");
+            mSelectedHour = times[0];
+            mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
+            mSelectedMinute = mMinuteList.get(0);
+            mMinuteView.setCurrentItem(0);
         }
     }
 
