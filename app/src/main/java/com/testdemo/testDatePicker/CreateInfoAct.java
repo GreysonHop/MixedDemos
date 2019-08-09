@@ -122,18 +122,6 @@ public class CreateInfoAct extends Activity {
 
         myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
             @Override
-            public void onYearWheeled(int index, String year) {
-            }
-
-            @Override
-            public void onMonthWheeled(int index, String month) {
-            }
-
-            @Override
-            public void onDayWheeled(int index, String day) {
-            }
-
-            @Override
             public void onHourWheeled(int index, String hour) {
                 String timeStr = cbTimeBtn.getText().toString();
                 selectedTime = timeStr.replaceFirst("^\\w{2}(?=:)", hour);

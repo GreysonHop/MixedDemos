@@ -153,18 +153,6 @@ public class DatePickDialog extends Dialog {
 
         myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
             @Override
-            public void onYearWheeled(int index, String year) {
-            }
-
-            @Override
-            public void onMonthWheeled(int index, String month) {
-            }
-
-            @Override
-            public void onDayWheeled(int index, String day) {
-            }
-
-            @Override
             public void onHourWheeled(int index, String hour) {
                 String timeStr = cbTimeBtn.getText().toString();
                 selectedTimeStr = timeStr.replaceFirst("^\\w{2}(?=:)", hour);
@@ -207,9 +195,9 @@ public class DatePickDialog extends Dialog {
         }
 
         if (selectedTimeStr != null) {
+            cbTimeBtn.setText(selectedTimeStr);
             this.selectedTimeStr = selectedTimeStr;
             myTimePicker.setSelectedTime(selectedTimeStr);
-            cbTimeBtn.setText(selectedTimeStr);
         }
     }
 
@@ -228,9 +216,9 @@ public class DatePickDialog extends Dialog {
         myCalendarPicker.setSelectedDay(selectedDateStr);
 
         String selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
+        cbTimeBtn.setText(selectedTimeStr);
         this.selectedTimeStr = selectedTimeStr;
         myTimePicker.setSelectedTime(selectedTimeStr);
-        cbTimeBtn.setText(selectedTimeStr);
     }
 
     /**

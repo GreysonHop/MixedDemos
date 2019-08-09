@@ -183,8 +183,23 @@ public class MyTimePicker extends LinearLayout {
             String[] times = timeStr.split(":");
             mSelectedHour = times[0];
             mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
-            mSelectedMinute = mMinuteList.get(0);
-            mMinuteView.setCurrentItem(0);
+
+            int minuteIndex = 0;
+            try {
+                int timeInt = Integer.valueOf(times[1]);
+                minuteIndex = timeInt / 15 + 1;
+                if (minuteIndex == 4) {
+                    minuteIndex--;
+                }
+            } catch (Exception e) {
+            }
+
+            mSelectedMinute = mMinuteList.get(minuteIndex);
+            mMinuteView.setCurrentItem(minuteIndex);
+
+            if (onWheelListener != null) {
+                onWheelListener.onMinuteWheeled(minuteIndex, mSelectedMinute);
+            }
         }
     }
 
@@ -193,12 +208,6 @@ public class MyTimePicker extends LinearLayout {
     }
 
     public interface OnWheelListener {
-
-        void onYearWheeled(int index, String year);
-
-        void onMonthWheeled(int index, String month);
-
-        void onDayWheeled(int index, String day);
 
         void onHourWheeled(int index, String hour);
 
