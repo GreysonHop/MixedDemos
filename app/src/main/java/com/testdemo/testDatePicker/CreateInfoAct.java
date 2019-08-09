@@ -1,11 +1,13 @@
 package com.testdemo.testDatePicker;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -26,6 +28,7 @@ import com.testdemo.testDatePicker.datepicker.cons.DPMode;
 import com.testdemo.testDatePicker.datepicker.views.DatePicker;
 
 import java.util.Date;
+import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -201,6 +204,12 @@ public class CreateInfoAct extends Activity {
             }
         });
 
+        /********************************************************/
+        System.out.println("greyson final locale: " + Locale.getDefault());
+        LocaleList locales = Resources.getSystem().getConfiguration().getLocales();
+        for (int i = 0; i < locales.size(); i++) {
+            System.out.println("greyson locale: " + locales.get(i));
+        }
     }
 
     private void checkCbDateBtn(boolean isChecked) {

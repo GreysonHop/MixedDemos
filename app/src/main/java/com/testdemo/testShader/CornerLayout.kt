@@ -9,9 +9,7 @@ import com.testdemo.broken_lib.Utils
 
 class CornerLayout : RelativeLayout {
 
-    constructor(context : Context) {
-        this(context, null)
-    }
+    constructor(context : Context) : super(context)
 
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
 

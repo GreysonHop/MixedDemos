@@ -95,12 +95,17 @@ public abstract class DPLManager {
      */
     public DateFormat getDateFormat() {
         if (mSimpleDateFormat == null) {
-            mSimpleDateFormat = new SimpleDateFormat(getDateFormatStr(), Locale.CHINA);
+            mSimpleDateFormat = new SimpleDateFormat(getDateFormatStr(), mLocale);
         }
         return mSimpleDateFormat;
     }
 
     public boolean isSameLanguage(Locale locale) {
         return TextUtils.equals(locale.getDisplayLanguage(), mLocale.getDisplayLanguage());
+    }
+
+    public void setLocale(Locale locale) {
+        mLocale = locale;
+        mSimpleDateFormat = new SimpleDateFormat(getDateFormatStr(), locale);
     }
 }

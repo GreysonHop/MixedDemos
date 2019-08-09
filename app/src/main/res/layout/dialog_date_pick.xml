@@ -30,7 +30,7 @@
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:text="2019年7月25日"
+            tools:text="2019年7月25日"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -43,7 +43,7 @@
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:text="18:00"
+            tools:text="18:00"
             android:textColor="@color/blue_date_picker"
             android:textSize="12sp" />
 

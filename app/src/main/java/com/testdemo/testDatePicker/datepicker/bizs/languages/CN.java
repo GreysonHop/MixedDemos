@@ -1,9 +1,5 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
-import android.text.TextUtils;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
@@ -38,7 +34,7 @@ public class CN extends DPLManager {
 
     @Override
     public String[] titleWeek() {
-        return new String[]{"六", "日", "一", "二", "三", "四", "五"};
+        return new String[]{"日", "一", "二", "三", "四", "五", "六"};
     }
 
     @Override

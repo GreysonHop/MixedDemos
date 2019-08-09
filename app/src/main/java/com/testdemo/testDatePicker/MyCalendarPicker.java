@@ -56,7 +56,6 @@ public class MyCalendarPicker extends View {
     private float mCanAutoScrollGapY = 60;
     private float mCanSignScrollGapY = 8;
 
-
     public MyCalendarPicker(Context context) {
         this(context, null);
     }
@@ -74,17 +73,11 @@ public class MyCalendarPicker extends View {
         mScroller = new Scroller(getContext());
         mPaint.setTextAlign(Paint.Align.CENTER);
         mCanAutoScrollGapY = Utils.dp2px((int) mCanAutoScrollGapY);
+
         Calendar calendar = Calendar.getInstance();
         mCurrentYear = calendar.get(Calendar.YEAR);
         mCurrentMonth = calendar.get(Calendar.MONTH) + 1;
-        String defaultSelectDate = new StringBuilder()
-                .append(mCurrentYear)
-                .append("-")
-                .append(mCurrentMonth)
-                .append("-")
-                .append(calendar.get(Calendar.DAY_OF_MONTH)).toString();
         computeDate();
-        mDateSelected.add(defaultSelectDate);
     }
 
     @Override
@@ -220,7 +213,6 @@ public class MyCalendarPicker extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         System.out.println("greyson MyCalendarPicker onDraw()");
-//        canvas.drawColor(Color.parseColor("#99000000"));
         if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
             return;
         }
@@ -300,8 +292,6 @@ public class MyCalendarPicker extends View {
         boolean isToday = dpInfo.isToday;
         boolean isWeekend = dpInfo.isWeekend;
         boolean isSelectedDay = isSelectedDay(year, month, strDay);
-        //最后一个字符变小，否则除了第一个字符，其它都变小
-        boolean isLastCharSmaller = DPLManager.getInstance().isSameLanguage(Locale.getDefault());
 
         //画背景
         if (isSelectedDay) {
@@ -317,7 +307,7 @@ public class MyCalendarPicker extends View {
         if (isToday) {
             mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
             mPaint.setTextSize(Utils.dp2px(14));
-            if (isLastCharSmaller) {//temporary deal
+            if (DPLManager.getInstance().isSameLanguage(Locale.CHINA)) {//temporary deal
                 canvas.drawText("今天", rect.centerX(), rect.centerY(), mPaint);
             } else {
                 canvas.drawText("Today", rect.centerX(), rect.centerY(), mPaint);
@@ -337,14 +327,13 @@ public class MyCalendarPicker extends View {
 
             String monthNumber;
             String monthSign;
-            if (isLastCharSmaller) {
+            if (DPLManager.getInstance().isSameLanguage(Locale.CHINA)) {
                 monthNumber = monthFirstDay.substring(0, monthFirstDay.length() - 1);
                 monthSign = monthFirstDay.substring(monthFirstDay.length() - 1);
 
             } else {
                 monthNumber = monthFirstDay.substring(0, 1);
                 monthSign = monthFirstDay.substring(1);
-
             }
 
             //测量“十一月”中“十一”字，或者“Jul”中“J”字的大小
@@ -387,11 +376,9 @@ public class MyCalendarPicker extends View {
 
         String[] dates = dateStr.split("-");
         setShowMonth(Integer.valueOf(dates[0]), Integer.valueOf(dates[1]));
-//        invalidate();
     }
 
     private boolean isSelectedDay(int year, int month, String day) {
-//        String date = new StringBuilder().append(year).append("-").append(month).append("-").append(day).toString();
         String date = String.format("%d-%d-%s", year, month, day);
         for (String s : mDateSelected) {
             if (TextUtils.equals(s, date)) return true;
@@ -503,8 +490,6 @@ public class MyCalendarPicker extends View {
             mScroller.setFinalX(0);
             mScroller.setFinalY(0);
         }
-//        indexYear = 0;
-//        indexMonth = 0;
 //        buildRegion();
         computeDate();
         requestLayout();

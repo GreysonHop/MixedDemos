@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -15,8 +16,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.testdemo.R;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
@@ -37,7 +36,7 @@ public class DatePickDialog extends Dialog {
     private Context activityContext;
     private DPLManager mDPLManager = DPLManager.getInstance();
 
-    private ConstraintLayout clDatePicker;
+    private ViewGroup clDatePicker;
     private RadioGroup rgSwitchDateTime;
     private RadioButton cbDateBtn;
     private RadioButton cbTimeBtn;
@@ -94,6 +93,7 @@ public class DatePickDialog extends Dialog {
         }
 
         setListener();
+        setSelectedDate(new Date());//default to select today
     }
 
     private void initLayoutParams() {
@@ -181,7 +181,7 @@ public class DatePickDialog extends Dialog {
     }
 
     /**
-     * 设置默认选中的日期
+     * 设置默认选中的日期，并且显示所在月的视图
      *
      * @param selectedDateStr 字符串类型的日期，格式为"****-**-**"；为null时则采用组件内的默认值
      *                        ，月、日为一位数时前面可以不补0，如2019-7-1
@@ -214,7 +214,7 @@ public class DatePickDialog extends Dialog {
     }
 
     /**
-     * 设置默认选中的日期
+     * 设置默认选中的日期，并且显示所在月的视图
      *
      * @param date
      */
@@ -227,11 +227,20 @@ public class DatePickDialog extends Dialog {
         this.selectedDateStr = selectedDateStr;
         myCalendarPicker.setSelectedDay(selectedDateStr);
 
-
         String selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
         this.selectedTimeStr = selectedTimeStr;
         myTimePicker.setSelectedTime(selectedTimeStr);
         cbTimeBtn.setText(selectedTimeStr);
+    }
+
+    /**
+     * 显示某个月的视图，不选中任一天，也不清除已选中的日期
+     *
+     * @param year  要显示的月份所在的年份
+     * @param month 要显示的月份
+     */
+    public void showMonth(int year, int month) {
+        myCalendarPicker.setShowMonth(year, month);
     }
 
     private void checkCbDateBtn(boolean isChecked) {
@@ -253,10 +262,12 @@ public class DatePickDialog extends Dialog {
         this.onDatePickListener = onDatePickListener;
     }
 
-    interface OnDatePickListener {
+    public interface OnDatePickListener {
         /**
-         * @param date the date selected is in format of "****-**-**"
-         * @param time the time selected is in format of "**:**"
+         * @param date the date selected is in format of "****-**-**".
+         *             年月日格式如"2019-7-12", "2019-11-1"
+         * @param time the time selected is in format of "**:**".
+         *             时分格式如"20:15", "09:00"
          */
         void onDatePick(String date, String time);
     }
