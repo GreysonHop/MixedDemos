@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.support.annotation.Nullable;
@@ -194,9 +195,13 @@ public class CreateInfoAct extends Activity {
 
         /********************************************************/
         System.out.println("greyson final locale: " + Locale.getDefault());
-        LocaleList locales = Resources.getSystem().getConfiguration().getLocales();
-        for (int i = 0; i < locales.size(); i++) {
-            System.out.println("greyson locale: " + locales.get(i));
+        if (Build.VERSION.SDK_INT >= 24) {
+            LocaleList locales = Resources.getSystem().getConfiguration().getLocales();
+            for (int i = 0; i < locales.size(); i++) {
+                System.out.println("greyson locale: " + locales.get(i));
+            }
+        } else {
+            System.out.println(Locale.getDefault());
         }
     }
 

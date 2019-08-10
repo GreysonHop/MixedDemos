@@ -30,9 +30,9 @@
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            tools:text="2019年7月25日"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="2019年7月25日" />
 
         <RadioButton
             android:id="@+id/cb_time_btn"
@@ -43,9 +43,9 @@
             android:gravity="center"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            tools:text="18:00"
             android:textColor="@color/blue_date_picker"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="18:00" />
 
     </RadioGroup>
 
@@ -86,9 +86,9 @@
                 android:id="@+id/ll_week"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-            </LinearLayout>
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp" />
 
             <com.testdemo.testDatePicker.MyCalendarPicker
                 android:id="@+id/myCalendarPicker"

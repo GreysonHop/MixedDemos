@@ -1,6 +1,7 @@
 package com.testdemo.testDatePicker;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -47,8 +48,8 @@ public class MyTimePicker extends LinearLayout {
 
     private void init() {
         setGravity(Gravity.CENTER);
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER;
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_VERTICAL;
 
 
         for (int i = 1; i <= 24; i++) {
@@ -86,10 +87,11 @@ public class MyTimePicker extends LinearLayout {
 
         TextView labelView = new TextView(getContext());
         LayoutParams lableLP = new LayoutParams(layoutParams.width, layoutParams.height);
+        lableLP.gravity = layoutParams.gravity;
         lableLP.leftMargin = Utils.dp2px(29);
         lableLP.rightMargin = Utils.dp2px(27);
         labelView.setLayoutParams(lableLP);
-//        labelView.setTextColor(textColorFocus);
+        labelView.setTextColor(Color.parseColor("#283851"));
         labelView.setTextSize(getResources().getDimensionPixelSize(R.dimen.text_wheel_time_colon));
         labelView.setText(":");
         addView(labelView);
