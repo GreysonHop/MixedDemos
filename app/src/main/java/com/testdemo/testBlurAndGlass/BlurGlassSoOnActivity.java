@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.testdemo.R;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class BlurGlassSoOnActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

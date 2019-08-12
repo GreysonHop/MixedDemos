@@ -12,4 +12,5 @@
     <color name="grey_date_picker">#F5F9FC</color>
     <color name="bg_date_picker_today">#AAC8FF</color>
 
+    <color name="black_alpha80">#c000</color>
 </resources>

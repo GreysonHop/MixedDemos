@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.testdemo.testBlurAndGlass.MainActivity;
+import com.testdemo.testBlurAndGlass.BlurGlassSoOnActivity;
 import com.testdemo.testCanDragLayout.TestDragViewActivity;
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct;
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 2018/1/25.
  */
-public class MainTestActivity extends ListActivity {
+public class MainActivity extends ListActivity {
 
     ArrayList<Class> classList = new ArrayList<Class>();
     ArrayList<String> classNameList = new ArrayList<>();
@@ -32,7 +32,7 @@ public class MainTestActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        classList.add(MainActivity.class);
+        classList.add(BlurGlassSoOnActivity.class);
         classList.add(TestActivity2.class);
         classList.add(TestActivity3.class);
         classList.add(TestDragViewActivity.class);

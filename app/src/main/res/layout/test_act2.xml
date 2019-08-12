@@ -71,7 +71,8 @@
             android:text="Hello!!!" />
     </LinearLayout>
 
-    <com.wonderkiln.blurkit.BlurLayout
+    <!--模糊的View会一起截图，性能消耗应该很高！-->
+    <!--<com.wonderkiln.blurkit.BlurLayout
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -85,7 +86,7 @@
             android:textColor="@android:color/holo_green_light"
             android:textSize="20sp" />
 
-    </com.wonderkiln.blurkit.BlurLayout>
+    </com.wonderkiln.blurkit.BlurLayout>-->
 
     <com.testdemo.testCanDragLayout.DraggableLayout
         android:id="@+id/dragLayout"

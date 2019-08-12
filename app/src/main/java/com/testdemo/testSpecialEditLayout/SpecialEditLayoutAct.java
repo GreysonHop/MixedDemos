@@ -18,9 +18,15 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.luck.picture.lib.tools.ScreenUtils;
 import com.testdemo.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Greyson on 2018/10/15.
@@ -31,51 +37,43 @@ public class SpecialEditLayoutAct extends Activity {
     private ToolLayout toolLayout;
     private EditText editText;
 
+    private LinearLayout fl_content;
+    private PopupWindow mPopupWindow;
+    private MenuLinearLayout mMenuLinearLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_test_special_edit_layout);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//沉浸式状态栏
-            Window window = getWindow();
-            ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-                decorView.setSystemUiVisibility(option);
-                window.setStatusBarColor(Color.TRANSPARENT);
-
-            } else {
-                WindowManager.LayoutParams attributes = window.getAttributes();
-                int flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-                attributes.flags |= flagTranslucentStatus;
-                window.setAttributes(attributes);
-
-            }
-            //根布局添加占位状态栏
-            ImageView statusBarView = new ImageView(this);
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ScreenUtils.getStatusBarHeight(getBaseContext()));
-            decorView.addView(statusBarView, lp);
-
-            ViewGroup rootView = (ViewGroup) decorView.findViewById(Window.ID_ANDROID_CONTENT);
-            if (rootView.getChildCount() > 0) {
-                rootView.getChildAt(0).setFitsSystemWindows(true);
-            }/* else {
-                rootView.setPadding(0, ScreenUtils.getStatusBarHeight(getBaseContext()), 0, 0);
-            }*/
-            statusBarView.setBackgroundColor(Color.WHITE);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            } else {
-                statusBarView.setImageResource(R.drawable.bg_grad_shadow);
-            }
-        }
-
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 
         toolLayout = (ToolLayout) findViewById(R.id.layout_tool);
         editText = (EditText) findViewById(R.id.et_msg);
+        fl_content = findViewById(R.id.fl_content);
+        fl_content.setOnLongClickListener((v) -> {
+            if (mPopupWindow == null) {
+                mPopupWindow = new PopupWindow(SpecialEditLayoutAct.this);
+                mPopupWindow.setOutsideTouchable(true);
+                mPopupWindow.setBackgroundDrawable(null);
+                mMenuLinearLayout = new MenuLinearLayout(SpecialEditLayoutAct.this);
+                mMenuLinearLayout.setOnMenuClickListener((view) -> {
+                    Toast.makeText(SpecialEditLayoutAct.this, "you click: " + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                    mPopupWindow.dismiss();
+                });
+                mPopupWindow.setContentView(mMenuLinearLayout);
+                List<String> menuList = new ArrayList<>();
+                menuList.add("拷贝");
+                menuList.add("转发");
+                menuList.add("引用");
+                menuList.add("删除");
+                menuList.add("多选");
+                menuList.add("销毁");
+                mMenuLinearLayout.setMenuList(menuList);
+            }
+            mPopupWindow.showAsDropDown(fl_content);
+            return true;
+        });
 
         /*editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
