@@ -62,6 +62,9 @@
         <activity android:name=".testShader.TestShaderAct" />
 
         <activity android:name=".testDatePicker.CreateInfoAct" />
+
+        <activity android:name=".testSpecialEditLayout.popupList.TestPopupListActivity"/>
+
     </application>
 
 </manifest>

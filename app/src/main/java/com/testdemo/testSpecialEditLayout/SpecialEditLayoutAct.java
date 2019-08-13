@@ -1,6 +1,7 @@
 package com.testdemo.testSpecialEditLayout;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.luck.picture.lib.tools.ScreenUtils;
 import com.testdemo.R;
+import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,10 @@ public class SpecialEditLayoutAct extends Activity {
     private PopupWindow mPopupWindow;
     private MenuLinearLayout mMenuLinearLayout;
 
+    private MenuPopUp menuPopUp;
+    private float mOffsetX;
+    private float moffsetY;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,29 +57,54 @@ public class SpecialEditLayoutAct extends Activity {
         toolLayout = (ToolLayout) findViewById(R.id.layout_tool);
         editText = (EditText) findViewById(R.id.et_msg);
         fl_content = findViewById(R.id.fl_content);
+        fl_content.setOnTouchListener((view, event) -> {
+            mOffsetX =event.getX();
+            moffsetY = event.getY();
+            return false;
+        });
         fl_content.setOnLongClickListener((v) -> {
-            if (mPopupWindow == null) {
-                mPopupWindow = new PopupWindow(SpecialEditLayoutAct.this);
+            /*if (mPopupWindow == null) {
+                mPopupWindow = new PopupWindow(this);
                 mPopupWindow.setOutsideTouchable(true);
                 mPopupWindow.setBackgroundDrawable(null);
-                mMenuLinearLayout = new MenuLinearLayout(SpecialEditLayoutAct.this);
+                mMenuLinearLayout = new MenuLinearLayout(this);
                 mMenuLinearLayout.setOnMenuClickListener((view) -> {
-                    Toast.makeText(SpecialEditLayoutAct.this, "you click: " + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "you click: " + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
                     mPopupWindow.dismiss();
                 });
                 mPopupWindow.setContentView(mMenuLinearLayout);
                 List<String> menuList = new ArrayList<>();
-                menuList.add("拷贝");
+                menuList.add("拷贝--你狗狗的DNA-pu na na na!!! huha?!");
+                menuList.add("全部删除");
                 menuList.add("转发");
+                menuList.add("随便点");
                 menuList.add("引用");
                 menuList.add("删除");
                 menuList.add("多选");
                 menuList.add("销毁");
                 mMenuLinearLayout.setMenuList(menuList);
             }
-            mPopupWindow.showAsDropDown(fl_content);
+            mPopupWindow.showAsDropDown(fl_content);*/
+
+            if (menuPopUp == null) {
+                menuPopUp = new MenuPopUp(this);
+                List<String> menuList = new ArrayList<>();
+                menuList.add("拷贝--你狗狗的DNA-pu na na na!!! huha?!");
+                menuList.add("全部删除");
+                menuList.add("转发");
+                menuList.add("随便点");
+                menuList.add("引用");
+                menuList.add("删除");
+                menuList.add("多选");
+                menuList.add("销毁");
+                menuPopUp.setMenuList(menuList);
+            }
+            menuPopUp.showPopupListWindow(fl_content, mOffsetX, moffsetY);
             return true;
         });
+
+        fl_content.setOnClickListener((v) ->
+                startActivity(new Intent(this, TestPopupListActivity.class)));
 
         /*editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
