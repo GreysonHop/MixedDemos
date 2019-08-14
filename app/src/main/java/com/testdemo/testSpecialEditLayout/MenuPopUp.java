@@ -64,7 +64,6 @@ public class MenuPopUp {
 
     public MenuPopUp(Context context) {
         mContext = context;
-        mIndicatorView = getDefaultIndicatorView(mContext);
 
         initPopUpPanel();
         initPageSwitchBtn();
@@ -81,8 +80,9 @@ public class MenuPopUp {
         mLlMenuList.setBackgroundResource(R.drawable.shape_corner4_black);
         mLlPopUpContent.addView(mLlMenuList);
 
+        mIndicatorView = getDefaultIndicatorView(mContext);
         if (mIndicatorView != null) {
-            LinearLayout.LayoutParams layoutParams;
+            /*LinearLayout.LayoutParams layoutParams;
             if (mIndicatorView.getLayoutParams() == null) {
                 layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             } else {
@@ -93,7 +93,7 @@ public class MenuPopUp {
             ViewParent viewParent = mIndicatorView.getParent();
             if (viewParent instanceof ViewGroup) {
                 ((ViewGroup) viewParent).removeView(mIndicatorView);
-            }
+            }*/
             mLlPopUpContent.addView(mIndicatorView);
         }
     }
@@ -106,7 +106,7 @@ public class MenuPopUp {
             mPopupWindow = new PopupWindow(mContext);
             mPopupWindow.setContentView(mLlPopUpContent);
             mPopupWindow.setOutsideTouchable(true);
-            mPopupWindow.setBackgroundDrawable(null);
+//            mPopupWindow.setBackgroundDrawable(null);
         }
 
         int mPopupWindowWidth = getViewWidth(mLlPopUpContent);
@@ -170,10 +170,11 @@ public class MenuPopUp {
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             tv.setText(s);
             tv.setGravity(Gravity.CENTER);
+            final int position = i;
             tv.setOnClickListener((view) -> {
-                /*if (onMenuClickListener != null) {
-                    onMenuClickListener.onMenuClick(view);
-                }*/
+                if (onMenuClickListener != null) {
+                    onMenuClickListener.onMenuClick(view, position);
+                }
             });
 
             ints[i] = getViewWidth(tv);
@@ -272,10 +273,10 @@ public class MenuPopUp {
         mPreviousPage.setOnClickListener((v) -> showPreviousPage());
 
 
-        float triangleWidth = dp2px(10f);
-        float triangleHeight = dp2pxFloat(6f);
+        float triangleHeight = dp2px(10f);
+        float triangleWidth = dp2pxFloat(6f);
 
-        Drawable rightTriangleDrawable = new Drawable() {
+        Drawable rightTriangleDrawable = new CanvasDrawable(triangleWidth, triangleHeight) {
             @Override
             public void draw(@NonNull Canvas canvas) {
                 Paint paint = new Paint();
@@ -283,72 +284,26 @@ public class MenuPopUp {
                 paint.setStyle(Paint.Style.FILL);
                 Path path = new Path();
                 path.moveTo(0f, 0f);
-                path.lineTo(0f, triangleWidth);
-                path.lineTo(triangleHeight, triangleWidth / 2);
+                path.lineTo(0f, mIntrinsicHeight);
+                path.lineTo(mIntrinsicWidth, mIntrinsicHeight / 2);
                 path.close();
                 canvas.drawPath(path, paint);
-            }
-
-            @Override
-            public void setAlpha(int alpha) {
-            }
-
-            @Override
-            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-            }
-
-            @Override
-            public int getOpacity() {
-                return PixelFormat.TRANSLUCENT;
-            }
-
-            @Override
-            public int getIntrinsicWidth() {
-                return (int) triangleHeight;
-            }
-
-            @Override
-            public int getIntrinsicHeight() {
-                return (int) triangleWidth;
             }
         };
         mNextPage.setCompoundDrawablesWithIntrinsicBounds(null, null, rightTriangleDrawable, null);
 
-        Drawable leftTriangleDrawable = new Drawable() {
+        Drawable leftTriangleDrawable = new CanvasDrawable(triangleWidth, triangleHeight) {
             @Override
             public void draw(@NonNull Canvas canvas) {
                 Paint paint = new Paint();
                 paint.setColor(Color.WHITE);
                 paint.setStyle(Paint.Style.FILL);
                 Path path = new Path();
-                path.moveTo(triangleHeight, 0f);
-                path.lineTo(triangleHeight, triangleWidth);
-                path.lineTo(0f, triangleWidth / 2);
+                path.moveTo(mIntrinsicWidth, 0f);
+                path.lineTo(mIntrinsicWidth, mIntrinsicHeight);
+                path.lineTo(0f, mIntrinsicHeight / 2);
                 path.close();
                 canvas.drawPath(path, paint);
-            }
-
-            @Override
-            public void setAlpha(int alpha) {
-            }
-
-            @Override
-            public void setColorFilter(@Nullable ColorFilter colorFilter) {
-            }
-
-            @Override
-            public int getOpacity() {
-                return PixelFormat.TRANSLUCENT;
-            }
-
-            @Override
-            public int getIntrinsicWidth() {
-                return (int) triangleHeight;
-            }
-
-            @Override
-            public int getIntrinsicHeight() {
-                return (int) triangleWidth;
             }
         };
         mPreviousPage.setCompoundDrawablesWithIntrinsicBounds(leftTriangleDrawable, null, null, null);
@@ -362,7 +317,7 @@ public class MenuPopUp {
     private View getTriangleIndicatorView(Context context, final float widthPixel
             , final float heightPixel, final int color) {
         ImageView indicator = new ImageView(context);
-        Drawable drawable = new Drawable() {
+        Drawable drawable = new CanvasDrawable(widthPixel, heightPixel) {
             @Override
             public void draw(Canvas canvas) {
                 Path path = new Path();
@@ -370,33 +325,10 @@ public class MenuPopUp {
                 paint.setColor(color);
                 paint.setStyle(Paint.Style.FILL);
                 path.moveTo(0f, 0f);
-                path.lineTo(widthPixel, 0f);
-                path.lineTo(widthPixel / 2, heightPixel);
+                path.lineTo(mIntrinsicWidth, 0f);
+                path.lineTo(mIntrinsicWidth / 2, mIntrinsicHeight);
                 path.close();
                 canvas.drawPath(path, paint);
-            }
-
-            @Override
-            public void setAlpha(int alpha) {
-            }
-
-            @Override
-            public void setColorFilter(ColorFilter colorFilter) {
-            }
-
-            @Override
-            public int getOpacity() {
-                return PixelFormat.TRANSLUCENT;
-            }
-
-            @Override
-            public int getIntrinsicWidth() {
-                return (int) widthPixel;
-            }
-
-            @Override
-            public int getIntrinsicHeight() {
-                return (int) heightPixel;
             }
         };
         indicator.setImageDrawable(drawable);
@@ -436,5 +368,55 @@ public class MenuPopUp {
                 value, getResources().getDisplayMetrics());
     }
 
+    private OnMenuClickListener onMenuClickListener;
+
+    public OnMenuClickListener getOnMenuClickListener() {
+        return onMenuClickListener;
+    }
+
+    public void setOnMenuClickListener(OnMenuClickListener onMenuClickListener) {
+        this.onMenuClickListener = onMenuClickListener;
+    }
+
+    interface OnMenuClickListener {
+        void onMenuClick(View view, int position);
+    }
+
+    class CanvasDrawable extends Drawable {
+        protected float mIntrinsicWidth;
+        protected float mIntrinsicHeight;
+
+        public CanvasDrawable(float intrinsicWidth, float intrinsicHeight) {
+            mIntrinsicWidth = intrinsicWidth;
+            mIntrinsicHeight = intrinsicHeight;
+        }
+
+        @Override
+        public void draw(@NonNull Canvas canvas) {
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+        }
+
+        @Override
+        public void setColorFilter(@Nullable ColorFilter colorFilter) {
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.TRANSLUCENT;
+        }
+
+        @Override
+        public int getIntrinsicWidth() {
+            return (int) mIntrinsicWidth;
+        }
+
+        @Override
+        public int getIntrinsicHeight() {
+            return (int) mIntrinsicHeight;
+        }
+    }
 }
 
