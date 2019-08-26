@@ -54,7 +54,8 @@
         <activity android:name=".testPictureSelect.PicturePreviewActivity" />
         <activity android:name=".testPictureSelect.PictureVideoPlayActivity" />
 
-        <activity android:name=".testSpecialEditLayout.SpecialEditLayoutAct" />
+        <activity android:name=".testSpecialEditLayout.SpecialEditLayoutAct"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
 
         <activity android:name=".testGiftAnim.TestGiftAnimAct" />
         <activity android:name=".testGiftAnim.GiftAnimActivity" />

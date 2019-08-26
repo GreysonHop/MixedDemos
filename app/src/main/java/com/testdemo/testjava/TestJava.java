@@ -23,6 +23,15 @@ public class TestJava {
         a.add("ea");
         System.out.println("a = " + a + " - " + a.subList(0, 1));
 
+    }
+
+    public static boolean isPhoneNumber(String str) {
+        Pattern pattern = Pattern.compile("^1[3|4|5|7|8][0-9]\\d{8}$");
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
+    }
+
+    public static void testRegularExpression() {
         String test1 = "13";
         String test2 = "13 7";
         String test3 = "137 ";
@@ -32,17 +41,6 @@ public class TestJava {
 
         System.out.println(pattern.matcher(test1).matches() + "\n" + pattern.matcher(test2).matches()
                 + "\n" + pattern.matcher(test3).matches() + "\n" + pattern.matcher(test4).matches());
-
-        int[] sel = new int[10];
-        for (int i : sel) {
-            System.out.println(i);
-        }
-    }
-
-    public static boolean isPhoneNumber(String str) {
-        Pattern pattern = Pattern.compile("^1[3|4|5|7|8][0-9]\\d{8}$");
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
     }
 
     public static void testDecimalFormat() {

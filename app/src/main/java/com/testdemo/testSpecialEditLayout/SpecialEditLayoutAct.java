@@ -5,25 +5,24 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.luck.picture.lib.tools.ScreenUtils;
 import com.testdemo.R;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
 
@@ -43,9 +42,11 @@ public class SpecialEditLayoutAct extends Activity {
     private PopupWindow mPopupWindow;
     private MenuLinearLayout mMenuLinearLayout;
 
+    private TextView tv_test_clickable;
+
     private MenuPopUp menuPopUp;
     private float mOffsetX;
-    private float moffsetY;
+    private float mOffsetY;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,14 +55,25 @@ public class SpecialEditLayoutAct extends Activity {
 
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 
+        tv_test_clickable = findViewById(R.id.tv_test_clickable);
         toolLayout = (ToolLayout) findViewById(R.id.layout_tool);
         editText = (EditText) findViewById(R.id.et_msg);
         fl_content = findViewById(R.id.fl_content);
         fl_content.setOnTouchListener((view, event) -> {
             mOffsetX =event.getX();
-            moffsetY = event.getY();
+            mOffsetY = event.getY();
             return false;
         });
+
+        List<String> menuList = new ArrayList<>();
+        menuList.add("拷贝--你狗狗的DNA-pu na na na!!! huha?!");
+        menuList.add("全部删除");
+        menuList.add("转发");
+        menuList.add("随便点");
+        menuList.add("引用");
+        menuList.add("删除");
+        menuList.add("多选");
+        menuList.add("销毁");
         fl_content.setOnLongClickListener((v) -> {
             /*if (mPopupWindow == null) {
                 mPopupWindow = new PopupWindow(this);
@@ -73,33 +85,19 @@ public class SpecialEditLayoutAct extends Activity {
                     mPopupWindow.dismiss();
                 });
                 mPopupWindow.setContentView(mMenuLinearLayout);
-                List<String> menuList = new ArrayList<>();
-                menuList.add("拷贝--你狗狗的DNA-pu na na na!!! huha?!");
-                menuList.add("全部删除");
-                menuList.add("转发");
-                menuList.add("随便点");
-                menuList.add("引用");
-                menuList.add("删除");
-                menuList.add("多选");
-                menuList.add("销毁");
                 mMenuLinearLayout.setMenuList(menuList);
             }
             mPopupWindow.showAsDropDown(fl_content);*/
 
             if (menuPopUp == null) {
                 menuPopUp = new MenuPopUp(this);
-                List<String> menuList = new ArrayList<>();
-                menuList.add("拷贝--你狗狗的DNA-pu na na na!!! huha?!");
-                menuList.add("全部删除");
-                menuList.add("转发");
-                menuList.add("随便点");
-                menuList.add("引用");
-                menuList.add("删除");
-                menuList.add("多选");
-                menuList.add("销毁");
                 menuPopUp.setMenuList(menuList);
+                menuPopUp.setOnMenuClickListener((view, position) -> {
+                    System.out.println(view + " -- " + position);
+                    Toast.makeText(this, "press: " + position, Toast.LENGTH_SHORT).show();
+                });
             }
-            menuPopUp.showPopupListWindow(fl_content, mOffsetX, moffsetY);
+            menuPopUp.showPopupListWindow(fl_content, mOffsetX, mOffsetY);
             return true;
         });
 
@@ -163,6 +161,43 @@ public class SpecialEditLayoutAct extends Activity {
                     }
                 }
         );*/
+
+        setTextClickable();
+    }
+
+    private void setTextClickable() {
+        tv_test_clickable.setHighlightColor(getResources().getColor(R.color.transparent));
+        SpannableStringBuilder spannableStBuilder = new SpannableStringBuilder();
+        spannableStBuilder.append("回复").append(" ");
+        int colorStart = spannableStBuilder.length() - 1;
+
+        spannableStBuilder.append("Anne");
+        int colorEnd = spannableStBuilder.length();
+
+        spannableStBuilder.append(" : ");
+        int clickableEnd = spannableStBuilder.length();
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                if (widget instanceof TextView) {
+                    Toast.makeText(SpecialEditLayoutAct.this, "you click: " + ((TextView) widget).getText().toString(), Toast.LENGTH_SHORT).show();
+                    //todo show the input panel
+                }
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                ds.setColor(ds.linkColor);
+                ds.setUnderlineText(false);
+            }
+        };
+        spannableStBuilder.setSpan(clickableSpan, colorStart, clickableEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStBuilder.setSpan(new ForegroundColorSpan(Color.WHITE), colorStart, colorEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStBuilder.setSpan(new ForegroundColorSpan(Color.BLACK), colorEnd, clickableEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableStBuilder.append("I am Iron man! Can you beat me!");
+
+        tv_test_clickable.setMovementMethod(LinkMovementMethod.getInstance());
+        tv_test_clickable.setText(spannableStBuilder);
     }
 
     public void onClick(View view) {

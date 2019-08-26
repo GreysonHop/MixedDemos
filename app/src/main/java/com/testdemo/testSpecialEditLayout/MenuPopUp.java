@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.luck.picture.lib.tools.ScreenUtils;
 import com.testdemo.R;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class MenuPopUp {
     public static final float DEFAULT_DIVIDER_WIDTH_DP = 0.5f;
     public static final float DEFAULT_DIVIDER_HEIGHT_DP = 16.0f;
 
+    private boolean hasInit;
     private Context mContext;
     private PopupWindow mPopupWindow;
     private LinearLayout mLlPopUpContent;
@@ -57,7 +59,9 @@ public class MenuPopUp {
 
     private TextView mNextPage;
     private TextView mPreviousPage;
-    private View mIndicatorView;
+    private View mIndicatorViewDown;
+    private View mIndicatorViewUp;
+    private View mIndicatorViewCurrent;
 
     private List<TextView> mTvMenuList = new ArrayList<>();
     private List<String> mMenuList;
@@ -73,6 +77,7 @@ public class MenuPopUp {
         mLlPopUpContent = new LinearLayout(mContext);
         mLlPopUpContent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         mLlPopUpContent.setOrientation(LinearLayout.VERTICAL);
+        mLlPopUpContent.setGravity(Gravity.CENTER_HORIZONTAL);
         mLlMenuList = new LinearLayout(mContext);
         mLlMenuList.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         mLlMenuList.setOrientation(LinearLayout.HORIZONTAL);
@@ -80,25 +85,16 @@ public class MenuPopUp {
         mLlMenuList.setBackgroundResource(R.drawable.shape_corner4_black);
         mLlPopUpContent.addView(mLlMenuList);
 
-        mIndicatorView = getDefaultIndicatorView(mContext);
-        if (mIndicatorView != null) {
-            /*LinearLayout.LayoutParams layoutParams;
-            if (mIndicatorView.getLayoutParams() == null) {
-                layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            } else {
-                layoutParams = (LinearLayout.LayoutParams) mIndicatorView.getLayoutParams();
-            }
-            layoutParams.gravity = Gravity.CENTER;
-            mIndicatorView.setLayoutParams(layoutParams);
-            ViewParent viewParent = mIndicatorView.getParent();
-            if (viewParent instanceof ViewGroup) {
-                ((ViewGroup) viewParent).removeView(mIndicatorView);
-            }*/
-            mLlPopUpContent.addView(mIndicatorView);
-        }
+        mIndicatorViewDown = getDefaultIndicatorView(mContext);
+        mIndicatorViewUp = getTriangleIndicatorUp();
     }
 
-    public void showPopupListWindow(View mAnchorView, float offsetX, float offsetY) {
+    private View mAnchorView;
+    private float mOffsetX, mOffsetY;
+    private int mShowY;
+    private int[] mAnchorViewLocation = new int[2];
+
+    public void showPopupListWindow(View anchorView, float offsetX, float offsetY) {
         if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
             return;
         }
@@ -106,33 +102,73 @@ public class MenuPopUp {
             mPopupWindow = new PopupWindow(mContext);
             mPopupWindow.setContentView(mLlPopUpContent);
             mPopupWindow.setOutsideTouchable(true);
-//            mPopupWindow.setBackgroundDrawable(null);
+            mPopupWindow.setBackgroundDrawable(null);
         }
 
-        int mPopupWindowWidth = getViewWidth(mLlPopUpContent);
+        int statusBarHeight = getStatusBarHeight();
+        anchorView.getLocationOnScreen(mAnchorViewLocation);
+        int touchRawY = mAnchorViewLocation[1] + (int) offsetY;
         int mPopupWindowHeight = getViewHeight(mLlPopUpContent);
-        int mIndicatorWidth = getViewHeight(mIndicatorView);
 
-        int[] location = new int[2];
-        mAnchorView.getLocationOnScreen(location);
-        if (mIndicatorView != null) {
-            float leftTranslationLimit = mIndicatorWidth / 2f /*+ mBackgroundCornerRadius*/ - mPopupWindowWidth / 2f;
-            float rightTranslationLimit = mPopupWindowWidth / 2f - mIndicatorWidth / 2f /*- mBackgroundCornerRadius*/;
-            float maxWidth = mContext.getResources().getDisplayMetrics().widthPixels;
-            if (location[0] + offsetX < mPopupWindowWidth / 2f) {
-                mIndicatorView.setTranslationX(Math.max(location[0] + offsetX - mPopupWindowWidth / 2f, leftTranslationLimit));
-            } else if (location[0] + offsetX + mPopupWindowWidth / 2f > maxWidth) {
-                mIndicatorView.setTranslationX(Math.min(location[0] + offsetX + mPopupWindowWidth / 2f - maxWidth, rightTranslationLimit));
-            } else {
-                mIndicatorView.setTranslationX(0);
+        if (touchRawY - mPopupWindowHeight < statusBarHeight) {
+            if (mIndicatorViewCurrent != mIndicatorViewUp) {
+                mLlPopUpContent.removeView(mIndicatorViewDown);
+                mIndicatorViewCurrent = mIndicatorViewUp;
+                mLlPopUpContent.addView(mIndicatorViewUp, 0);
             }
+            mShowY = touchRawY;
+        } else {
+            if (mIndicatorViewCurrent != mIndicatorViewDown) {
+                mLlPopUpContent.removeView(mIndicatorViewUp);
+                mIndicatorViewCurrent = mIndicatorViewDown;
+                mLlPopUpContent.addView(mIndicatorViewDown);
+            }
+            mShowY = touchRawY - mPopupWindowHeight;
         }
-        if (!mPopupWindow.isShowing()) {
-            int x = (int) (location[0] + offsetX - mPopupWindowWidth / 2f + 0.5f);
-            int y = (int) (location[1] + offsetY - mPopupWindowHeight + 0.5f);
-            mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, y);
+
+        mAnchorView = anchorView;
+        mOffsetX = offsetX;
+//        mOffsetY = offsetY;
+
+        showPopupWindow();
+    }
+
+    private void showPopupWindow() {
+        if (!hasInit) {
+            return;
+        }
+        int mPopupWindowWidth = getViewWidth(mLlPopUpContent);
+        int mIndicatorWidth = getViewHeight(mIndicatorViewCurrent);
+
+        int touchRawX = mAnchorViewLocation[0] + (int) mOffsetX;
+        int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+
+
+        float leftTranslationLimit = mIndicatorWidth / 2f - mPopupWindowWidth / 2f;
+        float rightTranslationLimit = mPopupWindowWidth / 2f - mIndicatorWidth / 2f;
+
+        int x;
+
+        if (touchRawX < mPopupWindowWidth / 2f) {
+            mIndicatorViewCurrent.setTranslationX(Math.max(touchRawX - mPopupWindowWidth / 2f, leftTranslationLimit));
+            x = 0;
+        } else if (touchRawX + mPopupWindowWidth / 2f > screenWidth) {
+            mIndicatorViewCurrent.setTranslationX(Math.min(touchRawX + mPopupWindowWidth / 2f - screenWidth, rightTranslationLimit));
+            x = screenWidth - mPopupWindowWidth / 2;
+        } else {
+            mIndicatorViewCurrent.setTranslationX(0);
+            x = touchRawX - mPopupWindowWidth / 2;
+        }
+
+
+        if (mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
+//        int x = (int) (touchRawX - mPopupWindowWidth / 2f + 0.5f);
+//        int y = (int) (touchRawY - mPopupWindowHeight + 0.5f);
+        mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, mShowY);
 //            mPopupWindow.showAsDropDown(mAnchorView);
-        }
+
     }
 
     private SparseArray<TextView> mAllMenu = new SparseArray<>();
@@ -199,6 +235,7 @@ public class MenuPopUp {
 
         mShowingPage = 0;
         showMenuInPage(mShowingPage);
+        hasInit = true;
     }
 
     private void showNextPage() {
@@ -239,6 +276,7 @@ public class MenuPopUp {
                 mLlMenuList.addView(getLineView());
             }
         }
+        showPopupWindow();
     }
 
     private View getLineView() {
@@ -335,6 +373,25 @@ public class MenuPopUp {
         return indicator;
     }
 
+    private View getTriangleIndicatorUp() {
+        ImageView indicator = new ImageView(mContext);
+        Drawable drawable = new CanvasDrawable(dp2px(10), dp2px(6)) {
+            @Override
+            public void draw(Canvas canvas) {
+                Path path = new Path();
+                Paint paint = new Paint();
+                paint.setColor(DEFAULT_NORMAL_BACKGROUND_COLOR);
+                paint.setStyle(Paint.Style.FILL);
+                path.moveTo(0f, mIntrinsicHeight);
+                path.lineTo(mIntrinsicWidth, mIntrinsicHeight);
+                path.lineTo(mIntrinsicWidth / 2, 0);
+                path.close();
+                canvas.drawPath(path, paint);
+            }
+        };
+        indicator.setImageDrawable(drawable);
+        return indicator;
+    }
 
     public Resources getResources() {
         if (mContext == null) {
@@ -366,6 +423,12 @@ public class MenuPopUp {
     public int sp2px(float value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 value, getResources().getDisplayMetrics());
+    }
+
+    public int getStatusBarHeight() {
+        // 获得状态栏高度
+        int resourceId = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return mContext.getResources().getDimensionPixelSize(resourceId);
     }
 
     private OnMenuClickListener onMenuClickListener;
