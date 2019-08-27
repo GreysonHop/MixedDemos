@@ -9,8 +9,8 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
@@ -18,22 +18,19 @@ import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.luck.picture.lib.tools.ScreenUtils;
 import com.testdemo.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Create by Greyson
  */
 public class MenuPopUp {
 
@@ -82,19 +79,29 @@ public class MenuPopUp {
         mLlMenuList.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         mLlMenuList.setOrientation(LinearLayout.HORIZONTAL);
         mLlMenuList.setGravity(Gravity.CENTER_VERTICAL);
-        mLlMenuList.setBackgroundResource(R.drawable.shape_corner4_black);
+        GradientDrawable cornerBackground = new GradientDrawable();
+        cornerBackground.setColor(DEFAULT_NORMAL_BACKGROUND_COLOR);
+        cornerBackground.setCornerRadius(dp2px(4));
+        mLlMenuList.setBackground(cornerBackground);
         mLlPopUpContent.addView(mLlMenuList);
 
-        mIndicatorViewDown = getDefaultIndicatorView(mContext);
+        mIndicatorViewDown = getTriangleIndicatorDown();
         mIndicatorViewUp = getTriangleIndicatorUp();
     }
 
     private View mAnchorView;
-    private float mOffsetX, mOffsetY;
+    private float mTouchX;
     private int mShowY;
     private int[] mAnchorViewLocation = new int[2];
 
-    public void showPopupListWindow(View anchorView, float offsetX, float offsetY) {
+    /**
+     * 在指定的点显示popupWindow
+     *
+     * @param anchorView
+     * @param touchX     长按时最后手指所在处的X坐标
+     * @param touchY     长按时最后手指所在处的Y坐标
+     */
+    public void showPopupWindow(View anchorView, float touchX, float touchY) {
         if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
             return;
         }
@@ -107,7 +114,7 @@ public class MenuPopUp {
 
         int statusBarHeight = getStatusBarHeight();
         anchorView.getLocationOnScreen(mAnchorViewLocation);
-        int touchRawY = mAnchorViewLocation[1] + (int) offsetY;
+        int touchRawY = mAnchorViewLocation[1] + (int) touchY;
         int mPopupWindowHeight = getViewHeight(mLlPopUpContent);
 
         if (touchRawY - mPopupWindowHeight < statusBarHeight) {
@@ -127,46 +134,60 @@ public class MenuPopUp {
         }
 
         mAnchorView = anchorView;
-        mOffsetX = offsetX;
-//        mOffsetY = offsetY;
+        mTouchX = touchX;
 
-        showPopupWindow();
+        showMenuInPage(0);
+        adjustXAndShowPopupWindow();
     }
 
-    private void showPopupWindow() {
+    public void hidePopupWindow() {
+        if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
+            return;
+        }
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+        }
+    }
+
+    /**
+     * 根据宽度的变化调整popupWindow显示位置的X坐标。以长按点为中心，去调节Location的X；
+     * 如果超出屏幕则往屏幕里面偏移
+     */
+    private void adjustXAndShowPopupWindow() {
         if (!hasInit) {
             return;
         }
-        int mPopupWindowWidth = getViewWidth(mLlPopUpContent);
-        int mIndicatorWidth = getViewHeight(mIndicatorViewCurrent);
+        int popupWindowWidth = getViewWidth(mLlPopUpContent);
+        int indicatorWidth = getViewWidth(mIndicatorViewCurrent);
 
-        int touchRawX = mAnchorViewLocation[0] + (int) mOffsetX;
+        int touchRawX = mAnchorViewLocation[0] + (int) mTouchX;
         int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
 
-
-        float leftTranslationLimit = mIndicatorWidth / 2f - mPopupWindowWidth / 2f;
-        float rightTranslationLimit = mPopupWindowWidth / 2f - mIndicatorWidth / 2f;
+        float halfPopupWindowWidth = popupWindowWidth / 2f;
+        float leftTranslationLimit = indicatorWidth / 2f - halfPopupWindowWidth;
+        float rightTranslationLimit = halfPopupWindowWidth - indicatorWidth / 2f;
 
         int x;
 
-        if (touchRawX < mPopupWindowWidth / 2f) {
-            mIndicatorViewCurrent.setTranslationX(Math.max(touchRawX - mPopupWindowWidth / 2f, leftTranslationLimit));
+        if (touchRawX < halfPopupWindowWidth) {
+            mIndicatorViewCurrent.setTranslationX(Math.max(touchRawX - halfPopupWindowWidth, leftTranslationLimit));
             x = 0;
-        } else if (touchRawX + mPopupWindowWidth / 2f > screenWidth) {
-            mIndicatorViewCurrent.setTranslationX(Math.min(touchRawX + mPopupWindowWidth / 2f - screenWidth, rightTranslationLimit));
-            x = screenWidth - mPopupWindowWidth / 2;
+        } else if (touchRawX + halfPopupWindowWidth > screenWidth) {
+            mIndicatorViewCurrent.setTranslationX(Math.min(touchRawX + halfPopupWindowWidth - screenWidth, rightTranslationLimit));
+            x = screenWidth - popupWindowWidth / 2;
         } else {
             mIndicatorViewCurrent.setTranslationX(0);
-            x = touchRawX - mPopupWindowWidth / 2;
+            x = touchRawX - popupWindowWidth / 2;
         }
 
 
         if (mPopupWindow.isShowing()) {
-            mPopupWindow.dismiss();
-        }
-//        int x = (int) (touchRawX - mPopupWindowWidth / 2f + 0.5f);
+//            mPopupWindow.dismiss();
+            mPopupWindow.update(x, mShowY, popupWindowWidth, getViewHeight(mLlPopUpContent));
+        } else
+//        int x = (int) (touchRawX - halfPopupWindowWidth + 0.5f);
 //        int y = (int) (touchRawY - mPopupWindowHeight + 0.5f);
-        mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, mShowY);
+            mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, mShowY);
 //            mPopupWindow.showAsDropDown(mAnchorView);
 
     }
@@ -183,8 +204,9 @@ public class MenuPopUp {
     private int mShowingPage;
 
     public void setMenuList(List<String> menuList) {
-        mMenuList = menuList;
         if (menuList == null) return;
+        mMenuList = menuList;
+        mTvMenuList.clear();
 
         int[] ints;
         int size = menuList.size();
@@ -196,6 +218,7 @@ public class MenuPopUp {
         ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
         int screenWidth = displayMetrics.widthPixels;
         int widthPerPage = screenWidth / 4 * 3;
+        int switchPageBtnWidth = getViewWidth(mNextPage);
 
         for (int i = 0; i < size; i++) {
             String s = menuList.get(i);
@@ -216,7 +239,7 @@ public class MenuPopUp {
             ints[i] = getViewWidth(tv);
             System.out.println("greyson tv's width = " + ints[i] + ", currentWidth = " + currentWidth + ", screen = " + widthPerPage);
             currentWidth += ints[i];
-            if (currentWidth > widthPerPage) {
+            if (currentWidth + switchPageBtnWidth * 2 > widthPerPage) {
                 pagePoint.add(i - 1);
                 currentWidth = ints[i];
             }
@@ -233,8 +256,8 @@ public class MenuPopUp {
             mLastIndexPerPage[i] = pagePoint.get(i);
         }
 
-        mShowingPage = 0;
-        showMenuInPage(mShowingPage);
+        mShowingPage = -1;
+        showMenuInPage(0);
         hasInit = true;
     }
 
@@ -242,17 +265,21 @@ public class MenuPopUp {
         if (mShowingPage + 1 > mLastIndexPerPage.length) {
             return;
         }
-        showMenuInPage(++mShowingPage);
+        showMenuInPage(mShowingPage + 1);
     }
 
     private void showPreviousPage() {
         if (mShowingPage - 1 < 0) {
             return;
         }
-        showMenuInPage(--mShowingPage);
+        showMenuInPage(mShowingPage - 1);
     }
 
     private void showMenuInPage(int page) {
+        if (page == mShowingPage) {
+            return;
+        }
+        mShowingPage = page;
         mLlMenuList.removeAllViews();
 
         int beginIndex = 0;
@@ -276,7 +303,7 @@ public class MenuPopUp {
                 mLlMenuList.addView(getLineView());
             }
         }
-        showPopupWindow();
+        adjustXAndShowPopupWindow();
     }
 
     private View getLineView() {
@@ -285,16 +312,6 @@ public class MenuPopUp {
         line.setLayoutParams(lp);
         line.setBackgroundColor(Color.WHITE);
         return line;
-    }
-
-
-    public void hidePopupListWindow() {
-        if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
-            return;
-        }
-        if (mPopupWindow != null && mPopupWindow.isShowing()) {
-            mPopupWindow.dismiss();
-        }
     }
 
     private void initPageSwitchBtn() {
@@ -347,20 +364,14 @@ public class MenuPopUp {
         mPreviousPage.setCompoundDrawablesWithIntrinsicBounds(leftTriangleDrawable, null, null, null);
     }
 
-
-    public View getDefaultIndicatorView(Context context) {
-        return getTriangleIndicatorView(context, dp2px(10), dp2px(6), DEFAULT_NORMAL_BACKGROUND_COLOR);
-    }
-
-    private View getTriangleIndicatorView(Context context, final float widthPixel
-            , final float heightPixel, final int color) {
-        ImageView indicator = new ImageView(context);
-        Drawable drawable = new CanvasDrawable(widthPixel, heightPixel) {
+    private View getTriangleIndicatorDown() {
+        ImageView indicator = new ImageView(mContext);
+        Drawable drawable = new CanvasDrawable(dp2px(10), dp2px(6)) {
             @Override
             public void draw(Canvas canvas) {
                 Path path = new Path();
                 Paint paint = new Paint();
-                paint.setColor(color);
+                paint.setColor(DEFAULT_NORMAL_BACKGROUND_COLOR);
                 paint.setStyle(Paint.Style.FILL);
                 path.moveTo(0f, 0f);
                 path.lineTo(mIntrinsicWidth, 0f);
@@ -441,7 +452,7 @@ public class MenuPopUp {
         this.onMenuClickListener = onMenuClickListener;
     }
 
-    interface OnMenuClickListener {
+    public interface OnMenuClickListener {
         void onMenuClick(View view, int position);
     }
 

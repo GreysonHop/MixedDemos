@@ -1,13 +1,13 @@
 package com.testdemo.testSpecialEditLayout;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.MenuPopupWindow;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -24,9 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.testdemo.R;
-import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -60,20 +59,22 @@ public class SpecialEditLayoutAct extends Activity {
         editText = (EditText) findViewById(R.id.et_msg);
         fl_content = findViewById(R.id.fl_content);
         fl_content.setOnTouchListener((view, event) -> {
-            mOffsetX =event.getX();
+            mOffsetX = event.getX();
             mOffsetY = event.getY();
             return false;
         });
 
-        List<String> menuList = new ArrayList<>();
-        menuList.add("拷贝--你狗狗的DNA-pu na na na!!! huha?!");
-        menuList.add("全部删除");
-        menuList.add("转发");
-        menuList.add("随便点");
-        menuList.add("引用");
-        menuList.add("删除");
-        menuList.add("多选");
-        menuList.add("销毁");
+        List<String> menuList = Arrays.asList(
+                "拷贝--你狗狗的DNA-pu na na na!!?!",
+                "全部删除",
+                "转发",
+                "随便点",
+                "引用",
+                "删除",
+                "多选",
+                "销毁"
+        );
+//        MenuPopupWindow
         fl_content.setOnLongClickListener((v) -> {
             /*if (mPopupWindow == null) {
                 mPopupWindow = new PopupWindow(this);
@@ -97,12 +98,11 @@ public class SpecialEditLayoutAct extends Activity {
                     Toast.makeText(this, "press: " + position, Toast.LENGTH_SHORT).show();
                 });
             }
-            menuPopUp.showPopupListWindow(fl_content, mOffsetX, mOffsetY);
+            menuPopUp.showPopupWindow(fl_content, mOffsetX, mOffsetY);
             return true;
         });
 
-        fl_content.setOnClickListener((v) ->
-                startActivity(new Intent(this, TestPopupListActivity.class)));
+//        fl_content.setOnClickListener((v) -> startActivity(new Intent(this, TestPopupListActivity.class)));
 
         /*editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
