@@ -96,7 +96,7 @@
         android:paddingRight="12dp"
         android:paddingBottom="8dp">
 
-        <com.testdemo.testSpecialEditLayout.SelectableTextView
+        <TextView
             android:id="@+id/message_tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

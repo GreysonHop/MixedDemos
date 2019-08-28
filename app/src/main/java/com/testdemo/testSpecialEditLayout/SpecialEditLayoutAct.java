@@ -98,7 +98,8 @@ public class SpecialEditLayoutAct extends Activity {
                     Toast.makeText(this, "press: " + position, Toast.LENGTH_SHORT).show();
                 });
             }
-            menuPopUp.showPopupWindow(fl_content, mOffsetX, mOffsetY);
+//            menuPopUp.showPopupWindow(fl_content, mOffsetX, mOffsetY, false);
+            menuPopUp.showPopupWindow(fl_content);
             return true;
         });
 

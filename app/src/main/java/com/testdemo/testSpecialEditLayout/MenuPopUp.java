@@ -24,8 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.testdemo.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,18 +88,27 @@ public class MenuPopUp {
     }
 
     private View mAnchorView;
-    private float mTouchX;
+    private int mTouchXInScreen;
     private int mShowY;
-    private int[] mAnchorViewLocation = new int[2];
+//    private int[] mAnchorViewLocation = new int[2];
+
+    /**
+     * 依附于anchorView显示popupWindow，默认在其中间顶部
+     * @param anchorView
+     */
+    public void showPopupWindow(View anchorView) {
+        showPopupWindow(anchorView, anchorView.getWidth() / 2f, 0, false);
+    }
 
     /**
      * 在指定的点显示popupWindow
      *
      * @param anchorView
-     * @param touchX     长按时最后手指所在处的X坐标
-     * @param touchY     长按时最后手指所在处的Y坐标
+     * @param touchX     长按时最后手指所在处的X坐标，相对于anchorView
+     * @param touchY     长按时最后手指所在处的Y坐标，相对于anchorView
+     * @param locateInScreen touch点是参照window，而不是anchorView
      */
-    public void showPopupWindow(View anchorView, float touchX, float touchY) {
+    public void showPopupWindow(View anchorView, float touchX, float touchY, boolean locateInScreen) {
         if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
             return;
         }
@@ -112,9 +119,19 @@ public class MenuPopUp {
             mPopupWindow.setBackgroundDrawable(null);
         }
 
+        mAnchorView = anchorView;
+
         int statusBarHeight = getStatusBarHeight();
-        anchorView.getLocationOnScreen(mAnchorViewLocation);
-        int touchRawY = mAnchorViewLocation[1] + (int) touchY;
+        int touchRawY;
+        if (locateInScreen) {
+            touchRawY = (int) touchY;
+            mTouchXInScreen = (int) touchX;
+        } else {
+            int[] anchorViewLocation = new int[2];
+            anchorView.getLocationOnScreen(anchorViewLocation);
+            touchRawY = anchorViewLocation[1] + (int) touchY;
+            mTouchXInScreen = anchorViewLocation[0] + (int) touchX;
+        }
         int mPopupWindowHeight = getViewHeight(mLlPopUpContent);
 
         if (touchRawY - mPopupWindowHeight < statusBarHeight) {
@@ -132,9 +149,6 @@ public class MenuPopUp {
             }
             mShowY = touchRawY - mPopupWindowHeight;
         }
-
-        mAnchorView = anchorView;
-        mTouchX = touchX;
 
         showMenuInPage(0);
         adjustXAndShowPopupWindow();
@@ -160,7 +174,7 @@ public class MenuPopUp {
         int popupWindowWidth = getViewWidth(mLlPopUpContent);
         int indicatorWidth = getViewWidth(mIndicatorViewCurrent);
 
-        int touchRawX = mAnchorViewLocation[0] + (int) mTouchX;
+        int touchRawX = mTouchXInScreen;
         int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
 
         float halfPopupWindowWidth = popupWindowWidth / 2f;
@@ -225,7 +239,7 @@ public class MenuPopUp {
             TextView tv = new TextView(mContext);
             tv.setTextColor(Color.WHITE);
 //            tv.setBackgroundResource();
-            tv.setPadding(dp2px(7f), dp2px(5f), dp2px(7f), dp2px(5f));
+            tv.setPadding(dp2px(8f), dp2px(5f), dp2px(8f), dp2px(5f));
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             tv.setText(s);
             tv.setGravity(Gravity.CENTER);
@@ -366,7 +380,7 @@ public class MenuPopUp {
 
     private View getTriangleIndicatorDown() {
         ImageView indicator = new ImageView(mContext);
-        Drawable drawable = new CanvasDrawable(dp2px(10), dp2px(6)) {
+        Drawable drawable = new CanvasDrawable(dp2px(16), dp2px(8)) {
             @Override
             public void draw(Canvas canvas) {
                 Path path = new Path();
@@ -386,7 +400,7 @@ public class MenuPopUp {
 
     private View getTriangleIndicatorUp() {
         ImageView indicator = new ImageView(mContext);
-        Drawable drawable = new CanvasDrawable(dp2px(10), dp2px(6)) {
+        Drawable drawable = new CanvasDrawable(dp2px(16), dp2px(8)) {
             @Override
             public void draw(Canvas canvas) {
                 Path path = new Path();
