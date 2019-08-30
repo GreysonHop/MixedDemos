@@ -9,6 +9,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -85,6 +86,8 @@ public class MenuPopUp {
 
         mIndicatorViewDown = getTriangleIndicatorDown();
         mIndicatorViewUp = getTriangleIndicatorUp();
+        mIndicatorViewCurrent = mIndicatorViewDown;
+        mLlPopUpContent.addView(mIndicatorViewDown);
     }
 
     private View mAnchorView;
@@ -94,21 +97,23 @@ public class MenuPopUp {
 
     /**
      * 依附于anchorView显示popupWindow，默认在其中间顶部
+     *
      * @param anchorView
      */
     public void showPopupWindow(View anchorView) {
-        showPopupWindow(anchorView, anchorView.getWidth() / 2f, 0, false);
+        showPopupWindow(anchorView, anchorView.getWidth() / 2f, 10, false, true);
     }
 
     /**
      * 在指定的点显示popupWindow
      *
      * @param anchorView
-     * @param touchX     长按时最后手指所在处的X坐标，相对于anchorView
-     * @param touchY     长按时最后手指所在处的Y坐标，相对于anchorView
+     * @param touchX         长按时最后手指所在处的X坐标，相对于anchorView
+     * @param touchY         长按时最后手指所在处的Y坐标，相对于anchorView
      * @param locateInScreen touch点是参照window，而不是anchorView
+     * @param outside        是否显示在anchorView外部，即顶部或底部出现，不会遮挡内容
      */
-    public void showPopupWindow(View anchorView, float touchX, float touchY, boolean locateInScreen) {
+    public void showPopupWindow(View anchorView, float touchX, float touchY, boolean locateInScreen, boolean outside) {
         if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
             return;
         }
@@ -116,42 +121,61 @@ public class MenuPopUp {
             mPopupWindow = new PopupWindow(mContext);
             mPopupWindow.setContentView(mLlPopUpContent);
             mPopupWindow.setOutsideTouchable(true);
+            mPopupWindow.setFocusable(true);
             mPopupWindow.setBackgroundDrawable(null);
         }
 
         mAnchorView = anchorView;
 
+        int[] anchorViewLocation = new int[2];
+        anchorView.getLocationOnScreen(anchorViewLocation);
         int statusBarHeight = getStatusBarHeight();
+        int mPopupWindowHeight = getViewHeight(mLlPopUpContent);
         int touchRawY;
         if (locateInScreen) {
             touchRawY = (int) touchY;
             mTouchXInScreen = (int) touchX;
         } else {
-            int[] anchorViewLocation = new int[2];
-            anchorView.getLocationOnScreen(anchorViewLocation);
             touchRawY = anchorViewLocation[1] + (int) touchY;
             mTouchXInScreen = anchorViewLocation[0] + (int) touchX;
         }
-        int mPopupWindowHeight = getViewHeight(mLlPopUpContent);
 
-        if (touchRawY - mPopupWindowHeight < statusBarHeight) {
+        if (outside) {
+            if (anchorViewLocation[1] - mPopupWindowHeight < statusBarHeight) {
+                switchIndicatorView(true);
+                mShowY = anchorViewLocation[1] + anchorView.getHeight();
+            } else {
+                switchIndicatorView(false);
+                mShowY = anchorViewLocation[1] - mPopupWindowHeight;
+            }
+        } else {
+            if (touchRawY - mPopupWindowHeight < statusBarHeight) {
+                switchIndicatorView(true);
+                mShowY = touchRawY;
+            } else {
+                switchIndicatorView(false);
+                mShowY = touchRawY - mPopupWindowHeight;
+            }
+        }
+
+        showMenuInPage(0);
+        adjustXAndShowPopupWindow();
+    }
+
+    private void switchIndicatorView(boolean up) {
+        if (up) {
             if (mIndicatorViewCurrent != mIndicatorViewUp) {
                 mLlPopUpContent.removeView(mIndicatorViewDown);
                 mIndicatorViewCurrent = mIndicatorViewUp;
                 mLlPopUpContent.addView(mIndicatorViewUp, 0);
             }
-            mShowY = touchRawY;
         } else {
             if (mIndicatorViewCurrent != mIndicatorViewDown) {
                 mLlPopUpContent.removeView(mIndicatorViewUp);
                 mIndicatorViewCurrent = mIndicatorViewDown;
                 mLlPopUpContent.addView(mIndicatorViewDown);
             }
-            mShowY = touchRawY - mPopupWindowHeight;
         }
-
-        showMenuInPage(0);
-        adjustXAndShowPopupWindow();
     }
 
     public void hidePopupWindow() {
@@ -196,17 +220,12 @@ public class MenuPopUp {
 
 
         if (mPopupWindow.isShowing()) {
-//            mPopupWindow.dismiss();
             mPopupWindow.update(x, mShowY, popupWindowWidth, getViewHeight(mLlPopUpContent));
         } else
-//        int x = (int) (touchRawX - halfPopupWindowWidth + 0.5f);
-//        int y = (int) (touchRawY - mPopupWindowHeight + 0.5f);
             mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, mShowY);
-//            mPopupWindow.showAsDropDown(mAnchorView);
-
     }
 
-    private SparseArray<TextView> mAllMenu = new SparseArray<>();
+//    private SparseArray<TextView> mAllMenu = new SparseArray<>();
     /**
      * indicate the last index of per page. the size equal to {@link #mShowingPage}.
      * And the page data include the index indicated by this array's value.
@@ -239,7 +258,7 @@ public class MenuPopUp {
             TextView tv = new TextView(mContext);
             tv.setTextColor(Color.WHITE);
 //            tv.setBackgroundResource();
-            tv.setPadding(dp2px(8f), dp2px(5f), dp2px(8f), dp2px(5f));
+            tv.setPadding(dp2px(10f), dp2px(7f), dp2px(10f), dp2px(7f));
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             tv.setText(s);
             tv.setGravity(Gravity.CENTER);
@@ -263,7 +282,7 @@ public class MenuPopUp {
             }
 
             mTvMenuList.add(tv);
-            mAllMenu.put(i, tv);
+//            mAllMenu.put(i, tv);
         }
         mLastIndexPerPage = new int[pagePoint.size()];
         for (int i = 0; i < pagePoint.size(); i++) {
@@ -332,13 +351,13 @@ public class MenuPopUp {
         mNextPage = new TextView(mContext);
         mNextPage.setGravity(Gravity.CENTER);
 //        mNextPage.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.list_icon_next);
-        mNextPage.setPadding(dp2px(8f), dp2px(5f), dp2px(10f), dp2px(5f));
+        mNextPage.setPadding(dp2px(10f), dp2px(7f), dp2px(12f), dp2px(7f));
         mNextPage.setOnClickListener((v) -> showNextPage());
 
         mPreviousPage = new TextView(mContext);
         mPreviousPage.setGravity(Gravity.CENTER);
 //        mPreviousPage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.refresh, 0, 0, 0);
-        mPreviousPage.setPadding(dp2px(10f), dp2px(5f), dp2px(8f), dp2px(5f));
+        mPreviousPage.setPadding(dp2px(12f), dp2px(7f), dp2px(10f), dp2px(7f));
         mPreviousPage.setOnClickListener((v) -> showPreviousPage());
 
 
