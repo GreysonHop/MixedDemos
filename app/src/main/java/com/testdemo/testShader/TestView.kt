@@ -3,9 +3,7 @@ package com.testdemo.testShader
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import com.luck.picture.lib.tools.ScreenUtils
 import com.testdemo.R
 
 /**
@@ -13,8 +11,8 @@ import com.testdemo.R
  */
 class TestView : View {
     private var bmp1: Bitmap? = null
-    private var bmp2: Bitmap? = null
-    private var bmp3: Bitmap? = null
+    private lateinit var bmp2: Bitmap
+    private lateinit var bmp3: Bitmap
     private var paint: Paint? = null
     private var mXfermode: PorterDuffXfermode? = null
 
@@ -24,10 +22,10 @@ class TestView : View {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initRes(context)
+        initRes()
     }
 
-    fun initRes(context: Context) {
+    private fun initRes() {
         // 获取源图
         bmp1 = BitmapFactory.decodeResource(resources, R.drawable.img3)
         bmp2 = BitmapFactory.decodeResource(resources, R.drawable.img2)
@@ -37,7 +35,9 @@ class TestView : View {
     override fun onDraw(canvas: Canvas) {
 //        val canvas = sfh.lockCanvas()
 //        canvas.drawColor(Color.BLACK)
-        canvas.drawBitmap(bmp1, 0f, 0f, paint)
+        bmp1?.let {
+            canvas.drawBitmap(it, 0f, 0f, paint)//这里必须用it，如果直接用bmp1还是会有警告，要你用bmp1!!
+        }
 
         canvas.save()
 
