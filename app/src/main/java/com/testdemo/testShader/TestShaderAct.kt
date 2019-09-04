@@ -14,7 +14,7 @@ class TestShaderAct: Activity() {
         setContentView(R.layout.act_test_shader)
 
         println("greyson this phone's factor: " +
-                "\ndensity = ${resources.displayMetrics.density}" +
+                "\ndensity = ${resources?.displayMetrics?.density}" +
                 "\nwidthPixel = ${resources.displayMetrics.widthPixels}" +
                 "\nheightPixel = ${resources.displayMetrics.heightPixels}" +
                 "\ndensityDpi = ${resources.displayMetrics.densityDpi} " +

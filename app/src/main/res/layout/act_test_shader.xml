@@ -57,7 +57,7 @@
 
     </com.testdemo.testShader.CornerLayout>
 
-    <com.testdemo.testShader.CornerLayout2
+    <com.testdemo.testShader.CornerLayout
         android:layout_width="400dp"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
@@ -86,6 +86,6 @@
             android:layout_marginBottom="10dp"
             android:background="@android:color/holo_red_light"
             android:text="wo shi redd????" />
-    </com.testdemo.testShader.CornerLayout2>
+    </com.testdemo.testShader.CornerLayout>
 
 </RelativeLayout>
