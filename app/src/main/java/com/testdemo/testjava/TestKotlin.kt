@@ -49,5 +49,8 @@ fun main(args: Array<String>) {
     test.addMethod("addadd")
     println("扩展的变量：${test.addition}")
 
-    print(test.myLet(111){ println("自己定义的Lambda表达式，参数为：$it"); return@myLet "no"})
+    println(test.myLet(111){ println("自己定义的Lambda表达式，参数为：$it"); return@myLet "no"})
+
+    var testpp = 1
+    println("-p = ${-testpp}, unary = ${testpp.unaryMinus()}")
 }
