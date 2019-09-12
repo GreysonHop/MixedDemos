@@ -25,6 +25,14 @@ public class TestJava {
 
     }
 
+    public String getInstance(int type) {
+        if (type == 1) {
+            return null;
+        } else {
+            return "SuccessString";
+        }
+    }
+
     public static boolean isPhoneNumber(String str) {
         Pattern pattern = Pattern.compile("^1[3|4|5|7|8][0-9]\\d{8}$");
         Matcher matcher = pattern.matcher(str);

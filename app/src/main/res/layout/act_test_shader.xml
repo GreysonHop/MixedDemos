@@ -67,22 +67,23 @@
         <TextView
             android:id="@+id/tv11"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/holo_blue_bright"
             android:text="wo shi blue--" />
 
         <TextView
             android:id="@+id/tv22"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:background="@android:color/holo_green_light"
             android:text="wo shi green===" />
 
         <TextView
             android:id="@+id/tv33"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="10dp"
             android:background="@android:color/holo_red_light"
             android:text="wo shi redd????" />

@@ -17,7 +17,7 @@ class CornerLayout : RelativeLayout {
         println("greyson CornerLayout init{} radius = $radius")
     }
 
-    constructor(context : Context) : super(context) //如何在构造器中调用其它构造器？
+    constructor(context : Context) : super(context) //如何在构造器中调用其它构造器？（构造器委托的方式）
 
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet) {
         println("greyson CornerLayout constructor()")

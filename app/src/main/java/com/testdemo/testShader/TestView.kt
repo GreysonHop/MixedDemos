@@ -19,9 +19,16 @@ class TestView : View {
     private var startX = 0f
     private var startY = 0f
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : this(context, null) {
+        println("TestView no-params constructor")
+    }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
+        println("TestView two-params constructor")
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        println("TestView three-params constructor")
         initRes()
     }
 
@@ -33,8 +40,6 @@ class TestView : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-//        val canvas = sfh.lockCanvas()
-//        canvas.drawColor(Color.BLACK)
         bmp1?.let {
             canvas.drawBitmap(it, 0f, 0f, paint)//这里必须用it，如果直接用bmp1还是会有警告，要你用bmp1!!
         }
@@ -47,8 +52,6 @@ class TestView : View {
         canvas.restore()
 
         canvas.drawBitmap(bmp3, 0f, 0f, null)
-
-//        sfh.unlockCanvasAndPost(canvas)
     }
 
 }
