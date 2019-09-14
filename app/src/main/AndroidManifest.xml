@@ -27,7 +27,7 @@
 
 
         <activity android:name=".testBlurAndGlass.BlurGlassSoOnActivity" />
-        <activity android:name=".testBlurAndGlass.MainActivity2">
+        <activity android:name=".testBlurAndGlass.MainActivity_Blur2">
             <!--模糊背景界面-->
         </activity>
         <activity android:name=".testBlurAndGlass.MainActivity_Blur"></activity>

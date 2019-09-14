@@ -33,7 +33,7 @@ public class MainActivity_Blur extends Activity {
                 BlurBehind.getInstance().execute(MainActivity_Blur.this, new OnBlurCompleteListener() {
                     @Override
                     public void onBlurComplete() {
-                        Intent intent = new Intent(MainActivity_Blur.this, MainActivity2.class);
+                        Intent intent = new Intent(MainActivity_Blur.this, MainActivity_Blur2.class);
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
                         startActivity(intent);

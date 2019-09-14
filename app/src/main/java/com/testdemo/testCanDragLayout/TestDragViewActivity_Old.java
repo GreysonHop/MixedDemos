@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.testdemo.R;
 
 /**
- * Created by Administrator on 2018/2/9.
+ * Created by Greyson on 2018/2/9.
  * 将View从一个容器拖曳到另一个容器中
  */
 public class TestDragViewActivity_Old extends Activity {

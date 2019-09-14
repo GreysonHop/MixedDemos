@@ -13,7 +13,7 @@ import android.widget.ScrollView;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2018/1/25.
+ * Created by Greyson on 2018/1/25.
  * 可以上下拖动并通过距离判断是否切换页面，可以直接添加组件，无限数量
  */
 public class ThreeScrollView extends ScrollView {

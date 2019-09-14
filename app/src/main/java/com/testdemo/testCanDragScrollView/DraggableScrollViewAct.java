@@ -9,7 +9,7 @@ import android.view.View;
 import com.testdemo.R;
 
 /**
- * Created by Administrator on 2018/4/16.
+ * Created by Greyson on 2018/4/16.
  */
 public class DraggableScrollViewAct extends Activity {
 

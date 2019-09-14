@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.testdemo.R;
 
 /**
- * Created by Administrator on 2018/7/11.
+ * Created by Greyson on 2018/7/11.
  */
 
 public class IndexPointLayout extends LinearLayout {

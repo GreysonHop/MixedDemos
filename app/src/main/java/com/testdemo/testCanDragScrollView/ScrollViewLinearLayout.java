@@ -9,7 +9,7 @@ import android.widget.ScrollView;
 import android.widget.Scroller;
 
 /**
- * Created by Administrator on 2018/4/16.
+ * Created by Greyson on 2018/4/16.
  */
 public class ScrollViewLinearLayout extends LinearLayout implements View.OnTouchListener {
 

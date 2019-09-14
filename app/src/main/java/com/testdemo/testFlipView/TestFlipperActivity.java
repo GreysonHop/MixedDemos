@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.zip.Inflater;
 
 /**
- * Created by Administrator on 2018/1/25.
+ * Created by Greyson on 2018/1/25.
  */
 public class TestFlipperActivity extends Activity {
     private final static String TAG = "greyson_TestFlipper";

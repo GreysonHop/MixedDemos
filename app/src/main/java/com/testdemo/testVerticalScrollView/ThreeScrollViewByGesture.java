@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 /**
- * Created by Administrator on 2018/1/25.
+ * Created by Greyson on 2018/1/25.
  * 根据上下划的手势切换页面
  */
 public class ThreeScrollViewByGesture extends ScrollView {

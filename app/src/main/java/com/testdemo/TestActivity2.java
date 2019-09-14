@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
 
 /**
  * 通过动画做一个从屏幕下外面慢慢向上移动的组件，和可上下拉的组件
- * Created by Administrator on 2018/1/25.
+ * Created by Greyson on 2018/1/25.
  */
 public class TestActivity2 extends Activity implements View.OnClickListener {
     private final static String TAG = "greyson_Test2";

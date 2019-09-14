@@ -11,7 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 
 /**
- * Created by Administrator on 2018/2/9.
+ * Created by Greyson on 2018/2/9.
  */
 public class DraggableLayout_Old extends LinearLayout {
     private final static String TAG = "greyson_dragLayout";

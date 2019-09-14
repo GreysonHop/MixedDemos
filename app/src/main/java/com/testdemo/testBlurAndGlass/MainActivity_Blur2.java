@@ -17,7 +17,7 @@ import com.testdemo.broken_lib.BrokenCallback;
 import com.testdemo.broken_lib.BrokenTouchListener;
 import com.testdemo.broken_lib.BrokenView;
 
-public class MainActivity2 extends Activity {
+public class MainActivity_Blur2 extends Activity {
 
     private RelativeLayout background;
 

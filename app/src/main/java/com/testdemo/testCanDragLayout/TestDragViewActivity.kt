@@ -13,7 +13,7 @@ import com.testdemo.R
 import kotlinx.android.synthetic.main.test_drag_view_activity.*
 
 /**
- * Created by Administrator on 2018/2/9.
+ * Created by Greyson on 2019/9/14.
  * 将View从一个容器拖曳到另一个容器中
  */
 class TestDragViewActivity : Activity() {

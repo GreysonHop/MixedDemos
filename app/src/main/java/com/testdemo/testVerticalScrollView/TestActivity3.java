@@ -27,7 +27,7 @@ import com.testdemo.R;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2018/1/25.
+ * Created by Greyson on 2018/1/25.
  */
 public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollChangeListener, DialogViewPresenter.OnViewClickListener {
     private final static String TAG = "Test3-greyson";

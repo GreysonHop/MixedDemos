@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import com.testdemo.R;
 
 /**
- * Created by Administrator on 2018/1/25.
+ * Created by Greyson on 2018/1/25.
  */
 public class ThreePageLinearLayout extends LinearLayout {
     private final static String TAG = "ThreePage-greyson";

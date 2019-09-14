@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 /**
- * Created by Administrator on 2018/6/5.
+ * Created by Greyson on 2018/6/5.
  */
 
 public class WrapWidthImageView extends AppCompatImageView {
