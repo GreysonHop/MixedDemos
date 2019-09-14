@@ -20,7 +20,6 @@ import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct;
 import com.testdemo.testVerticalScrollView.TestActivity3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Greyson on 2018/1/25.

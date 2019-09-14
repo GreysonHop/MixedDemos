@@ -17,7 +17,7 @@ import com.testdemo.R;
  * Created by Administrator on 2018/2/9.
  * 将View从一个容器拖曳到另一个容器中
  */
-public class TestDragViewActivity extends Activity {
+public class TestDragViewActivity_Old extends Activity {
 
     private final static String TAG = "greyson";
 

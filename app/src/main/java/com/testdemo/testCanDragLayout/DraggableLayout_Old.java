@@ -13,22 +13,22 @@ import android.widget.LinearLayout;
 /**
  * Created by Administrator on 2018/2/9.
  */
-public class DraggableLayout extends LinearLayout {
+public class DraggableLayout_Old extends LinearLayout {
     private final static String TAG = "greyson_dragLayout";
 
     private float lastTouchY;
     private float firstTouchY;
 
 
-    public DraggableLayout(Context context) {
+    public DraggableLayout_Old(Context context) {
         super(context);
     }
 
-    public DraggableLayout(Context context, AttributeSet attrs) {
+    public DraggableLayout_Old(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public DraggableLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DraggableLayout_Old(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
