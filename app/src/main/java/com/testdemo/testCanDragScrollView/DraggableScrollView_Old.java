@@ -16,7 +16,7 @@ import android.widget.ScrollView;
  * 请保证ScrollView中的ViewGroup的三个子View的正确顺序（位置）
  * Created by Greyson on 2018/4/16.
  */
-public class DraggableScrollView extends ScrollView {
+public class DraggableScrollView_Old extends ScrollView {
     private static String TAG = "DraggableScrollView";
 
     private View draggableView;
@@ -26,11 +26,11 @@ public class DraggableScrollView extends ScrollView {
     private float draggableY;//下拉到顶时，手指所在的位置
     private boolean isDragging = false;//正在拉伸中
 
-    public DraggableScrollView(Context context) {
+    public DraggableScrollView_Old(Context context) {
         super(context);
     }
 
-    public DraggableScrollView(Context context, AttributeSet attrs) {
+    public DraggableScrollView_Old(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

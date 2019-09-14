@@ -11,7 +11,7 @@ import com.testdemo.R;
 /**
  * Created by Greyson on 2018/4/16.
  */
-public class DraggableScrollViewAct extends Activity {
+public class DraggableScrollViewAct_Old extends Activity {
 
     private View userContactLayout;
 
@@ -24,7 +24,7 @@ public class DraggableScrollViewAct extends Activity {
         findViewById(R.id.cardLayout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("DraggableScrollViewAct", "cardLayout is clicked!!!!!");
+                Log.i("DraggableScrollViewAct_Old", "cardLayout is clicked!!!!!");
                 userContactLayout.setVisibility(userContactLayout.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
             }
         });
