@@ -52,7 +52,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
         //倒计时
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE)
         try {
-            val date = sdf.parse("2018-10-09 08:29:00")
+            val date = sdf.parse("2019-10-09 08:29:00")//TODO pay attention on the expire time
             val expireMilliseconds = date.time
             val currentMilliseconds = System.currentTimeMillis()
             if (expireMilliseconds <= currentMilliseconds) {
@@ -76,7 +76,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
         dragTV.setOnClickListener(this)
 
         blackBgIV.setOnClickListener(this)
-        clickBtn.setOnClickListener(this)
+        anim_btn.setOnClickListener(this)
         popupTV.setOnClickListener(this)
         shareLayout.setOnClickListener(this)
 
@@ -150,9 +150,9 @@ class TestActivity2 : Activity(), View.OnClickListener {
                 getInviteCode()
             }
 
-            R.id.clickBtn -> {
+            R.id.anim_btn -> {
                 Log.i(TAG, "click button dragLayout's y=${dragLayout.y} - top=${dragLayout.top}")
-                clickBtn.isSelected = !clickBtn.isSelected
+                anim_btn.isSelected = !anim_btn.isSelected
 
                 isSee = !isSee
                 showShareLayout(isSee)

@@ -36,7 +36,7 @@ public class MainActivity_Old extends ListActivity {
         LinkedHashMap<String, Class> menuListMap = new LinkedHashMap<>();
 //        HashMap<String, Class> menuListMap = new HashMap<>();
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity.class);
-        menuListMap.put("动画实现弹窗", TestActivity2_Old.class);
+        menuListMap.put("动画实现弹窗", TestActivity2.class);
         menuListMap.put("上下滑动切换界面的ViewPager？", TestActivity3.class);
         menuListMap.put("可以在容器间拖曳的组件", TestDragViewActivity.class);
         menuListMap.put("子View可被拉伸回弹的ScrollView", DraggableScrollViewAct.class);

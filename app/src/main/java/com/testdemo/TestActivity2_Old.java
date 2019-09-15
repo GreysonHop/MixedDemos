@@ -63,7 +63,7 @@ public class TestActivity2_Old extends Activity implements View.OnClickListener 
         bgIV = (ImageView) findViewById(R.id.bgIV);
         blackBgIV = findViewById(R.id.blackBgIV);
         shareLayout = (LinearLayout) findViewById(R.id.shareLayout);
-        clickBtn = (TextView) findViewById(R.id.clickBtn);
+        clickBtn = (TextView) findViewById(R.id.anim_btn);
         popupTV = (TextView) findViewById(R.id.popupTV);
 
         chronometer = (Chronometer) findViewById(R.id.chronometer);
@@ -87,7 +87,7 @@ public class TestActivity2_Old extends Activity implements View.OnClickListener 
         //倒计时
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
         try {
-            Date date = sdf.parse("2018-10-09 08:29:00");
+            Date date = sdf.parse("2019-10-09 08:29:00");//TODO pay attention on the expire time
             long expireMilliseconds = date.getTime();
             long currentMilliseconds = System.currentTimeMillis();
             if (expireMilliseconds <= currentMilliseconds) {

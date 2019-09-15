@@ -12,14 +12,15 @@
         android:src="@drawable/galata" />
 
     <TextView
-        android:id="@+id/clickBtn"
+        android:id="@+id/anim_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_layer_list_selector"
-        android:paddingBottom="9dp"
+        android:clickable="true"
         android:paddingLeft="17dp"
-        android:paddingRight="13dp"
         android:paddingTop="9dp"
+        android:paddingRight="13dp"
+        android:paddingBottom="9dp"
         android:text="anim btn" />
 
     <TextView
@@ -29,11 +30,12 @@
         android:layout_gravity="right"
         android:layout_marginRight="10dp"
         android:background="@drawable/orange_oval"
-        android:paddingBottom="9dp"
+        android:clickable="true"
         android:paddingLeft="17dp"
-        android:paddingRight="13dp"
         android:paddingTop="9dp"
-        android:text="anim btn"
+        android:paddingRight="13dp"
+        android:paddingBottom="9dp"
+        android:text="popupTV"
         android:textColor="#fff" />
 
     <Chronometer
