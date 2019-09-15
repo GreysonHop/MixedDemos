@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Greyson on 2018/3/7.
  */
-public class TestApplication extends Application {
+public class TestApplication_Old extends Application {
 
     private Activity activity;
 

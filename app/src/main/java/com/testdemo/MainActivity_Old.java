@@ -3,7 +3,6 @@ package com.testdemo;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -20,11 +19,12 @@ import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct;
 import com.testdemo.testVerticalScrollView.TestActivity3;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Greyson on 2018/1/25.
  */
-public class MainActivity extends ListActivity {
+public class MainActivity_Old extends ListActivity {
 
     ArrayList<String> classNameList = new ArrayList<>();
     ArrayList<Class> classList = new ArrayList<>();
@@ -33,10 +33,10 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayMap<String, Class> menuListMap = new ArrayMap<>();
+        LinkedHashMap<String, Class> menuListMap = new LinkedHashMap<>();
 //        HashMap<String, Class> menuListMap = new HashMap<>();
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity.class);
-        menuListMap.put("动画实现弹窗", TestActivity2.class);
+        menuListMap.put("动画实现弹窗", TestActivity2_Old.class);
         menuListMap.put("上下滑动切换界面的ViewPager？", TestActivity3.class);
         menuListMap.put("可以在容器间拖曳的组件", TestDragViewActivity.class);
         menuListMap.put("子View可被拉伸回弹的ScrollView", DraggableScrollViewAct.class);

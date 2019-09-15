@@ -1,12 +1,10 @@
 package com.testdemo;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -16,9 +14,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.testdemo.blurbehind.Blur;
-import com.testdemo.blurbehind.BlurBehind;
-import com.testdemo.blurbehind.FileUtil;
-import com.testdemo.blurbehind.OnBlurCompleteListener;
 import com.wonderkiln.blurkit.BlurLayout;
 
 /**

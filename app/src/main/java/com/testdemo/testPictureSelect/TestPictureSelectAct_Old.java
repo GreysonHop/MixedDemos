@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Greyson on 2018/6/4.
  */
 
-public class TestPictureSelectAct extends FragmentActivity implements PictureSelectPanel.OnSendClickListener {
+public class TestPictureSelectAct_Old extends FragmentActivity implements PictureSelectPanel.OnSendClickListener {
 
     PictureSelectPanel panel;
     TextView pictureTV;

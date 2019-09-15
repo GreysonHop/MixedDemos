@@ -1,19 +1,15 @@
 package com.testdemo;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -21,9 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,14 +25,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.resource.drawable.DrawableResource;
 import com.testdemo.broken_lib.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +38,7 @@ import java.util.regex.Pattern;
  * 通过动画做一个从屏幕下外面慢慢向上移动的组件，和可上下拉的组件
  * Created by Greyson on 2018/1/25.
  */
-public class TestActivity2 extends Activity implements View.OnClickListener {
+public class TestActivity2_Old extends Activity implements View.OnClickListener {
     private final static String TAG = "greyson_Test2";
 
     LinearLayout shareLayout;
@@ -109,7 +101,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onFinish() {
-                    Toast.makeText(TestActivity2.this, "倒计时完成！！！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TestActivity2_Old.this, "倒计时完成！！！", Toast.LENGTH_SHORT).show();
                     popupTV.setText("已过期");
                 }
             };
@@ -220,7 +212,7 @@ public class TestActivity2 extends Activity implements View.OnClickListener {
                 popupMenuView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(TestActivity2.this, "you click " + position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TestActivity2_Old.this, "you click " + position, Toast.LENGTH_SHORT).show();
                     }
                 });
 
