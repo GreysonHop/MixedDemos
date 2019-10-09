@@ -55,20 +55,19 @@ class TestActivity2 : Activity(), View.OnClickListener {
             val date = sdf.parse("2019-10-09 08:29:00")//TODO pay attention on the expire time
             val expireMilliseconds = date.time
             val currentMilliseconds = System.currentTimeMillis()
-            if (expireMilliseconds <= currentMilliseconds) {
-                return
-            }
-            val countDownTimer = object : CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    popupTV.text = second2Minute(millisUntilFinished / 1000)
-                }
+            if (expireMilliseconds > currentMilliseconds) {
+                val countDownTimer = object : CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        popupTV.text = second2Minute(millisUntilFinished / 1000)
+                    }
 
-                override fun onFinish() {
-                    Toast.makeText(this@TestActivity2, "倒计时完成！！！", Toast.LENGTH_SHORT).show()
-                    popupTV.text = "已过期"
+                    override fun onFinish() {
+                        Toast.makeText(this@TestActivity2, "倒计时完成！！！", Toast.LENGTH_SHORT).show()
+                        popupTV.text = "已过期"
+                    }
                 }
+                countDownTimer.start()
             }
-            countDownTimer.start()
         } catch (e: Exception) {
             e.printStackTrace()
         }

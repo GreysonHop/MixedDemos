@@ -65,14 +65,15 @@ public class SpecialEditLayoutAct extends Activity {
         });
 
         List<String> menuList = Arrays.asList(
-                "拷贝--你狗狗的DNA-pu na na na!!?!",
+                /*"拷贝--你狗狗的DNA-pu na na na!!?!",
                 "全部删除",
                 "转发",
                 "随便点",
                 "引用",
                 "删除",
                 "多选",
-                "销毁"
+                "销毁"*/
+                "recall", "copy", "forward", "quote", "alerts", "delete", "multiple selection"
         );
 //        MenuPopupWindow
         fl_content.setOnLongClickListener((v) -> {

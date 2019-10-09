@@ -90,23 +90,23 @@ public class TestActivity2_Old extends Activity implements View.OnClickListener 
             Date date = sdf.parse("2019-10-09 08:29:00");//TODO pay attention on the expire time
             long expireMilliseconds = date.getTime();
             long currentMilliseconds = System.currentTimeMillis();
-            if (expireMilliseconds <= currentMilliseconds) {
-                return;
-            }
-            CountDownTimer countDownTimer = new CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    popupTV.setText(second2Minute(millisUntilFinished / 1000));
-                }
+            if (expireMilliseconds > currentMilliseconds) {
+                CountDownTimer countDownTimer = new CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        popupTV.setText(second2Minute(millisUntilFinished / 1000));
+                    }
 
-                @Override
-                public void onFinish() {
-                    Toast.makeText(TestActivity2_Old.this, "倒计时完成！！！", Toast.LENGTH_SHORT).show();
-                    popupTV.setText("已过期");
-                }
-            };
-            countDownTimer.start();
+                    @Override
+                    public void onFinish() {
+                        Toast.makeText(TestActivity2_Old.this, "倒计时完成！！！", Toast.LENGTH_SHORT).show();
+                        popupTV.setText("已过期");
+                    }
+                };
+                countDownTimer.start();
+            }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
