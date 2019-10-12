@@ -95,7 +95,7 @@ public class DatePickDialog extends Dialog {
 //        myCalendarPicker = findViewById(R.id.myCalendarPicker);
 //        myTimePicker = findViewById(R.id.myTimePicker);
         vInflater = new View(getContext());
-        ViewGroup.LayoutParams params = vInflater.getLayoutParams();
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(MATCH_PARENT, 0);
         mFlContentPanel.addView(vInflater, params);
 
         setListener();
