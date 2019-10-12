@@ -9,13 +9,11 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -141,7 +139,7 @@ public class MenuPopUp {
         }
 
         if (outside) {
-            if (anchorViewLocation[1] - mPopupWindowHeight < statusBarHeight) {
+            if (anchorViewLocation[1] - mPopupWindowHeight < statusBarHeight + dp2px(30)) {
                 switchIndicatorView(true);
                 mShowY = anchorViewLocation[1] + anchorView.getHeight();
             } else {
@@ -149,7 +147,7 @@ public class MenuPopUp {
                 mShowY = anchorViewLocation[1] - mPopupWindowHeight;
             }
         } else {
-            if (touchRawY - mPopupWindowHeight < statusBarHeight) {
+            if (touchRawY - mPopupWindowHeight < statusBarHeight + dp2px(30)) {
                 switchIndicatorView(true);
                 mShowY = touchRawY;
             } else {
@@ -159,7 +157,6 @@ public class MenuPopUp {
         }
 
         showMenuInPage(0);
-        adjustXAndShowPopupWindow();
     }
 
     private void switchIndicatorView(boolean up) {
@@ -201,9 +198,9 @@ public class MenuPopUp {
         int touchRawX = mTouchXInScreen;
         int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
 
-        float halfPopupWindowWidth = popupWindowWidth / 2f;
-        float leftTranslationLimit = indicatorWidth / 2f - halfPopupWindowWidth;
-        float rightTranslationLimit = halfPopupWindowWidth - indicatorWidth / 2f;
+        int halfPopupWindowWidth = popupWindowWidth / 2;
+        int leftTranslationLimit = indicatorWidth / 2 - halfPopupWindowWidth;
+        int rightTranslationLimit = halfPopupWindowWidth - indicatorWidth / 2;
 
         int x;
 
@@ -212,20 +209,18 @@ public class MenuPopUp {
             x = 0;
         } else if (touchRawX + halfPopupWindowWidth > screenWidth) {
             mIndicatorViewCurrent.setTranslationX(Math.min(touchRawX + halfPopupWindowWidth - screenWidth, rightTranslationLimit));
-            x = screenWidth - popupWindowWidth / 2;
+            x = screenWidth - halfPopupWindowWidth;
         } else {
             mIndicatorViewCurrent.setTranslationX(0);
-            x = touchRawX - popupWindowWidth / 2;
+            x = touchRawX - halfPopupWindowWidth;
         }
 
-
-        if (mPopupWindow.isShowing()) {
-            mPopupWindow.update(x, mShowY, popupWindowWidth, getViewHeight(mLlPopUpContent));
-        } else
+        if (!mPopupWindow.isShowing()) {
             mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, mShowY);
+        }
+        mPopupWindow.update(x, mShowY, popupWindowWidth, getViewHeight(mLlPopUpContent));
     }
 
-//    private SparseArray<TextView> mAllMenu = new SparseArray<>();
     /**
      * indicate the last index of per page. the size equal to {@link #mShowingPage}.
      * And the page data include the index indicated by this array's value.
@@ -241,25 +236,23 @@ public class MenuPopUp {
         mMenuList = menuList;
         mTvMenuList.clear();
 
-        int[] ints;
         int size = menuList.size();
-        ints = new int[size];
-        int currentWidth = 0;
+        int[] ints = new int[size];
+        int currentPageWidth = 0;
         List<Integer> pagePoint = new ArrayList<>();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
         int screenWidth = displayMetrics.widthPixels;
-        int widthPerPage = screenWidth / 4 * 3;
+        int widthPerPage = screenWidth / /*4 * 3*/1;
         int switchPageBtnWidth = getViewWidth(mNextPage);
 
         for (int i = 0; i < size; i++) {
             String s = menuList.get(i);
             TextView tv = new TextView(mContext);
             tv.setTextColor(Color.WHITE);
-//            tv.setBackgroundResource();
-            tv.setPadding(dp2px(10f), dp2px(7f), dp2px(10f), dp2px(7f));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+            tv.setPadding(dp2px(8f), dp2px(5f), dp2px(8f), dp2px(5f));
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
             tv.setText(s);
             tv.setGravity(Gravity.CENTER);
             final int position = i;
@@ -270,11 +263,10 @@ public class MenuPopUp {
             });
 
             ints[i] = getViewWidth(tv);
-            System.out.println("greyson tv's width = " + ints[i] + ", currentWidth = " + currentWidth + ", screen = " + widthPerPage);
-            currentWidth += ints[i];
-            if (currentWidth + switchPageBtnWidth * 2 > widthPerPage) {
-                pagePoint.add(i - 1);
-                currentWidth = ints[i];
+            currentPageWidth += ints[i];
+            if (currentPageWidth + switchPageBtnWidth * 2 > widthPerPage) {
+                pagePoint.add(i - 1);//到上一个View为止归为一页，所以i-1
+                currentPageWidth = ints[i];//当前View将是新的一页，该页当前的长度
             }
 
             if (i == size - 1) {
@@ -282,7 +274,6 @@ public class MenuPopUp {
             }
 
             mTvMenuList.add(tv);
-//            mAllMenu.put(i, tv);
         }
         mLastIndexPerPage = new int[pagePoint.size()];
         for (int i = 0; i < pagePoint.size(); i++) {
@@ -310,6 +301,7 @@ public class MenuPopUp {
 
     private void showMenuInPage(int page) {
         if (page == mShowingPage) {
+            adjustXAndShowPopupWindow();
             return;
         }
         mShowingPage = page;
@@ -350,14 +342,12 @@ public class MenuPopUp {
     private void initPageSwitchBtn() {
         mNextPage = new TextView(mContext);
         mNextPage.setGravity(Gravity.CENTER);
-//        mNextPage.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.list_icon_next);
-        mNextPage.setPadding(dp2px(10f), dp2px(7f), dp2px(12f), dp2px(7f));
+        mNextPage.setPadding(dp2px(8f), dp2px(5f), dp2px(10f), dp2px(5f));
         mNextPage.setOnClickListener((v) -> showNextPage());
 
         mPreviousPage = new TextView(mContext);
         mPreviousPage.setGravity(Gravity.CENTER);
-//        mPreviousPage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.refresh, 0, 0, 0);
-        mPreviousPage.setPadding(dp2px(12f), dp2px(7f), dp2px(10f), dp2px(7f));
+        mPreviousPage.setPadding(dp2px(10f), dp2px(5f), dp2px(8f), dp2px(5f));
         mPreviousPage.setOnClickListener((v) -> showPreviousPage());
 
 

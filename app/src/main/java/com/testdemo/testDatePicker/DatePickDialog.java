@@ -32,8 +32,11 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * Created by Greyson
  */
 public class DatePickDialog extends Dialog {
+    public static final int MODE_DATE_AND_TIME = 0;
+    public static final int MODE_DATE_ONLY = 1;
+    public static final int MODE_TIME_ONLY = 2;
 
-    private Context activityContext;
+    private int mMode;
     private DPLManager mDPLManager = DPLManager.getInstance();
 
     private ViewGroup clDatePicker;
@@ -54,12 +57,16 @@ public class DatePickDialog extends Dialog {
     private OnDatePickListener onDatePickListener;
 
     public DatePickDialog(Context context) {
-        this(context, R.style.ActionSheetDialogStyle);
+        this(context, MODE_DATE_AND_TIME);
     }
 
-    public DatePickDialog(Context context, int themeResId) {
+    public DatePickDialog(Context context, int mode) {
+        this(context, R.style.ActionSheetDialogStyle, mode);
+    }
+
+    public DatePickDialog(Context context, int themeResId, int mode) {
         super(context, themeResId);
-        activityContext = context;
+        mMode = mode;
     }
 
     @Override
@@ -94,6 +101,27 @@ public class DatePickDialog extends Dialog {
 
         setListener();
         setSelectedDate(new Date());//default to select today
+    }
+
+    private void updateView(int toBeMode) {
+        if (toBeMode == mMode) {
+            return;
+        }
+        mMode = toBeMode;
+
+        switch (toBeMode) {
+            case MODE_DATE_AND_TIME:
+
+                break;
+
+            case MODE_DATE_ONLY:
+
+                break;
+
+            case MODE_TIME_ONLY:
+
+                break;
+        }
     }
 
     private void initLayoutParams() {
