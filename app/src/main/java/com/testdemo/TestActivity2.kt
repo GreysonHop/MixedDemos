@@ -180,8 +180,8 @@ class TestActivity2 : Activity(), View.OnClickListener {
                         popupWindow.isFocusable = true
                         //popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
                     }
-                    popupWindow.showAsDropDown(popupTV)
                 }
+                popupWindow.showAsDropDown(popupTV)
             }
         }
     }
