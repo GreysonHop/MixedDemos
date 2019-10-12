@@ -7,6 +7,28 @@
     android:layout_height="wrap_content"
     android:background="#f5f9fc">
 
+    <TextView
+        android:id="@+id/tv_only_one_switch"
+        android:layout_width="107dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="19dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_corner15_blue"
+        android:gravity="center"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/fl_content_panel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2019年7月25日"
+        tools:visibility="visible" />
+
+
     <RadioGroup
         android:id="@+id/rg_switch_date_time"
         android:layout_width="wrap_content"
@@ -18,7 +40,8 @@
         android:paddingBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/fl_content_panel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:alpha="0.0">
 
         <RadioButton
             android:id="@+id/cb_date_btn"
@@ -71,7 +94,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <View
+        <!--<View
             android:id="@+id/v_inflater"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
@@ -105,7 +128,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            tools:visibility="invisible" />
+            tools:visibility="invisible" />-->
 
     </FrameLayout>
 

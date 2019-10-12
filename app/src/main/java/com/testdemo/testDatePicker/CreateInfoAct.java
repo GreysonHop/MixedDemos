@@ -140,7 +140,7 @@ public class CreateInfoAct extends Activity {
 
         /***********************************************************/
 
-        datePickDialog = new DatePickDialog(this);
+        datePickDialog = new DatePickDialog(this, DatePickDialog.MODE_DATE_AND_TIME);
         datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
             selectedDate = dateStr;
             selectedTime = timeStr;

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.testdemo.R;
+import com.testdemo.broken_lib.Utils;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.view.Gravity.CENTER;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -32,7 +35,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * Created by Greyson
  */
 public class DatePickDialog extends Dialog {
-    public static final int MODE_DATE_AND_TIME = 0;
+    public static final int MODE_DATE_AND_TIME = 10;
     public static final int MODE_DATE_ONLY = 1;
     public static final int MODE_TIME_ONLY = 2;
 
@@ -40,13 +43,15 @@ public class DatePickDialog extends Dialog {
     private DPLManager mDPLManager = DPLManager.getInstance();
 
     private ViewGroup clDatePicker;
+    private TextView mTvOnlyOneSwitch;
     private RadioGroup rgSwitchDateTime;
     private RadioButton cbDateBtn;
     private RadioButton cbTimeBtn;
     private TextView mTvConfirm;
 
+    private FrameLayout mFlContentPanel;//包含日期、时间选择组件的面板
     private View vInflater;
-    private LinearLayout mLlCalendarPicker;
+    private LinearLayout mLlCalendarPicker;//包含星期组件的日期选择面板
     private LinearLayout mLlWeek;
     private MyCalendarPicker myCalendarPicker;
     private MyTimePicker myTimePicker;
@@ -57,7 +62,7 @@ public class DatePickDialog extends Dialog {
     private OnDatePickListener onDatePickListener;
 
     public DatePickDialog(Context context) {
-        this(context, MODE_DATE_AND_TIME);
+        this(context, -1);
     }
 
     public DatePickDialog(Context context, int mode) {
@@ -76,51 +81,27 @@ public class DatePickDialog extends Dialog {
         initLayoutParams();
 
         clDatePicker = findViewById(R.id.cl_select_date);
+        mTvOnlyOneSwitch = findViewById(R.id.tv_only_one_switch);
         rgSwitchDateTime = findViewById(R.id.rg_switch_date_time);
         cbDateBtn = findViewById(R.id.cb_date_btn);
         cbTimeBtn = findViewById(R.id.cb_time_btn);
         mTvConfirm = findViewById(R.id.tv_confirm);
         mTvConfirm.setText(mDPLManager.titleEnsure());
+        mFlContentPanel = findViewById(R.id.fl_content_panel);
 
-        vInflater = findViewById(R.id.v_inflater);
-        mLlCalendarPicker = findViewById(R.id.ll_calendar_picker);
-        mLlWeek = findViewById(R.id.ll_week);
-        myCalendarPicker = findViewById(R.id.myCalendarPicker);
-        myTimePicker = findViewById(R.id.myTimePicker);
-
-        LinearLayout.LayoutParams lpWeek = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-        lpWeek.weight = 1;
-        for (int i = 0; i < mDPLManager.titleWeek().length; i++) {
-            TextView tvWeek = new TextView(getContext());
-            tvWeek.setText(mDPLManager.titleWeek()[i]);
-            tvWeek.setGravity(Gravity.CENTER);
-            tvWeek.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            tvWeek.setTextColor(Color.parseColor("#283851"));
-            mLlWeek.addView(tvWeek, lpWeek);
-        }
+//        vInflater = findViewById(R.id.v_inflater);
+//        mLlCalendarPicker = findViewById(R.id.ll_calendar_picker);
+//        mLlWeek = findViewById(R.id.ll_week);
+//        myCalendarPicker = findViewById(R.id.myCalendarPicker);
+//        myTimePicker = findViewById(R.id.myTimePicker);
+        vInflater = new View(getContext());
+        ViewGroup.LayoutParams params = vInflater.getLayoutParams();
+        mFlContentPanel.addView(vInflater, params);
 
         setListener();
-        setSelectedDate(new Date());//default to select today
-    }
-
-    private void updateView(int toBeMode) {
-        if (toBeMode == mMode) {
-            return;
-        }
-        mMode = toBeMode;
-
-        switch (toBeMode) {
-            case MODE_DATE_AND_TIME:
-
-                break;
-
-            case MODE_DATE_ONLY:
-
-                break;
-
-            case MODE_TIME_ONLY:
-
-                break;
+        if (mMode != -1) {
+            updateView();
+            setSelectedDate(new Date());//default to select today
         }
     }
 
@@ -133,6 +114,128 @@ public class DatePickDialog extends Dialog {
             lp.height = WRAP_CONTENT;
             window.setAttributes(lp);
             window.setWindowAnimations(R.style.animBottomMenu);
+        }
+    }
+
+    public void changeMode(int toBeMode) {
+        if (toBeMode == mMode) {
+            return;
+        }
+        mMode = toBeMode;
+        updateView();
+    }
+
+    private void updateView() {
+        switch (mMode) {
+            case MODE_DATE_AND_TIME:
+                setTimePanel();
+                setCalendarPanel();
+                myTimePicker.setVisibility(View.GONE);
+                break;
+
+            case MODE_DATE_ONLY:
+                setCalendarPanel();
+                if (myTimePicker != null) {
+                    myTimePicker.setVisibility(View.GONE);
+                }
+                break;
+
+            case MODE_TIME_ONLY:
+                setTimePanel();
+                if (mLlCalendarPicker != null) {
+                    mLlCalendarPicker.setVisibility(View.GONE);
+                }
+
+                /*LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) myTimePicker.getLayoutParams();
+                params.gravity = Gravity.CENTER;
+                params.height = Utils.dp2px(200);
+                params.width = WRAP_CONTENT;*/
+                break;
+        }
+    }
+
+    private void initCalendarPanel() {
+        mLlCalendarPicker = new LinearLayout(getContext());
+        mLlCalendarPicker.setOrientation(LinearLayout.VERTICAL);
+
+        myCalendarPicker = new MyCalendarPicker(getContext());
+        myCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
+            if (TextUtils.isEmpty(clickDay)) {
+                return;
+            }
+
+            selectedDateStr = clickDay;
+            String[] dateDatas = clickDay.split("-");
+
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.set(Calendar.YEAR, Integer.valueOf(dateDatas[0]));
+            calendar.set(Calendar.MONTH, Integer.valueOf(dateDatas[1]) - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateDatas[2]));
+            if (mMode == MODE_DATE_AND_TIME) {
+                cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(calendar.getTime()));
+            } else {
+                mTvOnlyOneSwitch.setText(DPLManager.getInstance().getDateFormat().format(calendar.getTime()));
+            }
+
+        }));
+
+        mLlWeek = new LinearLayout(getContext());
+        LinearLayout.LayoutParams lpWeek = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        lpWeek.weight = 1;
+        for (int i = 0; i < mDPLManager.titleWeek().length; i++) {
+            TextView tvWeek = new TextView(getContext());
+            tvWeek.setText(mDPLManager.titleWeek()[i]);
+            tvWeek.setGravity(CENTER);
+            tvWeek.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            tvWeek.setTextColor(Color.parseColor("#283851"));
+            mLlWeek.addView(tvWeek, lpWeek);
+        }
+    }
+
+    private void setCalendarPanel() {
+        if (mLlCalendarPicker == null) {
+            initCalendarPanel();
+
+            mLlCalendarPicker.addView(mLlWeek);
+            mLlCalendarPicker.addView(myCalendarPicker);
+            mFlContentPanel.addView(mLlCalendarPicker);
+        }
+    }
+
+    private void initTimePanel() {
+        myTimePicker = new MyTimePicker(getContext());
+        myTimePicker.setGravity(CENTER);
+        myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
+            @Override
+            public void onHourWheeled(int index, String hour) {
+                String timeStr = cbTimeBtn.getText().toString();
+                selectedTimeStr = timeStr.replaceFirst("^\\w{2}(?=:)", hour);
+                if (mMode == MODE_DATE_AND_TIME) {
+                    cbTimeBtn.setText(selectedTimeStr);
+                } else {
+                    mTvOnlyOneSwitch.setText(selectedTimeStr);
+                }
+            }
+
+            @Override
+            public void onMinuteWheeled(int index, String minute) {
+                String timeStr = cbTimeBtn.getText().toString();
+                selectedTimeStr = timeStr.replaceFirst("(?<=:)\\w{2}$", minute);
+                if (mMode == MODE_DATE_AND_TIME) {
+                    cbTimeBtn.setText(selectedTimeStr);
+                } else {
+                    mTvOnlyOneSwitch.setText(selectedTimeStr);
+                }
+            }
+        });
+    }
+
+    private void setTimePanel() {
+        if (myTimePicker == null) {
+            initTimePanel();
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(WRAP_CONTENT, Utils.dp2px(200));
+            params.gravity = CENTER;
+            mFlContentPanel.addView(myTimePicker, params);
         }
     }
 
@@ -163,48 +266,17 @@ public class DatePickDialog extends Dialog {
                 onDatePickListener.onDatePick(selectedDateStr, selectedTimeStr);
             }
         });
-
-        myCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
-            if (TextUtils.isEmpty(clickDay)) {
-                return;
-            }
-
-            selectedDateStr = clickDay;
-            String[] dateDatas = clickDay.split("-");
-
-            Calendar calendar = Calendar.getInstance(Locale.getDefault());
-            calendar.set(Calendar.YEAR, Integer.valueOf(dateDatas[0]));
-            calendar.set(Calendar.MONTH, Integer.valueOf(dateDatas[1]) - 1);
-            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateDatas[2]));
-            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(calendar.getTime()));
-        }));
-
-        myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
-            @Override
-            public void onHourWheeled(int index, String hour) {
-                String timeStr = cbTimeBtn.getText().toString();
-                selectedTimeStr = timeStr.replaceFirst("^\\w{2}(?=:)", hour);
-                cbTimeBtn.setText(selectedTimeStr);
-            }
-
-            @Override
-            public void onMinuteWheeled(int index, String minute) {
-                String timeStr = cbTimeBtn.getText().toString();
-                selectedTimeStr = timeStr.replaceFirst("(?<=:)\\w{2}$", minute);
-                cbTimeBtn.setText(selectedTimeStr);
-            }
-        });
     }
 
     /**
-     * 设置默认选中的日期，并且显示所在月的视图
+     * 设置默认选中的日期，并且显示所在月的视图，类似于{@link #setSelectedDate(Date date)}
      *
      * @param selectedDateStr 字符串类型的日期，格式为"****-**-**"；为null时则采用组件内的默认值
      *                        ，月、日为一位数时前面可以不补0，如2019-7-1
      * @param selectedTimeStr 时间格式为"**:**"；为null时则采用组件内的默认值
      *                        ，数字为一位数时前面必须补0，如01:15
      */
-    public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {
+    public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {//todo need to fix like {@link #setSelectedDate(Date date)}
         if (selectedDateStr != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             Date selectDate;
@@ -238,15 +310,28 @@ public class DatePickDialog extends Dialog {
         if (date == null) {
             return;
         }
+
         String selectedDateStr = new SimpleDateFormat("yyyy-M-d", Locale.CHINA).format(date);
-        cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(date));
+        String formatSelectedDateStr = DPLManager.getInstance().getDateFormat().format(date);
         this.selectedDateStr = selectedDateStr;
-        myCalendarPicker.setSelectedDay(selectedDateStr);
 
         String selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
-        cbTimeBtn.setText(selectedTimeStr);
         this.selectedTimeStr = selectedTimeStr;
-        myTimePicker.setSelectedTime(selectedTimeStr);
+
+        if (mMode == MODE_DATE_AND_TIME) {
+            cbDateBtn.setText(formatSelectedDateStr);
+            cbTimeBtn.setText(selectedTimeStr);
+            myCalendarPicker.setSelectedDay(selectedDateStr);
+            myTimePicker.setSelectedTime(selectedTimeStr);
+
+        } else if (mMode == MODE_DATE_ONLY) {
+            mTvOnlyOneSwitch.setText(formatSelectedDateStr);
+            myCalendarPicker.setSelectedDay(selectedDateStr);
+
+        } else if (mMode == MODE_TIME_ONLY) {
+            mTvOnlyOneSwitch.setText(selectedTimeStr);
+            myTimePicker.setSelectedTime(selectedTimeStr);
+        }
     }
 
     /**
