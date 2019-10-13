@@ -145,11 +145,6 @@ public class DatePickDialog extends Dialog {
                 if (mLlCalendarPicker != null) {
                     mLlCalendarPicker.setVisibility(View.GONE);
                 }
-
-                /*LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) myTimePicker.getLayoutParams();
-                params.gravity = Gravity.CENTER;
-                params.height = Utils.dp2px(200);
-                params.width = WRAP_CONTENT;*/
                 break;
         }
     }
