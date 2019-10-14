@@ -224,7 +224,7 @@ public class CreateInfoAct extends Activity {
 
     private DatePickDialog getDatePickDialog() {
         if (datePickDialog == null) {
-            datePickDialog = new DatePickDialog(this/*, DatePickDialog.MODE_DATE_ONLY*/);
+            datePickDialog = new DatePickDialog(this, DatePickDialog.MODE_DATE_ONLY);
             datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
                 selectedDate = dateStr;
                 selectedTime = timeStr;
@@ -237,6 +237,7 @@ public class CreateInfoAct extends Activity {
 
     public void onClick(View view) {
         getDatePickDialog().show();
+        datePickDialog.setSelectedDate(new Date());
 //        datePickDialog.show();
 //        datePickDialog.setSelectedDate(selectedDate, selectedTime);
 //        datePickDialog.setSelectedDate(new Date());

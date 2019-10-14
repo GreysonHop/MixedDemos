@@ -39,6 +39,7 @@ public class DatePickDialog extends Dialog {
     public static final int MODE_DATE_ONLY = 1;
     public static final int MODE_TIME_ONLY = 2;
 
+    private boolean hasInit;
     private int mMode;
     private DPLManager mDPLManager = DPLManager.getInstance();
 
@@ -62,16 +63,23 @@ public class DatePickDialog extends Dialog {
     private OnDatePickListener onDatePickListener;
 
     /**
-     * 该构造方法不会有默认的显示视图（因为如果用户想要的不是默认的视图，那么一些没用到的View就没必要被实例化和加载进Dialog）
-     * ，需要后面自己调用 {@link #changeMode(int)} 方法去更新、显示自己想要的视图，并且通过 {@link #setSelectedDate(Date)}
-     *  或 {@link #setSelectedDate(String, String)} 方法去显示默认选中的日期和时间。
+     * 该构造方法默认使用 {@link #MODE_DATE_AND_TIME} 模式，即显示日期和时间视图，不会有默认选中的日期和时间的效果
+     * ，可通过 {@link #setSelectedDate(Date)} 或 {@link #setSelectedDate(String, String)} 方法去自定义
+     * 选中的日期和时间。
      *
      * @param context dialog所属的上下文对象
      */
     public DatePickDialog(Context context) {
-        this(context, -1);
+        this(context, MODE_DATE_AND_TIME);
     }
 
+    /**
+     * 参考 {@link #DatePickDialog(Context)}
+     *
+     * @param context
+     * @param mode    指定dialog的显示模式，有 {@link #MODE_DATE_AND_TIME}显示日期和时间、{@link #MODE_DATE_ONLY}
+     *                只显示日期、{@link #MODE_TIME_ONLY}只显示时间
+     */
     public DatePickDialog(Context context, int mode) {
         this(context, R.style.ActionSheetDialogStyle, mode);
     }
@@ -103,8 +111,8 @@ public class DatePickDialog extends Dialog {
         setListener();
         if (mMode != -1) {
             updateView();
-            setSelectedDate(new Date());//default to select today
         }
+        hasInit = true;
     }
 
     private void initLayoutParams() {
@@ -125,6 +133,8 @@ public class DatePickDialog extends Dialog {
      * @param toBeMode
      */
     public void changeMode(int toBeMode) {
+        checkInit();
+
         if (toBeMode == mMode) {
             return;
         }
@@ -303,6 +313,8 @@ public class DatePickDialog extends Dialog {
      *                        ，数字为一位数时前面必须补0，如01:15
      */
     public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {//todo need to fix like {@link #setSelectedDate(Date date)}
+        checkInit();
+
         if (selectedDateStr != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
             Date selectDate;
@@ -333,6 +345,8 @@ public class DatePickDialog extends Dialog {
      * @param date
      */
     public void setSelectedDate(Date date) {
+        checkInit();
+
         if (date == null) {
             return;
         }
@@ -367,6 +381,7 @@ public class DatePickDialog extends Dialog {
      * @param month 要显示的月份
      */
     public void showMonth(int year, int month) {
+        checkInit();
         myCalendarPicker.setShowMonth(year, month);
     }
 
@@ -405,4 +420,8 @@ public class DatePickDialog extends Dialog {
         void onDatePick(String date, String time);
     }
 
+    private boolean checkInit() {
+        if (!hasInit) throw new RuntimeException("you had never invoked the show()!");
+        else return true;
+    }
 }
