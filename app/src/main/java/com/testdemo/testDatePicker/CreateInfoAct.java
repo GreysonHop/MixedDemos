@@ -72,14 +72,16 @@ public class CreateInfoAct extends Activity {
 
         mLlWeek = findViewById(R.id.ll_week);
 
-        LinearLayout.LayoutParams lpWeek = new LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        LinearLayout.LayoutParams lpWeek = new LinearLayout.LayoutParams(0, WRAP_CONTENT);
         lpWeek.weight = 1;
+        String[] colors = getResources().getStringArray(R.array.colors);
         for (int i = 0; i < 7; i++) {
             TextView tvWeek = new TextView(this);
             tvWeek.setText(mDPLManager.titleWeek()[i]);
             tvWeek.setGravity(Gravity.CENTER);
             tvWeek.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             tvWeek.setTextColor(Color.parseColor("#283851"));
+            tvWeek.setBackgroundColor(Color.parseColor(colors[i]));
             mLlWeek.addView(tvWeek, lpWeek);
         }
 
@@ -94,6 +96,11 @@ public class CreateInfoAct extends Activity {
                 myCalendarPicker.setVisibility(View.VISIBLE);
                 myTimePicker.setVisibility(View.GONE);
 
+                //todo wait for deleting
+                if (datePickDialog != null) {
+                    datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
+                }
+
             } else if (cbTimeBtn.getId() == checkedId) {
                 mLlWeek.setVisibility(View.GONE);
                 clDatePicker.setBackgroundColor(getResources().getColor(R.color.white));
@@ -103,12 +110,21 @@ public class CreateInfoAct extends Activity {
 
                 myCalendarPicker.setVisibility(View.GONE);
                 myTimePicker.setVisibility(View.VISIBLE);
+
+                //todo wait for deleting
+                if (datePickDialog != null) {
+                    datePickDialog.changeMode(DatePickDialog.MODE_TIME_ONLY);
+                }
             }
         });
 
         mTvConfirm.setOnClickListener(clickView -> {
             Toast.makeText(this, selectedDate + " " + selectedTime, Toast.LENGTH_SHORT).show();
             mTvDate.setText(selectedDate + " " + selectedTime);
+
+            if (datePickDialog != null) {
+                datePickDialog.changeMode(DatePickDialog.MODE_DATE_AND_TIME);
+            }
         });
 
         myCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
@@ -137,15 +153,6 @@ public class CreateInfoAct extends Activity {
             }
         });
         myCalendarPicker.setShowMonth(2019, 7);
-
-        /***********************************************************/
-
-        datePickDialog = new DatePickDialog(this, DatePickDialog.MODE_DATE_AND_TIME);
-        datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
-            selectedDate = dateStr;
-            selectedTime = timeStr;
-            mTvDate.setText(dateStr + " " + timeStr);
-        });
 
         /*********************************************************/
 
@@ -215,8 +222,22 @@ public class CreateInfoAct extends Activity {
         }
     }
 
+    private DatePickDialog getDatePickDialog() {
+        if (datePickDialog == null) {
+            datePickDialog = new DatePickDialog(this/*, DatePickDialog.MODE_DATE_ONLY*/);
+            datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
+                selectedDate = dateStr;
+                selectedTime = timeStr;
+                mTvDate.setText(dateStr + " " + timeStr);
+                Toast.makeText(this, dateStr + " " + timeStr, Toast.LENGTH_LONG).show();
+            });
+        }
+        return datePickDialog;
+    }
+
     public void onClick(View view) {
-        datePickDialog.show();
+        getDatePickDialog().show();
+//        datePickDialog.show();
 //        datePickDialog.setSelectedDate(selectedDate, selectedTime);
 //        datePickDialog.setSelectedDate(new Date());
     }

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,7 +51,7 @@ public class MyTimePicker extends LinearLayout {
         layoutParams.gravity = Gravity.CENTER_VERTICAL;
 
 
-        for (int i = 1; i <= 24; i++) {
+        for (int i = 0; i <= 23; i++) {
             mHourList.add(fillZero(i));
         }
 
@@ -60,12 +59,13 @@ public class MyTimePicker extends LinearLayout {
             mMinuteList.add(fillZero(i));
         }
 
-        mHourView.setCanLoop(true);
+        mHourView.setCanLoop(false);
 //        mHourView.setSelectedTextColor(textColorFocus);
 //        mHourView.setUnSelectedTextColor(textColorNormal);
         mHourView.setDividerType(LineConfig.DividerType.FILL);
         mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
-//        mHourView.setCurrentItem(mSelectedHourIndex);
+        mHourView.setCurrentItem(0);
+        mSelectedHour = mHourList.get(0);
 //        mHourView.setLineConfig(lineConfig);
         mHourView.setLayoutParams(layoutParams);
         mHourView.setOnItemPickListener(new OnItemPickListener<String>() {
@@ -88,6 +88,7 @@ public class MyTimePicker extends LinearLayout {
         TextView labelView = new TextView(getContext());
         LayoutParams lableLP = new LayoutParams(layoutParams.width, layoutParams.height);
         lableLP.gravity = layoutParams.gravity;
+        lableLP.bottomMargin = Utils.dp2px(3);
         lableLP.leftMargin = Utils.dp2px(29);
         lableLP.rightMargin = Utils.dp2px(27);
         labelView.setLayoutParams(lableLP);
@@ -97,12 +98,13 @@ public class MyTimePicker extends LinearLayout {
         addView(labelView);
 
         //分钟
-        mMinuteView.setCanLoop(true);
+        mMinuteView.setCanLoop(false);
 //        mMinuteView.setTextSize(textSize);//must be called before setDateList
 //        mMinuteView.setSelectedTextColor(textColorFocus);
 //        mMinuteView.setUnSelectedTextColor(textColorNormal);
         mMinuteView.setAdapter(new ArrayWheelAdapter<>(mMinuteList));
-//        mMinuteView.setCurrentItem(mSelectedMinuteIndex);
+        mMinuteView.setCurrentItem(0);
+        mSelectedMinute = mMinuteList.get(0);
         mMinuteView.setDividerType(LineConfig.DividerType.FILL);
 //        mMinuteView.setLineConfig(lineConfig);
         mMinuteView.setLayoutParams(layoutParams);
@@ -162,6 +164,14 @@ public class MyTimePicker extends LinearLayout {
     @NonNull
     public static String fillZero(int number) {
         return number < 10 ? "0" + number : String.valueOf(number);
+    }
+
+    public String getSelectedHour() {
+        return mSelectedHour;
+    }
+
+    public String getSelectedMinute() {
+        return mSelectedMinute;
     }
 
     /**

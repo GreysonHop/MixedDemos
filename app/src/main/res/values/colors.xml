@@ -13,4 +13,14 @@
     <color name="bg_date_picker_today">#AAC8FF</color>
 
     <color name="black_alpha80">#c000</color>
+
+    <string-array name="colors">
+        <item>#3F51B5</item>
+        <item>#FF4081</item>
+        <item>#ffffff</item>
+        <item>#AAC8FF</item>
+        <item>#3F5b15</item>
+        <item>#e72061</item>
+        <item>#e27061</item>
+    </string-array>
 </resources>

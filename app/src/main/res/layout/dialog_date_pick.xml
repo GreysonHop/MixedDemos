@@ -22,7 +22,7 @@
         android:textColor="@color/white"
         android:textSize="12sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/fl_content_panel"
+        app:layout_constraintBottom_toTopOf="@id/v_line"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="2019年7月25日"
@@ -38,10 +38,11 @@
         android:paddingTop="10dp"
         android:paddingRight="19dp"
         android:paddingBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@id/fl_content_panel"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/v_line"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:alpha="0.0">
+        tools:visibility="gone">
 
         <RadioButton
             android:id="@+id/cb_date_btn"
@@ -76,7 +77,6 @@
         android:id="@+id/tv_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="10dp"
         android:gravity="center"
@@ -84,15 +84,26 @@
         android:text="确定"
         android:textColor="@color/blue_date_picker"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/fl_content_panel"
+        app:layout_constraintBottom_toTopOf="@id/v_line"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#f5f9fc"
+        app:layout_constraintBottom_toTopOf="@id/fl_content_panel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <FrameLayout
         android:id="@+id/fl_content_panel"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <!--<View
             android:id="@+id/v_inflater"
