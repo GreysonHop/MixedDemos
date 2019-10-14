@@ -237,9 +237,9 @@ public class CreateInfoAct extends Activity {
 
     public void onClick(View view) {
         getDatePickDialog().show();
-        datePickDialog.setSelectedDate(new Date());
-//        datePickDialog.show();
-//        datePickDialog.setSelectedDate(selectedDate, selectedTime);
 //        datePickDialog.setSelectedDate(new Date());
+        datePickDialog.setSelectedDate("2020-2-12", "08:08");
+
+//        datePickDialog.setSelectedDate(selectedDate, selectedTime);
     }
 }

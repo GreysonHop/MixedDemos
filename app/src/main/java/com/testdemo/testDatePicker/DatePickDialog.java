@@ -315,27 +315,34 @@ public class DatePickDialog extends Dialog {
     public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {//todo need to fix like {@link #setSelectedDate(Date date)}
         checkInit();
 
+        boolean needUpdate = false;
+        String formatSelectedDateStr = "";
+
         if (selectedDateStr != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
-            Date selectDate;
             try {
-                selectDate = dateFormat.parse(selectedDateStr);
+                formatSelectedDateStr = DPLManager.getInstance().getDateFormat().format(dateFormat.parse(selectedDateStr));
+                this.selectedDateStr = selectedDateStr;
+                needUpdate = true;
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println(String.format("传入的日期\"%s\"格式有问题! ", selectedDateStr));
-                return;
+//                return;
             }
 
 //            cbDateBtn.setText(String.format(Locale.CHINA, "%tY年%tm月%td日", selectDate, selectDate, selectDate));
-            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(selectDate));
-            this.selectedDateStr = selectedDateStr;
-            myCalendarPicker.setSelectedDay(selectedDateStr);
+//            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(selectDate));
+//            myCalendarPicker.setSelectedDay(selectedDateStr);
         }
 
         if (selectedTimeStr != null) {
-            cbTimeBtn.setText(selectedTimeStr);
+//            cbTimeBtn.setText(selectedTimeStr);
+//            myTimePicker.setSelectedTime(selectedTimeStr);
             this.selectedTimeStr = selectedTimeStr;
-            myTimePicker.setSelectedTime(selectedTimeStr);
+            needUpdate = true;
+        }
+        if (needUpdate) {
+            updateValue(formatSelectedDateStr);
         }
     }
 
@@ -358,6 +365,24 @@ public class DatePickDialog extends Dialog {
         String selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
         this.selectedTimeStr = selectedTimeStr;
 
+        updateValue(formatSelectedDateStr);
+        /*cbDateBtn.setText(formatSelectedDateStr);
+        cbTimeBtn.setText(selectedTimeStr);
+        if (mMode == MODE_DATE_AND_TIME) {
+            myCalendarPicker.setSelectedDay(selectedDateStr);
+            myTimePicker.setSelectedTime(selectedTimeStr);
+
+        } else if (mMode == MODE_DATE_ONLY) {
+            mTvOnlyOneSwitch.setText(formatSelectedDateStr);
+            myCalendarPicker.setSelectedDay(selectedDateStr);
+
+        } else if (mMode == MODE_TIME_ONLY) {
+            mTvOnlyOneSwitch.setText(selectedTimeStr);
+            myTimePicker.setSelectedTime(selectedTimeStr);
+        }*/
+    }
+
+    private void updateValue(String formatSelectedDateStr) {
         cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
         if (mMode == MODE_DATE_AND_TIME) {
