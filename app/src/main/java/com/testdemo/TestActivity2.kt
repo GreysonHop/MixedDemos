@@ -52,7 +52,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
         //倒计时
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE)
         try {
-            val date = sdf.parse("2019-10-09 08:29:00")//TODO pay attention on the expire time
+            val date = sdf.parse("2019-10-09 08:29:00")//pay attention on the expire time
             val expireMilliseconds = date.time
             val currentMilliseconds = System.currentTimeMillis()
             if (expireMilliseconds > currentMilliseconds) {

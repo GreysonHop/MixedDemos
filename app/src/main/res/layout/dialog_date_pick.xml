@@ -28,7 +28,6 @@
         tools:text="2019年7月25日"
         tools:visibility="visible" />
 
-
     <RadioGroup
         android:id="@+id/rg_switch_date_time"
         android:layout_width="wrap_content"

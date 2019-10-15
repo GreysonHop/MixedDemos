@@ -312,7 +312,7 @@ public class DatePickDialog extends Dialog {
      * @param selectedTimeStr 时间格式为"**:**"；为null时则采用组件内的默认值
      *                        ，数字为一位数时前面必须补0，如01:15
      */
-    public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {//todo need to fix like {@link #setSelectedDate(Date date)}
+    public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {
         checkInit();
 
         boolean needUpdate = false;

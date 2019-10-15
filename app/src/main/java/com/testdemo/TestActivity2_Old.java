@@ -87,7 +87,7 @@ public class TestActivity2_Old extends Activity implements View.OnClickListener 
         //倒计时
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
         try {
-            Date date = sdf.parse("2019-10-09 08:29:00");//TODO pay attention on the expire time
+            Date date = sdf.parse("2019-10-09 08:29:00");//pay attention on the expire time
             long expireMilliseconds = date.getTime();
             long currentMilliseconds = System.currentTimeMillis();
             if (expireMilliseconds > currentMilliseconds) {
