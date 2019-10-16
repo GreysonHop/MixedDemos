@@ -2,6 +2,7 @@ package com.testdemo.testDatePicker;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -60,8 +61,7 @@ public class MyTimePicker extends LinearLayout {
         }
 
         mHourView.setCanLoop(false);
-//        mHourView.setSelectedTextColor(textColorFocus);
-//        mHourView.setUnSelectedTextColor(textColorNormal);
+        mHourView.setTypeface(Typeface.SERIF);
         mHourView.setDividerType(LineConfig.DividerType.FILL);
         mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
         mHourView.setCurrentItem(0);
@@ -99,9 +99,7 @@ public class MyTimePicker extends LinearLayout {
 
         //分钟
         mMinuteView.setCanLoop(false);
-//        mMinuteView.setTextSize(textSize);//must be called before setDateList
-//        mMinuteView.setSelectedTextColor(textColorFocus);
-//        mMinuteView.setUnSelectedTextColor(textColorNormal);
+        mMinuteView.setTypeface(Typeface.DEFAULT);
         mMinuteView.setAdapter(new ArrayWheelAdapter<>(mMinuteList));
         mMinuteView.setCurrentItem(0);
         mSelectedMinute = mMinuteList.get(0);

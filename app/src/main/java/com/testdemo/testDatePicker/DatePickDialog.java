@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -163,7 +164,7 @@ public class DatePickDialog extends Dialog {
                 rgSwitchDateTime.setVisibility(View.GONE);
                 mTvOnlyOneSwitch.setVisibility(View.VISIBLE);
                 mTvOnlyOneSwitch.setText(cbDateBtn.getText());
-                clDatePicker.setBackgroundColor(getContext().getResources().getColor(R.color.grey_date_picker));
+                clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.grey_date_picker));
 
                 if (myTimePicker != null) {
                     myTimePicker.setVisibility(View.GONE);
@@ -176,7 +177,7 @@ public class DatePickDialog extends Dialog {
                 rgSwitchDateTime.setVisibility(View.GONE);
                 mTvOnlyOneSwitch.setVisibility(View.VISIBLE);
                 mTvOnlyOneSwitch.setText(cbTimeBtn.getText());
-                clDatePicker.setBackgroundColor(getContext().getResources().getColor(R.color.white));
+                clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
 
                 if (mLlCalendarPicker != null) {
                     mLlCalendarPicker.setVisibility(View.GONE);
@@ -412,21 +413,21 @@ public class DatePickDialog extends Dialog {
 
     private void checkCbDateBtn(boolean isChecked) {
         if (isChecked) {
-            cbTimeBtn.setTextColor(getContext().getResources().getColor(R.color.blue_date_picker));
+            cbTimeBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.blue_date_picker));
             cbDateBtn.setTextColor(Color.WHITE);
             mLlCalendarPicker.setVisibility(View.VISIBLE);
             myTimePicker.setVisibility(View.GONE);
 
-            clDatePicker.setBackgroundColor(getContext().getResources().getColor(R.color.grey_date_picker));
+            clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.grey_date_picker));
             vInflater.getLayoutParams().height = 0;
 
         } else {
             cbTimeBtn.setTextColor(Color.WHITE);
-            cbDateBtn.setTextColor(getContext().getResources().getColor(R.color.blue_date_picker));
+            cbDateBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.blue_date_picker));
             mLlCalendarPicker.setVisibility(View.GONE);
             myTimePicker.setVisibility(View.VISIBLE);
 
-            clDatePicker.setBackgroundColor(getContext().getResources().getColor(R.color.white));
+            clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             vInflater.getLayoutParams().height = mLlCalendarPicker.getHeight();
         }
     }
