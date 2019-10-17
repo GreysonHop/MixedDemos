@@ -13,6 +13,7 @@ import com.testdemo.testCanDragScrollView.DraggableScrollViewAct
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.testGiftAnim.TestGiftAnimAct
+import com.testdemo.testNCalendar.TestNCalendarAct
 import com.testdemo.testPictureSelect.TestPictureSelectAct
 import com.testdemo.testShader.TestShaderAct
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
@@ -41,6 +42,7 @@ class MainActivity : ListActivity() {
         menuListMap["礼物动画框架例子SVGA"] = TestGiftAnimAct::class.java
         menuListMap["自定义组件中的shader应用和圆角ViewGroup"] = TestShaderAct::class.java
         menuListMap["自定义年月日时分秒选择器"] = CreateInfoAct::class.java
+        menuListMap["万年历"] = TestNCalendarAct::class.java
 
         classNameList.addAll(menuListMap.keys)
         classList.addAll(menuListMap.values)

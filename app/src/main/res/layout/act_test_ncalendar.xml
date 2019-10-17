@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="15dp"
+        android:paddingTop="9dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="9dp">
+
+        <TextView
+            android:id="@+id/tv_calendar_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_corner11_grey"
+            android:paddingLeft="20dp"
+            android:paddingTop="3dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="3dp"
+            android:textColor="@color/blue_date_picker"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="今天：2019年5月13日，周一" />
+
+        <ImageView
+            android:id="@+id/iv_calendar_year_pre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/btn_calendar_year_previous"
+            app:layout_constraintBottom_toBottomOf="@id/iv_calendar_year_next"
+            app:layout_constraintEnd_toStartOf="@id/tv_calendar_year"
+            app:layout_constraintTop_toTopOf="@id/iv_calendar_year_next" />
+
+        <TextView
+            android:id="@+id/tv_calendar_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/cal_text_color"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_calendar_year_next"
+            app:layout_constraintEnd_toStartOf="@id/iv_calendar_year_next"
+            app:layout_constraintTop_toTopOf="@id/iv_calendar_year_next"
+            tools:text="2019" />
+
+        <ImageView
+            android:id="@+id/iv_calendar_year_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_calendar_year_next"
+            app:layout_constraintBottom_toBottomOf="@id/tv_calendar_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_calendar_date" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.necer.view.WeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:firstDayOfWeek="sunday" />
+
+    <com.necer.calendar.Miui10Calendar
+        android:id="@+id/miui10Calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:hollowCircleColor="@color/cal_today_bg"
+        app:lunarDistance="13dp"
+        app:lunarTextSize="8sp"
+        app:pointColor="@color/cal_selected_bg"
+        app:pointDistance="18dp"
+        app:pointLocation="down"
+        app:pointSize="3dp"
+        app:selectCircleColor="@color/cal_selected_bg"
+        app:selectLunarTextColor="@color/cal_selected_text"
+        app:selectSolarTextColorColor="@color/cal_selected_text"
+        app:solarTextColor="@color/cal_solar_text"
+        app:solarTextSize="16sp"
+        app:todaySolarTextColor="@color/cal_today_text">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cccccc"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher" />
+
+        </LinearLayout>
+
+
+    </com.necer.calendar.Miui10Calendar>
+</LinearLayout>

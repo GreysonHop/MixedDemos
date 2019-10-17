@@ -14,6 +14,18 @@
 
     <color name="black_alpha80">#c000</color>
 
+
+    <color name="cal_text_color">#283851</color>
+    <color name="cal_selected_bg">@color/blue_date_picker</color>
+    <color name="cal_selected_text">@color/white</color>
+    <color name="cal_solar_text">#333</color>
+    <color name="cal_lunar_text">#d8d8d8</color>
+    <color name="cal_point_grey">#999999</color>
+    <color name="cal_cal_point_blue">@color/blue_date_picker</color>
+    <color name="cal_out_month">#999</color>
+    <color name="cal_today_bg">@color/bg_date_picker_today</color>
+    <color name="cal_today_text">#283851</color>
+
     <string-array name="colors">
         <item>#3F51B5</item>
         <item>#FF4081</item>
