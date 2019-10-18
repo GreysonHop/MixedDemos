@@ -12,6 +12,7 @@ import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 import com.necer.view.CalendarView;
 import com.necer.view.MonthView;
+import com.testdemo.broken_lib.Utils;
 
 import org.joda.time.LocalDate;
 
@@ -32,7 +33,7 @@ public class MadTalkPainter implements CalendarPainter {
 
     private int noAlphaColor = 255;
     private boolean isLocalChina;
-
+    private float mSelectBgRectLength;
 
     protected List<LocalDate> mHolidayList;
     protected List<LocalDate> mWorkdayList;
@@ -54,6 +55,7 @@ public class MadTalkPainter implements CalendarPainter {
         mReplaceLunarStrMap = new HashMap<>();
         mReplaceLunarColorMap = new HashMap<>();
         isLocalChina = Locale.getDefault().getLanguage().toLowerCase().equals("zh");
+        mSelectBgRectLength = Utils.dp2px(44);
 
         List<String> holidayList = CalendarUtil.getHolidayList();
         for (int i = 0; i < holidayList.size(); i++) {
@@ -149,14 +151,23 @@ public class MadTalkPainter implements CalendarPainter {
         mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mCirclePaint.setColor(mAttrs.selectCircleColor);
         mCirclePaint.setAlpha(alphaColor);
-        canvas.drawCircle(rectF.centerX(), rectF.centerY(), mAttrs.selectCircleRadius, mCirclePaint);
+//        canvas.drawCircle(rectF.centerX(), rectF.centerY(), mAttrs.selectCircleRadius, mCirclePaint);
+        drawDayBg(canvas, rectF);
     }
 
     private void drawTodayBg(Canvas canvas, RectF rectF, int alphaColor) {
         mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mCirclePaint.setColor(mAttrs.hollowCircleColor);
         mCirclePaint.setAlpha(alphaColor);
-        canvas.drawCircle(rectF.centerX(), rectF.centerY(), mAttrs.selectCircleRadius, mCirclePaint);
+//        canvas.drawCircle(rectF.centerX(), rectF.centerY(), mAttrs.selectCircleRadius, mCirclePaint);
+        drawDayBg(canvas, rectF);
+    }
+
+    private void drawDayBg(Canvas canvas, RectF rectF) {
+        float widthOffset = (rectF.width() - mSelectBgRectLength) / 2;
+        float heightOffset = (rectF.height() - mSelectBgRectLength) / 2;
+        RectF realRectF = new RectF(rectF.left + widthOffset, rectF.top + heightOffset, rectF.right - widthOffset, rectF.bottom - heightOffset);
+        canvas.drawRoundRect(realRectF, mAttrs.selectCircleRadius, mAttrs.selectCircleRadius, mCirclePaint);
     }
 
 

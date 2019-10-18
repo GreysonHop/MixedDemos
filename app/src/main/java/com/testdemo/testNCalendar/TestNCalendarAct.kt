@@ -2,12 +2,17 @@ package com.testdemo.testNCalendar
 
 import android.app.Activity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import com.necer.calendar.Miui10Calendar
 import com.necer.enumeration.CalendarState
 import com.testdemo.R
+import kotlinx.android.synthetic.main.act_test_ncalendar.*
 import org.joda.time.LocalDate
 
 class TestNCalendarAct : Activity() {
@@ -17,6 +22,9 @@ class TestNCalendarAct : Activity() {
     private lateinit var mTvCalendarYear: TextView
     private lateinit var mIvCalendarYearPre: ImageView
     private lateinit var mIvCalendarYearNext: ImageView
+    private lateinit var mGroupCalendarMonthView: Group
+
+//    private lateinit var mRvSchedule: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +35,8 @@ class TestNCalendarAct : Activity() {
         mTvCalendarYear = findViewById(R.id.tv_calendar_year)
         mIvCalendarYearPre = findViewById(R.id.iv_calendar_year_pre)
         mIvCalendarYearNext = findViewById(R.id.iv_calendar_year_next)
+        mGroupCalendarMonthView = findViewById(R.id.group_calendar_monthView)
+//        mRvSchedule = findViewById(R.id.rv_schedule)
 
         val madTalkPainter = MadTalkPainter(miui10Calendar)
 
@@ -45,13 +55,23 @@ class TestNCalendarAct : Activity() {
             mTvCalendarYear.text = year.toString()
         }
 
-        findViewById<ImageView>(R.id.iv_icon).setOnClickListener {
+        miui10Calendar.setOnCalendarStateChangedListener {
+            mGroupCalendarMonthView.visibility = if (it == CalendarState.WEEK) View.GONE else View.VISIBLE
+        }
+
+//        val calendarOriginalHeight = miui10Calendar.min
+        miui10Calendar.setOnCalendarScrollingListener {
+            println("greyson: $it")
+//            miui10Calendar.layoutParams.height -= it.toInt()
+        }
+
+        /*findViewById<ImageView>(R.id.iv_icon).setOnClickListener {
             if (miui10Calendar.calendarState == CalendarState.MONTH) {
                 miui10Calendar.toWeek()
             } else {
                 miui10Calendar.toMonth()
             }
-        }
+        }*/
 
 
         miui10Calendar.calendarPainter = madTalkPainter
@@ -92,10 +112,13 @@ class TestNCalendarAct : Activity() {
         }
 
 
+        rv_schedule.layoutManager = LinearLayoutManager(this)
+        rv_schedule.adapter = RecyclerViewAdapter(this)
+
         /**   **********************/
         miui10Calendar.testKoMeth { i, f ->
             print("invoke my own method!")
-            i == f.toInt()
+            i.toFloat() == f
         }
     }
 
