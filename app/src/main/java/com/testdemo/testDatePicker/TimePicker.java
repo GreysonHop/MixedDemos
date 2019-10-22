@@ -18,6 +18,7 @@ import com.testdemo.testDatePicker.wheelView.OnItemPickListener;
 import com.testdemo.testDatePicker.wheelView.WheelView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Greyson
@@ -51,21 +52,15 @@ public class MyTimePicker extends LinearLayout {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_VERTICAL;
 
-
         for (int i = 0; i <= 23; i++) {
             mHourList.add(fillZero(i));
-        }
-
-        for (int i = 0; i < 60; i = i + 15) {
-            mMinuteList.add(fillZero(i));
         }
 
         mHourView.setCanLoop(false);
         mHourView.setTypeface(Typeface.SERIF);
         mHourView.setDividerType(LineConfig.DividerType.FILL);
         mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
-        mHourView.setCurrentItem(0);
-        mSelectedHour = mHourList.get(0);
+        mSelectedHour = mHourView.getCurrentItem();
 //        mHourView.setLineConfig(lineConfig);
         mHourView.setLayoutParams(layoutParams);
         mHourView.setOnItemPickListener(new OnItemPickListener<String>() {
@@ -100,9 +95,8 @@ public class MyTimePicker extends LinearLayout {
         //分钟
         mMinuteView.setCanLoop(false);
         mMinuteView.setTypeface(Typeface.DEFAULT);
-        mMinuteView.setAdapter(new ArrayWheelAdapter<>(mMinuteList));
-        mMinuteView.setCurrentItem(0);
-        mSelectedMinute = mMinuteList.get(0);
+        updateMinuteDateWithGap(15);
+        mSelectedMinute = mMinuteView.getCurrentItem();
         mMinuteView.setDividerType(LineConfig.DividerType.FILL);
 //        mMinuteView.setLineConfig(lineConfig);
         mMinuteView.setLayoutParams(layoutParams);
@@ -118,6 +112,13 @@ public class MyTimePicker extends LinearLayout {
         });
     }
 
+    public void updateMinuteDateWithGap(int gap) {
+        mMinuteList.clear();
+        for (int i = 0; i < 60; i = i + gap) {
+            mMinuteList.add(fillZero(i));
+        }
+        mMinuteView.setAdapter(new ArrayWheelAdapter<>(mMinuteList));
+    }
 
     /*private void changeMinuteData(int selectedHour) {
         if (startHour == endHour) {
