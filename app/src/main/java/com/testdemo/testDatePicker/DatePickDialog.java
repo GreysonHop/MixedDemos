@@ -303,6 +303,26 @@ public class DatePickDialog extends Dialog {
     }
 
     /**
+     * 修改时间选择器中分钟数的间隔，如gap=1时，数据为：0,1,2,3...59；gap为15时，数据为：0,15,30,45。
+     *
+     * @param gap 分钟数的间隔，小于1的整数都会被处理为1。
+     */
+    public void changeMinuteGap(int gap) {
+        if (!hasInit) {
+            return;
+        }
+        String str = mTimePicker.updateMinuteDateWithGap(gap);
+        String timeStr = cbTimeBtn.getText().toString();
+        if (TextUtils.isEmpty(timeStr)) {
+            timeStr = mTimePicker.getSelectedHour() + ":00";
+        }
+        selectedTimeStr = timeStr.replaceFirst("(?<=:)\\w{2}$", str);
+
+        cbTimeBtn.setText(selectedTimeStr);
+        mTvOnlyOneSwitch.setText(selectedTimeStr);
+    }
+
+    /**
      * 设置默认选中的日期，并且显示所在月的视图，类似于{@link #setSelectedDate(Date date)}
      *
      * @param selectedDateStr 字符串类型的日期，格式为"****-**-**"；为null时则采用组件内的默认值

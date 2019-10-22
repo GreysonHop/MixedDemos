@@ -97,7 +97,7 @@ public class CreateInfoAct extends Activity {
 
                 //todo wait for deleting
                 if (datePickDialog != null) {
-                    datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
+                    datePickDialog.changeMinuteGap(1);
                 }
 
             } else if (cbTimeBtn.getId() == checkedId) {
@@ -112,7 +112,7 @@ public class CreateInfoAct extends Activity {
 
                 //todo wait for deleting
                 if (datePickDialog != null) {
-                    datePickDialog.changeMode(DatePickDialog.MODE_TIME_ONLY);
+                    datePickDialog.changeMinuteGap(15);
                 }
             }
         });
@@ -120,10 +120,6 @@ public class CreateInfoAct extends Activity {
         mTvConfirm.setOnClickListener(clickView -> {
             Toast.makeText(this, selectedDate + " " + selectedTime, Toast.LENGTH_SHORT).show();
             mTvDate.setText(selectedDate + " " + selectedTime);
-
-            if (datePickDialog != null) {
-                datePickDialog.changeMode(DatePickDialog.MODE_DATE_AND_TIME);
-            }
         });
 
         mCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
@@ -223,13 +219,15 @@ public class CreateInfoAct extends Activity {
 
     private DatePickDialog getDatePickDialog() {
         if (datePickDialog == null) {
-            datePickDialog = new DatePickDialog(this, DatePickDialog.MODE_DATE_ONLY);
+            datePickDialog = new DatePickDialog(this);
             datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
                 selectedDate = dateStr;
                 selectedTime = timeStr;
                 mTvDate.setText(dateStr + " " + timeStr);
                 Toast.makeText(this, dateStr + " " + timeStr, Toast.LENGTH_LONG).show();
             });
+            datePickDialog.show();
+            datePickDialog.setSelectedDate("2019-11-12", "08:08");
         }
         return datePickDialog;
     }
@@ -238,7 +236,5 @@ public class CreateInfoAct extends Activity {
         getDatePickDialog().show();
 //        datePickDialog.setSelectedDate(new Date());
 //        datePickDialog.setSelectedDate("2019-11-12", "08:08");
-
-//        datePickDialog.setSelectedDate(selectedDate, selectedTime);
     }
 }
