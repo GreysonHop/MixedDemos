@@ -376,14 +376,9 @@ public class DatePickDialog extends Dialog {
             return;
         }
 
-        String selectedDateStr = new SimpleDateFormat("yyyy-M-d", Locale.CHINA).format(date);
-        String formatSelectedDateStr = DPLManager.getInstance().getDateFormat().format(date);
-        this.selectedDateStr = selectedDateStr;
-
-        String selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
-        this.selectedTimeStr = selectedTimeStr;
-
-        updateValue(formatSelectedDateStr);
+        this.selectedDateStr = new SimpleDateFormat("yyyy-M-d", Locale.CHINA).format(date);
+        this.selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
+        updateValue(DPLManager.getInstance().getDateFormat().format(date));
         /*cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
         if (mMode == MODE_DATE_AND_TIME) {
