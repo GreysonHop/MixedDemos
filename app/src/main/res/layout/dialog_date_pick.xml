@@ -123,7 +123,7 @@
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp" />
 
-            <com.testdemo.testDatePicker.MyCalendarPicker
+            <com.testdemo.testDatePicker.CalendarPicker
                 android:id="@+id/myCalendarPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
 
         </LinearLayout>
 
-        <com.testdemo.testDatePicker.MyTimePicker
+        <com.testdemo.testDatePicker.TimePicker
             android:id="@+id/myTimePicker"
             android:layout_width="wrap_content"
             android:layout_height="200dp"

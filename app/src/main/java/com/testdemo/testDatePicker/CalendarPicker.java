@@ -29,7 +29,7 @@ import java.util.Locale;
  * Created by Greyson
  * 此类中选中的日期字符串格式中月份和日为单位数时前面没有0
  */
-public class MyCalendarPicker extends View {
+public class CalendarPicker extends View {
 
     private final Region[][] MONTH_WEEKS_4 = new Region[4][7];
     private final Region[][] MONTH_WEEKS_5 = new Region[5][7];
@@ -56,15 +56,15 @@ public class MyCalendarPicker extends View {
     private float mCanAutoScrollGapY = 60;
     private float mCanSignScrollGapY = 8;
 
-    public MyCalendarPicker(Context context) {
+    public CalendarPicker(Context context) {
         this(context, null);
     }
 
-    public MyCalendarPicker(Context context, @Nullable AttributeSet attrs) {
+    public CalendarPicker(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyCalendarPicker(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CalendarPicker(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -99,13 +99,13 @@ public class MyCalendarPicker extends View {
         int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
         int measuredHeight = (int) (measuredWidth * column / 7f);
         setMeasuredDimension(measuredWidth, measuredHeight);
-        System.out.println("greyson MyCalendarPicker onMeasure() measuredHeight=" + measuredHeight
+        System.out.println("greyson CalendarPicker onMeasure() measuredHeight=" + measuredHeight
                 + ", column = " + column + " , cYear = " + mCurrentYear + ", cMonth= " + mCurrentMonth);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        System.out.println("greyson MyCalendarPicker onSizeChanged()");
+        System.out.println("greyson CalendarPicker onSizeChanged()");
         if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
             return;
         }
@@ -158,7 +158,7 @@ public class MyCalendarPicker extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        System.out.println("greyson MyCalendarPicker onTouchEvent() action = " + event.getAction() + " , cYear= " + mCurrentYear + " , cMonth=" + mCurrentMonth);
+        System.out.println("greyson CalendarPicker onTouchEvent() action = " + event.getAction() + " , cYear= " + mCurrentYear + " , cMonth=" + mCurrentMonth);
         float y = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -218,7 +218,7 @@ public class MyCalendarPicker extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        System.out.println("greyson MyCalendarPicker onDraw()");
+        System.out.println("greyson CalendarPicker onDraw()");
         if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
             return;
         }

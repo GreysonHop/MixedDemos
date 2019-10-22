@@ -18,15 +18,14 @@ import com.testdemo.testDatePicker.wheelView.OnItemPickListener;
 import com.testdemo.testDatePicker.wheelView.WheelView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Greyson
  */
-public class MyTimePicker extends LinearLayout {
+public class TimePicker extends LinearLayout {
 
-    final WheelView mHourView = new WheelView(getContext());
-    final WheelView mMinuteView = new WheelView(getContext());
+    private final WheelView mHourView = new WheelView(getContext());
+    private final WheelView mMinuteView = new WheelView(getContext());
     private ArrayList<String> mHourList = new ArrayList<>();
     private ArrayList<String> mMinuteList = new ArrayList<>();
 
@@ -34,15 +33,15 @@ public class MyTimePicker extends LinearLayout {
 
     private String mSelectedHour, mSelectedMinute;
 
-    public MyTimePicker(Context context) {
+    public TimePicker(Context context) {
         this(context, null);
     }
 
-    public MyTimePicker(Context context, @Nullable AttributeSet attrs) {
+    public TimePicker(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyTimePicker(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public TimePicker(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

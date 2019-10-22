@@ -55,8 +55,8 @@ public class DatePickDialog extends Dialog {
     private View vInflater;
     private LinearLayout mLlCalendarPicker;//包含星期组件的日期选择面板
     private LinearLayout mLlWeek;
-    private MyCalendarPicker myCalendarPicker;
-    private MyTimePicker myTimePicker;
+    private CalendarPicker mCalendarPicker;
+    private TimePicker mTimePicker;
 
     private String selectedDateStr;
     private String selectedTimeStr;
@@ -153,9 +153,12 @@ public class DatePickDialog extends Dialog {
 
                 if (rgSwitchDateTime.getCheckedRadioButtonId() == cbDateBtn.getId()) {
                     mLlCalendarPicker.setVisibility(View.VISIBLE);
-                    myTimePicker.setVisibility(View.GONE);
+                    mTimePicker.setVisibility(View.GONE);
                 } else {
                     cbDateBtn.setChecked(true);
+                }
+                if (TextUtils.isEmpty(cbTimeBtn.getText().toString())) {
+                    cbTimeBtn.setText(mTimePicker.getSelectedHour() + ":" + mTimePicker.getSelectedMinute());
                 }
                 break;
 
@@ -166,8 +169,8 @@ public class DatePickDialog extends Dialog {
                 mTvOnlyOneSwitch.setText(cbDateBtn.getText());
                 clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.grey_date_picker));
 
-                if (myTimePicker != null) {
-                    myTimePicker.setVisibility(View.GONE);
+                if (mTimePicker != null) {
+                    mTimePicker.setVisibility(View.GONE);
                 }
                 mLlCalendarPicker.setVisibility(View.VISIBLE);
                 break;
@@ -182,7 +185,10 @@ public class DatePickDialog extends Dialog {
                 if (mLlCalendarPicker != null) {
                     mLlCalendarPicker.setVisibility(View.GONE);
                 }
-                myTimePicker.setVisibility(View.VISIBLE);
+                mTimePicker.setVisibility(View.VISIBLE);
+                if (TextUtils.isEmpty(cbTimeBtn.getText().toString())) {
+                    mTvOnlyOneSwitch.setText(mTimePicker.getSelectedHour() + ":" + mTimePicker.getSelectedMinute());
+                }
                 break;
         }
     }
@@ -191,9 +197,9 @@ public class DatePickDialog extends Dialog {
         mLlCalendarPicker = new LinearLayout(getContext());
         mLlCalendarPicker.setOrientation(LinearLayout.VERTICAL);
 
-        myCalendarPicker = new MyCalendarPicker(getContext());
-        myCalendarPicker.setBackgroundColor(Color.WHITE);
-        myCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
+        mCalendarPicker = new CalendarPicker(getContext());
+        mCalendarPicker.setBackgroundColor(Color.WHITE);
+        mCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
             if (TextUtils.isEmpty(clickDay)) {
                 return;
             }
@@ -223,15 +229,6 @@ public class DatePickDialog extends Dialog {
             mLlWeek.addView(tvWeek, lpWeek);
         }
 
-        /*myCalendarPicker.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            Log.d("greyson", "addOnGlobalLayoutListener: calendar's height = " + myCalendarPicker.getHeight()
-                    + " | rootView: " + myCalendarPicker.getRootView().getHeight());
-        });
-
-        myCalendarPicker.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
-            Log.d("greyson", "addOnLayoutChangeListener: top = " + t + " oldTop = " + ot + " bot = " + b + " oldBot = " + ob
-                    + "   calendar==v: " + (myCalendarPicker == v));
-        });*/
     }
 
     private void setCalendarPanel() {
@@ -239,20 +236,20 @@ public class DatePickDialog extends Dialog {
             initCalendarPanel();
 
             mLlCalendarPicker.addView(mLlWeek);
-            mLlCalendarPicker.addView(myCalendarPicker);
+            mLlCalendarPicker.addView(mCalendarPicker);
             mFlContentPanel.addView(mLlCalendarPicker);
         }
     }
 
     private void initTimePanel() {
-        myTimePicker = new MyTimePicker(getContext());
-        myTimePicker.setGravity(CENTER);
-        myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
+        mTimePicker = new TimePicker(getContext());
+        mTimePicker.setGravity(CENTER);
+        mTimePicker.setOnWheelListener(new TimePicker.OnWheelListener() {
             @Override
             public void onHourWheeled(int index, String hour) {
                 String timeStr = cbTimeBtn.getText().toString();
                 if (TextUtils.isEmpty(timeStr)) {
-                    timeStr = "00:" + myTimePicker.getSelectedMinute();
+                    timeStr = "00:" + mTimePicker.getSelectedMinute();
                 }
                 selectedTimeStr = timeStr.replaceFirst("^\\w{2}(?=:)", hour);
 
@@ -264,7 +261,7 @@ public class DatePickDialog extends Dialog {
             public void onMinuteWheeled(int index, String minute) {
                 String timeStr = cbTimeBtn.getText().toString();
                 if (TextUtils.isEmpty(timeStr)) {
-                    timeStr = myTimePicker.getSelectedHour() + ":00";
+                    timeStr = mTimePicker.getSelectedHour() + ":00";
                 }
                 selectedTimeStr = timeStr.replaceFirst("(?<=:)\\w{2}$", minute);
 
@@ -275,11 +272,11 @@ public class DatePickDialog extends Dialog {
     }
 
     private void setTimePanel() {
-        if (myTimePicker == null) {
+        if (mTimePicker == null) {
             initTimePanel();
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(WRAP_CONTENT, Utils.dp2px(200));
             params.gravity = CENTER;
-            mFlContentPanel.addView(myTimePicker, params);
+            mFlContentPanel.addView(mTimePicker, params);
         }
     }
 
@@ -333,12 +330,12 @@ public class DatePickDialog extends Dialog {
 
 //            cbDateBtn.setText(String.format(Locale.CHINA, "%tY年%tm月%td日", selectDate, selectDate, selectDate));
 //            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(selectDate));
-//            myCalendarPicker.setSelectedDay(selectedDateStr);
+//            mCalendarPicker.setSelectedDay(selectedDateStr);
         }
 
         if (selectedTimeStr != null) {
 //            cbTimeBtn.setText(selectedTimeStr);
-//            myTimePicker.setSelectedTime(selectedTimeStr);
+//            mTimePicker.setSelectedTime(selectedTimeStr);
             this.selectedTimeStr = selectedTimeStr;
             needUpdate = true;
         }
@@ -370,16 +367,16 @@ public class DatePickDialog extends Dialog {
         /*cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
         if (mMode == MODE_DATE_AND_TIME) {
-            myCalendarPicker.setSelectedDay(selectedDateStr);
-            myTimePicker.setSelectedTime(selectedTimeStr);
+            mCalendarPicker.setSelectedDay(selectedDateStr);
+            mTimePicker.setSelectedTime(selectedTimeStr);
 
         } else if (mMode == MODE_DATE_ONLY) {
             mTvOnlyOneSwitch.setText(formatSelectedDateStr);
-            myCalendarPicker.setSelectedDay(selectedDateStr);
+            mCalendarPicker.setSelectedDay(selectedDateStr);
 
         } else if (mMode == MODE_TIME_ONLY) {
             mTvOnlyOneSwitch.setText(selectedTimeStr);
-            myTimePicker.setSelectedTime(selectedTimeStr);
+            mTimePicker.setSelectedTime(selectedTimeStr);
         }*/
     }
 
@@ -387,16 +384,16 @@ public class DatePickDialog extends Dialog {
         cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
         if (mMode == MODE_DATE_AND_TIME) {
-            myCalendarPicker.setSelectedDay(selectedDateStr);
-            myTimePicker.setSelectedTime(selectedTimeStr);
+            mCalendarPicker.setSelectedDay(selectedDateStr);
+            mTimePicker.setSelectedTime(selectedTimeStr);
 
         } else if (mMode == MODE_DATE_ONLY) {
             mTvOnlyOneSwitch.setText(formatSelectedDateStr);
-            myCalendarPicker.setSelectedDay(selectedDateStr);
+            mCalendarPicker.setSelectedDay(selectedDateStr);
 
         } else if (mMode == MODE_TIME_ONLY) {
             mTvOnlyOneSwitch.setText(selectedTimeStr);
-            myTimePicker.setSelectedTime(selectedTimeStr);
+            mTimePicker.setSelectedTime(selectedTimeStr);
         }
     }
 
@@ -408,7 +405,7 @@ public class DatePickDialog extends Dialog {
      */
     public void showMonth(int year, int month) {
         checkInit();
-        myCalendarPicker.setShowMonth(year, month);
+        mCalendarPicker.setShowMonth(year, month);
     }
 
     private void checkCbDateBtn(boolean isChecked) {
@@ -416,7 +413,7 @@ public class DatePickDialog extends Dialog {
             cbTimeBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.blue_date_picker));
             cbDateBtn.setTextColor(Color.WHITE);
             mLlCalendarPicker.setVisibility(View.VISIBLE);
-            myTimePicker.setVisibility(View.GONE);
+            mTimePicker.setVisibility(View.GONE);
 
             clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.grey_date_picker));
             vInflater.getLayoutParams().height = 0;
@@ -425,7 +422,7 @@ public class DatePickDialog extends Dialog {
             cbTimeBtn.setTextColor(Color.WHITE);
             cbDateBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.blue_date_picker));
             mLlCalendarPicker.setVisibility(View.GONE);
-            myTimePicker.setVisibility(View.VISIBLE);
+            mTimePicker.setVisibility(View.VISIBLE);
 
             clDatePicker.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
             vInflater.getLayoutParams().height = mLlCalendarPicker.getHeight();

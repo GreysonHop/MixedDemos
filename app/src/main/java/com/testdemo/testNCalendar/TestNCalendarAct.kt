@@ -24,7 +24,7 @@ class TestNCalendarAct : Activity() {
     private lateinit var mIvCalendarYearNext: ImageView
     private lateinit var mGroupCalendarMonthView: Group
 
-//    private lateinit var mRvSchedule: RecyclerView
+    private lateinit var mRvSchedule: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class TestNCalendarAct : Activity() {
         mIvCalendarYearPre = findViewById(R.id.iv_calendar_year_pre)
         mIvCalendarYearNext = findViewById(R.id.iv_calendar_year_next)
         mGroupCalendarMonthView = findViewById(R.id.group_calendar_monthView)
-//        mRvSchedule = findViewById(R.id.rv_schedule)
+        mRvSchedule = findViewById(R.id.rv_schedule)
 
         val madTalkPainter = MadTalkPainter(miui10Calendar)
 
@@ -50,7 +50,7 @@ class TestNCalendarAct : Activity() {
 
 
         miui10Calendar.setOnCalendarChangedListener { baseCalendar, year, month, localDate ->
-//            mTvCalendarDate.text = "${year}年${month}月 当前页面选中 $localDate"
+            //            mTvCalendarDate.text = "${year}年${month}月 当前页面选中 $localDate"
             mTvCalendarDate.text = localDate.toString("今天：yyyy年MM月dd日,E")
             mTvCalendarYear.text = year.toString()
         }
@@ -112,8 +112,8 @@ class TestNCalendarAct : Activity() {
         }
 
 
-        rv_schedule.layoutManager = LinearLayoutManager(this)
-        rv_schedule.adapter = RecyclerViewAdapter(this)
+        mRvSchedule.layoutManager = LinearLayoutManager(this)
+        mRvSchedule.adapter = RecyclerViewAdapter(this)
 
         /**   **********************/
         miui10Calendar.testKoMeth { i, f ->

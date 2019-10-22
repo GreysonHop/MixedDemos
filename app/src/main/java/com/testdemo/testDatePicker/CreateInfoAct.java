@@ -28,7 +28,6 @@ import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.cons.DPMode;
 import com.testdemo.testDatePicker.datepicker.views.DatePicker;
 
-import java.util.Date;
 import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -41,8 +40,8 @@ public class CreateInfoAct extends Activity {
     private TextView mTvConfirm;
     private LinearLayout mLlWeek;
     private View vInflater;
-    private MyCalendarPicker myCalendarPicker;
-    private MyTimePicker myTimePicker;
+    private CalendarPicker mCalendarPicker;
+    private TimePicker mTimePicker;
 
     private String selectedDate = "2019-06-02";
     private String selectedTime = "17:15";
@@ -66,8 +65,8 @@ public class CreateInfoAct extends Activity {
         mTvConfirm = findViewById(R.id.tv_confirm);
 
         vInflater = findViewById(R.id.v_inflater);
-        myCalendarPicker = findViewById(R.id.myCalendarPicker);
-        myTimePicker = findViewById(R.id.myTimePicker);
+        mCalendarPicker = findViewById(R.id.myCalendarPicker);
+        mTimePicker = findViewById(R.id.myTimePicker);
         mTvDate = findViewById(R.id.tv_date);
 
         mLlWeek = findViewById(R.id.ll_week);
@@ -93,8 +92,8 @@ public class CreateInfoAct extends Activity {
 
                 vInflater.getLayoutParams().height = 0;
 
-                myCalendarPicker.setVisibility(View.VISIBLE);
-                myTimePicker.setVisibility(View.GONE);
+                mCalendarPicker.setVisibility(View.VISIBLE);
+                mTimePicker.setVisibility(View.GONE);
 
                 //todo wait for deleting
                 if (datePickDialog != null) {
@@ -106,10 +105,10 @@ public class CreateInfoAct extends Activity {
                 clDatePicker.setBackgroundColor(getResources().getColor(R.color.white));
                 checkCbDateBtn(false);
 
-                vInflater.getLayoutParams().height = myCalendarPicker.getHeight();
+                vInflater.getLayoutParams().height = mCalendarPicker.getHeight();
 
-                myCalendarPicker.setVisibility(View.GONE);
-                myTimePicker.setVisibility(View.VISIBLE);
+                mCalendarPicker.setVisibility(View.GONE);
+                mTimePicker.setVisibility(View.VISIBLE);
 
                 //todo wait for deleting
                 if (datePickDialog != null) {
@@ -127,7 +126,7 @@ public class CreateInfoAct extends Activity {
             }
         });
 
-        myCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
+        mCalendarPicker.setOnDayClickListener(((clickDay, selectedDays) -> {
             if (TextUtils.isEmpty(clickDay)) {
                 return;
             }
@@ -137,7 +136,7 @@ public class CreateInfoAct extends Activity {
             cbDateBtn.setText(getString(R.string.text_calendar_cn, dateDatas[0], dateDatas[1], dateDatas[2]));
         }));
 
-        myTimePicker.setOnWheelListener(new MyTimePicker.OnWheelListener() {
+        mTimePicker.setOnWheelListener(new TimePicker.OnWheelListener() {
             @Override
             public void onHourWheeled(int index, String hour) {
                 String timeStr = cbTimeBtn.getText().toString();
@@ -152,7 +151,7 @@ public class CreateInfoAct extends Activity {
                 cbTimeBtn.setText(selectedTime);
             }
         });
-        myCalendarPicker.setShowMonth(2019, 7);
+        mCalendarPicker.setShowMonth(2019, 7);
 
         /*********************************************************/
 
@@ -238,7 +237,7 @@ public class CreateInfoAct extends Activity {
     public void onClick(View view) {
         getDatePickDialog().show();
 //        datePickDialog.setSelectedDate(new Date());
-        datePickDialog.setSelectedDate("2020-2-12", "08:08");
+//        datePickDialog.setSelectedDate("2019-11-12", "08:08");
 
 //        datePickDialog.setSelectedDate(selectedDate, selectedTime);
     }
