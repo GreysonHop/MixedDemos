@@ -54,7 +54,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="7dp"
-            android:text="发送"
+            android:text="@string/text_send_picture"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>

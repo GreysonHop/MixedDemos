@@ -2,7 +2,6 @@ package com.testdemo.testPictureSelect
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.view.View
@@ -15,8 +14,8 @@ class TestPictureSelectAct : FragmentActivity(), PictureSelectPanel.OnSendClickL
 
     lateinit var panel : PictureSelectPanel
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.act_test_picture_select)
 
         panel = PictureSelectPanel(this, pictureLayout)

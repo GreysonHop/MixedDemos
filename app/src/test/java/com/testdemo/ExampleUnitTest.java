@@ -1,6 +1,12 @@
 package com.testdemo;
 
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.Executors;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +39,18 @@ public class ExampleUnitTest {
         System.out.println("09:49".matches(regex));
         System.out.println("01:10".matches(regex));
 
+
+        Calendar cal = Calendar.getInstance();
+        System.out.println("greyson: " + cal.getTimeInMillis());
+        cal.set(Calendar.SECOND, 0);
+        System.out.println("greyson: " + cal.getTimeInMillis());
+        cal.set(Calendar.MILLISECOND, 0);
+        System.out.println("greyson: " + cal.getTimeInMillis());
+
         assertEquals(4, 2 + 2);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'Today': E, MMM d, yyyy");
+        System.out.println("date = " + dateFormat.format(new Date()));
 
     }
 

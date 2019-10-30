@@ -12,7 +12,8 @@
         android:padding="10dp"
         android:onClick="onClick"
         android:text="swith"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textColor="@color/Green"/>
 
     <include layout="@layout/nim_picture_panel" />
 
