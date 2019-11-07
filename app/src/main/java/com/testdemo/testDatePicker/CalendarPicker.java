@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
 
+import com.testdemo.R;
 import com.testdemo.broken_lib.Utils;
 import com.testdemo.testDatePicker.datepicker.bizs.calendars.DPCManager;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
@@ -315,12 +316,12 @@ public class CalendarPicker extends View {
             mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
             mPaint.setTextSize(Utils.dp2px(14));
             if (DPLManager.getInstance().isSameLanguage(Locale.CHINA)) {//temporary deal
-                canvas.drawText("今天", rect.centerX(), rect.centerY(), mPaint);
+                canvas.drawText("今天", rect.centerX(), rect.centerY() - fontMetrics.bottom, mPaint);
             } else {
-                canvas.drawText("Today", rect.centerX(), rect.centerY(), mPaint);
+                canvas.drawText("Today", rect.centerX(), rect.centerY() - fontMetrics.bottom, mPaint);
             }
 
-            y = rect.centerY() + fontMetrics.descent - fontMetrics.ascent;
+            y = rect.centerY() - fontMetrics.ascent;
         } else {
             y = rect.centerY() - fontMetrics.top / 2 - fontMetrics.bottom / 2;
         }
@@ -336,9 +337,22 @@ public class CalendarPicker extends View {
                 canvas.drawText(monthFirstDay, rect.centerX(), y, mPaint);
 
             } else if (mThisYear != year) {
+
+                Rect fontRect = new Rect();
                 mPaint.setTextSize(Utils.dp2px(14));
-                canvas.drawText(monthFirstDay, rect.centerX(), rect.centerY(), mPaint);
-                y = rect.centerY() + fontMetrics.descent - fontMetrics.ascent;
+                mPaint.getTextBounds(monthFirstDay, 0, monthFirstDay.length(), fontRect);
+                mPaint.setColor(getResources().getColor(R.color.button));
+                canvas.drawRect(rect.centerX() - fontRect.width() / 2
+                        , rect.centerY() - fontMetrics.bottom + fontMetrics.top
+                        , rect.centerX() + fontRect.width() / 2
+                        , rect.centerY()
+                        , mPaint);
+                mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));//todo
+
+                mPaint.setTextSize(Utils.dp2px(14));
+                canvas.drawText(monthFirstDay, rect.centerX(), rect.centerY() - fontMetrics.bottom, mPaint);
+                mPaint.setTextSize(Utils.dp2px(12));
+                y = rect.centerY() - fontMetrics.ascent;
                 canvas.drawText(String.valueOf(year), rect.centerX(), y, mPaint);
 
             } else {

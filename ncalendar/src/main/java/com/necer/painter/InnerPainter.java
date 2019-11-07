@@ -1,4 +1,4 @@
-package com.testdemo.testNCalendar;
+package com.necer.painter;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -7,45 +7,40 @@ import android.text.TextUtils;
 
 import com.necer.calendar.ICalendar;
 import com.necer.entity.CalendarDate;
-import com.necer.painter.CalendarPainter;
 import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 import com.necer.view.CalendarView;
 import com.necer.view.MonthView;
-import com.testdemo.broken_lib.Utils;
 
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
- * Created by Greyson on 2019/10/16 according to necer on 2019/1/3.
+ * Created by necer on 2019/1/3.
  */
-public class MadTalkPainter implements CalendarPainter {
+public class InnerPainter implements CalendarPainter {
 
     private Attrs mAttrs;
     protected Paint mTextPaint;
     protected Paint mCirclePaint;
 
     private int noAlphaColor = 255;
-    private boolean isLocalChina;
-    private float mSelectBgRectLength;
 
     protected List<LocalDate> mHolidayList;
     protected List<LocalDate> mWorkdayList;
 
     private List<LocalDate> mPointList;
-    private Map<LocalDate, Integer> mPointColorMap;
     private Map<LocalDate, String> mReplaceLunarStrMap;
     private Map<LocalDate, Integer> mReplaceLunarColorMap;
+    private Map<LocalDate, String> mStretchStrMap;
 
     private ICalendar mCalendar;
 
-    public MadTalkPainter(ICalendar calendar) {
+    public InnerPainter(ICalendar calendar) {
         this.mAttrs = calendar.getAttrs();
         this.mCalendar = calendar;
         mTextPaint = getPaint();
@@ -53,11 +48,9 @@ public class MadTalkPainter implements CalendarPainter {
         mPointList = new ArrayList<>();
         mHolidayList = new ArrayList<>();
         mWorkdayList = new ArrayList<>();
-        mPointColorMap = new HashMap<>();
         mReplaceLunarStrMap = new HashMap<>();
         mReplaceLunarColorMap = new HashMap<>();
-        isLocalChina = Locale.getDefault().getLanguage().toLowerCase().equals("zh");
-        mSelectBgRectLength = Utils.dp2px(38);
+        mStretchStrMap = new HashMap<>();
 
         List<String> holidayList = CalendarUtil.getHolidayList();
         for (int i = 0; i < holidayList.size(); i++) {
@@ -93,27 +86,27 @@ public class MadTalkPainter implements CalendarPainter {
     @Override
     public void onDrawToday(Canvas canvas, RectF rectF, LocalDate localDate, List<LocalDate> selectDateList) {
         if (selectDateList.contains(localDate)) {
-            drawSelectBg(canvas, rectF, noAlphaColor);
+            drawSelectBg(canvas, rectF, noAlphaColor, true);
             drawSolar(canvas, rectF, localDate, noAlphaColor, true, true);
             drawLunar(canvas, rectF, localDate, noAlphaColor, true, true);
             drawPoint(canvas, rectF, true, noAlphaColor, localDate);
             drawHolidays(canvas, rectF, true, noAlphaColor, localDate);
         } else {
-            drawTodayBg(canvas, rectF, noAlphaColor);
             drawSolar(canvas, rectF, localDate, noAlphaColor, false, true);
             drawLunar(canvas, rectF, localDate, noAlphaColor, false, true);
             drawPoint(canvas, rectF, false, noAlphaColor, localDate);
             drawHolidays(canvas, rectF, false, noAlphaColor, localDate);
         }
+        drawStretchText(canvas, rectF, noAlphaColor, localDate);
     }
 
     @Override
     public void onDrawCurrentMonthOrWeek(Canvas canvas, RectF rectF, LocalDate localDate, List<LocalDate> selectDateList) {
         if (selectDateList.contains(localDate)) {
-            drawSelectBg(canvas, rectF, noAlphaColor);
+            drawSelectBg(canvas, rectF, noAlphaColor, false);
             drawSolar(canvas, rectF, localDate, noAlphaColor, true, false);
             drawLunar(canvas, rectF, localDate, noAlphaColor, true, false);
-            drawPoint(canvas, rectF, true, noAlphaColor, localDate);
+            drawPoint(canvas, rectF, false, noAlphaColor, localDate);
             drawHolidays(canvas, rectF, false, noAlphaColor, localDate);
         } else {
             drawSolar(canvas, rectF, localDate, noAlphaColor, false, false);
@@ -121,12 +114,13 @@ public class MadTalkPainter implements CalendarPainter {
             drawPoint(canvas, rectF, false, noAlphaColor, localDate);
             drawHolidays(canvas, rectF, false, noAlphaColor, localDate);
         }
+        drawStretchText(canvas, rectF, noAlphaColor, localDate);
     }
 
     @Override
     public void onDrawLastOrNextMonth(Canvas canvas, RectF rectF, LocalDate localDate, List<LocalDate> selectDateList) {
         if (selectDateList.contains(localDate)) {
-            drawSelectBg(canvas, rectF, mAttrs.alphaColor);
+            drawSelectBg(canvas, rectF, mAttrs.alphaColor, false);
             drawSolar(canvas, rectF, localDate, mAttrs.alphaColor, true, false);
             drawLunar(canvas, rectF, localDate, mAttrs.alphaColor, true, false);
             drawPoint(canvas, rectF, false, mAttrs.alphaColor, localDate);
@@ -137,6 +131,7 @@ public class MadTalkPainter implements CalendarPainter {
             drawPoint(canvas, rectF, false, mAttrs.alphaColor, localDate);
             drawHolidays(canvas, rectF, false, mAttrs.alphaColor, localDate);
         }
+        drawStretchText(canvas, rectF, mAttrs.alphaColor, localDate);
     }
 
     @Override
@@ -145,29 +140,17 @@ public class MadTalkPainter implements CalendarPainter {
         drawLunar(canvas, rectF, localDate, mAttrs.disabledAlphaColor, false, false);
         drawPoint(canvas, rectF, false, mAttrs.disabledAlphaColor, localDate);
         drawHolidays(canvas, rectF, false, mAttrs.disabledAlphaColor, localDate);
+        drawStretchText(canvas, rectF, mAttrs.disabledAlphaColor, localDate);
     }
 
 
     //选中背景
-    private void drawSelectBg(Canvas canvas, RectF rectF, int alphaColor) {
-        mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mCirclePaint.setColor(mAttrs.selectCircleColor);
+    private void drawSelectBg(Canvas canvas, RectF rectF, int alphaColor, boolean isToday) {
+        mCirclePaint.setStyle(isToday ? Paint.Style.FILL_AND_STROKE : Paint.Style.STROKE);
+        mCirclePaint.setStrokeWidth(mAttrs.hollowCircleStroke);
+        mCirclePaint.setColor(isToday ? mAttrs.selectCircleColor : mAttrs.hollowCircleColor);
         mCirclePaint.setAlpha(alphaColor);
-        drawDayBg(canvas, rectF);
-    }
-
-    private void drawTodayBg(Canvas canvas, RectF rectF, int alphaColor) {
-        mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mCirclePaint.setColor(mAttrs.hollowCircleColor);
-        mCirclePaint.setAlpha(alphaColor);
-        drawDayBg(canvas, rectF);
-    }
-
-    private void drawDayBg(Canvas canvas, RectF rectF) {
-        float widthOffset = (rectF.width() - mSelectBgRectLength) / 2;
-        float heightOffset = (rectF.height() - mSelectBgRectLength) / 2;
-        RectF realRectF = new RectF(rectF.left + widthOffset, rectF.top + heightOffset, rectF.right - widthOffset, rectF.bottom - heightOffset);
-        canvas.drawRoundRect(realRectF, mAttrs.selectCircleRadius, mAttrs.selectCircleRadius, mCirclePaint);
+        canvas.drawCircle(rectF.centerX(), rectF.centerY(), mAttrs.selectCircleRadius, mCirclePaint);
     }
 
 
@@ -179,29 +162,13 @@ public class MadTalkPainter implements CalendarPainter {
             mTextPaint.setColor(isToday ? mAttrs.todaySolarTextColor : mAttrs.solarTextColor);
         }
         mTextPaint.setAlpha(alphaColor);
-
-        String dayStr = getMonthFirstDayStr(date);
-        float solarTextSizeScale = 1.0f;
-        if (dayStr.length() >= 3) {
-            if (isLocalChina) {
-                solarTextSizeScale = 3f / 5;
-            } else {
-                solarTextSizeScale = 4f / 5;
-            }
-        } else {
-            if (isLocalChina) {
-                solarTextSizeScale = 4f / 5;
-            }
-        }
-        mTextPaint.setTextSize(mAttrs.solarTextSize * solarTextSizeScale);
-        canvas.drawText(dayStr, rectF.centerX()
-                , isLocalChina && mAttrs.isShowLunar ? rectF.centerY() : getBaseLineY(rectF)
-                , mTextPaint);
+        mTextPaint.setTextSize(mAttrs.solarTextSize);
+        canvas.drawText(date.getDayOfMonth() + "", rectF.centerX(), mAttrs.isShowLunar ? rectF.centerY() : getBaseLineY(rectF), mTextPaint);
     }
 
     //绘制农历
     private void drawLunar(Canvas canvas, RectF rectF, LocalDate localDate, int alphaColor, boolean isSelect, boolean isToday) {
-        if (isLocalChina && mAttrs.isShowLunar) {
+        if (mAttrs.isShowLunar) {
             boolean isTodaySelect = isSelect && isToday;
             CalendarDate calendarDate = CalendarUtil.getCalendarDate(localDate);
             //优先顺序 替换的文字、农历节日、节气、公历节日、正常农历日期
@@ -225,8 +192,6 @@ public class MadTalkPainter implements CalendarPainter {
             if (color == null) {
                 if (isSelect) {
                     mTextPaint.setColor(isToday ? mAttrs.todaySelectContrastColor : mAttrs.selectLunarTextColor);
-                } else if (isToday) {
-                    mTextPaint.setColor(mAttrs.todaySolarTextColor);
                 }
             } else {
                 mTextPaint.setColor(color);
@@ -239,24 +204,12 @@ public class MadTalkPainter implements CalendarPainter {
 
 
     //绘制圆点
-    private void drawPoint(Canvas canvas, RectF rectF, boolean isSelect, int alphaColor, LocalDate date) {
+    private void drawPoint(Canvas canvas, RectF rectF, boolean isTodaySelect, int alphaColor, LocalDate date) {
         if (mPointList.contains(date)) {
             mCirclePaint.setStyle(Paint.Style.FILL);
+            mCirclePaint.setColor(isTodaySelect ? mAttrs.todaySelectContrastColor : mAttrs.pointColor);
             mCirclePaint.setAlpha(alphaColor);
-
-            Integer color;
-            if (isSelect) {
-                color = mAttrs.selectSolarTextColorColor;
-            } else {
-                color = mPointColorMap.get(date);
-                if (color == null) {
-                    color = mAttrs.selectCircleColor;
-                }
-            }
-            mCirclePaint.setColor(color);
-
-            canvas.drawCircle(rectF.centerX(), mAttrs.pointLocation == Attrs.DOWN
-                    ? (rectF.centerY() + mAttrs.pointDistance) : (rectF.centerY() - mAttrs.pointDistance), mAttrs.pointSize, mCirclePaint);
+            canvas.drawCircle(rectF.centerX(), mAttrs.pointLocation == Attrs.DOWN ? (rectF.centerY() + mAttrs.pointDistance) : (rectF.centerY() - mAttrs.pointDistance), mAttrs.pointSize, mCirclePaint);
         }
     }
 
@@ -273,6 +226,20 @@ public class MadTalkPainter implements CalendarPainter {
                 mTextPaint.setColor(isTodaySelect ? mAttrs.todaySelectContrastColor : mAttrs.workdayColor);
                 mTextPaint.setAlpha(alphaColor);
                 canvas.drawText("班", holidayLocation[0], holidayLocation[1], mTextPaint);
+            }
+        }
+    }
+
+    //绘制拉伸的文字
+    private void drawStretchText(Canvas canvas, RectF rectF, int alphaColor, LocalDate localDate) {
+        float v = rectF.centerY() + mAttrs.stretchTextDistance;
+        if (v <= rectF.bottom) {//超出当前矩形 不绘制
+            String stretchText = mStretchStrMap.get(localDate);
+            if (!TextUtils.isEmpty(stretchText)) {
+                mTextPaint.setTextSize(mAttrs.stretchTextSize);
+                mTextPaint.setColor(mAttrs.stretchTextColor);
+                mTextPaint.setAlpha(alphaColor);
+                canvas.drawText(stretchText, rectF.centerX(), rectF.centerY() + mAttrs.stretchTextDistance, mTextPaint);
             }
         }
     }
@@ -354,20 +321,6 @@ public class MadTalkPainter implements CalendarPainter {
         mCalendar.notifyCalendar();
     }
 
-    public void setPointColorMap(Map<String, Integer> pointColorMap) {
-        mPointColorMap.clear();
-        for (String key : pointColorMap.keySet()) {
-            LocalDate localDate;
-            try {
-                localDate = new LocalDate(key);
-            } catch (Exception e) {
-                throw new RuntimeException("setReplaceLunarStrMap的参数需要 yyyy-MM-dd 格式的日期");
-            }
-            mPointColorMap.put(localDate, pointColorMap.get(key));
-        }
-        mCalendar.notifyCalendar();
-    }
-
     //设置替换农历的文字
     public void setReplaceLunarStrMap(Map<String, String> replaceLunarStrMap) {
         mReplaceLunarStrMap.clear();
@@ -428,18 +381,18 @@ public class MadTalkPainter implements CalendarPainter {
     }
 
 
-    private String getMonthFirstDayStr(LocalDate date) {
-        String result = "";
-        if (date.getDayOfMonth() == 1) {
-            String[] lunarMonth = isLocalChina
-                    ? new String[]{"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"}
-                    : new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    public void setStretchStrMap(Map<String, String> stretchStrMap) {
+        mStretchStrMap.clear();
+        for (String key : stretchStrMap.keySet()) {
+            LocalDate localDate;
+            try {
+                localDate = new LocalDate(key);
 
-            result = lunarMonth[date.getMonthOfYear() - 1];
-        } else {
-            result = date.getDayOfMonth() + "";
+            } catch (Exception e) {
+                throw new RuntimeException("setStretchStrMap的参数需要 yyyy-MM-dd 格式的日期");
+            }
+            mStretchStrMap.put(localDate, stretchStrMap.get(key));
         }
-        return result;
+        mCalendar.notifyCalendar();
     }
 }
-

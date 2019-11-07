@@ -3,6 +3,8 @@ package com.testdemo.broken_lib;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 
 import java.util.Random;
@@ -14,10 +16,15 @@ public class Utils {
     static int screenHeight;
     private static Random random = new Random();
     private static final float DENSITY = Resources.getSystem().getDisplayMetrics().density;
+    private static final DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
     private static final Canvas mCanvas = new Canvas();
 
     public static int dp2px(int dp) {
         return Math.round(dp * DENSITY);
+    }
+
+    public static int sp2px(int sp) {
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, metrics));
     }
 
     public static Bitmap convertViewToBitmap(View view) {

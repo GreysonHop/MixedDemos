@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/BlurAndSomeElse-app.iml" filepath="$PROJECT_DIR$/app/BlurAndSomeElse-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/GitRepo-BlurAndSomeElse.iml" filepath="$PROJECT_DIR$/GitRepo-BlurAndSomeElse.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ncalendar/ncalendar.iml" filepath="$PROJECT_DIR$/ncalendar/ncalendar.iml" />
     </modules>
   </component>
 </project>

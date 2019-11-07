@@ -61,5 +61,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
 //    implementation 'com.github.GreysonHop:WeChatTag:v2.0.0'
-    implementation 'com.necer.ncalendar:ncalendar:4.3.7'
+//    implementation 'com.necer.ncalendar:ncalendar:4.3.7'
+    implementation project(path: ':ncalendar')
 }

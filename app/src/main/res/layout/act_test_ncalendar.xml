@@ -82,20 +82,22 @@
         android:id="@+id/miui10Calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:calendarHeight="250dp"
         app:hollowCircleColor="@color/cal_today_bg"
-        app:lunarDistance="13dp"
+        app:lunarDistance="12dp"
         app:lunarTextSize="8sp"
         app:pointColor="@color/cal_selected_bg"
-        app:pointDistance="18dp"
+        app:pointDistance="16dp"
         app:pointLocation="down"
-        app:pointSize="3dp"
+        app:pointSize="2dp"
         app:selectCircleColor="@color/cal_selected_bg"
         app:selectCircleRadius="3dp"
         app:selectLunarTextColor="@color/cal_selected_text"
         app:selectSolarTextColorColor="@color/cal_selected_text"
         app:solarTextColor="@color/cal_solar_text"
         app:solarTextSize="16sp"
-        app:todaySolarTextColor="@color/cal_today_text">
+        app:todaySolarTextColor="@color/cal_today_text"
+        app:isAllMonthSixLine="true">
 
         <LinearLayout
             android:layout_width="match_parent"
