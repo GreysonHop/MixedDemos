@@ -34,7 +34,7 @@ public class WeekCalendar extends BaseCalendar {
     }
 
     @Override
-    protected LocalDate getIntervalDate(LocalDate localDate, int count) {
+    protected LocalDate getIntervalDate(LocalDate localDate, int count, boolean isJumpClick) {
         return localDate.plusWeeks(count);
     }
 

@@ -109,7 +109,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:tag="@string/factual_scroll_view"
-                android:text="drag me!!!" />
+                android:text="drag me!!!"
+                android:onClick="changeMode"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_schedule"

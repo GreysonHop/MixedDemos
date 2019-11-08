@@ -12,12 +12,11 @@ import androidx.constraintlayout.widget.Group
 import com.necer.calendar.Miui10Calendar
 import com.necer.enumeration.CalendarState
 import com.testdemo.R
-import kotlinx.android.synthetic.main.act_test_ncalendar.*
 import org.joda.time.LocalDate
 
 class TestNCalendarAct : Activity() {
 
-    private lateinit var miui10Calendar: Miui10Calendar
+    private lateinit var mMiui10Calendar: Miui10Calendar
     private lateinit var mTvCalendarDate: TextView
     private lateinit var mTvCalendarYear: TextView
     private lateinit var mIvCalendarYearPre: ImageView
@@ -30,7 +29,7 @@ class TestNCalendarAct : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_test_ncalendar)
 
-        miui10Calendar = findViewById(R.id.miui10Calendar)
+        mMiui10Calendar = findViewById(R.id.miui10Calendar)
         mTvCalendarDate = findViewById(R.id.tv_calendar_date)
         mTvCalendarYear = findViewById(R.id.tv_calendar_year)
         mIvCalendarYearPre = findViewById(R.id.iv_calendar_year_pre)
@@ -38,7 +37,7 @@ class TestNCalendarAct : Activity() {
         mGroupCalendarMonthView = findViewById(R.id.group_calendar_monthView)
         mRvSchedule = findViewById(R.id.rv_schedule)
 
-        val madTalkPainter = MadTalkPainter(miui10Calendar)
+        val madTalkPainter = MadTalkPainter(mMiui10Calendar)
 
         val pointList = arrayListOf("2019-10-01", "2019-11-01", "2019-10-17"
                 , "2019-09-23", "2019-11-03", "2019-10-16")
@@ -48,36 +47,36 @@ class TestNCalendarAct : Activity() {
         val workdayList = arrayListOf("2019-10-01", "2019-11-02", "2019-12-01")
         madTalkPainter.setLegalHolidayList(holidayList, workdayList)
 
-
-        miui10Calendar.setOnCalendarChangedListener { baseCalendar, year, month, localDate ->
+        mMiui10Calendar.setDefaultSelectFitst(true)
+        mMiui10Calendar.setOnCalendarChangedListener { baseCalendar, year, month, localDate ->
             //            mTvCalendarDate.text = "${year}年${month}月 当前页面选中 $localDate"
             mTvCalendarDate.text = localDate.toString("今天：yyyy年MM月dd日,E")
             mTvCalendarYear.text = year.toString()
         }
 
-        miui10Calendar.setOnCalendarStateChangedListener {
+        mMiui10Calendar.setOnCalendarStateChangedListener {
             mGroupCalendarMonthView.visibility = if (it == CalendarState.WEEK) View.GONE else View.VISIBLE
         }
 
-//        val calendarOriginalHeight = miui10Calendar.min
-        miui10Calendar.setOnCalendarScrollingListener {
+//        val calendarOriginalHeight = mMiui10Calendar.min
+        mMiui10Calendar.setOnCalendarScrollingListener {
             println("greyson: $it")
-//            miui10Calendar.layoutParams.height -= it.toInt()
+//            mMiui10Calendar.layoutParams.height -= it.toInt()
         }
 
         /*findViewById<ImageView>(R.id.iv_icon).setOnClickListener {
-            if (miui10Calendar.calendarState == CalendarState.MONTH) {
-                miui10Calendar.toWeek()
+            if (mMiui10Calendar.calendarState == CalendarState.MONTH) {
+                mMiui10Calendar.toWeek()
             } else {
-                miui10Calendar.toMonth()
+                mMiui10Calendar.toMonth()
             }
         }*/
 
 
-        miui10Calendar.calendarPainter = madTalkPainter
+        mMiui10Calendar.calendarPainter = madTalkPainter
 
         val jumpYear = { jumpMode: Int ->
-            miui10Calendar.currectSelectDateList?.let {
+            mMiui10Calendar.currectSelectDateList?.let {
                 if (it.size > 0) {
                     it[0]?.let { selectedLocalDate ->
                         val localDateToJump = when (jumpMode) {
@@ -88,8 +87,8 @@ class TestNCalendarAct : Activity() {
                             }
                         }
                         Log.d("greyson", localDateToJump.toString("yyyy-MM-dd"))
-//                        miui10Calendar.jumpDate("${localDateToJump.year}-${localDateToJump.monthOfYear}-${localDateToJump.dayOfMonth}")
-                        miui10Calendar.jumpDate(localDateToJump.toString("yyyy-MM-dd"))
+//                        mMiui10Calendar.jumpDate("${localDateToJump.year}-${localDateToJump.monthOfYear}-${localDateToJump.dayOfMonth}")
+                        mMiui10Calendar.jumpDate(localDateToJump.toString("yyyy-MM-dd"))
                     }
                 }
             }
@@ -108,7 +107,7 @@ class TestNCalendarAct : Activity() {
         }
 
         mTvCalendarDate.setOnClickListener {
-            miui10Calendar.jumpDate(LocalDate().toString("yyyy-MM-dd"))
+            mMiui10Calendar.jumpDate(LocalDate().toString("yyyy-MM-dd"))
         }
 
 
@@ -116,13 +115,21 @@ class TestNCalendarAct : Activity() {
         mRvSchedule.adapter = RecyclerViewAdapter(this)
 
         /**   **********************/
-        miui10Calendar.testKoMeth { i, f ->
+        mMiui10Calendar.testKoMeth { i, f ->
             print("invoke my own method!")
             i.toFloat() == f
         }
     }
 
-    public fun <T> T.testKoMeth(funtion: (Int, Float) -> Boolean) {
+    fun changeMode(view: View) {
+        if (mMiui10Calendar.calendarState == CalendarState.MONTH) {
+            mMiui10Calendar.toWeek()
+        } else {
+            mMiui10Calendar.toMonth()
+        }
+    }
+
+    fun <T> T.testKoMeth(funtion: (Int, Float) -> Boolean) {
         println("testKoMeth's result: ${funtion(1, 1.1f)}")
     }
 }

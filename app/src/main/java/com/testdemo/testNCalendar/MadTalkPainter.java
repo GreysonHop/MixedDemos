@@ -127,8 +127,8 @@ public class MadTalkPainter implements CalendarPainter {
     public void onDrawLastOrNextMonth(Canvas canvas, RectF rectF, LocalDate localDate, List<LocalDate> selectDateList) {
         if (selectDateList.contains(localDate)) {
             drawSelectBg(canvas, rectF, mAttrs.alphaColor);
-            drawSolar(canvas, rectF, localDate, mAttrs.alphaColor, true, false);
-            drawLunar(canvas, rectF, localDate, mAttrs.alphaColor, true, false);
+            drawSolar(canvas, rectF, localDate, noAlphaColor, true, false);
+            drawLunar(canvas, rectF, localDate, noAlphaColor, true, false);
             drawPoint(canvas, rectF, false, mAttrs.alphaColor, localDate);
             drawHolidays(canvas, rectF, false, mAttrs.alphaColor, localDate);
         } else {
@@ -152,7 +152,6 @@ public class MadTalkPainter implements CalendarPainter {
     private void drawSelectBg(Canvas canvas, RectF rectF, int alphaColor) {
         mCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mCirclePaint.setColor(mAttrs.selectCircleColor);
-        mCirclePaint.setAlpha(alphaColor);
         drawDayBg(canvas, rectF);
     }
 

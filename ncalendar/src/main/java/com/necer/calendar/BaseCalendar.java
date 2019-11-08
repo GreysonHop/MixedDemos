@@ -22,7 +22,6 @@ import com.necer.painter.CalendarPainter;
 import com.necer.utils.Attrs;
 import com.necer.utils.AttrsUtil;
 import com.necer.view.CalendarView;
-import com.necer.view.MonthView;
 
 import org.joda.time.LocalDate;
 
@@ -41,7 +40,7 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
     private SelectedModel mSelectedModel;//选中模式
 
     private boolean mIsJumpClick;//是否是点击上月、下月或跳转，这个只在默认选中时有用
-    private boolean mIsDefaultSelectFitst;//默认选择时，翻页选中第一个日期
+    private boolean mIsDefaultSelectFirst;//默认选择时，翻页选中第一个日期
 
     protected OnClickDisableDateListener mOnClickDisableDateListener;//点击区间之外的日期回调
     private OnMWDateChangeListener mOnMWDateChangeListener;//月周切换是折叠中心的回调
@@ -151,9 +150,9 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
             LocalDate lastDate = mAllSelectDateList.get(0);//上个页面选中的日期
             //当前面页面的初始值和上个页选中的日期，相差几月或几周，再又上个页面选中的日期得出当前页面选中的日期
             int currNum = getTwoDateCount(lastDate, initialDate, mAttrs.firstDayOfWeek);//得出两个页面相差几个
-            LocalDate tempLocalDate = getIntervalDate(lastDate, currNum);
+            LocalDate tempLocalDate = getIntervalDate(lastDate, currNum, mIsJumpClick);
             LocalDate currectDate; //当前页面选中的日期
-            if (mIsDefaultSelectFitst && !mIsJumpClick && !tempLocalDate.equals(new LocalDate())) {
+            if (mIsDefaultSelectFirst && !mIsJumpClick && !tempLocalDate.equals(new LocalDate())) {
                 //默认选中第一个 且 不是点击或跳转 且 不等于今天（为了第一次进来日历选中的是今天）
                 currectDate = getFirstDate();
             } else {
@@ -471,7 +470,7 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
     protected abstract int getTwoDateCount(LocalDate startDate, LocalDate endDate, int type);
 
     //相差count之后的的日期
-    protected abstract LocalDate getIntervalDate(LocalDate localDate, int count);
+    protected abstract LocalDate getIntervalDate(LocalDate localDate, int count, boolean isJumpClick);
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -517,7 +516,7 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
 
     @Override
     public void setDefaultSelectFitst(boolean isDefaultSelectFitst) {
-        this.mIsDefaultSelectFitst = isDefaultSelectFitst;
+        this.mIsDefaultSelectFirst = isDefaultSelectFitst;
     }
 
     @Override

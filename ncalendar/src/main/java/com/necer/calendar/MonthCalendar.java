@@ -34,13 +34,18 @@ public class MonthCalendar extends BaseCalendar {
     }
 
     @Override
-    protected LocalDate getIntervalDate(LocalDate localDate, int count) {
+    protected LocalDate getIntervalDate(LocalDate localDate, int count, boolean isJumpClick) {
         LocalDate date = localDate.plusMonths(count);
-        LocalDate today = new LocalDate();
-        if (CalendarUtil.getIntervalMonths(date, today) == 0) {
-            return today;//当前月份包含"今天"，则默认选中今天，否则选中月份的第一天
+        if (isJumpClick) {
+            return date;
+            
         } else {
-            return getFirstDate();
+            LocalDate today = new LocalDate();
+            if (CalendarUtil.getIntervalMonths(date, today) == 0) {
+                return today;//当前月份包含"今天"，则默认选中今天，否则选中月份的第一天
+            } else {
+                return getFirstDate();
+            }
         }
     }
 }
