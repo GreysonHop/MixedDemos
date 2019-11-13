@@ -53,9 +53,9 @@
             android:src="@mipmap/ic_launcher" />
         <ImageView
             android:id="@+id/myimage5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_pool_black_24dp" />
     </LinearLayout>
 
     <LinearLayout

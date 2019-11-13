@@ -47,7 +47,7 @@ class TestNCalendarAct : Activity() {
         val workdayList = arrayListOf("2019-10-01", "2019-11-02", "2019-12-01")
         madTalkPainter.setLegalHolidayList(holidayList, workdayList)
 
-        mMiui10Calendar.setDefaultSelectFitst(true)
+//        mMiui10Calendar.setDefaultSelectFitst(true)
         mMiui10Calendar.setOnCalendarChangedListener { baseCalendar, year, month, localDate ->
             //            mTvCalendarDate.text = "${year}年${month}月 当前页面选中 $localDate"
             mTvCalendarDate.text = localDate.toString("今天：yyyy年MM月dd日,E")
