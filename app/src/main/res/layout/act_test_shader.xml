@@ -21,7 +21,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        app:topLeftRadius="20dp"
+        app:bottomRightRadius="20dp">
 
         <ImageView
             android:layout_width="match_parent"
