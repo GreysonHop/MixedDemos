@@ -2,18 +2,14 @@ package com.testdemo.testVerticalScrollView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 
 import com.testdemo.R;
-import com.testdemo.broken_lib.Utils;
-
-import java.util.ArrayList;
 
 /**
  * Created by Greyson on 2018/7/17.

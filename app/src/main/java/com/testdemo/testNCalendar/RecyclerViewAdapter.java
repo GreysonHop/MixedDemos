@@ -1,13 +1,12 @@
 package com.testdemo.testNCalendar;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.testdemo.R;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Create by Greyson

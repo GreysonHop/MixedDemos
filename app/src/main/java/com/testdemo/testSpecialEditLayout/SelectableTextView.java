@@ -2,16 +2,13 @@ package com.testdemo.testSpecialEditLayout;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Layout;
 import android.text.Selection;
 import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.widget.EditText;
-
-import java.util.jar.Attributes;
 
 public class SelectableTextView extends AppCompatEditText {
     private int off; //字符串的偏移值

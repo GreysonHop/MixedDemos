@@ -2,13 +2,13 @@ package com.testdemo.testNCalendar
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.necer.calendar.Miui10Calendar
 import com.necer.enumeration.CalendarState
 import com.testdemo.R

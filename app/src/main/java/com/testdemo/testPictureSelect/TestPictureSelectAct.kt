@@ -2,9 +2,9 @@ package com.testdemo.testPictureSelect
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import com.luck.picture.lib.entity.LocalMedia
 import com.testdemo.R
 import kotlinx.android.synthetic.main.act_test_picture_select.*
