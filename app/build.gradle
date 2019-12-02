@@ -18,24 +18,52 @@ android {
 
         multiDexEnabled true
 
+        resValue "string", "google_search_api_key", (project.findProperty("GOOGLE_SEARCH_API_KEY") ?: "")
+        resValue "string", "google_map_api_key", (project.findProperty("GOOGLE_MAP_API_KEY") ?: "")
     }
-    buildTypes {
+
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            keyAlias 'googlemap.keystore'
+            keyPassword 'testdemo'
+            storeFile file('../android.keystore')
+            storePassword 'testdemo'
         }
     }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            debuggable false
+            zipAlignEnabled true
+
+            minifyEnabled true
+            shrinkResources true
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        /*debug {
+            signingConfig signingConfigs.release
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }*/
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
 repositories {
     mavenCentral()
     mavenLocal() //Add local m2 repository of yours
     jcenter()
     maven { url 'https://jitpack.io' }
 }
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
@@ -66,8 +94,8 @@ dependencies {
 //    implementation 'com.necer.ncalendar:ncalendar:4.3.7'
     implementation project(path: ':ncalendar')
 
-//    implementation 'com.google.android.libraries.places:places:2.0.0'
-    implementation 'com.google.android.gms:play-services-maps:12.0.1'
+    implementation 'com.google.android.libraries.places:places:2.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 //    地图操作工具类，添加标记等
 //    implementation 'com.google.maps.android:android-maps-utils:0.5+'
 

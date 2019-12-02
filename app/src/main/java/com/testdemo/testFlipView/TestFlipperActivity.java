@@ -2,7 +2,9 @@ package com.testdemo.testFlipView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterViewFlipper;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -27,6 +30,7 @@ public class TestFlipperActivity extends Activity {
 
     ViewFlipper viewFlipper;
     ViewPager viewPager;
+    AdapterViewFlipper adapterViewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +56,27 @@ public class TestFlipperActivity extends Activity {
     }
 
     public void initViewFlipper() {
-        TranslateAnimation inAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-        inAnimation.setDuration(1000);
-        TranslateAnimation outAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
+        TranslateAnimation inAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0);
+        inAnimation.setDuration(700);
+        TranslateAnimation outAnimation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
                 Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1);
-        outAnimation.setDuration(1000);
+        outAnimation.setDuration(700);
 
-        viewFlipper.setFlipInterval(2000);
         viewFlipper.setInAnimation(inAnimation);
         viewFlipper.setOutAnimation(outAnimation);
 
         for (int i = 0; i < 5; i++) {
             TextView textView = new TextView(this);
             textView.setText("test lalala of == " + i);
-            textView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            textView.setBackgroundColor(Color.YELLOW);
             viewFlipper.addView(textView);
         }
 
-//        viewFlipper.startFlipping();
+        //viewFlipper.setFlipInterval(2000);
+        //viewFlipper.startFlipping();
     }
 
     public void onClick(View view) {

@@ -1,21 +1,28 @@
 package com.testdemo.testMap
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import kotlinx.android.synthetic.main.act_test_map.*
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
+import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.gson.Gson
 import com.testdemo.R
+import com.testdemo.testMap.places.StringUtil
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 
 
 /**
@@ -23,23 +30,33 @@ import com.testdemo.R
  */
 class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
+    private lateinit var mPlacesClient: PlacesClient
     private lateinit var mMap: GoogleMap
+    private val mHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_test_map)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        /*val mapFragment = supportFragmentManager
+                .findFragmentById(R.id.map_fragment) as SupportMapFragment
+        mapFragment.view?.isClickable = false
+        mapFragment.getMapAsync(this)*/
+        mv_map_google.isClickable = false
+        mv_map_google.getMapAsync(this)
+        mv_map_google.onCreate(savedInstanceState)
 
+        iv_map_locate.setOnClickListener { locateMyLocation() }
+
+
+        //下面是跳转第三方地图应用的例子代码
         btn_start_map.setOnClickListener {
             val stringBuffer = StringBuffer()
             val pageStringList = packageManager.getInstalledPackages(0)
             pageStringList.forEach {
                 val pageName = it.packageName
-                Log.d("greyson", "包名有：$pageName")
+                Log.i("greyson", "包名有：$pageName")
                 stringBuffer.append(pageName).append(",")
             }
 
@@ -57,6 +74,18 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
             }
 
         }
+
+        Thread {
+            val client = OkHttpClient()
+            val request = Request.Builder().url("http://ip.taobao.com/service/getIpInfo.php?ip=myip").get().build()
+            try {
+                val response = client.newCall(request).execute()
+                Log.i("greyson", "淘宝接口调用：${response.body().string()}")
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }.start()
+
     }
 
     /**
@@ -69,11 +98,116 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+        mPlacesClient = Places.createClient(this)
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
+        /*val sydney = LatLng(-33.8666199, 151.1958527)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))*/
+
+
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(14f))
+        mMap.uiSettings.isRotateGesturesEnabled = false//不能旋转地图
+        mMap.uiSettings.isCompassEnabled = false//不显示指南针
+        mMap.uiSettings.isMyLocationButtonEnabled = false
+        mMap.isMyLocationEnabled = true
+
+        /*val googleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)*/
+
+        mMap.setOnCameraMoveCanceledListener {
+            Log.i("greyson", "OnCameraMoveCanceled")
+        }
+
+        mMap.setOnCameraIdleListener {
+            Log.i("greyson", "nCameraIdle position = ${mMap.cameraPosition}")
+            searchRound(mMap.cameraPosition.target)
+        }
+
+        mMap.setOnMyLocationChangeListener {
+            locateMyLocation()
+        }
+    }
+
+
+    private fun searchRound(latLng: LatLng) {
+        refreshLayout.isRefreshing = true
+
+        Thread {
+            val client = OkHttpClient()
+            val request1 = Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latLng.latitude},${latLng.longitude}&rankby=distance&type=food&key=${getString(R.string.google_search_api_key)}").get().build()
+            try {
+                val response = client.newCall(request1).execute()
+                val bodyStr = response.body().string()
+                if (bodyStr.contains("error")) {//请求有错误
+                    Toast.makeText(this, "请求出现问题！", Toast.LENGTH_SHORT).show()
+                    Log.i("greyson", "谷歌周围API调用：${bodyStr}")
+
+                } else {//响应正常
+                    val mapResult = Gson().fromJson<MapSearchResult>(bodyStr, MapSearchResult::class.java)
+                    Log.d("greyson", "response:  $bodyStr")
+                    mapResult.results.forEach {
+                        Log.d("greyson", "name=${it.name}, address=${it.plusCode?.compound_code}")
+//                        it.place_id?.let { getPlaceById(it) }
+                    }
+                }
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                refreshLayout.isRefreshing = false
+            }
+        }.start()
+
+    }
+
+    private fun getPlaceById(id: String) {
+        val request = FetchPlaceRequest.newInstance(id, arrayListOf(*Place.Field.values())
+                /*arrayListOf(Place.Field.LAT_LNG, Place.Field.ADDRESS, Place.Field.TYPES, Place.Field.ID
+                , Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS)*/)
+        val placeTask = mPlacesClient.fetchPlace(request)
+
+        placeTask.addOnSuccessListener {
+            Log.i("greyson", "fetch place success : ${StringUtil.stringify(it, true)}")
+        }
+
+        placeTask.addOnFailureListener {
+            Log.e("greyson", "fetch failed!!! ${it}")
+        }
+
+    }
+
+    private fun locateMyLocation() {
+        mMap.myLocation?.let {
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(LatLng(it.latitude, it.longitude)))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mv_map_google.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mv_map_google.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mv_map_google.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mv_map_google.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mv_map_google.onDestroy()
     }
 }

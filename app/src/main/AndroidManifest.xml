@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".TestApplication"
@@ -21,7 +23,7 @@
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI"/>
+            android:value="@string/google_map_api_key" />
 
         <activity android:name=".TestActivity2BlurBg" />
         <activity android:name=".TestActivity2" />
@@ -57,8 +59,9 @@
         <activity android:name=".testPictureSelect.PicturePreviewActivity" />
         <activity android:name=".testPictureSelect.PictureVideoPlayActivity" />
 
-        <activity android:name=".testSpecialEditLayout.SpecialEditLayoutAct"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+        <activity
+            android:name=".testSpecialEditLayout.SpecialEditLayoutAct"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
         <activity android:name=".testGiftAnim.TestGiftAnimAct" />
         <activity android:name=".testGiftAnim.GiftAnimActivity" />
@@ -68,9 +71,19 @@
         <activity android:name=".testDatePicker.CreateInfoAct" />
         <activity android:name=".testNCalendar.TestNCalendarAct" />
 
-        <activity android:name=".testSpecialEditLayout.popupList.TestPopupListActivity"/>
+        <activity android:name=".testSpecialEditLayout.popupList.TestPopupListActivity" />
 
-        <activity android:name=".testMap.TestMapAct" />
+        <activity android:name=".testMap.TestMapAct"
+            android:theme="@style/Theme.Design.Light.NoActionBar"/>
+
+        <activity android:name="com.testdemo.testFlipView.TestFlipperActivity" />
+
+
+        <activity android:name=".testMap.places.MainActivity" />
+        <activity android:name=".testMap.places.AutocompleteTestActivity" />
+        <activity android:name=".testMap.places.CurrentPlaceTestActivity" />
+        <activity android:name=".testMap.places.PlaceAndPhotoTestActivity" />
+
     </application>
 
 </manifest>

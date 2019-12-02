@@ -7,13 +7,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.google.android.libraries.places.api.Places
 import com.testdemo.testBlurAndGlass.BlurGlassSoOnActivity
 import com.testdemo.testCanDragLayout.TestDragViewActivity
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDatePicker.CreateInfoAct
+import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testGiftAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct
+import com.testdemo.testMap.places.MainActivity
 import com.testdemo.testNCalendar.TestNCalendarAct
 import com.testdemo.testPictureSelect.TestPictureSelectAct
 import com.testdemo.testShader.TestShaderAct
@@ -45,12 +48,18 @@ class MainActivity : ListActivity() {
         menuListMap["自定义年月日时分秒选择器"] = CreateInfoAct::class.java
         menuListMap["万年历"] = TestNCalendarAct::class.java
         menuListMap["定位、地图显示、第三方调用等"] = TestMapAct::class.java
+        menuListMap["FlipperView测试"] = TestFlipperActivity::class.java
 
         classNameList.addAll(menuListMap.keys)
         classList.addAll(menuListMap.values)
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, classNameList)
         listAdapter = adapter
+
+        // Setup Places Client
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, getString(R.string.google_map_api_key))
+        }
     }
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
