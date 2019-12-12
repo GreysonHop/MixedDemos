@@ -111,7 +111,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isRotateGesturesEnabled = false//不能旋转地图
         mMap.uiSettings.isCompassEnabled = false//不显示指南针
         mMap.uiSettings.isMyLocationButtonEnabled = false
-        mMap.isMyLocationEnabled = true
+//        mMap.isMyLocationEnabled = true//todo 必须有定位权限
 
         /*val googleApiClient = GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)*/
@@ -158,7 +158,9 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                refreshLayout.isRefreshing = false
+                runOnUiThread {
+                    refreshLayout.isRefreshing = false
+                }
             }
         }.start()
 

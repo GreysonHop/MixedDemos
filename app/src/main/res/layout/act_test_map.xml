@@ -101,7 +101,8 @@
             android:layout_height="30dp"
             android:layout_gravity="end|bottom"
             android:layout_margin="5dp"
-            android:src="@drawable/video_icon" />
+            android:src="@drawable/video_icon"
+            android:background="@color/hintColor"/>
 
     </FrameLayout>
 

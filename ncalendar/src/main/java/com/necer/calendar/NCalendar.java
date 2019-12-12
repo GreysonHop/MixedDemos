@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * Created by necer on 2018/11/12.
  */
-public abstract class NCalendar extends FrameLayout implements IICalendar, NestedScrollingParent, ValueAnimator.AnimatorUpdateListener {
+public abstract class NCalendar extends FrameLayout implements IICalendar, /*NestedScrollingParent,*/ ValueAnimator.AnimatorUpdateListener {
 
     protected WeekCalendar weekCalendar;
     protected MonthCalendar monthCalendar;
@@ -171,6 +171,10 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
             }
         }
 
+        //todo I add
+        if (childView != null) {
+            targetView = ViewUtil.getTargetView(getContext(), childView);
+        }
     }
 
     @Override
@@ -417,7 +421,7 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
 
     }
 
-
+/*
     private float downY;
     private float downX;
     private float lastY;//上次的y
@@ -476,7 +480,7 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
                 break;
         }
         return true;
-    }
+    }*/
 
 
     //点击事件是否在日历的范围内
