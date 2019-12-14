@@ -16,9 +16,9 @@ import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testGiftAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct
-import com.testdemo.testMap.places.MainActivity
 import com.testdemo.testNCalendar.TestNCalendarAct
 import com.testdemo.testPictureSelect.TestPictureSelectAct
+import com.testdemo.testRecyclerViewType.TestRecyclerViewAct
 import com.testdemo.testShader.TestShaderAct
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
 import com.testdemo.testVerticalScrollView.TestActivity3
@@ -28,8 +28,8 @@ import com.testdemo.testVerticalScrollView.TestActivity3
  */
 class MainActivity : ListActivity() {
 
-    val classNameList = mutableListOf<String>()
-    val classList = mutableListOf<Class<out Activity>>()
+    private val classNameList = mutableListOf<String>()
+    private val classList = mutableListOf<Class<out Activity>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +49,7 @@ class MainActivity : ListActivity() {
         menuListMap["万年历"] = TestNCalendarAct::class.java
         menuListMap["定位、地图显示、第三方调用等"] = TestMapAct::class.java
         menuListMap["FlipperView测试"] = TestFlipperActivity::class.java
+        menuListMap["RecyclerView特效"] = TestRecyclerViewAct::class.java
 
         classNameList.addAll(menuListMap.keys)
         classList.addAll(menuListMap.values)

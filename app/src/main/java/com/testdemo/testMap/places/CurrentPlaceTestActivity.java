@@ -57,7 +57,7 @@ public class CurrentPlaceTestActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.current_place_test_activity);
 
-    // Retrieve a PlacesClient (previously initialized - see MainActivity)
+    // Retrieve a PlacesClient (previously initialized - see PlacesMainActivity)
     placesClient = Places.createClient(this);
 
     // Set view objects

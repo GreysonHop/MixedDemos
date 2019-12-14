@@ -73,16 +73,22 @@
 
         <activity android:name=".testSpecialEditLayout.popupList.TestPopupListActivity" />
 
-        <activity android:name=".testMap.TestMapAct"
-            android:theme="@style/Theme.Design.Light.NoActionBar"/>
+        <activity
+            android:name=".testMap.TestMapAct"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
 
         <activity android:name="com.testdemo.testFlipView.TestFlipperActivity" />
 
 
-        <activity android:name=".testMap.places.MainActivity" />
+        <activity android:name=".testMap.places.PlacesMainActivity" />
         <activity android:name=".testMap.places.AutocompleteTestActivity" />
         <activity android:name=".testMap.places.CurrentPlaceTestActivity" />
         <activity android:name=".testMap.places.PlaceAndPhotoTestActivity" />
+
+        <activity android:name=".testRecyclerViewType.itemtouchhelperdemo.ItemMoveMainActivity" />
+        <activity android:name=".testRecyclerViewType.itemtouchhelperdemo.demodrag.DragActivity" />
+        <activity android:name=".testRecyclerViewType.itemtouchhelperdemo.demochannel.ChannelActivity" />
+        <activity android:name=".testRecyclerViewType.TestRecyclerViewAct" />
 
     </application>
 

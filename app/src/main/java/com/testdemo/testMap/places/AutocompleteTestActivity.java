@@ -70,7 +70,7 @@ public class AutocompleteTestActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.autocomplete_test_activity);
 
-    // Retrieve a PlacesClient (previously initialized - see MainActivity)
+    // Retrieve a PlacesClient (previously initialized - see PlacesMainActivity)
     placesClient = Places.createClient(this);
 
     // Set up view objects

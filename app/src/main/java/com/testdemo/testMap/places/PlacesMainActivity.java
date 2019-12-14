@@ -25,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.libraries.places.api.Places;
 import com.testdemo.R;
 
-public class MainActivity extends AppCompatActivity {
+public class PlacesMainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,6 @@ public class MainActivity extends AppCompatActivity {
       int onClickResId, Class<? extends AppCompatActivity> activityClassToLaunch) {
     findViewById(onClickResId)
         .setOnClickListener(
-            v -> startActivity(new Intent(MainActivity.this, activityClassToLaunch)));
+            v -> startActivity(new Intent(this, activityClassToLaunch)));
   }
 }
