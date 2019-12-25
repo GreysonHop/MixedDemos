@@ -20,8 +20,8 @@ public abstract class BaseCalendarAdapter extends PagerAdapter {
 
 
     protected Context mContext;
-    protected int mCount;//总页数
-    protected int mCurr;//当前位置
+    protected int mCount;//总页数，指总共能显示多少个月的数据
+    protected int mCurr;//指今天的月份数据所在的位置
     protected LocalDate mInitializeDate;
     protected Attrs mAttrs;
 

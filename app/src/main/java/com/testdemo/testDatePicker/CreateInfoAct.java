@@ -152,7 +152,7 @@ public class CreateInfoAct extends Activity {
         /*********************************************************/
 
         DatePicker picker = (DatePicker) findViewById(R.id.main_dp);
-        picker.setDate(2019, 7);
+        picker.setDate(2019, 12);
         picker.setFestivalDisplay(false);
         picker.setTodayDisplay(false);
         picker.setHolidayDisplay(false);
