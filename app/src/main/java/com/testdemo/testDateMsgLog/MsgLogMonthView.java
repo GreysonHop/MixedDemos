@@ -52,8 +52,6 @@ public class MsgLogMonthView extends View {
 
     private int mThisYear;//系统时间当前年份
     private int mCurrentYear, mCurrentMonth;//日历组件正中间显示的月份
-    private int mNextYear, mNextMonth;//日历组件屏幕外下面显示的月份
-    private int mPreviousYear, mPreviousMonth;//日历组件屏幕外上面显示的月份
 
     private float mCanAutoScrollGapY = 60;
     private float mCanSignScrollGapY = 8;
@@ -78,7 +76,6 @@ public class MsgLogMonthView extends View {
         Calendar calendar = Calendar.getInstance();
         mThisYear = mCurrentYear = calendar.get(Calendar.YEAR);
         mCurrentMonth = calendar.get(Calendar.MONTH) + 1;
-        computeDate();
     }
 
     @Override
@@ -142,10 +139,6 @@ public class MsgLogMonthView extends View {
 
     private float mFirstTouchY;
     private float mLastTouchY;
-    private int mTotalScrollY;//标志总共纵向滑动多少距离
-    private int mLastTotalScrollY;//标志上一次up事件之后的总共纵向滑动多少距离
-    private boolean isScrolling;
-//   private  int verticalIndex;//标志纵向滑动几次
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -157,50 +150,10 @@ public class MsgLogMonthView extends View {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-//                mTotalScrollY += y - mLastTouchY;
-
-                if (isScrolling) {
-                    mTotalScrollY = mLastTotalScrollY + (int) (mFirstTouchY - y);
-//                    smoothScrollTo(0, mTotalScrollY);
-                } else if (Math.abs(y - mFirstTouchY) > mCanSignScrollGapY) {
-                    isScrolling = true;
-                }
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (!isScrolling) {
-                    dealClickEvent((int) event.getX(), (int) event.getY());
-                    break;
-                }
-                if (y - mFirstTouchY > mCanAutoScrollGapY) {//auto slide down
-                    if (mCurrentMonth == 1) {
-                        mCurrentYear--;
-                        mCurrentMonth = 12;
-                    } else {
-                        mCurrentMonth--;
-                    }
-                    computeDate();
-                    mTotalScrollY = mLastTotalScrollY - getHeight();
-
-                } else if (mFirstTouchY - y > mCanAutoScrollGapY) {//auto slide up
-                    if (mCurrentMonth == 12) {
-                        mCurrentYear++;
-                        mCurrentMonth = 1;
-                    } else {
-                        mCurrentMonth++;
-                    }
-                    computeDate();
-                    mTotalScrollY = mLastTotalScrollY + getHeight();
-                } else {
-                    /* 没有切页时不会顺滑地滚回原来的位置的bug，是因为没加下面这句代码，会导致后面的smoothScrollTo方法
-                    要滚向的目标位置不是原位置mLastTotalScrollY，而是手指起来时的位置，而这种情况下后面就会：因为还是
-                    当前月份，并且滚动的目标位置不变，所以直接刷新View和数据，也就形成了直接“跳回”原来月份视图、没有慢慢
-                    滚动的动画的现象 */
-                    mTotalScrollY = mLastTotalScrollY;
-                }
-//                smoothScrollTo(0, mTotalScrollY);
-                mLastTotalScrollY = mTotalScrollY;
-                isScrolling = false;
+                dealClickEvent((int) event.getX(), (int) event.getY());
                 break;
         }
         mLastTouchY = y;
@@ -214,22 +167,19 @@ public class MsgLogMonthView extends View {
             return;
         }
 
-        drawMonthData(canvas, 0, mLastTotalScrollY, mCurrentYear, mCurrentMonth);
+        drawMonthData(canvas, mCurrentYear, mCurrentMonth);
     }
 
     /**
      * 画某年某月的日历视图
      *
      * @param canvas
-     * @param x
-     * @param y
      * @param year
      * @param month
      */
-    private void drawMonthData(Canvas canvas, int x, int y, int year, int month) {
+    private void drawMonthData(Canvas canvas, int year, int month) {
         canvas.save();
 //        canvas.translate(x, y);
-        int yOffset;
         int myHeight;
         DPInfo[][] info = mCManager.obtainDPInfo(year, month);
         DPInfo[][] result;
@@ -251,19 +201,7 @@ public class MsgLogMonthView extends View {
             myHeight = MONTH_WEEKS_6[0][0].getBounds().height() * 6;
         }
 
-        if (year > mCurrentYear) {
-            yOffset = mLastTotalScrollY + getMeasuredHeight();
-        } else if (year < mCurrentYear) {
-            yOffset = mLastTotalScrollY - myHeight;
-        } else if (month > mCurrentMonth) {
-            yOffset = mLastTotalScrollY + getMeasuredHeight();
-        } else if (month < mCurrentMonth) {
-            yOffset = mLastTotalScrollY - myHeight;
-        } else {
-            yOffset = mLastTotalScrollY;
-        }
-
-        canvas.translate(0, yOffset);
+//        canvas.translate(0, 0);
 
         for (int i = 0; i < result.length; i++) {
             for (int j = 0; j < result[i].length; j++) {
@@ -492,39 +430,10 @@ public class MsgLogMonthView extends View {
     void setShowMonth(int year, int month) {
         mCurrentYear = year;
         mCurrentMonth = month;
-        mTotalScrollY = 0;
-        mLastTotalScrollY = 0;
 
 //        buildRegion();
-        computeDate();
         requestLayout();
         invalidate();
-    }
-
-    /**
-     * 设置新的当前年月后，计算上一个月或下一个月的所在年月值
-     */
-    private void computeDate() {
-        if (mCurrentMonth == 12) {
-            mNextYear = mCurrentYear + 1;
-            mNextMonth = 1;
-        } else {
-            mNextYear = mCurrentYear;
-            mNextMonth = mCurrentMonth + 1;
-        }
-
-        if (mCurrentMonth == 1) {
-            mPreviousYear = mCurrentYear - 1;
-            mPreviousMonth = 12;
-        } else {
-            mPreviousYear = mCurrentYear;
-            mPreviousMonth = mCurrentMonth - 1;
-        }
-
-        /*if (null != onDateChangeListener) {
-            onDateChangeListener.onYearChange(centerYear);
-            onDateChangeListener.onMonthChange(centerMonth);
-        }*/
     }
 
     interface OnDayClickListener {
