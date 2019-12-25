@@ -1,5 +1,7 @@
 package com.testdemo.testMap
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +9,7 @@ import kotlinx.android.synthetic.main.act_test_map.*
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Handler
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,7 +22,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.gson.Gson
 import com.testdemo.R
+import com.testdemo.broken_lib.Utils
 import com.testdemo.testMap.places.StringUtil
+import com.testdemo.testNCalendar.RecyclerViewAdapter
+import com.testdemo.util.PermissionUtils
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -32,6 +38,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mPlacesClient: PlacesClient
     private lateinit var mMap: GoogleMap
+    private var mLocateMyGoogle = false
     private val mHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +54,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         mv_map_google.getMapAsync(this)
         mv_map_google.onCreate(savedInstanceState)
 
-        iv_map_locate.setOnClickListener { locateMyLocation() }
+        iv_map_locate.setOnClickListener { locateMyLocation(true) }
 
 
         //下面是跳转第三方地图应用的例子代码
@@ -86,6 +93,8 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
             }
         }.start()
 
+        rv_map_search_list.adapter = RecyclerViewAdapter(this)
+        refreshLayout.isEnabled = false
     }
 
     /**
@@ -112,6 +121,11 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isCompassEnabled = false//不显示指南针
         mMap.uiSettings.isMyLocationButtonEnabled = false
 //        mMap.isMyLocationEnabled = true//todo 必须有定位权限
+        if (PermissionUtils.isGranted(android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        , android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            mMap.isMyLocationEnabled = true
+            mLocateMyGoogle = true
+        }
 
         /*val googleApiClient = GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)*/
@@ -126,7 +140,9 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mMap.setOnMyLocationChangeListener {
-            locateMyLocation()
+            if (mLocateMyGoogle) {
+                mLocateMyGoogle = !locateMyLocation(false)
+            }
         }
     }
 
@@ -182,10 +198,31 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun locateMyLocation() {
-        mMap.myLocation?.let {
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(LatLng(it.latitude, it.longitude)))
+    private fun locateMyLocation(animate: Boolean):Boolean {
+        var result = false
+        if (PermissionUtils.isGranted(android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        , android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            mMap.myLocation?.let {
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(LatLng(it.latitude, it.longitude)))
+                result = true
+            }
         }
+
+
+        /*mMap?.let { gMap ->
+            if (gMap.isMyLocationEnabled) {
+                gMap.myLocation?.let {
+                    val latLng = CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 14f)
+                    if (animate) {
+                        gMap.animateCamera(latLng)
+                    } else {
+                        gMap.moveCamera(latLng)
+                    }
+                    result = true
+                }
+            }
+        }*/
+        return result
     }
 
     override fun onResume() {
@@ -212,4 +249,5 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         super.onDestroy()
         mv_map_google.onDestroy()
     }
+
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,13 +8,17 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/cl_date_tip"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingLeft="15dp"
         android:paddingTop="9dp"
         android:paddingRight="15dp"
-        android:paddingBottom="9dp">
+        android:paddingBottom="9dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_calendar_date"
@@ -71,19 +75,29 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.necer.view.WeekBar
-        android:layout_width="match_parent"
+        android:id="@+id/cl_week_bar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        app:firstDayOfWeek="sunday" />
+        app:firstDayOfWeek="sunday"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_date_tip" />
 
     <com.necer.calendar.Miui10Calendar
         android:id="@+id/miui10Calendar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:calendarHeight="250dp"
+        app:defaultCalendar="week"
         app:hollowCircleColor="@color/cal_today_bg"
+        app:isAllMonthSixLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_week_bar"
         app:lunarDistance="12dp"
         app:lunarTextSize="8sp"
         app:pointColor="@color/cal_selected_bg"
@@ -96,8 +110,7 @@
         app:selectSolarTextColorColor="@color/cal_selected_text"
         app:solarTextColor="@color/cal_solar_text"
         app:solarTextSize="16sp"
-        app:todaySolarTextColor="@color/cal_today_text"
-        app:isAllMonthSixLine="true">
+        app:todaySolarTextColor="@color/cal_today_text">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,18 +121,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:onClick="changeMode"
                 android:tag="@string/factual_scroll_view"
-                android:text="drag me!!!"
-                android:onClick="changeMode"/>
+                android:text="drag me!!!" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/factual_scroll_view"  />
+                android:tag="@string/factual_scroll_view" />
         </LinearLayout>
 
 
     </com.necer.calendar.Miui10Calendar>
 
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_week_tip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeTextType="uniform"
+        android:background="#cfff"
+        android:gravity="center"
+        android:maxLines="1"
+        android:minHeight="50dp"
+        android:textColor="@color/blue_date_picker"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/miui10Calendar"
+        app:layout_constraintStart_toStartOf="@id/miui10Calendar"
+        app:layout_constraintTop_toBottomOf="@id/cl_date_tip"
+        tools:text="2018/02/12 - 2019/01/01=-=-=-=---12345678910abcdefgHiJKLMN"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_month_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_corner20_yellow"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/miui10Calendar"
+        app:layout_constraintStart_toStartOf="@id/miui10Calendar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2018/02"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import com.necer.enumeration.MultipleNumModel;
 import com.necer.enumeration.SelectedModel;
 import com.necer.listener.OnCalendarChangedListener;
 import com.necer.listener.OnCalendarMultipleChangedListener;
+import com.necer.listener.OnCalendarPageChangeListener;
 import com.necer.listener.OnClickDisableDateListener;
 import com.necer.painter.CalendarPainter;
 import com.necer.utils.Attrs;
@@ -69,6 +70,8 @@ public interface ICalendar {
 
     //单选日期变化监听
     void setOnCalendarChangedListener(OnCalendarChangedListener onCalendarChangedListener);
+
+    void setOnCalendarPageChangeListener(OnCalendarPageChangeListener onCalendarPageChangeListener);
 
     //多选日期变化监听
     void setOnCalendarMultipleChangedListener(OnCalendarMultipleChangedListener onCalendarMultipleChangedListener);

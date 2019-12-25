@@ -23,6 +23,22 @@ public class TestJava {
         a.add("ea");
         System.out.println("a = " + a + " - " + a.subList(0, 1));
 
+        ArrayList<? super Goods> list = new ArrayList<Thing>();//todo 系统学习一下泛型吧小弟！
+//        list.add(new Thing());//虽然它现在是是ArrayList<Object>对象，但还是不能传入Thing对象？？
+        list.add(new Paint());
+        list.add(new Goods());
+        System.out.println("11list's class= " + list.getClass().getName()
+                + ", list's object: " + list.get(0));
+        list = new ArrayList<Thing>();
+//        list.add(new Thing());//虽然它现在是是ArrayList<Thing>对象，但还是不能传入Thing对象？？
+        list.add(new Paint());
+        list.add(new Goods());
+        System.out.println("22list's class= " + list.getClass()
+                + ", list's object: " + list.get(0));
+
+        ArrayList<? extends Goods> list2 = new ArrayList<Paint>();
+//        list2.add(new Book());
+//        list2.add(new Goods());//什么都不能加。。。？？？
     }
 
     public String getInstance(int type) {

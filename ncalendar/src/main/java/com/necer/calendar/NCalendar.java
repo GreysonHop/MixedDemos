@@ -7,9 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.NestedScrollingParent;
+
 import android.util.AttributeSet;
 
 import android.view.MotionEvent;
@@ -23,6 +25,7 @@ import com.necer.enumeration.MultipleNumModel;
 import com.necer.enumeration.SelectedModel;
 import com.necer.listener.OnCalendarChangedListener;
 import com.necer.listener.OnCalendarMultipleChangedListener;
+import com.necer.listener.OnCalendarPageChangeListener;
 import com.necer.listener.OnCalendarScrollingListener;
 import com.necer.listener.OnCalendarStateChangedListener;
 import com.necer.listener.OnClickDisableDateListener;
@@ -604,6 +607,11 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, /*Nes
         weekCalendar.setOnCalendarChangedListener(onCalendarChangedListener);
     }
 
+    @Override
+    public void setOnCalendarPageChangeListener(OnCalendarPageChangeListener onCalendarPageChangeListener) {
+        monthCalendar.setOnCalendarPageChangeListener(onCalendarPageChangeListener);
+        weekCalendar.setOnCalendarPageChangeListener(onCalendarPageChangeListener);
+    }
 
     @Override
     public void setOnCalendarMultipleChangedListener(OnCalendarMultipleChangedListener onCalendarMultipleChangedListener) {
@@ -871,5 +879,12 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, /*Nes
         ViewGroup.LayoutParams params = childView.getLayoutParams();
         params.height = getHeight() - (int) childView.getY();
         childView.setLayoutParams(params);
+    }
+
+    public int getMonthViewHeight() {
+        return monthHeight;
+    }
+    public int getWeekViewHeight() {
+        return weekHeight;
     }
 }

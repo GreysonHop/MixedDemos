@@ -15,6 +15,7 @@ import com.necer.enumeration.MultipleNumModel;
 import com.necer.enumeration.SelectedModel;
 import com.necer.listener.OnCalendarChangedListener;
 import com.necer.listener.OnCalendarMultipleChangedListener;
+import com.necer.listener.OnCalendarPageChangeListener;
 import com.necer.listener.OnClickDisableDateListener;
 import com.necer.listener.OnMWDateChangeListener;
 import com.necer.painter.InnerPainter;
@@ -45,6 +46,7 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
     protected OnClickDisableDateListener mOnClickDisableDateListener;//点击区间之外的日期回调
     private OnMWDateChangeListener mOnMWDateChangeListener;//月周切换是折叠中心的回调
     private OnCalendarChangedListener mOnCalendarChangedListener;//单选时回调，当前页面无选中返回null
+    private OnCalendarPageChangeListener mOnCalendarPageChangeListener;//日历切换页面时的回调
     private OnCalendarMultipleChangedListener mOnCalendarMultipleChangedListener;//多选时回调
 
     protected LocalDate mStartDate, mEndDate, mInitializeDate;
@@ -69,6 +71,11 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
         addOnPageChangeListener(new SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(final int position) {
+                //greyson add
+                if (mOnCalendarPageChangeListener != null) {
+                    mOnCalendarPageChangeListener.onCalendarPageChange(BaseCalendar.this);
+                }
+
                 drawView(position);
             }
         });
@@ -152,7 +159,7 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
             int currNum = getTwoDateCount(lastDate, initialDate, mAttrs.firstDayOfWeek);//得出两个页面相差几个
             LocalDate tempLocalDate = getIntervalDate(lastDate, currNum, mIsJumpClick);
             LocalDate currectDate; //当前页面选中的日期
-            if (mIsDefaultSelectFirst && !mIsJumpClick && !tempLocalDate.equals(new LocalDate())) {
+            if (mIsDefaultSelectFirst && !mIsJumpClick && !tempLocalDate.equals(new LocalDate())) {//greyson add
                 //默认选中第一个 且 不是点击或跳转 且 不等于今天（为了第一次进来日历选中的是今天）
                 currectDate = getFirstDate();
             } else {
@@ -419,6 +426,11 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
     @Override
     public void setOnCalendarChangedListener(OnCalendarChangedListener onCalendarChangedListener) {
         this.mOnCalendarChangedListener = onCalendarChangedListener;
+    }
+
+    @Override
+    public void setOnCalendarPageChangeListener(OnCalendarPageChangeListener onCalendarPageChangeListener) {
+        this.mOnCalendarPageChangeListener = onCalendarPageChangeListener;
     }
 
     @Override

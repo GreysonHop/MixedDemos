@@ -66,64 +66,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_title_bar" />
 
-    <FrameLayout
-        android:id="@+id/fl_map_panel"
+    <com.testdemo.testMap.ScrollShrinkView
         android:layout_width="0dp"
-        android:layout_height="290dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_search">
 
-        <!--<fragment
-            android:id="@+id/map_fragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <FrameLayout
+            android:id="@+id/fl_map_panel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MapsActivity" />-->
+            android:layout_height="290dp"
+            android:layout_marginTop="5dp">
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mv_map_google"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <!--<fragment
+                android:id="@+id/map_fragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MapsActivity" />-->
 
-        <ImageView
-            android:id="@+id/iv_locate_signal"
-            android:layout_width="21dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="12dp"
-            android:src="@drawable/ic_locate_signal" />
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mv_map_google"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <ImageView
-            android:id="@+id/iv_map_locate"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="5dp"
-            android:src="@drawable/video_icon"
-            android:background="@color/hintColor"/>
+            <ImageView
+                android:id="@+id/iv_locate_signal"
+                android:layout_width="21dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/ic_locate_signal" />
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/iv_map_locate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="5dp"
+                android:background="@color/hintColor"
+                android:src="@drawable/video_icon" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fl_map_panel">
+        </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_map_search_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:background="@color/blue_date_picker" />
+            >
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_map_search_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:background="@color/blue_date_picker" />
 
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.testdemo.testMap.ScrollShrinkView>
 
     <Button
         android:id="@+id/btn_start_map"
