@@ -7,15 +7,16 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.R
-import org.joda.time.LocalDate
+import com.testdemo.testDateMsgLog.MsgLogMonthView.OnDayClickListener
 
 /**
  * Create by Greyson
  */
-class MonthListAdapter : RecyclerView.Adapter<MonthListAdapter.MonthViewHolder>() {
+class MonthListAdapter : RecyclerView.Adapter<MonthListAdapter.MonthViewHolder>()
+        , OnDayClickListener {
 
     private val mCount = 0
-    private val dateList = arrayListOf<LocalDate>()
+    private val dateList = arrayListOf<Array<Array<MsgLogDate>>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
         return MonthViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_date_msg_log, null))
@@ -29,11 +30,45 @@ class MonthListAdapter : RecyclerView.Adapter<MonthListAdapter.MonthViewHolder>(
 //        holder.monthViewPanel.removeAllViews()
 //        holder.monthViewPanel.addView()
 
-
+        val firstDay = dateList[position][0][0]
+        holder.monthTitle.text = "${firstDay.yearStr}年${firstDay.monthStr}月"
+        holder.msgLogMonthView.setMonthData(dateList[position])
+        holder.msgLogMonthView.onDayClickListener = this
     }
 
     inner class MonthViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var monthViewPanel : FrameLayout = view.findViewById(R.id.fl_month_view_panel)
+        //        var monthViewPanel : FrameLayout = view.findViewById(R.id.fl_month_view_panel)
         var monthTitle = view.findViewById<TextView>(R.id.tv_date_msg_yearMonth)
+        var msgLogMonthView: MsgLogMonthView = view.findViewById(R.id.msgLogMonthView)
+    }
+
+    fun setNewData(datas: List<Array<Array<MsgLogDate>>>?) {
+        dateList.clear()
+        if (datas != null) {
+            dateList.addAll(datas)
+        }
+    }
+
+    fun addData(data: Array<Array<MsgLogDate>>?) {
+        if (data != null) {
+            dateList.add(data)
+            notifyItemInserted(dateList.size)
+        }
+    }
+
+    fun addDatas(datas: List<Array<Array<MsgLogDate>>>) {
+        if (datas.isNotEmpty()) {
+            dateList.addAll(datas)
+            notifyItemInserted(dateList.size)
+        }
+    }
+
+    override fun onDayClickListener(clickDay: String) {
+        mOnDayClickListener?.onDayClickListener(clickDay)
+    }
+
+    private var mOnDayClickListener: OnDayClickListener? = null
+    fun setOnDayClickListener(listener: OnDayClickListener) {
+        mOnDayClickListener = listener
     }
 }

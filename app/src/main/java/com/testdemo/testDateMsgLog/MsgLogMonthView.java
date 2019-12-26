@@ -1,5 +1,6 @@
 package com.testdemo.testDateMsgLog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,12 +14,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.testdemo.R;
 import com.testdemo.broken_lib.Utils;
-import com.testdemo.testDatePicker.datepicker.bizs.calendars.DPCManager;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.bizs.themes.DPTManager;
-import com.testdemo.testDatePicker.datepicker.entities.DPInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,32 +27,36 @@ import java.util.Locale;
 /**
  * MonthView
  *
- * @author AigeStudio 2015-06-29
+ * @author Greyson 2019-12-26
  */
+@SuppressLint("ClickableViewAccessibility")
 public class MsgLogMonthView extends View {
 
     private final Region[][] MONTH_WEEKS_4 = new Region[4][7];
     private final Region[][] MONTH_WEEKS_5 = new Region[5][7];
     private final Region[][] MONTH_WEEKS_6 = new Region[6][7];
 
-    private final DPInfo[][] INFO_4 = new DPInfo[4][7];
-    private final DPInfo[][] INFO_5 = new DPInfo[5][7];
-    private final DPInfo[][] INFO_6 = new DPInfo[6][7];
+    private final MsgLogDate[][] INFO_4 = new MsgLogDate[4][7];
+    private final MsgLogDate[][] INFO_5 = new MsgLogDate[5][7];
+    private final MsgLogDate[][] INFO_6 = new MsgLogDate[6][7];
 
-    private DPCManager mCManager = DPCManager.getInstance();
+    private MsgLogManager mCManager = MsgLogManager.getInstance();
     private DPTManager mTManager = DPTManager.getInstance();
     private DPLManager mDPLManager = DPLManager.getInstance();
 
     protected Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG |
             Paint.LINEAR_TEXT_FLAG);
 
-    private List<String> mDateSelected = new ArrayList<>();
+    private String mSelectDayStr = "1";
 
-    private int mThisYear;//系统时间当前年份
-    private int mCurrentYear, mCurrentMonth;//日历组件正中间显示的月份
+    //greyson
+    private MsgLogDate[][] mMonthData = null;
 
-    private float mCanAutoScrollGapY = 60;
-    private float mCanSignScrollGapY = 8;
+    public void setMonthData(MsgLogDate[][] monthData) {
+        mMonthData = monthData;
+        invalidate();
+    }
+
 
     public MsgLogMonthView(Context context) {
         this(context, null);
@@ -71,40 +73,36 @@ public class MsgLogMonthView extends View {
 
     private void init() {
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mCanAutoScrollGapY = Utils.dp2px((int) mCanAutoScrollGapY);
 
         Calendar calendar = Calendar.getInstance();
-        mThisYear = mCurrentYear = calendar.get(Calendar.YEAR);
-        mCurrentMonth = calendar.get(Calendar.MONTH) + 1;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int column;
-        if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
-            column = 4;
+        int row;
+        if (mMonthData == null) {
+            row = 1;
         } else {
-            DPInfo[][] info = mCManager.obtainDPInfo(mCurrentYear, mCurrentMonth);
-            if (TextUtils.isEmpty(info[4][0].strG)) {
-                column = 4;
-            } else if (TextUtils.isEmpty(info[5][0].strG)) {
-                column = 5;
+            if (TextUtils.isEmpty(mMonthData[4][0].dayStr)) {
+                row = 4;
+            } else if (TextUtils.isEmpty(mMonthData[5][0].dayStr)) {
+                row = 5;
             } else {
-                column = 6;
+                row = 6;
             }
         }
 
         int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int measuredHeight = (int) (measuredWidth * column / 7f);
+        int measuredHeight = (int) (measuredWidth * row / 7f);
         setMeasuredDimension(measuredWidth, measuredHeight);
         System.out.println("greyson CalendarPicker onMeasure() measuredHeight=" + measuredHeight
-                + ", column = " + column + " , cYear = " + mCurrentYear + ", cMonth= " + mCurrentMonth);
+                + ", column = " + row);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         System.out.println("greyson CalendarPicker onSizeChanged()");
-        if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
+        if (mMonthData == null) {
             return;
         }
 
@@ -138,11 +136,10 @@ public class MsgLogMonthView extends View {
     }
 
     private float mFirstTouchY;
-    private float mLastTouchY;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        System.out.println("greyson CalendarPicker onTouchEvent() action = " + event.getAction() + " , cYear= " + mCurrentYear + " , cMonth=" + mCurrentMonth);
+        System.out.println("greyson CalendarPicker onTouchEvent() action = " + event.getAction());
         float y = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -156,40 +153,37 @@ public class MsgLogMonthView extends View {
                 dealClickEvent((int) event.getX(), (int) event.getY());
                 break;
         }
-        mLastTouchY = y;
         return true;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         System.out.println("greyson CalendarPicker onDraw()");
-        if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
+        if (mMonthData == null) {
             return;
         }
 
-        drawMonthData(canvas, mCurrentYear, mCurrentMonth);
+        drawMonthData(canvas);
     }
 
     /**
      * 画某年某月的日历视图
      *
      * @param canvas
-     * @param year
-     * @param month
      */
-    private void drawMonthData(Canvas canvas, int year, int month) {
+    private void drawMonthData(Canvas canvas) {
         canvas.save();
-//        canvas.translate(x, y);
         int myHeight;
-        DPInfo[][] info = mCManager.obtainDPInfo(year, month);
-        DPInfo[][] result;
+//        MsgLogDate[][] info = mCManager.obtainMsgLogDate(year, month);
+        MsgLogDate[][] info = mMonthData;
+        MsgLogDate[][] result;
         Region[][] tmp;
-        if (TextUtils.isEmpty(info[4][0].strG)) {
+        if (TextUtils.isEmpty(info[4][0].dayStr)) {
             tmp = MONTH_WEEKS_4;
             arrayClear(INFO_4);
             result = arrayCopy(info, INFO_4);
             myHeight = MONTH_WEEKS_4[0][0].getBounds().height() * 4;
-        } else if (TextUtils.isEmpty(info[5][0].strG)) {
+        } else if (TextUtils.isEmpty(info[5][0].dayStr)) {
             tmp = MONTH_WEEKS_5;
             arrayClear(INFO_5);
             result = arrayCopy(info, INFO_5);
@@ -201,30 +195,26 @@ public class MsgLogMonthView extends View {
             myHeight = MONTH_WEEKS_6[0][0].getBounds().height() * 6;
         }
 
-//        canvas.translate(0, 0);
-
         for (int i = 0; i < result.length; i++) {
             for (int j = 0; j < result[i].length; j++) {
-                drawMonthData(canvas, tmp[i][j].getBounds(), info[i][j], year, month);
+                drawMonthData(canvas, tmp[i][j].getBounds(), info[i][j]);
             }
         }
-        drawFrame(canvas, tmp[0][0].getBounds(), tmp.length);
         canvas.restore();
     }
 
-    private void drawMonthData(Canvas canvas, Rect rect, DPInfo info, int year, int month) {
+    private void drawMonthData(Canvas canvas, Rect rect, MsgLogDate info) {
 //        drawBG(canvas, rect, info);
-        drawDayText(canvas, rect, info, year, month);
+        drawDayText(canvas, rect, info);
 //        if (isFestivalDisplay) drawFestival(canvas, rect, info.strF, info.isFestival);
 //        drawDecor(canvas, rect, info);
     }
 
-    private void drawDayText(Canvas canvas, Rect rect, DPInfo dpInfo, int year, int month) {
-        String strDay = dpInfo.strG;
-        boolean isMonthFirstDay = TextUtils.equals("1", strDay);
+    private void drawDayText(Canvas canvas, Rect rect, MsgLogDate dpInfo) {
+        String strDay = dpInfo.dayStr;
         boolean isToday = dpInfo.isToday;
         boolean isWeekend = dpInfo.isWeekend;
-        boolean isSelectedDay = isSelectedDay(year, month, strDay);
+        boolean isSelectedDay = strDay.equals(mSelectDayStr);
 
         //画背景
         if (isSelectedDay) {
@@ -254,128 +244,31 @@ public class MsgLogMonthView extends View {
 //        if (!isFestivalDisplay)
 //            y = rect.centerY() + Math.abs(mPaint.ascent()) - (mPaint.descent() - mPaint.ascent()) / 2F;
 
-        if (isMonthFirstDay) {
-            String monthFirstDay = mDPLManager.titleMonth()[month - 1];
-            mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));
-            if (isToday) {
-                mPaint.setTextSize(Utils.dp2px(14));
-                canvas.drawText(monthFirstDay, rect.centerX(), y, mPaint);
-
-            } else if (mThisYear != year) {
-
-                Rect fontRect = new Rect();
-                mPaint.setTextSize(Utils.dp2px(14));
-                mPaint.getTextBounds(monthFirstDay, 0, monthFirstDay.length(), fontRect);
-                mPaint.setColor(getResources().getColor(R.color.button));
-                canvas.drawRect(rect.centerX() - fontRect.width() / 2
-                        , rect.centerY() - fontMetrics.bottom + fontMetrics.top
-                        , rect.centerX() + fontRect.width() / 2
-                        , rect.centerY()
-                        , mPaint);
-                mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));//todo
-
-                mPaint.setTextSize(Utils.dp2px(14));
-                canvas.drawText(monthFirstDay, rect.centerX(), rect.centerY() - fontMetrics.bottom, mPaint);
-                mPaint.setTextSize(Utils.dp2px(12));
-                y = rect.centerY() - fontMetrics.ascent;
-                canvas.drawText(String.valueOf(year), rect.centerX(), y, mPaint);
-
-            } else {
-                String monthNumber;
-                String monthSign;
-                if (DPLManager.getInstance().isSameLanguage(Locale.CHINA)) {
-                    monthNumber = monthFirstDay.substring(0, monthFirstDay.length() - 1);
-                    monthSign = monthFirstDay.substring(monthFirstDay.length() - 1);
-
-                } else {
-                    monthNumber = monthFirstDay.substring(0, 1);
-                    monthSign = monthFirstDay.substring(1);
-                }
-
-                //测量“十一月”中“十一”字，或者“Jul”中“J”字的大小
-                Rect monthNumberRect = new Rect();
-                mPaint.setTextSize(Utils.dp2px(18));
-                mPaint.getTextBounds(monthNumber, 0, monthNumber.length(), monthNumberRect);
-
-                //测量“月”字，或“ul”字的大小
-                Rect monthSignRect = new Rect();
-                mPaint.setTextSize(Utils.dp2px(10));
-                mPaint.getTextBounds(monthSign, 0, monthSign.length(), monthSignRect);
-
-                //计算两种字体的位置
-                int monthNumberX = rect.centerX() - (monthSignRect.width() / 2);
-                int monthSignX = monthNumberRect.width() / 2 + rect.centerX();
-
-                canvas.drawText(monthSign, monthSignX, y, mPaint);
-
-                mPaint.setTextSize(Utils.dp2px(18));
-                canvas.drawText(monthNumber, monthNumberX, y, mPaint);
-            }
-
-        } else {
-            mPaint.setTextSize(Utils.dp2px(14));
-            mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
-            canvas.drawText(strDay, rect.centerX(), y, mPaint);
-        }
+        mPaint.setTextSize(Utils.dp2px(14));
+        mPaint.setColor(isSelectedDay ? Color.WHITE : isWeekend ? mTManager.colorWeekend() : mTManager.colorG());
+        canvas.drawText(strDay, rect.centerX(), y, mPaint);
     }
 
     /**
      * 设置选中的年月日，并且显示所在月的视图
-     *
-     * @param dateStr
      */
-    public void setSelectedDay(String dateStr) {
-        if (dateStr == null) {
+    public void setSelectedDay(String dayStr) {
+        if (dayStr == null) {
             return;
         }
 
-        mDateSelected.clear();
-        mDateSelected.add(dateStr.replaceAll("(?<=\\d-)0", ""));
+        mSelectDayStr = dayStr;
 
-        String[] dates = dateStr.split("-");
-        setShowMonth(Integer.valueOf(dates[0]), Integer.valueOf(dates[1]));
+        setShowMonth(dayStr);
     }
 
-    private boolean isSelectedDay(int year, int month, String day) {
-        String date = String.format("%d-%d-%s", year, month, day);
-        for (String s : mDateSelected) {
-            if (TextUtils.equals(s, date)) return true;
-        }
-        return false;
-    }
-
-    //绘制条框
-    private void drawFrame(Canvas canvas, Rect cellRect, int columnNumber) {
-        mPaint.setColor(mTManager.colorGridLine());
-        int cellWith = cellRect.width();
-        int lineLength;
-        canvas.drawLine(0, cellWith, cellWith * 7, cellWith, mPaint);
-        canvas.drawLine(0, cellWith * 2, cellWith * 7, cellWith * 2, mPaint);
-        canvas.drawLine(0, cellWith * 3, cellWith * 7, cellWith * 3, mPaint);
-        lineLength = cellWith * 4;
-        if (columnNumber > 4) {
-            canvas.drawLine(0, cellWith * 4, cellWith * 7, cellWith * 4, mPaint);
-            lineLength = cellWith * 5;
-        }
-        if (columnNumber > 5) {
-            canvas.drawLine(0, cellWith * 5, cellWith * 7, cellWith * 5, mPaint);
-            lineLength = cellWith * 6;
-        }
-        canvas.drawLine(cellWith, 0, cellWith, lineLength, mPaint);
-        canvas.drawLine(cellWith * 2, 0, cellWith * 2, lineLength, mPaint);
-        canvas.drawLine(cellWith * 3, 0, cellWith * 3, lineLength, mPaint);
-        canvas.drawLine(cellWith * 4, 0, cellWith * 4, lineLength, mPaint);
-        canvas.drawLine(cellWith * 5, 0, cellWith * 5, lineLength, mPaint);
-        canvas.drawLine(cellWith * 6, 0, cellWith * 6, lineLength, mPaint);
-    }
-
-    private void arrayClear(DPInfo[][] info) {
-        for (DPInfo[] anInfo : info) {
+    private void arrayClear(MsgLogDate[][] info) {
+        for (MsgLogDate[] anInfo : info) {
             Arrays.fill(anInfo, null);
         }
     }
 
-    private DPInfo[][] arrayCopy(DPInfo[][] src, DPInfo[][] dst) {
+    private MsgLogDate[][] arrayCopy(MsgLogDate[][] src, MsgLogDate[][] dst) {
         for (int i = 0; i < dst.length; i++) {
             System.arraycopy(src[i], 0, dst[i], 0, dst[i].length);
         }
@@ -383,11 +276,12 @@ public class MsgLogMonthView extends View {
     }
 
     private void dealClickEvent(int x, int y) {
-        DPInfo[][] info = mCManager.obtainDPInfo(mCurrentYear, mCurrentMonth);
+        MsgLogDate[][] info = mMonthData;//todo is null??
+//        MsgLogDate[][] info = mCManager.obtainMsgLogDate(mCurrentYear, mCurrentMonth);
         Region[][] tmp;
-        if (TextUtils.isEmpty(info[4][0].strG)) {
+        if (TextUtils.isEmpty(info[4][0].dayStr)) {
             tmp = MONTH_WEEKS_4;
-        } else if (TextUtils.isEmpty(info[5][0].strG)) {
+        } else if (TextUtils.isEmpty(info[5][0].dayStr)) {
             tmp = MONTH_WEEKS_5;
         } else {
             tmp = MONTH_WEEKS_6;
@@ -396,7 +290,7 @@ public class MsgLogMonthView extends View {
             for (int j = 0; j < tmp[i].length; j++) {
                 Region region = tmp[i][j];
                 String currentDay;
-                if (TextUtils.isEmpty(currentDay = info[i][j].strG)) {
+                if (TextUtils.isEmpty(currentDay = info[i][j].dayStr)) {
                     continue;
                 }
 
@@ -404,16 +298,10 @@ public class MsgLogMonthView extends View {
                     continue;
                 }
 
-                final String date = mCurrentYear + "-" + mCurrentMonth + "-" + currentDay;
-                /*if (mDateSelected.contains(date)) {
-                    mDateSelected.remove(date);
-                } else {
-                    mDateSelected.add(date);
-                }*///屏蔽多选逻辑
-                mDateSelected.clear();
-                mDateSelected.add(date);
+                mSelectDayStr = currentDay;
+                final String date = info[i][j].yearStr + "-" + info[i][j].monthStr + "-" + currentDay;
                 if (mOnDayClickListener != null) {
-                    mOnDayClickListener.onDayClickListener(date, mDateSelected);
+                    mOnDayClickListener.onDayClickListener(date);
                 }
                 invalidate();
 //                Toast.makeText(getContext(), "you click: " + mCurrentYear + "年" + mCurrentMonth + "月" + currentDay + "日", Toast.LENGTH_SHORT).show();
@@ -423,27 +311,21 @@ public class MsgLogMonthView extends View {
 
     /**
      * 显示某年某月的视图
-     *
-     * @param year  要显示的视图所在的年份
-     * @param month 要显示的视图所在的月份
      */
-    void setShowMonth(int year, int month) {
-        mCurrentYear = year;
-        mCurrentMonth = month;
+    void setShowMonth(String day) {
 
 //        buildRegion();
         requestLayout();
         invalidate();
     }
 
-    interface OnDayClickListener {
+    public interface OnDayClickListener {
         /**
          * 格式都为“****-**-**”
          *
-         * @param clickDay     点击的日期
-         * @param selectedDays 所有已经选择的日期，月和日前面不补0，如2019-7-1
+         * @param clickDay 点击的日期，月和日前面不补0，如2019-7-1
          */
-        void onDayClickListener(String clickDay, List<String> selectedDays);
+        void onDayClickListener(String clickDay);
     }
 
     private OnDayClickListener mOnDayClickListener;

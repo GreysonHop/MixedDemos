@@ -45,7 +45,8 @@ import java.util.List;
 /**
  * Created by necer on 2018/11/12.
  */
-public abstract class NCalendar extends FrameLayout implements IICalendar, /*NestedScrollingParent,*/ ValueAnimator.AnimatorUpdateListener {
+public abstract class NCalendar extends FrameLayout implements IICalendar
+        , /*NestedScrollingParent,*/ ValueAnimator.AnimatorUpdateListener {
 
     protected WeekCalendar weekCalendar;
     protected MonthCalendar monthCalendar;

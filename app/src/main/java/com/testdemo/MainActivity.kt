@@ -12,6 +12,7 @@ import com.testdemo.testBlurAndGlass.BlurGlassSoOnActivity
 import com.testdemo.testCanDragLayout.TestDragViewActivity
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
+import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testGiftAnim.TestGiftAnimAct
@@ -50,6 +51,7 @@ class MainActivity : ListActivity() {
         menuListMap["定位、地图显示、第三方调用等"] = TestMapAct::class.java
         menuListMap["FlipperView测试"] = TestFlipperActivity::class.java
         menuListMap["RecyclerView特效"] = TestRecyclerViewAct::class.java
+        menuListMap["RecyclerView实现的日历"] = DateMsgLogAct::class.java
 
         classNameList.addAll(menuListMap.keys)
         classList.addAll(menuListMap.values)
