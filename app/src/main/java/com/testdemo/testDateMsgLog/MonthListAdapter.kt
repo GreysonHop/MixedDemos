@@ -15,7 +15,6 @@ import com.testdemo.testDateMsgLog.MsgLogMonthView.OnDayClickListener
 class MonthListAdapter : RecyclerView.Adapter<MonthListAdapter.MonthViewHolder>()
         , OnDayClickListener {
 
-    private val mCount = 0
     private val dateList = arrayListOf<Array<Array<MsgLogDate>>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
@@ -63,8 +62,8 @@ class MonthListAdapter : RecyclerView.Adapter<MonthListAdapter.MonthViewHolder>(
         }
     }
 
-    override fun onDayClickListener(clickDay: String) {
-        mOnDayClickListener?.onDayClickListener(clickDay)
+    override fun onDayClickListener(msgLogMonthView: MsgLogMonthView, year: Int, month: Int, day: Int) {
+        mOnDayClickListener?.onDayClickListener(msgLogMonthView, year, month, day)
     }
 
     private var mOnDayClickListener: OnDayClickListener? = null

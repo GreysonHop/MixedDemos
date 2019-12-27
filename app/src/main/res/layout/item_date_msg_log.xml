@@ -16,6 +16,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="2020年1月"
+        android:fontFamily=""
         android:textColor="#283851"
         android:textSize="14sp" />
 
