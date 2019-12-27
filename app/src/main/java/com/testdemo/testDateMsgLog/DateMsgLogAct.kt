@@ -29,12 +29,12 @@ class DateMsgLogAct : Activity() {
         rv_month_list.adapter = monthListAdapter
 
         initData()
-        tv_week.setOnClickListener {
+        /*ll_week.setOnClickListener {
             currentTargetLocalDate?.let {
                 val moreDatas = loadDate(it, 1, 0)
                 monthListAdapter.addDatas(moreDatas)
             }
-        }
+        }*/
     }
 
 

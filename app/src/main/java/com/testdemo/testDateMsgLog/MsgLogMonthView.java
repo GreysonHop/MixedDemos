@@ -158,7 +158,6 @@ public class MsgLogMonthView extends View {
      */
     private void drawMonthData(Canvas canvas) {
         canvas.save();
-//        MsgLogDate[][] info = mCManager.obtainMsgLogDate(year, month);
         MsgLogDate[][] info = mMonthData;
         MsgLogDate[][] result;
         Region[][] tmp;
@@ -248,8 +247,11 @@ public class MsgLogMonthView extends View {
     }
 
     private void dealClickEvent(int x, int y, MotionEvent event) {
-        MsgLogDate[][] info = mMonthData;//todo is null??
-//        MsgLogDate[][] info = mCManager.obtainMsgLogDate(mCurrentYear, mCurrentMonth);
+        if (mMonthData == null) {
+            return;
+        }
+
+        MsgLogDate[][] info = mMonthData;
         Region[][] tmp;
         if (TextUtils.isEmpty(info[4][0].dayStr)) {
             tmp = MONTH_WEEKS_4;

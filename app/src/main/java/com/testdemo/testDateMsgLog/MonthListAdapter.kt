@@ -3,7 +3,6 @@ package com.testdemo.testDateMsgLog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.R
@@ -18,7 +17,7 @@ class MonthListAdapter : RecyclerView.Adapter<MonthListAdapter.MonthViewHolder>(
     private val dateList = arrayListOf<Array<Array<MsgLogDate>>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
-        return MonthViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_date_msg_log, null))
+        return MonthViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_month_list, null))
     }
 
     override fun getItemCount(): Int {
