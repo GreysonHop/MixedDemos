@@ -10,6 +10,7 @@ import com.testdemo.R
 
 /**
  * Created by Greyson on 2018/12/10.
+ * 镜像图片的绘制
  */
 class MirrorImageView : View {
     private var mSrcBitmap: Bitmap? = null
@@ -65,9 +66,9 @@ class MirrorImageView : View {
         canvas.drawColor(Color.BLACK)
         canvas.drawBitmap(mSrcBitmap, startX, startY, null)
 
-        allNonNull(mSrcBitmap, mRefBitmap) {
-            val srcBitmap = it[0] as Bitmap
-            val refBitmap = it[1] as Bitmap
+        allNonNull(mSrcBitmap, mRefBitmap) {(it1, it2) ->//TODO 如果参数超过5个会怎样？还能析构吗？
+            val srcBitmap = it1 as Bitmap
+            val refBitmap = it2 as Bitmap
             val sc = canvas.saveLayer(startX, startY + srcBitmap.height, startX + refBitmap.width, startY + srcBitmap.height * 2, null, Canvas.ALL_SAVE_FLAG)
             canvas.drawBitmap(refBitmap, startX, startY + srcBitmap.height, null)
             mPaint.xfermode = mXfermode

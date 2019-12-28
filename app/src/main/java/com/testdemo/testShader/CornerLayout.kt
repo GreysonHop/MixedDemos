@@ -26,13 +26,11 @@ class CornerLayout : RelativeLayout {
     private var mSetfil: PaintFlagsDrawFilter? = null //抗锯齿
 
     init {
-        println("greyson CornerLayout init{} mRadius = $mRadius")
     }
 
     constructor(context: Context) : this(context, null) //如何在构造器中调用其它构造器？（构造器委托的方式）
 
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0) {
-        println("greyson CornerLayout constructor()")
     }
 
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(context, attributeSet, defStyleAttr) {

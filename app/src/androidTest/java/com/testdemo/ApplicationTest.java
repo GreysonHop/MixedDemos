@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.ImageView;
 //import android.test.ApplicationTestCase;
 
 import androidx.test.InstrumentationRegistry;
@@ -30,7 +31,11 @@ public class ApplicationTest {
     @Test
     public void onCreate() {
         try {
-            ApplicationInfo applicationInfo = mTargetContext.getPackageManager().getApplicationInfo(mTargetContext.getPackageName(), PackageManager.GET_META_DATA);
+            ImageView testBitmap = new ImageView(mTargetContext);
+
+
+            ApplicationInfo applicationInfo = mTargetContext.getPackageManager()
+                    .getApplicationInfo(mTargetContext.getPackageName(), PackageManager.GET_META_DATA);
             Bundle metaData = ((ApplicationInfo) applicationInfo).metaData;
             String data = metaData.getString("com");
             assertEquals("1234567890", data);

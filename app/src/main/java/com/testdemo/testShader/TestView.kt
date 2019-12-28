@@ -8,6 +8,7 @@ import com.testdemo.R
 
 /**
  * Created by Greyson on 2018/12/10.
+ * 测试绘制组件时的画布缩放
  */
 class TestView : View {
     private var bmp1: Bitmap? = null

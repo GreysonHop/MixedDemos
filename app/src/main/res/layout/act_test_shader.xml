@@ -12,6 +12,19 @@
 
     <com.testdemo.testShader.TestView
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/bar_grey_90" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_test_bitmap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/img5" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_test_my_bitmap"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <com.testdemo.testShader.CornerLayout
@@ -22,8 +35,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        app:topLeftRadius="20dp"
-        app:bottomRightRadius="20dp">
+        app:bottomRightRadius="20dp"
+        app:topLeftRadius="20dp">
 
         <ImageView
             android:layout_width="match_parent"
