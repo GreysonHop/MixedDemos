@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -62,6 +64,16 @@ public class SpecialEditLayoutAct extends Activity {
             mOffsetX = event.getX();
             mOffsetY = event.getY();
             return false;
+        });
+        tv_test_clickable.post(() -> {
+            Layout layout = tv_test_clickable.getLayout();
+            if (layout != null) {
+                if (layout.getEllipsisCount(tv_test_clickable.getLineCount() - 1) > 0) {
+                    Toast.makeText(this, "有省略号哦。", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "没有省略号呢！", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
         List<String> menuList = Arrays.asList(
@@ -196,7 +208,7 @@ public class SpecialEditLayoutAct extends Activity {
         spannableStBuilder.setSpan(clickableSpan, colorStart, clickableEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableStBuilder.setSpan(new ForegroundColorSpan(Color.WHITE), colorStart, colorEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableStBuilder.setSpan(new ForegroundColorSpan(Color.BLACK), colorEnd, clickableEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        spannableStBuilder.append("I am Iron man! Can you beat me!");
+        spannableStBuilder.append("I am Iron man! Can you beat me!---- But I never give up!");
 
         tv_test_clickable.setMovementMethod(LinkMovementMethod.getInstance());
         tv_test_clickable.setText(spannableStBuilder);

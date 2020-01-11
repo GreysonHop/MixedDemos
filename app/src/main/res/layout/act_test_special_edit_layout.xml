@@ -129,7 +129,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textSize="16sp"
-            tools:text="我是测试TextView的点击而存在的" />
+            android:singleLine="true"
+            android:ellipsize="end"
+            tools:text="我是测试TextView的点击而存在的，我换行换行了，怎么样呢" />
 
         <com.testdemo.testPictureSelect.SuitedImageView
             android:layout_width="275dp"

@@ -3,7 +3,11 @@ package com.testdemo
 import android.app.Activity
 import android.app.ListActivity
 import android.content.Intent
+import android.database.ContentObserver
 import android.os.Bundle
+import android.os.Handler
+import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -22,6 +26,7 @@ import com.testdemo.testPictureSelect.TestPictureSelectAct
 import com.testdemo.testRecyclerViewType.TestRecyclerViewAct
 import com.testdemo.testShader.TestShaderAct
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
+import com.testdemo.testStartMode.ActivityA
 import com.testdemo.testVerticalScrollView.TestActivity3
 
 /**
@@ -52,6 +57,8 @@ class MainActivity : ListActivity() {
         menuListMap["FlipperView测试"] = TestFlipperActivity::class.java
         menuListMap["RecyclerView特效"] = TestRecyclerViewAct::class.java
         menuListMap["RecyclerView实现的日历"] = DateMsgLogAct::class.java
+        menuListMap["测试启动模式"] = ActivityA::class.java
+
 
         classNameList.addAll(menuListMap.keys)
         classList.addAll(menuListMap.values)
@@ -63,13 +70,34 @@ class MainActivity : ListActivity() {
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, getString(R.string.google_map_api_key))
         }
+
+        // 注册监听系统时间12/24小时制的变动
+        contentResolver.registerContentObserver(Settings.System.getUriFor(Settings.System.TIME_12_24), true, object : ContentObserver(Handler()) {
+            override fun onChange(selfChange: Boolean) {
+                val timeFormat = Settings.System.getInt(contentResolver, Settings.System.TIME_12_24, 24)
+                Log.d("greyson", "监听系统小时制变化，timeFormat:$timeFormat")
+                var mTimeFormat = 12
+                if (12 == timeFormat) {
+                    mTimeFormat = 12
+                } else if (24 == timeFormat) {
+                    mTimeFormat = 24
+                }
+
+            }
+        })
     }
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
 
-        val intent = Intent()
-        intent.setClass(this, classList[position])
-        startActivity(intent)
+        if (position == 0) {
+            val intent = Intent()
+            intent.setClass(this, classList[position])
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+            return
+        }
+
+        startActivity(Intent(this, classList[position]))
     }
 }

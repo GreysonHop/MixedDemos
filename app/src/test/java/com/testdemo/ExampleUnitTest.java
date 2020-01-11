@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 
 import static org.junit.Assert.*;
@@ -27,8 +28,8 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
 
-        new MyThread("thread1111").start();
-        new MyThread("thread2222").start();
+//        new MyThread("thread1111").start();
+//        new MyThread("thread2222").start();
         printSomeThing("main");
 
 
@@ -49,7 +50,7 @@ public class ExampleUnitTest {
 
         assertEquals(4, 2 + 2);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'Today': E, MMM d, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'Today': EEEE, yyyy MMM d, hh:m,a", Locale.ENGLISH);
         System.out.println("date = " + dateFormat.format(new Date()));
 
     }
