@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import com.testdemo.BaseActivity
 import com.testdemo.broken_lib.Utils
 
 /**
  * Create by Greyson
  */
-class ActivityA : AppCompatActivity() {
+class ActivityA : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

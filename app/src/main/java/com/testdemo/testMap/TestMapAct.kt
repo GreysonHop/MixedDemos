@@ -25,6 +25,7 @@ import com.testdemo.R
 import com.testdemo.broken_lib.Utils
 import com.testdemo.testMap.places.StringUtil
 import com.testdemo.testNCalendar.RecyclerViewAdapter
+import com.testdemo.testStartMode.ActivityA
 import com.testdemo.util.PermissionUtils
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -56,6 +57,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
         iv_map_locate.setOnClickListener { locateMyLocation(true) }
 
+        tv_show_location.setOnClickListener { startActivity(Intent(this, ActivityA::class.java)) }
 
         //下面是跳转第三方地图应用的例子代码
         btn_start_map.setOnClickListener {
@@ -198,7 +200,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun locateMyLocation(animate: Boolean):Boolean {
+    private fun locateMyLocation(animate: Boolean): Boolean {
         var result = false
         if (PermissionUtils.isGranted(android.Manifest.permission.ACCESS_COARSE_LOCATION
                         , android.Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -250,4 +252,9 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         mv_map_google.onDestroy()
     }
 
+    override fun finish() {
+        super.finish()
+        //注释掉activity本身的过渡动画
+//        overridePendingTransition(0, R.anim.bottom_menu_out)//TODO 不在这里设置的话，退出的动画会变成<Application>设置的Theme里面的动画
+    }
 }

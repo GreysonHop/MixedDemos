@@ -6,13 +6,13 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
+import com.testdemo.BaseActivity
 import com.testdemo.broken_lib.Utils
 
 /**
  * Create by Greyson
  */
-class ActivityB : AppCompatActivity() {
+class ActivityB : BaseActivity() {
 
     val flagGroups = arrayOf(0
             , Intent.FLAG_ACTIVITY_SINGLE_TOP

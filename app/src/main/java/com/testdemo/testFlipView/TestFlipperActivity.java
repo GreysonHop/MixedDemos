@@ -1,6 +1,5 @@
 package com.testdemo.testFlipView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.widget.AdapterViewFlipper;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.testdemo.BaseActivity;
 import com.testdemo.R;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 /**
  * Created by Greyson on 2018/1/25.
  */
-public class TestFlipperActivity extends Activity {
+public class TestFlipperActivity extends BaseActivity {
     private final static String TAG = "greyson_TestFlipper";
 
     ViewFlipper viewFlipper;

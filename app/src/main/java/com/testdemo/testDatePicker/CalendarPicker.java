@@ -400,7 +400,7 @@ public class CalendarPicker extends View {
      * @param dateStr
      */
     public void setSelectedDay(String dateStr) {
-        if (dateStr == null) {
+        if (TextUtils.isEmpty(dateStr)) {
             return;
         }
 

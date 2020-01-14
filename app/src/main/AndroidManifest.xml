@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,7 +79,7 @@
 
         <activity
             android:name=".testMap.TestMapAct"
-            android:theme="@style/Theme.Design.Light.NoActionBar" />
+            android:theme="@style/AppTheme.BottomSheet" />
 
         <activity android:name="com.testdemo.testFlipView.TestFlipperActivity" />
 
@@ -93,7 +95,7 @@
         <activity android:name=".testRecyclerViewType.TestRecyclerViewAct" />
         <activity android:name=".testDateMsgLog.DateMsgLogAct" />
 
-        <activity android:name=".testStartMode.ActivityA">
+        <activity android:name=".testStartMode.ActivityA" android:configChanges="orientation|screenSize">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

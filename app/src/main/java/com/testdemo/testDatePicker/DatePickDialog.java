@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.core.content.ContextCompat;
+
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -42,6 +44,7 @@ public class DatePickDialog extends Dialog {
 
     private boolean hasInit;
     private int mMode;
+    private int mMinuteGap = 1;//分钟选择器中分钟数之间的间隔，如平时显示的0,1,2...59，间隔为1
     private DPLManager mDPLManager = DPLManager.getInstance();
 
     private ViewGroup clDatePicker;
@@ -124,7 +127,7 @@ public class DatePickDialog extends Dialog {
             lp.width = MATCH_PARENT;
             lp.height = WRAP_CONTENT;
             window.setAttributes(lp);
-            window.setWindowAnimations(R.style.animBottomMenu);
+//            window.setWindowAnimations(R.style.animBottomMenu);//也可以在style中设置
         }
     }
 
@@ -134,12 +137,14 @@ public class DatePickDialog extends Dialog {
      * @param toBeMode
      */
     public void changeMode(int toBeMode) {
-        checkInit();
-
         if (toBeMode == mMode) {
             return;
         }
         mMode = toBeMode;
+
+        if (!hasInit) {
+            return;
+        }
         updateView();
     }
 
@@ -205,14 +210,9 @@ public class DatePickDialog extends Dialog {
             }
 
             selectedDateStr = clickDay;
-            String[] dateDatas = clickDay.split("-");
-
-            Calendar calendar = Calendar.getInstance(Locale.getDefault());
-            calendar.set(Calendar.YEAR, Integer.valueOf(dateDatas[0]));
-            calendar.set(Calendar.MONTH, Integer.valueOf(dateDatas[1]) - 1);
-            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateDatas[2]));
-            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(calendar.getTime()));
-            mTvOnlyOneSwitch.setText(DPLManager.getInstance().getDateFormat().format(calendar.getTime()));
+            Date date = getDateFromStr(clickDay);
+            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(date));
+            mTvOnlyOneSwitch.setText(DPLManager.getInstance().getDateFormat().format(date));
 
         }));
 
@@ -228,7 +228,10 @@ public class DatePickDialog extends Dialog {
             tvWeek.setPadding(0, Utils.dp2px(2), 0, Utils.dp2px(2));
             mLlWeek.addView(tvWeek, lpWeek);
         }
-
+        if (!TextUtils.isEmpty(selectedDateStr)) {
+            mCalendarPicker.setSelectedDay(selectedDateStr);
+            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(getDateFromStr(selectedDateStr)));
+        }
     }
 
     private void setCalendarPanel() {
@@ -242,7 +245,7 @@ public class DatePickDialog extends Dialog {
     }
 
     private void initTimePanel() {
-        mTimePicker = new TimePicker(getContext());
+        mTimePicker = new TimePicker(getContext(), mMinuteGap);
         mTimePicker.setGravity(CENTER);
         mTimePicker.setOnWheelListener(new TimePicker.OnWheelListener() {
             @Override
@@ -269,6 +272,9 @@ public class DatePickDialog extends Dialog {
                 mTvOnlyOneSwitch.setText(selectedTimeStr);
             }
         });
+        if (!TextUtils.isEmpty(selectedTimeStr)) {
+            mTimePicker.setSelectedTime(selectedTimeStr);
+        }
     }
 
     private void setTimePanel() {
@@ -308,10 +314,11 @@ public class DatePickDialog extends Dialog {
      * @param gap 分钟数的间隔，小于1的整数都会被处理为1。
      */
     public void changeMinuteGap(int gap) {
+        mMinuteGap = gap < 1 ? 1 : gap;
         if (!hasInit) {
             return;
         }
-        String str = mTimePicker.updateMinuteDateWithGap(gap);
+        String str = mTimePicker.updateMinuteDateWithGap(mMinuteGap);
         String timeStr = cbTimeBtn.getText().toString();
         if (TextUtils.isEmpty(timeStr)) {
             timeStr = mTimePicker.getSelectedHour() + ":00";
@@ -331,8 +338,6 @@ public class DatePickDialog extends Dialog {
      *                        ，数字为一位数时前面必须补0，如01:15
      */
     public void setSelectedDate(String selectedDateStr, String selectedTimeStr) {
-        checkInit();
-
         boolean needUpdate = false;
         String formatSelectedDateStr = "";
 
@@ -359,7 +364,7 @@ public class DatePickDialog extends Dialog {
             this.selectedTimeStr = selectedTimeStr;
             needUpdate = true;
         }
-        if (needUpdate) {
+        if (hasInit && needUpdate) {
             updateValue(formatSelectedDateStr);
         }
     }
@@ -370,14 +375,15 @@ public class DatePickDialog extends Dialog {
      * @param date
      */
     public void setSelectedDate(Date date) {
-        checkInit();
-
         if (date == null) {
             return;
         }
-
         this.selectedDateStr = new SimpleDateFormat("yyyy-M-d", Locale.CHINA).format(date);
         this.selectedTimeStr = new SimpleDateFormat("HH:mm", Locale.CHINA).format(date);
+        if (!hasInit) {
+            return;
+        }
+
         updateValue(DPLManager.getInstance().getDateFormat().format(date));
         /*cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
@@ -461,5 +467,15 @@ public class DatePickDialog extends Dialog {
     private boolean checkInit() {
         if (!hasInit) throw new RuntimeException("you had never invoked the show()!");
         else return true;
+    }
+
+    private Date getDateFromStr(String dateStr) {
+        String[] dateDatas = dateStr.split("-");
+
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.set(Calendar.YEAR, Integer.valueOf(dateDatas[0]));
+        calendar.set(Calendar.MONTH, Integer.valueOf(dateDatas[1]) - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateDatas[2]));
+        return calendar.getTime();
     }
 }

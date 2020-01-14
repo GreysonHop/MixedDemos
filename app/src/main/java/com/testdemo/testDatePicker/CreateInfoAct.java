@@ -9,7 +9,9 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
+
 import androidx.annotation.Nullable;
+
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -220,14 +222,15 @@ public class CreateInfoAct extends Activity {
     private DatePickDialog getDatePickDialog() {
         if (datePickDialog == null) {
             datePickDialog = new DatePickDialog(this);
+            datePickDialog.changeMinuteGap(15);
+            datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
+            datePickDialog.setSelectedDate("2019-12-23", "09:08");
             datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
                 selectedDate = dateStr;
                 selectedTime = timeStr;
                 mTvDate.setText(dateStr + " " + timeStr);
                 Toast.makeText(this, dateStr + " " + timeStr, Toast.LENGTH_LONG).show();
             });
-            datePickDialog.show();
-            datePickDialog.setSelectedDate("2019-11-12", "08:08");
         }
         return datePickDialog;
     }
