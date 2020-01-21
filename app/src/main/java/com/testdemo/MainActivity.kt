@@ -3,6 +3,7 @@ package com.testdemo
 import android.app.Activity
 import android.app.ListActivity
 import android.content.Intent
+import android.content.res.Configuration
 import android.database.ContentObserver
 import android.os.Bundle
 import android.os.Handler
@@ -87,17 +88,17 @@ class MainActivity : ListActivity() {
         })
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        Log.d("greyson", "newConfig: ${newConfig}")
+    }
+
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
 
-        if (position == 0) {
             val intent = Intent()
             intent.setClass(this, classList[position])
             intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
-            return
-        }
-
-        startActivity(Intent(this, classList[position]))
     }
 }

@@ -21,6 +21,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.gson.Gson
+import com.testdemo.BaseActivity
 import com.testdemo.R
 import com.testdemo.broken_lib.Utils
 import com.testdemo.testMap.places.StringUtil
@@ -35,16 +36,24 @@ import java.io.IOException
 /**
  * Create by Greyson
  */
-class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
+class TestMapAct : BaseActivity(), OnMapReadyCallback {
 
     private lateinit var mPlacesClient: PlacesClient
     private lateinit var mMap: GoogleMap
     private var mLocateMyGoogle = false
     private val mHandler = Handler()
 
+    override fun getLayoutResId(): Int {
+        return R.layout.act_test_map
+    }
+
+    override fun initView() {
+        setOpenAnim(R.anim.bottom_menu_in, R.anim.activity_hold)
+        setCloseAnim(R.anim.activity_hold, R.anim.bottom_menu_out)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_test_map)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         /*val mapFragment = supportFragmentManager
@@ -250,11 +259,5 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
     override fun onDestroy() {
         super.onDestroy()
         mv_map_google.onDestroy()
-    }
-
-    override fun finish() {
-        super.finish()
-        //注释掉activity本身的过渡动画
-//        overridePendingTransition(0, R.anim.bottom_menu_out)//TODO 不在这里设置的话，退出的动画会变成<Application>设置的Theme里面的动画
     }
 }

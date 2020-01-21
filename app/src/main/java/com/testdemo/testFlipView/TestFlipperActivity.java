@@ -2,7 +2,6 @@ package com.testdemo.testFlipView;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -33,17 +32,21 @@ public class TestFlipperActivity extends BaseActivity {
     AdapterViewFlipper adapterViewFlipper;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_flipper);
-        viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-
-        initViewFlipper();
-        initPager();
+    protected int getLayoutResId() {
+        return R.layout.test_flipper;
     }
 
-    private void initPager() {
+    @Override
+    protected void initView() {
+        viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        initViewFlipper();
+
         final ArrayList<String> dataList = new ArrayList<>();
         dataList.add("墨鱼");
         dataList.add("死鱼");
@@ -52,7 +55,6 @@ public class TestFlipperActivity extends BaseActivity {
         dataList.add("哇哈哈鱼");
 
         viewPager.setAdapter(new TestAdapter(this, dataList));
-
     }
 
     public void initViewFlipper() {
