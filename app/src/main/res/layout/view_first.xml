@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/firstView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".testVerticalScrollView.TestActivity3">
 
     <LinearLayout
         android:id="@+id/holdUpView"
@@ -10,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical"
-        android:paddingBottom="20dp"
         android:paddingLeft="15dp"
-        android:paddingTop="25dp">
+        android:paddingTop="25dp"
+        android:paddingBottom="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,10 +24,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_orange_light"
-                android:paddingBottom="2dp"
-                android:paddingEnd="3dp"
                 android:paddingStart="3dp"
                 android:paddingTop="2dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="2dp"
                 android:text="推荐管家"
                 android:textSize="10sp" />
 
@@ -34,10 +36,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="@android:color/holo_blue_light"
-                android:paddingBottom="2dp"
-                android:paddingEnd="3dp"
                 android:paddingStart="3dp"
                 android:paddingTop="2dp"
+                android:paddingEnd="3dp"
+                android:paddingBottom="2dp"
                 android:text="推荐管家"
                 android:textSize="10sp" />
         </LinearLayout>
@@ -47,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:onClick="onClick"
             android:text="MaLingLing"
             android:textSize="28sp" />
 
