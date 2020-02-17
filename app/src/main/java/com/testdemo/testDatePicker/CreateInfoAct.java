@@ -97,7 +97,7 @@ public class CreateInfoAct extends Activity {
 
                 //todo wait for deleting
                 if (datePickDialog != null) {
-                    datePickDialog.changeMinuteGap(1);
+                    datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
                 }
 
             } else if (cbTimeBtn.getId() == checkedId) {
@@ -112,7 +112,7 @@ public class CreateInfoAct extends Activity {
 
                 //todo wait for deleting
                 if (datePickDialog != null) {
-                    datePickDialog.changeMinuteGap(15);
+                    datePickDialog.changeMode(DatePickDialog.MODE_TIME_ONLY);
                 }
             }
         });

@@ -338,7 +338,7 @@ public class CalendarPicker extends View {
 
             } else if (mThisYear != year) {
 
-                Rect fontRect = new Rect();
+                /*Rect fontRect = new Rect();
                 mPaint.setTextSize(Utils.dp2px(14));
                 mPaint.getTextBounds(monthFirstDay, 0, monthFirstDay.length(), fontRect);
                 mPaint.setColor(getResources().getColor(R.color.button));
@@ -346,8 +346,8 @@ public class CalendarPicker extends View {
                         , rect.centerY() - fontMetrics.bottom + fontMetrics.top
                         , rect.centerX() + fontRect.width() / 2
                         , rect.centerY()
-                        , mPaint);
-                mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));//todo
+                        , mPaint);*///todo 测试查看字体的占用区域
+                mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));
 
                 mPaint.setTextSize(Utils.dp2px(14));
                 canvas.drawText(monthFirstDay, rect.centerX(), rect.centerY() - fontMetrics.bottom, mPaint);

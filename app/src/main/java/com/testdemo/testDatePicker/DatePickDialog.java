@@ -311,7 +311,8 @@ public class DatePickDialog extends Dialog {
         if (!hasInit) {
             return;
         }
-        String str = mTimePicker.updateMinuteDateWithGap(gap);
+
+        String str = mTimePicker.updateMinuteDateWithGap(gap <= 0 ? 1 : gap);
         String timeStr = cbTimeBtn.getText().toString();
         if (TextUtils.isEmpty(timeStr)) {
             timeStr = mTimePicker.getSelectedHour() + ":00";
@@ -336,10 +337,18 @@ public class DatePickDialog extends Dialog {
         boolean needUpdate = false;
         String formatSelectedDateStr = "";
 
-        if (selectedDateStr != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        if (!TextUtils.isEmpty(selectedDateStr)) {
             try {
-                formatSelectedDateStr = DPLManager.getInstance().getDateFormat().format(dateFormat.parse(selectedDateStr));
+                String dateStrToParse;
+                SimpleDateFormat dateFormat;
+                if (!TextUtils.isEmpty(selectedTimeStr)) {
+                    dateStrToParse = String.format("%s,%s", selectedDateStr, selectedTimeStr);
+                    dateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm", Locale.CHINA);
+                } else {
+                    dateStrToParse = selectedDateStr;
+                    dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+                }
+                formatSelectedDateStr = DPLManager.getInstance().getDateFormat().format(dateFormat.parse(dateStrToParse));
                 this.selectedDateStr = selectedDateStr;
                 needUpdate = true;
             } catch (Exception e) {
@@ -353,7 +362,7 @@ public class DatePickDialog extends Dialog {
 //            mCalendarPicker.setSelectedDay(selectedDateStr);
         }
 
-        if (selectedTimeStr != null) {
+        if (!TextUtils.isEmpty(selectedTimeStr)) {
 //            cbTimeBtn.setText(selectedTimeStr);
 //            mTimePicker.setSelectedTime(selectedTimeStr);
             this.selectedTimeStr = selectedTimeStr;
