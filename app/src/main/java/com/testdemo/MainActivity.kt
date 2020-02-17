@@ -3,6 +3,7 @@ package com.testdemo
 import android.app.Activity
 import android.app.ListActivity
 import android.content.Intent
+import android.content.res.Configuration
 import android.database.ContentObserver
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import com.google.android.libraries.places.api.Places
 import com.testdemo.testBlurAndGlass.BlurGlassSoOnActivity
 import com.testdemo.testCanDragLayout.TestDragViewActivity
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct
+import com.testdemo.testCanvas.TestCanvasActivity
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
@@ -58,6 +60,7 @@ class MainActivity : ListActivity() {
         menuListMap["RecyclerView特效"] = TestRecyclerViewAct::class.java
         menuListMap["RecyclerView实现的日历"] = DateMsgLogAct::class.java
         menuListMap["测试启动模式"] = ActivityA::class.java
+        menuListMap["测试绘画相关属性"] = TestCanvasActivity::class.java
 
 
         classNameList.addAll(menuListMap.keys)
@@ -87,17 +90,17 @@ class MainActivity : ListActivity() {
         })
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        Log.d("greyson", "newConfig: ${newConfig}")
+    }
+
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
 
-        if (position == 0) {
-            val intent = Intent()
-            intent.setClass(this, classList[position])
-            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-            return
-        }
-
-        startActivity(Intent(this, classList[position]))
+        val intent = Intent()
+        intent.setClass(this, classList[position])
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
     }
 }

@@ -4,78 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_date_tip"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/ll_controller"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingLeft="15dp"
-        android:paddingTop="9dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="9dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_calendar_date"
+        <Button
+            android:id="@+id/btn_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_corner11_grey"
-            android:paddingLeft="20dp"
-            android:paddingTop="3dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="3dp"
-            android:textColor="@color/blue_date_picker"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="今天：2019年5月13日，周一" />
+            android:text="切换视图" />
 
-        <ImageView
-            android:id="@+id/iv_calendar_year_pre"
+        <Button
+            android:id="@+id/btn_back_today"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/btn_calendar_year_previous"
-            app:layout_constraintBottom_toBottomOf="@id/iv_calendar_year_next"
-            app:layout_constraintEnd_toStartOf="@id/tv_calendar_year"
-            app:layout_constraintTop_toTopOf="@id/iv_calendar_year_next" />
+            android:text="回至今天" />
 
-        <TextView
-            android:id="@+id/tv_calendar_year"
+        <Button
+            android:id="@+id/btn_print_calendar_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:textColor="@color/cal_text_color"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_calendar_year_next"
-            app:layout_constraintEnd_toStartOf="@id/iv_calendar_year_next"
-            app:layout_constraintTop_toTopOf="@id/iv_calendar_year_next"
-            tools:text="2019" />
-
-        <ImageView
-            android:id="@+id/iv_calendar_year_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/btn_calendar_year_next"
-            app:layout_constraintBottom_toBottomOf="@id/tv_calendar_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_calendar_date" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group_calendar_monthView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="iv_calendar_year_pre,tv_calendar_year,iv_calendar_year_next" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="print" />
+    </LinearLayout>
 
     <com.necer.view.WeekBar
-        android:id="@+id/cl_week_bar"
+        android:id="@+id/weekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -84,55 +42,92 @@
         app:firstDayOfWeek="sunday"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_date_tip" />
+        app:layout_constraintTop_toBottomOf="@id/ll_controller" />
 
     <com.necer.calendar.Miui10Calendar
         android:id="@+id/miui10Calendar"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/white"
         app:calendarHeight="250dp"
         app:defaultCalendar="week"
-        app:hollowCircleColor="@color/cal_today_bg"
+        app:hollowCircleColor="@color/bg_date_picker_today"
         app:isAllMonthSixLine="true"
+        app:isShowNumberBackground="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_week_bar"
+        app:layout_constraintTop_toBottomOf="@id/weekBar"
         app:lunarDistance="12dp"
         app:lunarTextSize="8sp"
-        app:pointColor="@color/cal_selected_bg"
+        app:numberBackgroundAlphaColor="30"
+        app:numberBackgroundTextColor="@color/cal_cal_point_blue"
+        app:pointColor="@color/blue_date_picker"
         app:pointDistance="16dp"
         app:pointLocation="down"
         app:pointSize="2dp"
-        app:selectCircleColor="@color/cal_selected_bg"
-        app:selectCircleRadius="3dp"
-        app:selectLunarTextColor="@color/cal_selected_text"
-        app:selectSolarTextColorColor="@color/cal_selected_text"
-        app:solarTextColor="@color/cal_solar_text"
+        app:selectCircleColor="@color/blue_date_picker"
+        app:selectCircleRadius="4dp"
+        app:selectLunarTextColor="@color/white"
+        app:selectSolarTextColorColor="@color/white"
+        app:solarTextColor="@color/black_alpha80"
         app:solarTextSize="16sp"
-        app:todaySolarTextColor="@color/cal_today_text">
+        app:todaySolarTextColor="@color/black_alpha80">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/white">
+
+            <!--<ImageView
+                android:id="@+id/iv_collapse_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_collapse_arrow"
+                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>-->
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tv_status"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:onClick="changeMode"
-                android:tag="@string/factual_scroll_view"
-                android:text="drag me!!!" />
+                android:textColor="@color/cal_out_month"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="正在连接..."
+                tools:visibility="visible" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_schedule"
-                android:layout_width="match_parent"
+                android:id="@+id/rv_scheduleList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_status"
+                app:layout_goneMarginTop="10dp" />
+
+            <ImageView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:tag="@string/factual_scroll_view" />
-        </LinearLayout>
+                android:src="@drawable/shadow_tab_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:scaleY="-1" />
 
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.necer.calendar.Miui10Calendar>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -151,7 +146,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/miui10Calendar"
         app:layout_constraintStart_toStartOf="@id/miui10Calendar"
-        app:layout_constraintTop_toBottomOf="@id/cl_date_tip"
+        app:layout_constraintTop_toTopOf="@id/weekBar"
         tools:text="2018/02/12 - 2019/01/01=-=-=-=---12345678910abcdefgHiJKLMN"
         tools:visibility="gone" />
 
@@ -172,8 +167,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/miui10Calendar"
         app:layout_constraintStart_toStartOf="@id/miui10Calendar"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/weekBar"
         tools:text="2018/02"
         tools:visibility="visible" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

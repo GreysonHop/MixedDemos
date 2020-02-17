@@ -21,10 +21,12 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.gson.Gson
+import com.testdemo.BaseActivity
 import com.testdemo.R
 import com.testdemo.broken_lib.Utils
 import com.testdemo.testMap.places.StringUtil
 import com.testdemo.testNCalendar.RecyclerViewAdapter
+import com.testdemo.testStartMode.ActivityA
 import com.testdemo.util.PermissionUtils
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -34,16 +36,24 @@ import java.io.IOException
 /**
  * Create by Greyson
  */
-class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
+class TestMapAct : BaseActivity(), OnMapReadyCallback {
 
     private lateinit var mPlacesClient: PlacesClient
     private lateinit var mMap: GoogleMap
     private var mLocateMyGoogle = false
     private val mHandler = Handler()
 
+    override fun getLayoutResId(): Int {
+        return R.layout.act_test_map
+    }
+
+    override fun initView() {
+        setOpenAnim(R.anim.bottom_menu_in, R.anim.activity_hold)
+        setCloseAnim(R.anim.activity_hold, R.anim.bottom_menu_out)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_test_map)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         /*val mapFragment = supportFragmentManager
@@ -56,6 +66,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
         iv_map_locate.setOnClickListener { locateMyLocation(true) }
 
+        tv_show_location.setOnClickListener { startActivity(Intent(this, ActivityA::class.java)) }
 
         //下面是跳转第三方地图应用的例子代码
         btn_start_map.setOnClickListener {
@@ -198,7 +209,7 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun locateMyLocation(animate: Boolean):Boolean {
+    private fun locateMyLocation(animate: Boolean): Boolean {
         var result = false
         if (PermissionUtils.isGranted(android.Manifest.permission.ACCESS_COARSE_LOCATION
                         , android.Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -249,5 +260,4 @@ class TestMapAct : AppCompatActivity(), OnMapReadyCallback {
         super.onDestroy()
         mv_map_google.onDestroy()
     }
-
 }

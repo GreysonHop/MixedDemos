@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.necer.adapter.BaseCalendarAdapter;
 import com.necer.adapter.MonthCalendarAdapter;
+import com.necer.adapter.BaseCalendarAdapter;
 import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 
@@ -23,8 +23,8 @@ public class MonthCalendar extends BaseCalendar {
     }
 
     @Override
-    protected BaseCalendarAdapter getCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs) {
-        return new MonthCalendarAdapter(context, startDate, endDate, initializeDate, attrs);
+    protected BaseCalendarAdapter getCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
+        return new MonthCalendarAdapter(context, startDate, endDate, initializeDate, attrs, baseCalendar);
     }
 
     @Override

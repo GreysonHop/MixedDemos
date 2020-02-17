@@ -1,9 +1,7 @@
 package com.testdemo.testFlipView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -17,6 +15,7 @@ import android.widget.AdapterViewFlipper;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.testdemo.BaseActivity;
 import com.testdemo.R;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 /**
  * Created by Greyson on 2018/1/25.
  */
-public class TestFlipperActivity extends Activity {
+public class TestFlipperActivity extends BaseActivity {
     private final static String TAG = "greyson_TestFlipper";
 
     ViewFlipper viewFlipper;
@@ -33,17 +32,21 @@ public class TestFlipperActivity extends Activity {
     AdapterViewFlipper adapterViewFlipper;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_flipper);
-        viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-
-        initViewFlipper();
-        initPager();
+    protected int getLayoutResId() {
+        return R.layout.test_flipper;
     }
 
-    private void initPager() {
+    @Override
+    protected void initView() {
+        viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        initViewFlipper();
+
         final ArrayList<String> dataList = new ArrayList<>();
         dataList.add("墨鱼");
         dataList.add("死鱼");
@@ -52,7 +55,6 @@ public class TestFlipperActivity extends Activity {
         dataList.add("哇哈哈鱼");
 
         viewPager.setAdapter(new TestAdapter(this, dataList));
-
     }
 
     public void initViewFlipper() {

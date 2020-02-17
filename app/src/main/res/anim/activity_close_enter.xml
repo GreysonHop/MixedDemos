@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500" android:detachWallpaper="true">
+<!--    android:zAdjustment="top"> 能使Activity显示在其它的上一层 -->
+
+    <translate
+        android:fromXDelta="-10%p"
+        android:toXDelta="0" />
+
+    <!--<scale
+
+        android:fromXScale="50%p"
+        android:fromYScale="50%p"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="100%p"
+        android:toYScale="100%p"
+        android:fillEnabled="true"
+        android:fillAfter="true"
+        android:fillBefore="true"/>
+
+    <alpha android:fromAlpha="0.0" android:toAlpha="1.0"
+
+        android:fillEnabled="true"
+        android:fillBefore="true" android:fillAfter="true"
+        />-->
+
+</set>

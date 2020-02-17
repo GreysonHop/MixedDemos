@@ -92,10 +92,7 @@ public abstract class CalendarView extends View {
                     //5行一个矩形高度 mHeight/5, 画图可知,4个5行矩形的高度等于5个6行矩形的高度  故：6行的每一个矩形高度是  (mHeight/5)*4/5
                     float rectHeight5 = height / 5;
                     float rectHeight6 = (height / 5) * 4 / 5;
-                    rectF.set(j * width / 7
-                            , i * rectHeight6 + (rectHeight5 - rectHeight6) / 2
-                            , j * width / 7 + width / 7
-                            , i * rectHeight6 + rectHeight6 + (rectHeight5 - rectHeight6) / 2);
+                    rectF.set(j * width / 7, i * rectHeight6 + (rectHeight5 - rectHeight6) / 2, j * width / 7 + width / 7, i * rectHeight6 + rectHeight6 + (rectHeight5 - rectHeight6) / 2);
                 }
 
                 //开始绘制

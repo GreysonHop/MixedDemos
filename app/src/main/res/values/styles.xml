@@ -1,13 +1,42 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
         <item name="picture.preview.complete.textColor">@color/picture_preview_text_color</item>
+
+        <item name="android:windowBackground">@color/white</item>
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+<!--        <item name="android:windowAnimationStyle">@style/activityAnimations</item>-->
+    </style>
+    <!--整个应用所有Activity通用的动画-->
+    <style name="activityAnimations">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+
+        <!-- <item name="android:windowExitAnimation">@anim/activity_close_exit</item>-->
+        <!-- <item name="android:windowEnterAnimation">@anim/activity_open_enter</item>-->
+    </style>
+
+
+    <style name="AppTheme.BottomSheet" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/bottomSheetAnimation</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+    <!--从下往上打开，从上往下关闭的动画-->
+    <style name="bottomSheetAnimation">
+        <!--为设置的Activity服务-->
+        <item name="android:activityOpenEnterAnimation">@anim/bottom_menu_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_hold</item>
+        <!--为设置的Activity的下一个（堆栈中的上一层）Activity服务，即下一个Activity退出、显示当前设置的Activity时使用的动画!目前看来是这样的关系！-->
+        <!--所以个别情况的Activity动画还是代码里写吧！！！-->
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
     </style>
 
 
@@ -57,6 +86,7 @@
         <item name="android:windowNoTitle">true</item>
 
     </style>
+
 
     <!-- Greyson 自定义选择图片的样式 -->
     <style name="picture.my.style" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -145,6 +175,6 @@
         <!-- 半透明 -->
         <item name="android:windowIsTranslucent">true</item>
         <!-- Dialog进入及退出动画 -->
-        <!--<item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>-->
+        <item name="android:windowAnimationStyle">@style/animBottomMenu</item>
     </style>
 </resources>

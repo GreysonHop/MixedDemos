@@ -4,15 +4,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
+import com.testdemo.BaseActivity
 import com.testdemo.broken_lib.Utils
+import android.os.Build
+import android.transition.TransitionInflater
+import android.view.View
+
+import com.testdemo.R
+
 
 /**
  * Create by Greyson
  */
-class ActivityB : AppCompatActivity() {
+class ActivityB : BaseActivity() {
+
+    lateinit var button: Button
 
     val flagGroups = arrayOf(0
             , Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -22,15 +31,11 @@ class ActivityB : AppCompatActivity() {
             , -1)
     var flagIndex = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.v("greyson", "ActivityB onCreate($savedInstanceState), object=${hashCode()}, taskId=$taskId")
-
+    override fun getLayoutView(): View? {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
-        setContentView(layout)
 
-        val button = Button(this)
+        button = Button(this)
         button.text = "start A"
         button.textSize = Utils.dp2px(20).toFloat()
         layout.addView(button)
@@ -53,10 +58,33 @@ class ActivityB : AppCompatActivity() {
                 intent.removeFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.removeFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             } else {*/
-                intent.flags = flagGroups[flagIndex]
+            intent.flags = flagGroups[flagIndex]
 //            }
             startActivity(intent)
         }
+        return layout
+    }
+
+    override fun initialize() {
+        super.initialize()
+        if (Build.VERSION.SDK_INT >= 21) {//ActivityOptions实现Activity动画
+            window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+            val explode = TransitionInflater.from(this).inflateTransition(R.transition.explode)
+            window.exitTransition = explode
+            window.enterTransition = explode
+            window.reenterTransition = explode
+        }
+    }
+
+    override fun initView() {
+        if (Build.VERSION.SDK_INT >= 21) {//ActivityOptions实现Activity动画
+            button.transitionName = "test_transition"
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.v("greyson", "ActivityB onCreate($savedInstanceState), object=${hashCode()}, taskId=$taskId")
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {

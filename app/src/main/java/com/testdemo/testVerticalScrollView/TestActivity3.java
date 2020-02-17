@@ -2,27 +2,23 @@ package com.testdemo.testVerticalScrollView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.testdemo.R;
+import com.testdemo.testVerticalScrollView.viewPager2.TestViewPager2Act;
 
 import java.util.ArrayList;
 
@@ -79,7 +75,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_act3);
 
-        ThreeScrollView threeScrollView = (ThreeScrollView) findViewById(R.id.threeScrollView);
+        ThreeScrollView threeScrollView = findViewById(R.id.threeScrollView);
 
         threeScrollView.addChildView(findViewById(R.id.firstView));
         threeScrollView.addChildView(findViewById(R.id.holdUpView));
@@ -89,45 +85,42 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         threeScrollView.setOnScrollChangeListener(this);
 
         blurBgIV = findViewById(R.id.blurBgIV);
-        containLayout = (FrameLayout) findViewById(R.id.containLayout);
+        containLayout = findViewById(R.id.containLayout);
 
         managerServiceInfoLayout = findViewById(R.id.managerServiceInfoLayout);
         callerServiceInfoLayout = findViewById(R.id.callerServiceInfoLayout);
-        mediaChatTV = (TextView) findViewById(R.id.mediaChatTV);
-        mediaChatTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*if (containLayout == null || dialogViewPresenter == null || dialogViewPresenter.getDialogView() == null) {
-                    return;
-                }
-                containLayout.addView(dialogViewPresenter.getDialogView());*/
-                dialogViewPresenter.showDialog();
+        mediaChatTV = findViewById(R.id.mediaChatTV);
+        mediaChatTV.setOnClickListener(v -> {
+            /*if (containLayout == null || dialogViewPresenter == null || dialogViewPresenter.getDialogView() == null) {
+                return;
             }
+            containLayout.addView(dialogViewPresenter.getDialogView());*/
+            dialogViewPresenter.showDialog();
         });
 
         handler.postDelayed(myRunnable, 2500);
 
 
         //多页面切换时的小点点
-        indexPointLayout = (IndexPointLayout) findViewById(R.id.indexPointLayout);
+        indexPointLayout = findViewById(R.id.indexPointLayout);
         indexPointLayout.setPointCount(4, 1);
 
-        ProgressBar ratingPB = (ProgressBar) findViewById(R.id.ratingPB);
+        ProgressBar ratingPB = findViewById(R.id.ratingPB);
         ratingPB.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
         ratingPB.setMax(10);
         ratingPB.setProgress(7);
 
-        ProgressBar ratingPB2 = (ProgressBar) findViewById(R.id.ratingPB2);
+        ProgressBar ratingPB2 = findViewById(R.id.ratingPB2);
         ratingPB2.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
         ratingPB2.setMax(10);
         ratingPB2.setProgress(5);
 
-        ProgressBar ratingPB3 = (ProgressBar) findViewById(R.id.ratingPB3);
+        ProgressBar ratingPB3 = findViewById(R.id.ratingPB3);
         ratingPB3.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
         ratingPB3.setMax(10);
         ratingPB3.setProgress(3);
 
-        ProgressBar ratingPB4 = (ProgressBar) findViewById(R.id.ratingPB4);
+        ProgressBar ratingPB4 = findViewById(R.id.ratingPB4);
         ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
         ratingPB4.setMax(10);
         ratingPB4.setProgress(1);
@@ -137,7 +130,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         list.add(R.drawable.ic_launcher);
         list.add(R.mipmap.ic_launcher);
         list.add(R.drawable.ic_camera);
-        OverlayListLayout overlayListLayout = (OverlayListLayout) findViewById(R.id.overlayListLayout);
+        OverlayListLayout overlayListLayout = findViewById(R.id.overlayListLayout);
         overlayListLayout.setAdapter(new AvatarListAdapter(this, list));
         /*ImageView imageView = new ImageView(this);
         imageView.setImageResource(R.drawable.ic_launcher);
@@ -152,13 +145,8 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         imageView3.setBackgroundResource(R.drawable.bg_popup);
         overlayListLayout.addView(imageView3);*/
 
-        final PhoneEditText etPhone = (PhoneEditText) findViewById(R.id.et_phone);
-        findViewById(R.id.btn_print_phone).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(TestActivity3.this, etPhone.getPhone(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        final PhoneEditText etPhone = findViewById(R.id.et_phone);
+        findViewById(R.id.btn_print_phone).setOnClickListener(v -> Toast.makeText(TestActivity3.this, etPhone.getPhone(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -190,19 +178,16 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
     }
 
     private void initDialogView() {
-        mediaChatTV.post(new Runnable() {
-            @Override
-            public void run() {
-                DisplayMetrics metrics = new DisplayMetrics();
-                ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
-                int windowWidth = metrics.widthPixels;
+        mediaChatTV.post(() -> {
+            DisplayMetrics metrics = new DisplayMetrics();
+            ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
+            int windowWidth = metrics.widthPixels;
 
-                int[] locations = new int[2];
-                mediaChatTV.getLocationInWindow(locations);
-                System.out.println("width = " + windowWidth + " - " + mediaChatTV.getWidth() + " - " + locations[0]);
-                dialogViewPresenter.setItemsLayoutMarginRight(windowWidth - locations[0] - mediaChatTV.getWidth());
-                containLayout.addView(dialogViewPresenter.getDialogView());
-            }
+            int[] locations = new int[2];
+            mediaChatTV.getLocationInWindow(locations);
+            System.out.println("width = " + windowWidth + " - " + mediaChatTV.getWidth() + " - " + locations[0]);
+            dialogViewPresenter.setItemsLayoutMarginRight(windowWidth - locations[0] - mediaChatTV.getWidth());
+            containLayout.addView(dialogViewPresenter.getDialogView());
         });
     }
 
@@ -224,6 +209,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
 
     public void onClick(View view) {
         Log.i(TAG, "onClick-" + view.getId());
+        startActivity(new Intent(this, TestViewPager2Act.class));
     }
 
     @Override

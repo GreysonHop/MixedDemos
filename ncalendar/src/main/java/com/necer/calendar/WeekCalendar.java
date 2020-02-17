@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.necer.adapter.BaseCalendarAdapter;
 import com.necer.adapter.WeekCalendarAdapter;
+import com.necer.adapter.BaseCalendarAdapter;
 import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 
@@ -23,8 +23,8 @@ public class WeekCalendar extends BaseCalendar {
     }
 
     @Override
-    protected BaseCalendarAdapter getCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs) {
-        return new WeekCalendarAdapter(context, startDate, endDate, initializeDate, attrs);
+    protected BaseCalendarAdapter getCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
+        return new WeekCalendarAdapter(context, startDate, endDate, initializeDate, attrs, baseCalendar);
     }
 
     @Override
