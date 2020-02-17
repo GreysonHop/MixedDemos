@@ -97,4 +97,5 @@ public interface ICalendar {
     //更新折叠日历的滑动距离
     void updateSlideDistance(int currentDistance);
 
+    public void printCurrentCalendarView();
 }

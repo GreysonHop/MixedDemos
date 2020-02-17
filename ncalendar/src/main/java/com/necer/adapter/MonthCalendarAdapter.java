@@ -3,6 +3,7 @@ package com.necer.adapter;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import com.necer.calendar.BaseCalendar;
 import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 import com.necer.view.CalendarView;
@@ -19,8 +20,8 @@ import java.util.List;
 public class MonthCalendarAdapter extends BaseCalendarAdapter {
 
 
-    public MonthCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs) {
-        super(context, startDate, endDate, initializeDate, attrs);
+    public MonthCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
+        super(context, startDate, endDate, initializeDate, attrs, baseCalendar);
     }
 
     @Override

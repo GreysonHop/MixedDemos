@@ -3,7 +3,6 @@ package com.necer.painter;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 
-import com.necer.calendar.BaseCalendar;
 import com.necer.view.CalendarView;
 
 import org.joda.time.LocalDate;

@@ -14,7 +14,6 @@ import androidx.core.view.NestedScrollingParent;
 
 import android.util.AttributeSet;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -35,7 +34,6 @@ import com.necer.painter.CalendarPainter;
 import com.necer.painter.InnerPainter;
 import com.necer.utils.Attrs;
 import com.necer.utils.AttrsUtil;
-import com.necer.utils.ViewUtil;
 
 import org.joda.time.LocalDate;
 
@@ -45,8 +43,7 @@ import java.util.List;
 /**
  * Created by necer on 2018/11/12.
  */
-public abstract class NCalendar extends FrameLayout implements IICalendar
-        , /*NestedScrollingParent,*/ ValueAnimator.AnimatorUpdateListener {
+public abstract class NCalendar extends FrameLayout implements IICalendar, NestedScrollingParent, ValueAnimator.AnimatorUpdateListener {
 
     protected WeekCalendar weekCalendar;
     protected MonthCalendar monthCalendar;
@@ -175,10 +172,6 @@ public abstract class NCalendar extends FrameLayout implements IICalendar
             }
         }
 
-        //todo I add
-        if (childView != null) {
-            targetView = ViewUtil.getTargetView(getContext(), childView);
-        }
     }
 
     @Override
@@ -655,6 +648,12 @@ public abstract class NCalendar extends FrameLayout implements IICalendar
     }
 
     @Override
+    public void printCurrentCalendarView() {
+        monthCalendar.printCurrentCalendarView();
+        weekCalendar.printCurrentCalendarView();
+    }
+
+    @Override
     public void setDateInterval(String startFormatDate, String endFormatDate, String formatInitializeDate) {
         monthCalendar.setDateInterval(startFormatDate, endFormatDate, formatInitializeDate);
         weekCalendar.setDateInterval(startFormatDate, endFormatDate, formatInitializeDate);
@@ -885,6 +884,7 @@ public abstract class NCalendar extends FrameLayout implements IICalendar
     public int getMonthViewHeight() {
         return monthHeight;
     }
+
     public int getWeekViewHeight() {
         return weekHeight;
     }

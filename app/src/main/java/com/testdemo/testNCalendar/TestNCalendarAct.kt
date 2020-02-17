@@ -8,27 +8,18 @@ import android.os.Handler
 import android.os.Message
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.necer.calendar.BaseCalendar
 import com.necer.calendar.MonthCalendar
 import com.necer.calendar.WeekCalendar
 import com.necer.enumeration.CalendarState
+import com.necer.calendar.BaseCalendar
 import com.testdemo.R
 import kotlinx.android.synthetic.main.act_test_ncalendar.*
 import org.joda.time.LocalDate
 import java.lang.ref.WeakReference
 
 class TestNCalendarAct : Activity() {
-
-    private lateinit var mTvCalendarDate: TextView
-    private lateinit var mTvCalendarYear: TextView
-    private lateinit var mIvCalendarYearPre: ImageView
-    private lateinit var mIvCalendarYearNext: ImageView
-    private lateinit var mGroupCalendarMonthView: Group
 
     private lateinit var mRvSchedule: RecyclerView
 
@@ -37,17 +28,12 @@ class TestNCalendarAct : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_test_ncalendar)
 
-        mTvCalendarDate = findViewById(R.id.tv_calendar_date)
-        mTvCalendarYear = findViewById(R.id.tv_calendar_year)
-        mIvCalendarYearPre = findViewById(R.id.iv_calendar_year_pre)
-        mIvCalendarYearNext = findViewById(R.id.iv_calendar_year_next)
-        mGroupCalendarMonthView = findViewById(R.id.group_calendar_monthView)
-        mRvSchedule = findViewById(R.id.rv_schedule)
+        mRvSchedule = findViewById(R.id.rv_scheduleList)
 
         miui10Calendar.post {
-//            val height = if (miui10Calendar.height == 0) miui10Calendar.measuredHeight else miui10Calendar.height
+            //            val height = if (miui10Calendar.height == 0) miui10Calendar.measuredHeight else miui10Calendar.height
             val params = tv_week_tip.layoutParams
-            params.height = miui10Calendar.weekViewHeight + cl_week_bar.height
+            params.height = miui10Calendar.weekViewHeight + weekBar.height
             tv_week_tip.layoutParams = params
 
             val yBottom = miui10Calendar.y + miui10Calendar.monthViewHeight / 6 * 5
@@ -68,9 +54,9 @@ class TestNCalendarAct : Activity() {
 
         var mWeekFirstDate: LocalDate? = null//
         var mMonthFirstDate: LocalDate? = null
-        miui10Calendar.setNestedScroll(true)
+        miui10Calendar.setNestedScroll(false)
         miui10Calendar.setOnCalendarChangedListener { baseCalendar, year, month, localDate ->
-            Log.v("greyson", "setOnCalendarChangedListener baseCalendar=$baseCalendar")
+            Log.v("greyson", "选择了新日期的回调： baseCalendar=$baseCalendar")
 
 
             /*val curFirstDate = baseCalendar.firstDate
@@ -100,18 +86,15 @@ class TestNCalendarAct : Activity() {
                 }
                 mWeekFirstDate = curFirstDate
             }*/
-
-
-            mTvCalendarDate.text = localDate.toString("今天：yyyy年MM月dd日,E")
-            mTvCalendarYear.text = year.toString()
         }
 
 
         miui10Calendar.setOnCalendarPageChangeListener { baseCalendar: BaseCalendar ->
-            Log.v("greyson", "setOnCalendarPageChangeListener: baseCalendar=$baseCalendar" +
+            Log.v("greyson", "切换了页面的回调: baseCalendar=$baseCalendar" +
                     "\n ${miui10Calendar.calendarState == CalendarState.WEEK}")
 
-            val curFirstDate = baseCalendar.firstDate
+            val curFirstDate = baseCalendar.firstDate ?: return@setOnCalendarPageChangeListener
+
             if (miui10Calendar.calendarState == CalendarState.MONTH && baseCalendar is MonthCalendar) {
 //                Toast.makeText(this, "${curFirstDate.year}年${curFirstDate.monthOfYear}月", Toast.LENGTH_SHORT).show()
                 tv_month_tip.text = "${curFirstDate.year}年${curFirstDate.monthOfYear}月"
@@ -143,12 +126,11 @@ class TestNCalendarAct : Activity() {
 
         miui10Calendar.setOnCalendarStateChangedListener {
             Log.v("greyson", "setOnCalendarStateChangedListener")
-            mGroupCalendarMonthView.visibility = if (it == CalendarState.WEEK) View.GONE else View.VISIBLE
         }
 
 //        val calendarOriginalHeight = miui10Calendar.min
         miui10Calendar.setOnCalendarScrollingListener {
-            println("greyson: setOnCalendarScrollingListener: $it")
+//            println("greyson: setOnCalendarScrollingListener: $it")
 //            miui10Calendar.layoutParams.height -= it.toInt()
         }
 
@@ -182,23 +164,6 @@ class TestNCalendarAct : Activity() {
             }
         }
 
-        mIvCalendarYearPre.setOnClickListener {
-            jumpYear(1)
-        }
-
-        mIvCalendarYearNext.setOnClickListener {
-            jumpYear(2)
-        }
-
-        mTvCalendarYear.setOnClickListener {
-            jumpYear(0)
-        }
-
-        mTvCalendarDate.setOnClickListener {
-            miui10Calendar.jumpDate(LocalDate().toString("yyyy-MM-dd"))
-        }
-
-
         mRvSchedule.layoutManager = LinearLayoutManager(this)
         mRvSchedule.adapter = RecyclerViewAdapter(this)
 
@@ -207,13 +172,20 @@ class TestNCalendarAct : Activity() {
             print("invoke my own method!")
             i.toFloat() == f
         }
-    }
 
-    fun changeMode(view: View) {
-        if (miui10Calendar.calendarState == CalendarState.MONTH) {
-            miui10Calendar.toWeek()
-        } else {
-            miui10Calendar.toMonth()
+        btn_switch.setOnClickListener {
+            if (miui10Calendar.calendarState == CalendarState.WEEK) {
+                miui10Calendar.toMonth()
+            } else {
+                miui10Calendar.toWeek()
+            }
+        }
+        btn_back_today.setOnClickListener {
+            miui10Calendar.toToday()
+        }
+
+        btn_print_calendar_view.setOnClickListener {
+            miui10Calendar.printCurrentCalendarView()
         }
     }
 
