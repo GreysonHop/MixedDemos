@@ -76,20 +76,17 @@ public class TimePicker extends LinearLayout {
         mSelectedHour = mHourView.getCurrentItem();
 //        mHourView.setLineConfig(lineConfig);
         mHourView.setLayoutParams(layoutParams);
-        mHourView.setOnItemPickListener(new OnItemPickListener<String>() {
-            @Override
-            public void onItemPicked(int index, String item) {
-                mSelectedHour = item;
-                if (onWheelListener != null) {
-                    onWheelListener.onHourWheeled(index, item);
-                }
-               /* if (!canLinkage) {
-                    return;
-                }
-//                changeMinuteData(trimZero(item));
-                mMinuteView.setAdapter(new ArrayWheelAdapter<>(minutes));
-                mMinuteView.setCurrentItem(mSelectedMinuteIndex);*/
+        mHourView.setOnItemPickListener((OnItemPickListener<String>) (index, item) -> {
+            mSelectedHour = item;
+            if (onWheelListener != null) {
+                onWheelListener.onHourWheeled(index, item);
             }
+           /* if (!canLinkage) {
+                return;
+            }
+//                changeMinuteData(trimZero(item));
+            mMinuteView.setAdapter(new ArrayWheelAdapter<>(minutes));
+            mMinuteView.setCurrentItem(mSelectedMinuteIndex);*/
         });
         addView(mHourView);
 
@@ -114,13 +111,10 @@ public class TimePicker extends LinearLayout {
 //        mMinuteView.setLineConfig(lineConfig);
         mMinuteView.setLayoutParams(layoutParams);
         addView(mMinuteView);
-        mMinuteView.setOnItemPickListener(new OnItemPickListener<String>() {
-            @Override
-            public void onItemPicked(int index, String item) {
-                mSelectedMinute = item;
-                if (onWheelListener != null) {
-                    onWheelListener.onMinuteWheeled(index, item);
-                }
+        mMinuteView.setOnItemPickListener((OnItemPickListener<String>) (index, item) -> {
+            mSelectedMinute = item;
+            if (onWheelListener != null) {
+                onWheelListener.onMinuteWheeled(index, item);
             }
         });
     }
@@ -268,7 +262,7 @@ public class TimePicker extends LinearLayout {
      * @return 当前分钟间隔下的分钟数据列表中的一项
      */
     private int getNearMinuteInCurrGap(int minute) {
-        int nearMinute = 0;
+        int nearMinute;
         int scale = minute / mMinuteGap;
         int remainder = minute % mMinuteGap;
         if (remainder == 0) {

@@ -1,7 +1,5 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
-import java.util.Locale;
-
 /**
  * 中文的默认实现类
  * 如果你想实现更多的语言请参考Language{@link DPLManager}
@@ -11,11 +9,7 @@ import java.util.Locale;
  *
  * @author AigeStudio 2015-03-28
  */
-public class CN extends DPLManager {
-
-    public CN(Locale locale) {
-        mLocale = locale;
-    }
+public class CN implements ILanguage {
 
     @Override
     public String[] titleMonth() {

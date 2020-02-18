@@ -131,6 +131,14 @@ public class DatePickDialog extends Dialog {
         }
     }
 
+    @Override
+    public void show() {
+        super.show();
+        if (mDPLManager.checkLocale()) {//更新UI
+            updateViewForLocale();
+        }
+    }
+
     /**
      * 改变Dialog的显示模式，并更新视图。这样做方便在同一个界面里面需要使用不同模式的dialog时，不用重新创建新的dialog对象。
      *
@@ -211,8 +219,8 @@ public class DatePickDialog extends Dialog {
 
             selectedDateStr = clickDay;
             Date date = getDateFromStr(clickDay);
-            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(date));
-            mTvOnlyOneSwitch.setText(DPLManager.getInstance().getDateFormat().format(date));
+            cbDateBtn.setText(mDPLManager.getDateFormat().format(date));
+            mTvOnlyOneSwitch.setText(mDPLManager.getDateFormat().format(date));
 
         }));
 
@@ -230,8 +238,29 @@ public class DatePickDialog extends Dialog {
         }
         if (!TextUtils.isEmpty(selectedDateStr)) {
             mCalendarPicker.setSelectedDay(selectedDateStr);
-            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(getDateFromStr(selectedDateStr)));
+            cbDateBtn.setText(mDPLManager.getDateFormat().format(getDateFromStr(selectedDateStr)));
         }
+    }
+
+    private void updateViewForLocale() {
+        //更新周
+        if (mLlWeek != null) {//初始化Dialog时该View还没初始化吧
+            String[] weeks = mDPLManager.titleWeek();
+            for (int i = 0; i < weeks.length && i < mLlWeek.getChildCount(); i++) {
+                TextView tv = (TextView) mLlWeek.getChildAt(i);
+                tv.setText(weeks[i]);
+            }
+        }
+
+        //更新日期和时间的显示
+        if (!TextUtils.isEmpty(selectedDateStr)) {
+            Date date = getDateFromStr(selectedDateStr);
+            if (cbDateBtn != null)
+                cbDateBtn.setText(mDPLManager.getDateFormat().format(date));
+            if (mTvOnlyOneSwitch != null)
+                mTvOnlyOneSwitch.setText(mDPLManager.getDateFormat().format(date));
+        }
+        mTvConfirm.setText(mDPLManager.titleEnsure());
     }
 
     private void setCalendarPanel() {
@@ -353,7 +382,7 @@ public class DatePickDialog extends Dialog {
                     dateStrToParse = selectedDateStr;
                     dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
                 }
-                formatSelectedDateStr = DPLManager.getInstance().getDateFormat().format(dateFormat.parse(dateStrToParse));
+                formatSelectedDateStr = mDPLManager.getDateFormat().format(dateFormat.parse(dateStrToParse));
                 this.selectedDateStr = selectedDateStr;
                 needUpdate = true;
             } catch (Exception e) {
@@ -363,7 +392,7 @@ public class DatePickDialog extends Dialog {
             }
 
 //            cbDateBtn.setText(String.format(Locale.CHINA, "%tY年%tm月%td日", selectDate, selectDate, selectDate));
-//            cbDateBtn.setText(DPLManager.getInstance().getDateFormat().format(selectDate));
+//            cbDateBtn.setText(mDPLManager.getDateFormat().format(selectDate));
 //            mCalendarPicker.setSelectedDay(selectedDateStr);
         }
 
@@ -393,7 +422,7 @@ public class DatePickDialog extends Dialog {
             return;
         }
 
-        updateValue(DPLManager.getInstance().getDateFormat().format(date));
+        updateValue(mDPLManager.getDateFormat().format(date));
         /*cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
         if (mMode == MODE_DATE_AND_TIME) {
