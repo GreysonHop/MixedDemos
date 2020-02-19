@@ -92,7 +92,6 @@ public class TimePicker extends LinearLayout {
         mHourView.setTypeface(Typeface.SERIF);
         mHourView.setDividerType(LineConfig.DividerType.FILL);
 
-//        mHourView.setLineConfig(lineConfig);
         mHourView.setLayoutParams(layoutParams);
         mHourView.setOnItemPickListener((OnItemPickListener<String>) (index, item) -> {
             mSelectedHour = item;

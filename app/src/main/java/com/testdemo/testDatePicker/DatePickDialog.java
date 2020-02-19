@@ -36,6 +36,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Greyson
+ * 2019/10/15 新增 {@link #changeMode(int)} 方法，用于Dialog显示后改变视图模式
  */
 public class DatePickDialog extends Dialog {
     public static final int MODE_DATE_AND_TIME = 10;
@@ -138,9 +139,6 @@ public class DatePickDialog extends Dialog {
             updateViewForLocale();
         }
 
-        /*if (mTimePicker.updateDataForHourStyle()) {//检查小时制是否变化
-        }*/
-
         mTimePicker.updateDataForHourStyle();
         if (mTimePicker.is12_Hour()) {
             cbTimeBtn.setText(String.format(
@@ -156,7 +154,8 @@ public class DatePickDialog extends Dialog {
     /**
      * 改变Dialog的显示模式，并更新视图。这样做方便在同一个界面里面需要使用不同模式的dialog时，不用重新创建新的dialog对象。
      *
-     * @param toBeMode
+     * @param toBeMode 指定dialog的显示模式，有 {@link #MODE_DATE_AND_TIME}显示日期和时间、{@link #MODE_DATE_ONLY}
+     *                 只显示日期、{@link #MODE_TIME_ONLY}只显示时间
      */
     public void changeMode(int toBeMode) {
         if (toBeMode == mMode) {
@@ -281,7 +280,7 @@ public class DatePickDialog extends Dialog {
             @Override
             public void onHourWheeled(int index, String hour) {
                 String timeStr = cbTimeBtn.getText().toString();
-                if (TextUtils.isEmpty(timeStr)) {//todo 是否需要判断12小时制
+                if (TextUtils.isEmpty(timeStr)) {
                     timeStr = "00:" + mTimePicker.getSelectedMinute();
                 }
                 selectedTimeStr = timeStr.replaceFirst("\\w{2}(?=:)", hour);
@@ -302,24 +301,11 @@ public class DatePickDialog extends Dialog {
                 mTvOnlyOneSwitch.setText(selectedTimeStr);
             }
         });
+        //因为TimePicker初始化之前都是默认24小时制来处理时间的，所以这里的selectedTimeStr肯定是24小时制
         if (!TextUtils.isEmpty(selectedTimeStr)) {
             mTimePicker.setSelectedTime(selectedTimeStr);
-            this.selectedTimeStr = parseTimeStr(selectedTimeStr);//
+            this.selectedTimeStr = parseTimeStr(selectedTimeStr);
         }
-    }
-
-    //将组件正常显示的时间结果（如：18:03，或：下午 06:03）解析成24小时制的时分
-    private String parseShowingTimeStr(String timeStr) {
-        if (mTimePicker == null) {//
-            return timeStr;
-        }
-
-        if (mTimePicker.is12_Hour()) {
-            if (mTimePicker.isAmHour()) {
-
-            }
-        }
-        return null;
     }
 
     private void setCalendarPanel() {
@@ -450,22 +436,15 @@ public class DatePickDialog extends Dialog {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println(String.format("传入的日期\"%s\"格式有问题! ", selectedDateStr));
-//                return;
             }
-
-//            cbDateBtn.setText(String.format(Locale.CHINA, "%tY年%tm月%td日", selectDate, selectDate, selectDate));
-//            cbDateBtn.setText(mDPLManager.getDateFormat().format(selectDate));
-//            mCalendarPicker.setSelectedDay(selectedDateStr);
         }
 
         if (!TextUtils.isEmpty(selectedTimeStr)) {
-//            int[] timeMsg = parseTimeStr(selectedTimeStr);
-
             this.selectedTimeStr = parseTimeStr(selectedTimeStr);
             needUpdate = true;
         }
         if (hasInit && needUpdate) {
-            updateValue(formatSelectedDateStr);
+            updateValue(formatSelectedDateStr, selectedTimeStr);
         }
     }
 
@@ -476,7 +455,6 @@ public class DatePickDialog extends Dialog {
      * @return 时、分、12小时制时0为上午，1为下午，-1则说明是24小时制
      */
     private String parseTimeStr(String timeStr) {
-        int[] result = new int[]{0, 0, -1};
         if (timeStr == null || !timeStr.matches("^(([0,1][0-9])|(2[0-3])):([0-5][0-9])$")) {
             return null;//传入的时间不合法
         }
@@ -485,28 +463,21 @@ public class DatePickDialog extends Dialog {
         int offsetIndex = timeStr.indexOf(":");
         int hour = Integer.valueOf(timeStr.substring(0, offsetIndex));
         if (mTimePicker == null) {//还没初始化，按24小时制处理
-            result[0] = hour;
             return timeStr;
 
         } else {
             if (mTimePicker.is12_Hour()) {//TimePicker已经初始化就要判断小时制
                 if (hour >= 12) {
                     resultBuilder.append(mDPLManager.getAmPmStr()[1]).append(" ").append(TimePicker.fillZero(hour - 12));
-                    result[0] = hour - 12;
-                    result[2] = 1;
                 } else {
                     resultBuilder.append(mDPLManager.getAmPmStr()[0]).append(" ").append(TimePicker.fillZero(hour));
-                    result[0] = hour;
-                    result[2] = 0;
                 }
             } else {
                 resultBuilder.append(TimePicker.fillZero(hour));
-                result[0] = hour;
             }
         }
 
-        resultBuilder.append(":").append(selectedTimeStr.substring(offsetIndex + 1));
-        result[1] = Integer.valueOf(selectedTimeStr.substring(offsetIndex + 1));
+        resultBuilder.append(":").append(timeStr.substring(offsetIndex + 1));
         return resultBuilder.toString();
     }
 
@@ -521,9 +492,8 @@ public class DatePickDialog extends Dialog {
         }
         this.selectedDateStr = new SimpleDateFormat("yyyy-M-d", Locale.CHINA).format(date);
         String timeFormatStr;
-        if (mTimePicker.is12_Hour()) {
+        if (mTimePicker != null && mTimePicker.is12_Hour()) {
             timeFormatStr = "a hh:mm";
-//            selectedTimeStr = String.format("%s %s", mDPLManager.getAmPmStr()[mTimePicker.isAmHour() ? 0 : 1], selectedTimeStr);
         } else {
             timeFormatStr = "HH:mm";
         }
@@ -533,15 +503,17 @@ public class DatePickDialog extends Dialog {
             return;
         }
 
-        updateValue(mDPLManager.getDateFormat().format(date));
+        updateValue(mDPLManager.getDateFormat().format(date), new SimpleDateFormat("HH:mm", mDPLManager.getLocale()).format(date));
     }
 
-    private void updateValue(String formatSelectedDateStr) {
+    //该方法里面的selectedTimeStr已经经过12/24小时制的处理
+    private void updateValue(String formatSelectedDateStr, String selectedTimeOf24Hour) {
         cbDateBtn.setText(formatSelectedDateStr);
         cbTimeBtn.setText(selectedTimeStr);
+
         if (mMode == MODE_DATE_AND_TIME) {
             mCalendarPicker.setSelectedDay(selectedDateStr);
-            mTimePicker.setSelectedTime(selectedTimeStr);
+            mTimePicker.setSelectedTime(selectedTimeOf24Hour);
 
         } else if (mMode == MODE_DATE_ONLY) {
             mTvOnlyOneSwitch.setText(formatSelectedDateStr);
@@ -549,7 +521,7 @@ public class DatePickDialog extends Dialog {
 
         } else if (mMode == MODE_TIME_ONLY) {
             mTvOnlyOneSwitch.setText(selectedTimeStr);
-            mTimePicker.setSelectedTime(selectedTimeStr);
+            mTimePicker.setSelectedTime(selectedTimeOf24Hour);
         }
     }
 

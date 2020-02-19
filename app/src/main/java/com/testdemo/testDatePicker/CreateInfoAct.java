@@ -30,6 +30,7 @@ import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.datepicker.cons.DPMode;
 import com.testdemo.testDatePicker.datepicker.views.DatePicker;
 
+import java.util.Date;
 import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -229,7 +230,8 @@ public class CreateInfoAct extends Activity {
             datePickDialog = new DatePickDialog(this);
             datePickDialog.changeMinuteGap(15);
 //            datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
-            datePickDialog.setSelectedDate("2019-12-23", "18:08");
+//            datePickDialog.setSelectedDate(new Date());
+//            datePickDialog.setSelectedDate("2019-12-23", "18:08");
             datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
                 selectedDate = dateStr;
                 selectedTime = timeStr;
@@ -242,7 +244,7 @@ public class CreateInfoAct extends Activity {
 
     public void onClick(View view) {
         getDatePickDialog().show();
-//        datePickDialog.setSelectedDate(new Date());
-//        datePickDialog.setSelectedDate("2019-11-12", "08:08");
+        datePickDialog.setSelectedDate(new Date());
+//        datePickDialog.setSelectedDate("2020-03-12", "18:08");
     }
 }

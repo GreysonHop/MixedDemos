@@ -153,15 +153,12 @@ public class CalendarPicker extends View {
     }
 
     private float mFirstTouchY;
-    private float mLastTouchY;
     private int mTotalScrollY;//标志总共纵向滑动多少距离
     private int mLastTotalScrollY;//标志上一次up事件之后的总共纵向滑动多少距离
     private boolean isScrolling;
-//   private  int verticalIndex;//标志纵向滑动几次
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        System.out.println("greyson CalendarPicker onTouchEvent() action = " + event.getAction() + " , cYear= " + mCurrentYear + " , cMonth=" + mCurrentMonth);
         float y = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -169,8 +166,6 @@ public class CalendarPicker extends View {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-//                mTotalScrollY += y - mLastTouchY;
-
                 if (isScrolling) {
                     mTotalScrollY = mLastTotalScrollY + (int) (mFirstTouchY - y);
                     smoothScrollTo(0, mTotalScrollY);
@@ -215,13 +210,11 @@ public class CalendarPicker extends View {
                 isScrolling = false;
                 break;
         }
-        mLastTouchY = y;
         return true;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        System.out.println("greyson CalendarPicker onDraw()");
         if (mCurrentMonth <= 0 || mCurrentYear <= 0) {
             return;
         }
@@ -242,7 +235,7 @@ public class CalendarPicker extends View {
      */
     private void drawMonthData(Canvas canvas, int x, int y, int year, int month) {
         canvas.save();
-//        canvas.translate(x, y);
+
         int yOffset;
         int myHeight;
         DPInfo[][] info = mCManager.obtainDPInfo(year, month);
@@ -297,6 +290,9 @@ public class CalendarPicker extends View {
 
     private void drawDayText(Canvas canvas, Rect rect, DPInfo dpInfo, int year, int month) {
         String strDay = dpInfo.strG;
+        if (TextUtils.isEmpty(strDay)) {
+            return;//空日期直接跳过不判断、不显示
+        }
         boolean isMonthFirstDay = TextUtils.equals("1", strDay);
         boolean isToday = dpInfo.isToday;
         boolean isWeekend = dpInfo.isWeekend;
@@ -503,7 +499,6 @@ public class CalendarPicker extends View {
                     mOnDayClickListener.onDayClickListener(date, mDateSelected);
                 }
                 invalidate();
-//                Toast.makeText(getContext(), "you click: " + mCurrentYear + "年" + mCurrentMonth + "月" + currentDay + "日", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -524,7 +519,7 @@ public class CalendarPicker extends View {
             mScroller.setFinalX(0);
             mScroller.setFinalY(0);
         }
-//        buildRegion();
+
         computeDate();
         requestLayout();
         invalidate();
@@ -549,11 +544,6 @@ public class CalendarPicker extends View {
             mPreviousYear = mCurrentYear;
             mPreviousMonth = mCurrentMonth - 1;
         }
-
-        /*if (null != onDateChangeListener) {
-            onDateChangeListener.onYearChange(centerYear);
-            onDateChangeListener.onMonthChange(centerMonth);
-        }*/
     }
 
     interface OnDayClickListener {
