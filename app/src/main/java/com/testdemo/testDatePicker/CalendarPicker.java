@@ -6,14 +6,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Region;
+
 import androidx.annotation.Nullable;
+
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
 
-import com.testdemo.R;
 import com.testdemo.broken_lib.Utils;
 import com.testdemo.testDatePicker.datepicker.bizs.calendars.DPCManager;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;

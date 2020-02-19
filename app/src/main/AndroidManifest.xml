@@ -73,7 +73,9 @@
 
         <activity android:name=".testShader.TestShaderAct" />
 
-        <activity android:name=".testDatePicker.CreateInfoAct" />
+        <activity
+            android:name=".testDatePicker.CreateInfoAct"
+            android:screenOrientation="portrait" />
         <activity android:name=".testNCalendar.TestNCalendarAct" />
 
         <activity android:name=".testSpecialEditLayout.popupList.TestPopupListActivity" />

@@ -136,9 +136,14 @@ public class CreateInfoAct extends Activity {
 
         mTimePicker.setOnWheelListener(new TimePicker.OnWheelListener() {
             @Override
+            public void onAmPmWheeled(int index, String amPm) {
+
+            }
+
+            @Override
             public void onHourWheeled(int index, String hour) {
                 String timeStr = cbTimeBtn.getText().toString();
-                selectedTime = timeStr.replaceFirst("^\\w{2}(?=:)", hour);
+                selectedTime = timeStr.replaceFirst("\\w{2}(?=:)", hour);
                 cbTimeBtn.setText(selectedTime);
             }
 
@@ -224,7 +229,7 @@ public class CreateInfoAct extends Activity {
             datePickDialog = new DatePickDialog(this);
             datePickDialog.changeMinuteGap(15);
 //            datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
-            datePickDialog.setSelectedDate("2019-12-23", "09:08");
+            datePickDialog.setSelectedDate("2019-12-23", "18:08");
             datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
                 selectedDate = dateStr;
                 selectedTime = timeStr;

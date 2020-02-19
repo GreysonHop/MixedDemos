@@ -57,6 +57,7 @@ public class DPLManager implements ILanguage {
     /**
      * 如果已经存在Manager对象，则直接返回；如果没有则按照参数生成新的Manager。
      * 如果需要指定Locale而不跟随系统变化可用{@link #setLocaleLocked(boolean)}配合{@link #setLocale(Locale)}
+     *
      * @param localeLocked
      * @param locale
      * @return
@@ -106,6 +107,12 @@ public class DPLManager implements ILanguage {
         return mLanguage.getDateFormatStr();
     }
 
+    @NotNull
+    @Override
+    public String[] getAmPmStr() {
+        return mLanguage.getAmPmStr();
+    }
+
     /**
      * 获取日历的显示格式，如“2017-09-01”，“Jul 2, 2017”
      *
@@ -132,6 +139,7 @@ public class DPLManager implements ILanguage {
 
     /**
      * 设置新的Locale
+     *
      * @param locale
      * @return 跟原来的Locale是否一样，是则更新Manager中的语言相关内容并返回true；否则为false
      */
@@ -153,8 +161,13 @@ public class DPLManager implements ILanguage {
         return true;
     }
 
+    public Locale getLocale() {
+        return this.mLocale;
+    }
+
     /**
      * 检查Locale是否需要更新，是则更新Manager对象并返回true，否则不更新并且返回false
+     *
      * @return 是否更新
      */
     public boolean checkLocale() {

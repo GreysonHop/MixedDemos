@@ -1,5 +1,7 @@
 package com.testdemo.testDatePicker.datepicker.bizs.languages;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 中文的默认实现类
  * 如果你想实现更多的语言请参考Language{@link DPLManager}
@@ -36,4 +38,9 @@ public class CN implements ILanguage {
         return "yyyy年M月d日";
     }
 
+    @NotNull
+    @Override
+    public String[] getAmPmStr() {
+        return new String[]{"上午", "下午"};
+    }
 }

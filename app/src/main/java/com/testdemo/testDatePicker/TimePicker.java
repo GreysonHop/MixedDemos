@@ -3,8 +3,12 @@ package com.testdemo.testDatePicker;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.LinearLayout;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 
 import com.testdemo.R;
 import com.testdemo.broken_lib.Utils;
+import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 import com.testdemo.testDatePicker.wheelView.ArrayWheelAdapter;
 import com.testdemo.testDatePicker.wheelView.LineConfig;
 import com.testdemo.testDatePicker.wheelView.OnItemPickListener;
@@ -24,14 +29,18 @@ import java.util.ArrayList;
  */
 public class TimePicker extends LinearLayout {
 
+    private final WheelView mAmPmView = new WheelView(getContext());
     private final WheelView mHourView = new WheelView(getContext());
     private final WheelView mMinuteView = new WheelView(getContext());
+    private ArrayList<String> mAmPmList = new ArrayList<>();
     private ArrayList<String> mHourList = new ArrayList<>();
     private ArrayList<String> mMinuteList = new ArrayList<>();
 
     private OnWheelListener onWheelListener;
 
+    private short mSelectedAmPm = -1;
     private String mSelectedHour, mSelectedMinute;
+    private int mHourStyle;//小时制，默认为24小时制，除非值等于12
     private int mMinuteGap;//分钟选择器中分钟数之间的间隔，如平时显示的0,1,2...59，间隔为1
 
     public TimePicker(Context context) {
@@ -65,15 +74,24 @@ public class TimePicker extends LinearLayout {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_VERTICAL;
 
-        for (int i = 0; i <= 23; i++) {
-            mHourList.add(fillZero(i));
-        }
+        //上\下午滚轮
+        mAmPmView.setCanLoop(false);
+        mAmPmView.setTypeface(Typeface.SERIF);
+        mAmPmView.setDividerType(LineConfig.DividerType.FILL);
+        mAmPmView.setLayoutParams(layoutParams);
+        mAmPmView.setOnItemPickListener((OnItemPickListener<String>) (index, item) -> {
+            mSelectedAmPm = (short) index;
+            if (onWheelListener != null) {
+                onWheelListener.onAmPmWheeled(index, item);
+            }
+        });
+        addView(mAmPmView);
 
+        //小时滚轮
         mHourView.setCanLoop(false);
         mHourView.setTypeface(Typeface.SERIF);
         mHourView.setDividerType(LineConfig.DividerType.FILL);
-        mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
-        mSelectedHour = mHourView.getCurrentItem();
+
 //        mHourView.setLineConfig(lineConfig);
         mHourView.setLayoutParams(layoutParams);
         mHourView.setOnItemPickListener((OnItemPickListener<String>) (index, item) -> {
@@ -81,15 +99,10 @@ public class TimePicker extends LinearLayout {
             if (onWheelListener != null) {
                 onWheelListener.onHourWheeled(index, item);
             }
-           /* if (!canLinkage) {
-                return;
-            }
-//                changeMinuteData(trimZero(item));
-            mMinuteView.setAdapter(new ArrayWheelAdapter<>(minutes));
-            mMinuteView.setCurrentItem(mSelectedMinuteIndex);*/
         });
         addView(mHourView);
 
+        //时间冒号
         TextView labelView = new TextView(getContext());
         LayoutParams lableLP = new LayoutParams(layoutParams.width, layoutParams.height);
         lableLP.gravity = layoutParams.gravity;
@@ -102,21 +115,78 @@ public class TimePicker extends LinearLayout {
         labelView.setText(":");
         addView(labelView);
 
-        //分钟
+        //分钟滚轮
         mMinuteView.setCanLoop(false);
         mMinuteView.setTypeface(Typeface.DEFAULT);
-        mSelectedMinute = updateMinuteDateWithGap(mMinuteGap);
+        /*mSelectedMinute = */
+        updateMinuteDateWithGap(mMinuteGap);
 
         mMinuteView.setDividerType(LineConfig.DividerType.FILL);
 //        mMinuteView.setLineConfig(lineConfig);
         mMinuteView.setLayoutParams(layoutParams);
-        addView(mMinuteView);
         mMinuteView.setOnItemPickListener((OnItemPickListener<String>) (index, item) -> {
             mSelectedMinute = item;
             if (onWheelListener != null) {
                 onWheelListener.onMinuteWheeled(index, item);
             }
         });
+        addView(mMinuteView);
+        updateDataForHourStyle();
+    }
+
+    public boolean updateDataForHourStyle() {
+        int timeFormat = Settings.System.getInt(getContext().getContentResolver(), Settings.System.TIME_12_24, 24);
+        if (timeFormat == mHourStyle) {
+            return false;
+        }
+
+        mAmPmList.clear();
+        String[] amPm = DPLManager.getInstance().getAmPmStr();
+        mAmPmList.add(amPm[0]);
+        mAmPmList.add(amPm[1]);
+        mAmPmView.setAdapter(new ArrayWheelAdapter<>(mAmPmList));
+
+        mHourList.clear();
+        final int hourLimit = timeFormat == 12 ? 12 : 24;
+        for (int i = 0; i < hourLimit; i++) {
+            mHourList.add(fillZero(i));
+        }
+        mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
+
+        if (timeFormat == 12) {
+            if (!TextUtils.isEmpty(mSelectedHour)) {//原来是24小时制，判断小时是否超过12点
+                String newHourStr;
+                int originalHour = Integer.valueOf(mSelectedHour);
+                if (originalHour >= 12) {
+                    newHourStr = fillZero(originalHour - 12);
+                    mAmPmView.setCurrentItem(mSelectedAmPm = 1);
+                } else {
+                    newHourStr = mSelectedHour;
+                    mAmPmView.setCurrentItem(mSelectedAmPm = 0);
+                }
+                mSelectedHour = newHourStr;
+                mHourView.setCurrentItem(mHourList.indexOf(newHourStr));
+            }
+            mAmPmView.setVisibility(VISIBLE);
+
+        } else {
+            //如果12小时制时是下午的时间，则小时数增加12
+            if (!TextUtils.isEmpty(mSelectedHour)) {
+                String newHourStr;
+                if (mSelectedAmPm == 1) {
+                    newHourStr = String.valueOf(Integer.valueOf(mSelectedHour) + 12);
+                } else {
+                    newHourStr = mSelectedHour;
+                }
+                mSelectedHour = newHourStr;
+                mHourView.setCurrentItem(mHourList.indexOf(newHourStr));
+            }
+
+            mAmPmView.setVisibility(GONE);
+        }
+//        mSelectedHour = mHourView.getCurrentItem();
+        mHourStyle = timeFormat;
+        return true;
     }
 
     /**
@@ -186,6 +256,14 @@ public class TimePicker extends LinearLayout {
         return number < 10 ? "0" + number : String.valueOf(number);
     }
 
+    public boolean is12_Hour() {
+        return mHourStyle == 12;
+    }
+
+    public boolean isAmHour() {
+        return mSelectedAmPm == 0;
+    }
+
     public String getSelectedHour() {
         return mSelectedHour;
     }
@@ -212,13 +290,16 @@ public class TimePicker extends LinearLayout {
         if (mMinuteGap == 15) {
             if (timeStr.matches("^(([0,1][0-9])|(2[0-3])):((00)|(15)|(30)|(45))$")) {//传入的时间的分钟数刚好是15分为间隔
                 String[] times = timeStr.split(":");
+                parseTimeForHourStyle(times);
                 mSelectedHour = times[0];
                 mSelectedMinute = times[1];
+
                 mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
                 mMinuteView.setCurrentItem(mMinuteList.indexOf(mSelectedMinute));
 
             } else {
                 String[] times = timeStr.split(":");
+                parseTimeForHourStyle(times);
                 mSelectedHour = times[0];
                 mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
 
@@ -233,10 +314,23 @@ public class TimePicker extends LinearLayout {
             }
         } else {
             String[] times = timeStr.split(":");
+            parseTimeForHourStyle(times);
             mSelectedHour = times[0];
             mSelectedMinute = times[1];
             mHourView.setCurrentItem(mHourList.indexOf(mSelectedHour));
             mMinuteView.setCurrentItem(mMinuteList.indexOf(mSelectedMinute));
+        }
+    }
+
+    private void parseTimeForHourStyle(String[] times) {
+        if (is12_Hour()) {
+            int hour = Integer.valueOf(times[0]);
+            if (hour >= 12) {
+                mAmPmView.setCurrentItem(mSelectedAmPm = 1);
+                times[0] = fillZero(hour - 12);
+            } else {
+                mAmPmView.setCurrentItem(mSelectedAmPm = 0);
+            }
         }
     }
 
@@ -275,11 +369,21 @@ public class TimePicker extends LinearLayout {
         return nearMinute;
     }
 
+    public void updateViewForLocale() {
+        mAmPmList.clear();
+        String[] amPm = DPLManager.getInstance().getAmPmStr();
+        mAmPmList.add(amPm[0]);
+        mAmPmList.add(amPm[1]);
+        mAmPmView.setAdapter(new ArrayWheelAdapter<>(mAmPmList));
+    }
+
     public void setOnWheelListener(OnWheelListener onWheelListener) {
         this.onWheelListener = onWheelListener;
     }
 
     public interface OnWheelListener {
+
+        void onAmPmWheeled(int index, String amPm);
 
         void onHourWheeled(int index, String hour);
 

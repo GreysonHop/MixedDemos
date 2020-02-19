@@ -38,6 +38,8 @@ interface ILanguage {
      */
     fun titleWeek(): Array<String>
 
+    fun getAmPmStr(): Array<String>
+
     /**
      * 获取日历的显示格式，如“2017-09-01”，“Jul 2, 2017”
      *
