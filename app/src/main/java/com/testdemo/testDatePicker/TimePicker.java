@@ -146,8 +146,9 @@ public class TimePicker extends LinearLayout {
         mAmPmView.setAdapter(new ArrayWheelAdapter<>(mAmPmList));
 
         mHourList.clear();
-        final int hourLimit = timeFormat == 12 ? 12 : 24;
-        for (int i = 0; i < hourLimit; i++) {
+        final int start = timeFormat == 12 ? 1 : 0;
+        final int end = timeFormat == 12 ? 12 : 23;
+        for (int i = start; i <= end; i++) {
             mHourList.add(fillZero(i));
         }
         mHourView.setAdapter(new ArrayWheelAdapter<>(mHourList));
@@ -156,11 +157,12 @@ public class TimePicker extends LinearLayout {
             if (!TextUtils.isEmpty(mSelectedHour)) {//原来是24小时制，判断小时是否超过12点
                 String newHourStr;
                 int originalHour = Integer.valueOf(mSelectedHour);
-                if (originalHour >= 12) {
-                    newHourStr = fillZero(originalHour - 12);
+                if (originalHour >= 12) {//下午的时间处理，24小时制的12:00将显示为：下午12:00
+                    newHourStr = fillZero(originalHour == 12 ? 12 : originalHour - 12);
                     mAmPmView.setCurrentItem(mSelectedAmPm = 1);
-                } else {
-                    newHourStr = mSelectedHour;
+
+                } else {//早上的时间处理，24小时制的00:00将显示为：上午12:00
+                    newHourStr = originalHour == 0 ? fillZero(12) : mSelectedHour;
                     mAmPmView.setCurrentItem(mSelectedAmPm = 0);
                 }
                 mSelectedHour = newHourStr;
@@ -169,13 +171,20 @@ public class TimePicker extends LinearLayout {
             mAmPmView.setVisibility(VISIBLE);
 
         } else {
-            //如果12小时制时是下午的时间，则小时数增加12
+            //如果原来12小时制时是下午的时间，则小时数增加12
             if (!TextUtils.isEmpty(mSelectedHour)) {
                 String newHourStr;
+                int hour = Integer.valueOf(mSelectedHour);
                 if (mSelectedAmPm == 1) {
-                    newHourStr = String.valueOf(Integer.valueOf(mSelectedHour) + 12);
-                } else {
-                    newHourStr = mSelectedHour;
+                    if (hour != 12) {
+                        hour += 12;
+                    }
+                    newHourStr = String.valueOf(hour);
+                } else {//上午12点转成24小时制
+                    if (hour == 12) {
+                        hour = 0;
+                    }
+                    newHourStr = fillZero(hour);
                 }
                 mSelectedHour = newHourStr;
                 mHourView.setCurrentItem(mHourList.indexOf(newHourStr));
@@ -209,35 +218,6 @@ public class TimePicker extends LinearLayout {
         mMinuteView.setCurrentItem(selectedIndex);
         return mSelectedMinute;
     }
-
-    /*private void changeMinuteData(int selectedHour) {
-        if (startHour == endHour) {
-            if (startMinute > endMinute) {
-                int temp = startMinute;
-                startMinute = endMinute;
-                endMinute = temp;
-            }
-            for (int i = startMinute; i <= endMinute; i+= stepMinute) {
-                minutes.add(DateUtils.fillZero(i));
-            }
-        } else if (selectedHour == startHour) {
-            for (int i = startMinute; i <= 59; i+= stepMinute) {
-                minutes.add(DateUtils.fillZero(i));
-            }
-        } else if (selectedHour == endHour) {
-            for (int i = 0; i <= endMinute; i+= stepMinute) {
-                minutes.add(DateUtils.fillZero(i));
-            }
-        } else {
-            for (int i = 0; i <= 59; i+= stepMinute) {
-                minutes.add(DateUtils.fillZero(i));
-            }
-        }
-        if (minutes.indexOf(selectedMinute) == -1) {
-            //当前设置的分钟不在指定范围，则默认选中范围开始的分钟
-            selectedMinute = minutes.get(0);
-        }
-    }*/
 
     public static int trimZero(@NonNull String text) {
         try {
@@ -326,8 +306,9 @@ public class TimePicker extends LinearLayout {
             int hour = Integer.valueOf(times[0]);
             if (hour >= 12) {
                 mAmPmView.setCurrentItem(mSelectedAmPm = 1);
-                times[0] = fillZero(hour - 12);
+                times[0] = fillZero(hour == 12 ? 12 : hour - 12);
             } else {
+                times[0] = hour == 0 ? fillZero(12) : times[0];
                 mAmPmView.setCurrentItem(mSelectedAmPm = 0);
             }
         }

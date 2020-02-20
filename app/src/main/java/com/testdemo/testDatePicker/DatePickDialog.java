@@ -267,7 +267,7 @@ public class DatePickDialog extends Dialog {
             public void onAmPmWheeled(int index, String amPm) {
                 String timeStr = cbTimeBtn.getText().toString();
                 if (TextUtils.isEmpty(timeStr)) {
-                    timeStr = mDPLManager.getAmPmStr()[index] + " 00:00";
+                    timeStr = mDPLManager.getAmPmStr()[index] + " 01:00";
                 } else {
                     timeStr = mDPLManager.getAmPmStr()[index] + timeStr.substring(2);
                 }
@@ -371,14 +371,23 @@ public class DatePickDialog extends Dialog {
             if (onDatePickListener != null) {
                 String result;
                 if (mTimePicker.is12_Hour()) {
-                    String hourStr = mTimePicker.getSelectedHour();
-                    if (mTimePicker.isAmHour()) {
-                        result = String.format("%s:%s", hourStr, mTimePicker.getSelectedMinute());
-                    } else {
-                        result = String.format("%s:%s", TimePicker.fillZero(Integer.valueOf(hourStr) + 12), mTimePicker.getSelectedMinute());
+                    try {
+                        Date date = new SimpleDateFormat("a hh:mm", mDPLManager.getLocale()).parse(selectedTimeStr);
+                        result = new SimpleDateFormat("HH:mm", mDPLManager.getLocale()).format(date);
+                    } catch (Exception e) {//保险措施
+                        String hourStr = mTimePicker.getSelectedHour();
+                        if (mTimePicker.isAmHour()) {
+                            result = String.format("%s:%s", hourStr, mTimePicker.getSelectedMinute());
+                        } else {
+                            int hour = Integer.valueOf(hourStr);
+                            if (hour != 12) {
+                                hour += 12;
+                            }
+                            result = String.format("%s:%s", TimePicker.fillZero(hour), mTimePicker.getSelectedMinute());
+                        }
                     }
                 } else {
-                    result = cbTimeBtn.getText().toString();
+                    result = selectedTimeStr;
                 }
                 onDatePickListener.onDatePick(selectedDateStr, result);
             }
@@ -579,7 +588,7 @@ public class DatePickDialog extends Dialog {
     private Date getDateFromStr(String dateStr) {
         String[] dateDatas = dateStr.split("-");
 
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(mDPLManager.getLocale());
         calendar.set(Calendar.YEAR, Integer.valueOf(dateDatas[0]));
         calendar.set(Calendar.MONTH, Integer.valueOf(dateDatas[1]) - 1);
         calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dateDatas[2]));
