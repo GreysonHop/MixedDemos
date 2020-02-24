@@ -29,6 +29,7 @@ import com.testdemo.testRecyclerViewType.TestRecyclerViewAct
 import com.testdemo.testShader.TestShaderAct
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
 import com.testdemo.testStartMode.ActivityA
+import com.testdemo.testStartMode.ConstraintAnimAct
 import com.testdemo.testVerticalScrollView.TestActivity3
 
 /**
@@ -61,6 +62,7 @@ class MainActivity : ListActivity() {
         menuListMap["RecyclerView实现的日历"] = DateMsgLogAct::class.java
         menuListMap["测试启动模式"] = ActivityA::class.java
         menuListMap["测试绘画相关属性"] = TestCanvasActivity::class.java
+        menuListMap["Constraint动画"] = ConstraintAnimAct::class.java
 
 
         classNameList.addAll(menuListMap.keys)

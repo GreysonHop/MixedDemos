@@ -108,6 +108,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".testStartMode.ActivityB" />
+        <activity android:name=".testStartMode.ConstraintAnimAct" />
 
         <activity android:name=".testCanvas.TestCanvasActivity" />
 
