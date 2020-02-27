@@ -50,9 +50,26 @@ fun main() {
     /*list3.add(Paint())
     list3.add(Goods())
     list3.add(Thing())*/ //全部报错
-    list3.get(0)
+    //list3.get(0)
 //    var goods3: Paint = list3.get(0)//传说中的取出安全，传入不安全！！
-    var goods31: Thing = list3.get(0)
+    //var goods31: Thing = list3.get(0)
+
+    getMeter()
+}
+
+
+fun getMeter(): Array<Array<Meter>> {
+//    val array2D : Array<Array<Thing>> = Array(6) { Array(7) { Goods()} }
+    val info = Array<Array<Meter>>(6) { emptyArray() }
+//    val info = Array<Array<Meter>>(6) { Array<Meter>(7) { Meter()} }
+
+    for (i in info.indices) {
+        println("row=${i}")
+        for (j in info[0].indices) {
+            println("column=$j")
+        }
+    }
+    return info
 }
 
 class Stores<T> {
@@ -81,7 +98,9 @@ class Store {
     }
 }
 
-open class Thing {
+interface Meter
+
+open class Thing : Meter {
     var name: String? = null
     open fun exist(): Boolean {
         return false

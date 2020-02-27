@@ -51,7 +51,7 @@ class MainActivity : ListActivity() {
         menuListMap["子View可被拉伸回弹的ScrollView"] = DraggableScrollViewAct::class.java
         menuListMap["中间刷新的List"] = CollapsingRecyclerActivity::class.java
         menuListMap["仿QQ横向图片选择器"] = TestPictureSelectAct::class.java
-        menuListMap["可滚动缩放的编辑器"] = SpecialEditLayoutAct::class.java
+        menuListMap["常见聊天界面例子——可滚动缩放的编辑器"] = SpecialEditLayoutAct::class.java
         menuListMap["礼物动画框架例子SVGA"] = TestGiftAnimAct::class.java
         menuListMap["自定义组件中的shader应用和圆角ViewGroup"] = TestShaderAct::class.java
         menuListMap["自定义年月日时分秒选择器"] = CreateInfoAct::class.java

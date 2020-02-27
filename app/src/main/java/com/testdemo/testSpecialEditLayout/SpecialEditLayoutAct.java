@@ -76,43 +76,9 @@ public class SpecialEditLayoutAct extends Activity {
             }
         });
 
-        List<String> menuList = Arrays.asList(
-                /*"拷贝--你狗狗的DNA-pu na na na!!?!",
-                "全部删除",
-                "转发",
-                "随便点",
-                "引用",
-                "删除",
-                "多选",
-                "销毁"*/
-                "recall", "copy", "forward", "quote", "alerts", "delete", "multiple selection"
-        );
-//        MenuPopupWindow
+        fl_content.postDelayed(() -> showMenuPopup(), 3000);
         fl_content.setOnLongClickListener((v) -> {
-            /*if (mPopupWindow == null) {
-                mPopupWindow = new PopupWindow(this);
-                mPopupWindow.setOutsideTouchable(true);
-                mPopupWindow.setBackgroundDrawable(null);
-                mMenuLinearLayout = new MenuLinearLayout(this);
-                mMenuLinearLayout.setOnMenuClickListener((view) -> {
-                    Toast.makeText(this, "you click: " + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-                    mPopupWindow.dismiss();
-                });
-                mPopupWindow.setContentView(mMenuLinearLayout);
-                mMenuLinearLayout.setMenuList(menuList);
-            }
-            mPopupWindow.showAsDropDown(fl_content);*/
-
-            if (menuPopUp == null) {
-                menuPopUp = new MenuPopUp(this);
-                menuPopUp.setMenuList(menuList);
-                menuPopUp.setOnMenuClickListener((view, position) -> {
-                    System.out.println(view + " -- " + position);
-                    Toast.makeText(this, "press: " + position, Toast.LENGTH_SHORT).show();
-                });
-            }
-            menuPopUp.showPopupWindow(fl_content, mOffsetX, mOffsetY, false, true);
-//            menuPopUp.showPopupWindow(fl_content);
+            showMenuPopup();
             return true;
         });
 
@@ -177,6 +143,45 @@ public class SpecialEditLayoutAct extends Activity {
         );*/
 
         setTextClickable();
+    }
+
+    private void showMenuPopup() {
+        List<String> menuList = Arrays.asList(
+                /*"拷贝--你狗狗的DNA-pu na na na!!?!",
+                "全部删除",
+                "转发",
+                "随便点",
+                "引用",
+                "删除",
+                "多选",
+                "销毁"*/
+                "recall", "copy", "forward", "quote", "alerts", "delete", "multiple selection"
+        );
+
+         /*if (mPopupWindow == null) {
+                mPopupWindow = new PopupWindow(this);
+                mPopupWindow.setOutsideTouchable(true);
+                mPopupWindow.setBackgroundDrawable(null);
+                mMenuLinearLayout = new MenuLinearLayout(this);
+                mMenuLinearLayout.setOnMenuClickListener((view) -> {
+                    Toast.makeText(this, "you click: " + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                    mPopupWindow.dismiss();
+                });
+                mPopupWindow.setContentView(mMenuLinearLayout);
+                mMenuLinearLayout.setMenuList(menuList);
+            }
+            mPopupWindow.showAsDropDown(fl_content);*/
+
+        if (menuPopUp == null) {
+            menuPopUp = new MenuPopUp(this);
+            menuPopUp.setMenuList(menuList);
+            menuPopUp.setOnMenuClickListener((view, position) -> {
+                System.out.println(view + " -- " + position);
+                Toast.makeText(this, "press: " + position, Toast.LENGTH_SHORT).show();
+            });
+        }
+        menuPopUp.showPopupWindow(fl_content, mOffsetX, mOffsetY, false, true);
+//      menuPopUp.showPopupWindow(fl_content);
     }
 
     private void setTextClickable() {

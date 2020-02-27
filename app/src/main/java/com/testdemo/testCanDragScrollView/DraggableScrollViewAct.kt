@@ -14,7 +14,7 @@ class DraggableScrollViewAct : Activity() {
         setContentView(R.layout.act_draggable_scroll)
         
         cardLayout.setOnClickListener{
-            Log.i("DraggableScrollViewAct_Old", "cardLayout is clicked!!!!!")
+            Log.i("DraggableScrollViewAct", "cardLayout is clicked!!!!!")
             userContactLayout.visibility = if (userContactLayout.visibility == View.GONE) View.VISIBLE else View.GONE
         }
     }
