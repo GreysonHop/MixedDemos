@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +40,8 @@ public class TestJava {
         ArrayList<? extends Goods> list2 = new ArrayList<Paint>();
 //        list2.add(new Book());
 //        list2.add(new Goods());//什么都不能加。。。？？？
+
+        testStringRegex();
     }
 
     public String getInstance(int type) {
@@ -65,6 +68,18 @@ public class TestJava {
 
         System.out.println(pattern.matcher(test1).matches() + "\n" + pattern.matcher(test2).matches()
                 + "\n" + pattern.matcher(test3).matches() + "\n" + pattern.matcher(test4).matches());
+    }
+
+    public static void testStringRegex() {
+        String[] list = { "yang-vo,id", "yangw/oid", "yang,uo1id"};
+        for (int i = 0; i < list.length; i++) {
+            System.out.println(list[i] = list[i].replaceAll("[^a-z]", ""));
+        }
+        Arrays.sort(list, 0, list.length, String::compareToIgnoreCase);
+        System.out.println("排序后：");
+        for (String s : list) {
+            System.out.println(s);
+        }
     }
 
     public static void testDecimalFormat() {

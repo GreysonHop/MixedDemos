@@ -1,7 +1,9 @@
 package com.testdemo.testVerticalScrollView;
 
 import android.content.Context;
+
 import androidx.appcompat.widget.AppCompatEditText;
+
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -13,6 +15,10 @@ import java.util.regex.Pattern;
  * Created by greyson on 2018/9/4.
  */
 public class PhoneEditText extends AppCompatEditText {
+
+    private final Pattern mTwoGapPattern = Pattern.compile("^\\d{3} \\d{4} \\d{1,4}$");
+    private final Pattern mOneGapPattern = Pattern.compile("^\\d{3} \\d{1,4}$");
+    private final Pattern mNoGapPattern = Pattern.compile("^\\d{1,3}$");
 
     public PhoneEditText(Context context) {
         super(context);
@@ -36,60 +42,61 @@ public class PhoneEditText extends AppCompatEditText {
 
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        super.onTextChanged(text, start, lengthBefore, lengthAfter);
-
         if (text.length() <= 0) {
             return;
         }
 
-        if (text.length() >= 10 && Pattern.compile("^\\d{3} \\d{4} \\d{1,4}$").matcher(text).matches()
-                || text.length() >= 5 && Pattern.compile("^\\d{3} \\d{1,4}$").matcher(text).matches()
-                || Pattern.compile("^\\d{1,3}$").matcher(text).matches()) {
+        if (text.length() >= 10 && mTwoGapPattern.matcher(text).matches()
+                || text.length() >= 5 && mOneGapPattern.matcher(text).matches()
+                || mNoGapPattern.matcher(text).matches()) {
             return;
-        } else {
+        }
 
-            boolean isAddAction = lengthBefore == 0 && lengthAfter == 1;
+        boolean isAddAction = lengthBefore == 0 && lengthAfter == 1;
 
-            int selection = getSelectionStart();
-            StringBuilder result = new StringBuilder(text.toString().replace(" ", ""));
-            if (result.length() < 4) {
-                setText(result);
-                setSelection(selection > result.length() ? result.length() : selection);
-                return;
-            }
-
-            if (result.length() >= 4) {
-                if (result.charAt(3) != ' ') {
-                    result.insert(3, ' ');
-                    if (isAddAction && selection == 4)
-                        selection++;
-                }
-            }
-
-            if (result.length() >= 9) {
-                if (result.charAt(8) != ' ') {
-                    result.insert(8, ' ');
-                    if (isAddAction && selection == 9)
-                        selection++;
-                }
-            }
-
-            if (result.length() > 13) {//只保留13位
-                result.delete(13, result.length());
-            }
-
+        int selection = getSelectionStart();
+        StringBuilder result = new StringBuilder(text.toString().replace(" ", ""));
+        if (result.length() < 4) {
             setText(result);
             setSelection(selection > result.length() ? result.length() : selection);
-
+            return;
         }
+
+        if (result.length() >= 4) {
+            if (result.charAt(3) != ' ') {
+                result.insert(3, ' ');
+                if (isAddAction && selection == 4)
+                    selection++;
+            }
+        }
+
+        if (result.length() >= 9) {
+            if (result.charAt(8) != ' ') {
+                result.insert(8, ' ');
+                if (isAddAction && selection == 9)
+                    selection++;
+            }
+        }
+
+        if (result.length() > 13) {//只保留13位
+            result.delete(13, result.length());
+        }
+
+        setText(result);
+        setSelection(selection > result.length() ? result.length() : selection);
+
     }
 
     public String getPhone() {
-        String result = getText().toString();
-        if (result == null || result.length() == 0) {
+        if (getText() == null) {
             return "";
         } else {
-            return result.replace(" ", "");
+            String result = getText().toString();
+            if (result.length() == 0) {
+                return "";
+            } else {
+                return result.replace(" ", "");
+            }
         }
     }
 }

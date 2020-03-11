@@ -119,7 +119,7 @@ public class MenuPopUp {
             mPopupWindow = new PopupWindow(mContext);
             mPopupWindow.setContentView(mLlPopUpContent);
             mPopupWindow.setOutsideTouchable(true);
-            mPopupWindow.setFocusable(true);
+            mPopupWindow.setFocusable(false);
             mPopupWindow.setBackgroundDrawable(null);
         }
 
