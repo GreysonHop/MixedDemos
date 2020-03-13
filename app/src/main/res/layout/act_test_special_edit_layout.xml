@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:focusableInTouchMode="true"
             android:background="#fafafa">
 
             <EditText
@@ -49,6 +50,7 @@
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/iv_gift"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/call_icon_gift" />
@@ -134,12 +136,13 @@
             tools:text="我是测试TextView的点击而存在的，我换行换行了，怎么样呢" />
 
         <com.testdemo.testPictureSelect.SuitedImageView
+            android:id="@+id/iv_picture"
             android:layout_width="275dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:maxHeight="470dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/timg"
+            tools:src="@drawable/timg"
             app:resize_base_on="width" />
 
     </LinearLayout>

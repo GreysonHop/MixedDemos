@@ -71,7 +71,6 @@ public class ToolLayout extends LinearLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d("greyson", "ToolLayout's onMeasure() " + getChildCount());
     }
 
     /**
