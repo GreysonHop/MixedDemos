@@ -30,6 +30,7 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
     protected LocalDate mInitializeDate;
     protected Attrs mAttrs;
 
+    private OnDataBoundForPage mOnDataBoundForPage;
 
     public BaseCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
         this.mContext = context;
@@ -84,6 +85,19 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
     }
 
     @Override
+    public void onViewAttachedToWindow(@NonNull MyViewHolder holder) {
+        print("onViewAttachedToWindow()", holder);
+        ViewGroup parent = (ViewGroup) holder.itemView;
+        View view = parent.getChildAt(0);
+        if (view != null) {
+            if (mOnDataBoundForPage != null) {
+                mOnDataBoundForPage.onPageAttachedToWindow((Integer) view.getTag());
+            }
+        }
+        super.onViewAttachedToWindow(holder);
+    }
+
+    @Override
     public void onViewDetachedFromWindow(@NonNull MyViewHolder holder) {
         print("onViewDetachedFromWindow()", holder);
         super.onViewDetachedFromWindow(holder);
@@ -93,12 +107,6 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
     public void onViewRecycled(@NonNull MyViewHolder holder) {
         print("onViewRecycled()", holder);
         super.onViewRecycled(holder);
-    }
-
-    @Override
-    public boolean onFailedToRecycleView(@NonNull MyViewHolder holder) {
-        print("onFailedToRecycleView()", holder);
-        return super.onFailedToRecycleView(holder);
     }
 
     private void print(String logType, @NonNull MyViewHolder holder) {
@@ -131,6 +139,18 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
             super(view);
 
         }
+    }
+
+    public interface OnDataBoundForPage {
+        void onPageAttachedToWindow(final int position);
+    }
+
+    public OnDataBoundForPage getOnDataBoundForPage() {
+        return mOnDataBoundForPage;
+    }
+
+    public void setOnDataBoundForPage(OnDataBoundForPage onDataBoundForPage) {
+        this.mOnDataBoundForPage = onDataBoundForPage;
     }
 
 }
