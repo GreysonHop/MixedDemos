@@ -52,46 +52,14 @@ class TestNCalendarAct : Activity() {
         val workdayList = arrayListOf("2019-10-01", "2019-11-02", "2019-12-01")
         madTalkPainter.setLegalHolidayList(holidayList, workdayList)
 
-        var mWeekFirstDate: LocalDate? = null//
-        var mMonthFirstDate: LocalDate? = null
         miui10Calendar.setNestedScroll(false)
         miui10Calendar.setOnCalendarChangedListener { baseCalendar, year, month, localDate ->
-            Log.v("greyson", "选择了新日期的回调： baseCalendar=$baseCalendar")
-
-
-            /*val curFirstDate = baseCalendar.firstDate
-            if (baseCalendar is MonthCalendar) {//月视图切换月
-                if (mMonthFirstDate != null && curFirstDate != mMonthFirstDate) {
-                    Toast.makeText(this, "${curFirstDate.year}年${curFirstDate.monthOfYear}月", Toast.LENGTH_SHORT).show()
-                }
-                mMonthFirstDate = curFirstDate
-
-            } else if (baseCalendar is WeekCalendar) {//切换周
-                if (mWeekFirstDate != null && curFirstDate != mWeekFirstDate) {
-                    val weekLastDate = curFirstDate.plusDays(6)
-                    var endYear = ""
-                    var endMonth = ""
-                    if (curFirstDate.year != weekLastDate.year) {
-                        endYear = "${weekLastDate.year}年"
-                    }
-                    if (curFirstDate.monthOfYear != weekLastDate.monthOfYear) {
-                        endMonth = "${weekLastDate.monthOfYear}月"
-                    }
-                    tv_week_tip.text = "${curFirstDate.year}年${curFirstDate.monthOfYear}月${curFirstDate.dayOfMonth}日 - " +
-                            "${endYear}${endMonth}${weekLastDate.dayOfMonth}日"
-                    tv_week_tip.visibility = View.VISIBLE
-                    tv_week_tip.postDelayed({ tv_week_tip.visibility = View.GONE }, 1500)
-//                    Toast.makeText(this, "${curFirstDate.year}年${curFirstDate.monthOfYear}月${curFirstDate.dayOfMonth}日 - " +
-//                            "${endYear}${endMonth}${weekLastDate.dayOfMonth}日", Toast.LENGTH_SHORT).show()
-                }
-                mWeekFirstDate = curFirstDate
-            }*/
+            Log.v("greyson", "选择了新日期的回调：$year-$month-${localDate.dayOfMonth}, baseCalendar=$baseCalendar")
         }
 
 
         miui10Calendar.setOnCalendarPageChangeListener { baseCalendar: BaseCalendar ->
-            Log.v("greyson", "切换了页面的回调: baseCalendar=$baseCalendar" +
-                    "\n ${miui10Calendar.calendarState == CalendarState.WEEK}")
+            Log.v("greyson", "切换了页面的回调: 是否为周视图:${miui10Calendar.calendarState == CalendarState.WEEK}, baseCalendar=$baseCalendar")
 
             val curFirstDate = baseCalendar.firstDate ?: return@setOnCalendarPageChangeListener
 
@@ -130,18 +98,9 @@ class TestNCalendarAct : Activity() {
 
 //        val calendarOriginalHeight = miui10Calendar.min
         miui10Calendar.setOnCalendarScrollingListener {
-//            println("greyson: setOnCalendarScrollingListener: $it")
+            //println("greyson: setOnCalendarScrollingListener: $it")
 //            miui10Calendar.layoutParams.height -= it.toInt()
         }
-
-        /*findViewById<ImageView>(R.id.iv_icon).setOnClickListener {
-            if (miui10Calendar.calendarState == CalendarState.MONTH) {
-                miui10Calendar.toWeek()
-            } else {
-                miui10Calendar.toMonth()
-            }
-        }*/
-
 
         miui10Calendar.calendarPainter = madTalkPainter
 

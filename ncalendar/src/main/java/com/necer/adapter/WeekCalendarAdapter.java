@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import com.necer.calendar.BaseCalendar;
+import com.necer.mynew.CalendarData;
+import com.necer.mynew.WeekDataBean;
 import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 import com.necer.view.CalendarView;
@@ -18,15 +20,21 @@ import java.util.List;
  * qq群：127278900
  */
 public class WeekCalendarAdapter extends BaseCalendarAdapter {
+
     public WeekCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
         super(context, startDate, endDate, initializeDate, attrs, baseCalendar);
     }
 
     @Override
-    protected CalendarView getCalendarView(ViewGroup container, int position) {
-        LocalDate localDate = mInitializeDate.plusDays((position - mCurr) * 7);
-        List<LocalDate> dateList = CalendarUtil.getWeekCalendar(localDate, mAttrs.firstDayOfWeek);
-        return new WeekView(mContext, container, localDate, dateList);
+    protected CalendarData getCalendarData(int position) {
+        LocalDate initialDate = mInitializeDate.plusDays((position - mCurr) * 7);
+        List<LocalDate> dateList = CalendarUtil.getWeekCalendar(initialDate, mAttrs.firstDayOfWeek);
+        return new WeekDataBean(initialDate, dateList);
+    }
+
+    @Override
+    protected CalendarView getCalendarView(ViewGroup container) {
+        return new WeekView(mContext, container);
     }
 
     @Override

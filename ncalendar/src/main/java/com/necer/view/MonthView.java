@@ -7,16 +7,14 @@ import com.necer.utils.CalendarUtil;
 
 import org.joda.time.LocalDate;
 
-import java.util.List;
-
 /**
  * Created by necer on 2018/9/11.
  * qq群：127278900
  */
 public class MonthView extends CalendarView {
-    public MonthView(Context context, ViewGroup container, LocalDate initialDate, List<LocalDate> dateList) {
-        super(context, container, initialDate, dateList);
 
+    public MonthView(Context context, ViewGroup container) {
+        super(context, container);
     }
 
     @Override

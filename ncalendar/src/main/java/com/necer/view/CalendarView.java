@@ -36,25 +36,13 @@ public abstract class CalendarView extends View {
 
     private int mCurrentDistance;//折叠日历滑动当前的距离
 
-    public CalendarView(Context context, ViewGroup container, LocalDate initialDate, List<LocalDate> dateList) {
+    public CalendarView(Context context, ViewGroup container) {
         super(context);
-        this.mInitialDate = initialDate;
-        this.mDateList = dateList;
-        mRectFList = new ArrayList<>();
-        mLineNum = mDateList.size() / 7;//天数/7
-
         mCalendar = (BaseCalendar) container;
         mAllSelectListDate = mCalendar.getAllSelectDateList();
         mStartDate = mCalendar.getStartDate();
         mEndDate = mCalendar.getEndDate();
-
-        //为每一个日期分配一个矩形，便于计算位置
-        for (int i = 0; i < mDateList.size(); i++) {
-            mRectFList.add(new RectF());
-        }
-        mBgRectF = new RectF();
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -72,7 +60,6 @@ public abstract class CalendarView extends View {
         calendarPainter.onDrawCalendarBackground(this, canvas, mBgRectF, getMiddleLocalDate(), getMeasuredHeight(), mCurrentDistance);
     }
 
-
     //绘制日期
     private void drawDate(Canvas canvas, CalendarPainter calendarPainter) {
 
@@ -83,16 +70,17 @@ public abstract class CalendarView extends View {
                 float width = getMeasuredWidth();
                 float height = getMeasuredHeight();
                 //为每个矩形确定位置
+                float right = (j + 1) * width / 7;
                 if (mLineNum == 5 || mLineNum == 1) {
                     //5行的月份，5行矩形平分view的高度  mLineNum==1是周的情况
                     float rectHeight = height / mLineNum;
-                    rectF.set(j * width / 7, i * rectHeight, j * width / 7 + width / 7, i * rectHeight + rectHeight);
+                    rectF.set(j * width / 7, i * rectHeight, right, i * rectHeight + rectHeight);
                 } else {
                     //6行的月份，要第一行和最后一行矩形的中心分别和和5行月份第一行和最后一行矩形的中心对齐
                     //5行一个矩形高度 mHeight/5, 画图可知,4个5行矩形的高度等于5个6行矩形的高度  故：6行的每一个矩形高度是  (mHeight/5)*4/5
                     float rectHeight5 = height / 5;
                     float rectHeight6 = (height / 5) * 4 / 5;
-                    rectF.set(j * width / 7, i * rectHeight6 + (rectHeight5 - rectHeight6) / 2, j * width / 7 + width / 7, i * rectHeight6 + rectHeight6 + (rectHeight5 - rectHeight6) / 2);
+                    rectF.set(j * width / 7, i * rectHeight6 + (rectHeight5 - rectHeight6) / 2, right, i * rectHeight6 + rectHeight6 + (rectHeight5 - rectHeight6) / 2);
                 }
 
                 //开始绘制
@@ -121,18 +109,6 @@ public abstract class CalendarView extends View {
                 }
             }
         }
-    }
-
-
-    //获取当前页面的初始化日期
-    public LocalDate getInitialDate() {
-        return mInitialDate;
-    }
-
-
-    //获取中间的日期，周日历以中间的日期判断当前页面的年和月
-    public LocalDate getMiddleLocalDate() {
-        return mDateList.get((mDateList.size() / 2) + 1);
     }
 
     @Override
@@ -209,6 +185,32 @@ public abstract class CalendarView extends View {
     public void updateSlideDistance(int currentDistance) {
         this.mCurrentDistance = currentDistance;
         invalidate();
+    }
+
+    //获取中间的日期，周日历以中间的日期判断当前页面的年和月
+    public LocalDate getMiddleLocalDate() {
+        return mDateList.get((mDateList.size() / 2) + 1);
+    }
+
+
+    /********* 下面为greyson修改 *********/
+    public void setCalendarData(LocalDate initialDate, List<LocalDate> dateList) {
+        this.mInitialDate = initialDate;
+        this.mDateList = dateList;
+        mLineNum = mDateList.size() / 7;//天数/7
+
+        //为每一个日期分配一个矩形，便于计算位置
+        mRectFList = new ArrayList<>();
+        for (int i = 0; i < mDateList.size(); i++) {
+            mRectFList.add(new RectF());
+        }
+        mBgRectF = new RectF();
+        invalidate();
+    }
+
+    //获取当前页面的初始化日期
+    public LocalDate getInitialDate() {
+        return mInitialDate;
     }
 
     //获取当前页面的日期

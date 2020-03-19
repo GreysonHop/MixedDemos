@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import com.necer.calendar.BaseCalendar;
+import com.necer.mynew.CalendarData;
+import com.necer.mynew.MonthDataBean;
 import com.necer.utils.Attrs;
 import com.necer.utils.CalendarUtil;
 import com.necer.view.CalendarView;
@@ -19,16 +21,20 @@ import java.util.List;
  */
 public class MonthCalendarAdapter extends BaseCalendarAdapter {
 
-
     public MonthCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
         super(context, startDate, endDate, initializeDate, attrs, baseCalendar);
     }
 
     @Override
-    protected CalendarView getCalendarView(ViewGroup container, int position) {
-        LocalDate localDate = mInitializeDate.plusMonths(position - mCurr);
-        List<LocalDate> dateList = CalendarUtil.getMonthCalendar(localDate, mAttrs.firstDayOfWeek, mAttrs.isAllMonthSixLine);
-        return new MonthView(mContext, container, localDate, dateList);
+    protected CalendarData getCalendarData(int position) {
+        LocalDate initialDate = mInitializeDate.plusMonths(position - mCurr);
+        List<LocalDate> dateList = CalendarUtil.getMonthCalendar(initialDate, mAttrs.firstDayOfWeek, mAttrs.isAllMonthSixLine);
+        return new MonthDataBean(initialDate, dateList);
+    }
+
+    @Override
+    protected CalendarView getCalendarView(ViewGroup container) {
+        return new MonthView(mContext, container);
     }
 
     @Override

@@ -2,14 +2,15 @@ package com.necer.adapter;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.necer.calendar.BaseCalendar;
+import com.necer.mynew.CalendarData;
 import com.necer.utils.Attrs;
 import com.necer.view.CalendarView;
 
@@ -26,11 +27,11 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
 
     protected Context mContext;
     protected int mCount;//总页数
-    protected int mCurr;//当前位置
+    protected int mCurr;//当前位置，今天的位置。比如今天是2020/3/10，离startDate有mCurr个月或周
     protected LocalDate mInitializeDate;
     protected Attrs mAttrs;
 
-    private OnDataBoundForPage mOnDataBoundForPage;
+    private SparseArray<CalendarData> mDataList = new SparseArray<>();
 
     public BaseCalendarAdapter(Context context, LocalDate startDate, LocalDate endDate, LocalDate initializeDate, Attrs attrs, BaseCalendar baseCalendar) {
         this.mContext = context;
@@ -41,47 +42,31 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
         this.mBaseCalendar = baseCalendar;
     }
 
-    @Override
-    public int getItemCount() {
-        return mCount;
-    }
-
-
-//    @Override
-//    public boolean isViewFromObject(View view, Object object) {
-//        return view == object;
-//    }
-
-    /*@Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }*/
-
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        FrameLayout layout = new FrameLayout(parent.getContext());
-        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        return new MyViewHolder(layout);
+        View view = getCalendarView(mBaseCalendar);
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        ViewGroup parent = (ViewGroup) holder.itemView;
-        parent.removeAllViews();
+        CalendarData data = getDataByPosition(position);
 
-        CalendarView view = getCalendarView(mBaseCalendar, position);
-        /*ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params == null) {
-            params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        } else {
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        }
-        view.setLayoutParams(params);*/
+        CalendarView calendarView = (CalendarView) holder.itemView;
+        calendarView.setCalendarData(data.getInitialDate(), data.getDateList());
+
         Log.i("greyson", getClass().getSimpleName() + " onBindViewHolder position=" + position);
-        view.setTag(position);
-        parent.addView(view);
+    }
+
+    public CalendarData getDataByPosition(int position) {
+        CalendarData data = mDataList.get(position);
+        if (data == null) {
+            data = getCalendarData(position);
+            mDataList.put(position, data);
+        }
+        return data;
     }
 
     @Override
@@ -110,34 +95,32 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
     }
 
     private void print(String logType, @NonNull MyViewHolder holder) {
-        ViewGroup parent = (ViewGroup) holder.itemView;
+        /*ViewGroup parent = (ViewGroup) holder.itemView;
         View view = parent.getChildAt(0);
         if (view != null) {
             Log.v("greyson", logType + ", tag= " + view.getTag());
-        }
+        }*/
     }
-
-    /*@Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        CalendarView view = getCalendarView(container, position);
-        view.setTag(position);
-        container.addView(view);
-        return view;
-    }*/
 
     //当前页的位置
     public int getCurrItem() {
         return mCurr;
     }
 
-    protected abstract CalendarView getCalendarView(ViewGroup container, int position);
+    @Override
+    public int getItemCount() {
+        return mCount;
+    }
+
+    protected abstract CalendarView getCalendarView(ViewGroup container);
+
+    protected abstract CalendarData getCalendarData(int position);
 
     protected abstract int getIntervalCount(LocalDate startDate, LocalDate endDate, int weekFirstDayType);
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
-
         }
     }
 
