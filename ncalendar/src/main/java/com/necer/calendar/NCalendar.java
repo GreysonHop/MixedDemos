@@ -680,20 +680,20 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
     }
 
     @Override
-    public List<LocalDate> getCurrectSelectDateList() {
+    public List<LocalDate> getCurrentSelectDateList() {
         if (calendarState == CalendarState.WEEK) {
-            return weekCalendar.getCurrectSelectDateList();
+            return weekCalendar.getCurrentSelectDateList();
         } else {
-            return monthCalendar.getCurrectSelectDateList();
+            return monthCalendar.getCurrentSelectDateList();
         }
     }
 
     @Override
-    public List<LocalDate> getCurrectDateList() {
+    public List<LocalDate> getCurrentDateList() {
         if (calendarState == CalendarState.WEEK) {
-            return weekCalendar.getCurrectDateList();
+            return weekCalendar.getCurrentDateList();
         } else {
-            return monthCalendar.getCurrectDateList();
+            return monthCalendar.getCurrentDateList();
         }
     }
 

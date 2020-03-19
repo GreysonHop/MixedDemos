@@ -170,41 +170,41 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     }
 
     private void drawView(int position) {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(position);
-        new Exception("greyson, BaseCalendar(" + getClass().getName() + ") drawView(" + position + ") CalendarView= " + currectCalendarView).printStackTrace();
-        if (currectCalendarView == null) {
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(position);
+        new Exception("greyson, BaseCalendar(" + getClass().getName() + ") drawView(" + position + ") CalendarView= " + currentCalendarView).printStackTrace();
+        if (currentCalendarView == null) {
             return;
         }
         if (mSelectedModel == SelectedModel.SINGLE_SELECTED) {//每页单个选中
-            LocalDate initialDate = currectCalendarView.getInitialDate();//当前页面初始化的日期
+            LocalDate initialDate = currentCalendarView.getInitialDate();//当前页面初始化的日期
             LocalDate lastDate = mAllSelectDateList.get(0);//上个页面选中的日期
             //当前面页面的初始值和上个页选中的日期，相差几月或几周，再又上个页面选中的日期得出当前页面选中的日期
             int currNum = getTwoDateCount(lastDate, initialDate, mAttrs.firstDayOfWeek);//得出两个页面相差几个
             LocalDate tempLocalDate = getIntervalDate(lastDate, currNum, mIsJumpClick);
-            LocalDate currectDate; //当前页面选中的日期
+            LocalDate currentDate; //当前页面选中的日期
             if (mIsDefaultSelectFirst && !mIsJumpClick && !tempLocalDate.equals(new LocalDate())) {
                 //默认选中第一个 且 不是点击或跳转 且 不等于今天（为了第一次进来日历选中的是今天）
-                currectDate = getFirstDate();
+                currentDate = getFirstDate();
             } else {
-                currectDate = tempLocalDate;
+                currentDate = tempLocalDate;
             }
 
-            currectDate = getAvailableDate(currectDate);
+            currentDate = getAvailableDate(currentDate);
 
             mIsJumpClick = false;
 
             mAllSelectDateList.clear();
-            mAllSelectDateList.add(currectDate);
-            currectCalendarView.invalidate();
+            mAllSelectDateList.add(currentDate);
+            currentCalendarView.invalidate();
         } else {
             //分为两种情况，1、单选不选中 2、多选  这两种情况只需要绘制页面
-            currectCalendarView.invalidate();
+            currentCalendarView.invalidate();
         }
 
         callBack();
     }
 
-    public void onClickCurrectMonthOrWeekDate(LocalDate localDate) {
+    public void onClickCurrentMonthOrWeekDate(LocalDate localDate) {
         //判断日期是否合法
         if (!isAvailable(localDate)) {
             clickDisableDate(localDate);
@@ -239,7 +239,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         }
     }
 
-
     public void onClickLastMonthDate(LocalDate localDate) {
         jump(localDate, true);
     }
@@ -256,11 +255,11 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         }
 
         mIsJumpClick = true;
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
         new Exception("greyson, BaseCalendar(" + getClass().getName() + ") jump to " + localDate
-                + ", isDraw= " + isDraw + ", currentItem= " + mViewPager.getCurrentItem() + ", it's CalendarView= " + currectCalendarView).printStackTrace();
+                + ", isDraw= " + isDraw + ", currentItem= " + mViewPager.getCurrentItem() + ", it's CalendarView= " + currentCalendarView).printStackTrace();
 
-        int indexOffset = getTwoDateCount(localDate, currectCalendarView.getInitialDate(), mAttrs.firstDayOfWeek);//得出两个页面相差几个
+        int indexOffset = getTwoDateCount(localDate, currentCalendarView.getInitialDate(), mAttrs.firstDayOfWeek);//得出两个页面相差几个
         if (mSelectedModel == SelectedModel.MULTIPLE) {
             //多选  点击的日期不清除，只翻页，如果需要清除，等到翻页之后再次点击
             if (!mAllSelectDateList.contains(localDate) && isDraw) {
@@ -286,19 +285,18 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
 
     }
 
-
     private void callBack() {
         mViewPager.post(new Runnable() {
             @Override
             public void run() {
-                CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-                LocalDate middleLocalDate = currectCalendarView.getMiddleLocalDate();
-                List<LocalDate> currentSelectDateList = currectCalendarView.getCurrentSelectDateList();
+                CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+                LocalDate middleLocalDate = currentCalendarView.getMiddleLocalDate();
+                List<LocalDate> currentSelectDateList = currentCalendarView.getCurrentSelectDateList();
                 LocalDate yearMonthLocalDate;
 
                 if (BaseCalendar.this instanceof MonthCalendar) {
                     //月日历返回初始化的月份
-                    yearMonthLocalDate = currectCalendarView.getInitialDate();
+                    yearMonthLocalDate = currentCalendarView.getInitialDate();
                 } else {
                     if (currentSelectDateList.size() == 0) {
                         yearMonthLocalDate = middleLocalDate;
@@ -309,22 +307,21 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
 
                 if (mOnMWDateChangeListener != null) {
                     //月周折叠日历使用
-                    mOnMWDateChangeListener.onMwDateChange(BaseCalendar.this, currectCalendarView.getPivotDate(), mAllSelectDateList);
+                    mOnMWDateChangeListener.onMwDateChange(BaseCalendar.this, currentCalendarView.getPivotDate(), mAllSelectDateList);
                 }
 
-                if (mOnCalendarChangedListener != null && !(mSelectedModel == SelectedModel.MULTIPLE) && getVisibility() == View.VISIBLE) {
+                if (mOnCalendarChangedListener != null && !(mSelectedModel == SelectedModel.MULTIPLE) && getVisibility() == VISIBLE) {
                     //单选
                     mOnCalendarChangedListener.onCalendarChange(BaseCalendar.this, yearMonthLocalDate.getYear(), yearMonthLocalDate.getMonthOfYear(), currentSelectDateList.size() == 0 ? null : currentSelectDateList.get(0));
                 }
 
-                if (mOnCalendarMultipleChangedListener != null && mSelectedModel == SelectedModel.MULTIPLE && getVisibility() == View.VISIBLE) {
+                if (mOnCalendarMultipleChangedListener != null && mSelectedModel == SelectedModel.MULTIPLE && getVisibility() == VISIBLE) {
                     //多选
                     mOnCalendarMultipleChangedListener.onCalendarChange(BaseCalendar.this, yearMonthLocalDate.getYear(), yearMonthLocalDate.getMonthOfYear(), currentSelectDateList, mAllSelectDateList);
                 }
             }
         });
     }
-
 
     @Override
     public void notifyCalendar() {
@@ -362,7 +359,7 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
 
     //点击不可用的日期处理
     private void clickDisableDate(LocalDate localDate) {
-        if (getVisibility() != View.VISIBLE) {
+        if (getVisibility() != VISIBLE) {
             return;
         }
         if (mOnClickDisableDateListener != null) {
@@ -371,7 +368,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
             Toast.makeText(mViewPager.getContext(), TextUtils.isEmpty(mAttrs.disabledString) ? "日期超出许可范围" : mAttrs.disabledString, Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void toNextPager() {
@@ -387,7 +383,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     public void toToday() {
         jump(new LocalDate(), true);
     }
-
 
     @Override
     public void jumpDate(String formatDate) {
@@ -421,7 +416,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         return mEndDate;
     }
 
-
     //设置绘制类
     @Override
     public void setCalendarPainter(CalendarPainter calendarPainter) {
@@ -437,12 +431,11 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         return mCalendarPainter;
     }
 
-
     @Override
     public void updateSlideDistance(int currentDistance) {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (currectCalendarView != null) {
-            currectCalendarView.updateSlideDistance(currentDistance);
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        if (currentCalendarView != null) {
+            currentCalendarView.updateSlideDistance(currentDistance);
         }
     }
 
@@ -452,7 +445,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         mAllSelectDateList.addAll(dateList);
         notifyCalendar();
     }
-
 
     public void setOnMWDateChangeListener(OnMWDateChangeListener onMWDateChangeListener) {
         this.mOnMWDateChangeListener = onMWDateChangeListener;
@@ -475,43 +467,41 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
 
     //获取当前月，当前周的第一个日期
     public LocalDate getFirstDate() {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
         new Exception("greyson, BaseCalendar(" + getClass().getName() + ") getFirstDate() getCurrentItem= "
-                + mViewPager.getCurrentItem() + ", CalendarView= " + currectCalendarView).printStackTrace();
-        if (currectCalendarView != null) {
-            return currectCalendarView.getFirstDate();
+                + mViewPager.getCurrentItem() + ", CalendarView= " + currentCalendarView).printStackTrace();
+        if (currentCalendarView != null) {
+            return currentCalendarView.getFirstDate();
         }
         return null;
     }
 
-
     //获取PivotDate
     public LocalDate getPivotDate() {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (currectCalendarView != null) {
-            return currectCalendarView.getPivotDate();
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        if (currentCalendarView != null) {
+            return currentCalendarView.getPivotDate();
         }
         return null;
     }
 
     //localDate到顶部的距离
     public int getDistanceFromTop(LocalDate localDate) {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (currectCalendarView != null) {
-            return currectCalendarView.getDistanceFromTop(localDate);
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        if (currentCalendarView != null) {
+            return currentCalendarView.getDistanceFromTop(localDate);
         }
         return 0;
     }
 
     //PivotDate到顶部的距离
     public int getPivotDistanceFromTop() {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (currectCalendarView != null) {
-            return currectCalendarView.getPivotDistanceFromTop();
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        if (currentCalendarView != null) {
+            return currentCalendarView.getPivotDistanceFromTop();
         }
         return 0;
     }
-
 
     //回去viewpager的adapter
     protected abstract BaseCalendarAdapter getCalendarAdapter(Context context, LocalDate startDate,
@@ -523,7 +513,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     //相差count之后的的日期
     protected abstract LocalDate getIntervalDate(LocalDate localDate, int count, boolean isJumpClick);
 
-
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
@@ -534,19 +523,19 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     }
 
     @Override
-    public List<LocalDate> getCurrectSelectDateList() {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (currectCalendarView != null) {
-            return currectCalendarView.getCurrentSelectDateList();
+    public List<LocalDate> getCurrentSelectDateList() {
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        if (currentCalendarView != null) {
+            return currentCalendarView.getCurrentSelectDateList();
         }
         return null;
     }
 
     @Override
-    public List<LocalDate> getCurrectDateList() {
-        CalendarView currectCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
-        if (currectCalendarView != null) {
-            return currectCalendarView.getCurrentDateList();
+    public List<LocalDate> getCurrentDateList() {
+        CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
+        if (currentCalendarView != null) {
+            return currentCalendarView.getCurrentDateList();
         }
         return null;
     }
@@ -555,7 +544,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     public Attrs getAttrs() {
         return mAttrs;
     }
-
 
     @Override
     public void setSelectedMode(SelectedModel selectedMode) {

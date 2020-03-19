@@ -230,7 +230,7 @@ public class CreateInfoAct extends Activity {
             datePickDialog = new DatePickDialog(this);
             datePickDialog.changeMinuteGap(15);
 //            datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
-//            datePickDialog.setSelectedDate(new Date());
+            datePickDialog.setSelectedDate(new Date());
 //            datePickDialog.setSelectedDate("2019-12-23", "18:08");
             datePickDialog.setOnDatePickListener((dateStr, timeStr) -> {
                 selectedDate = dateStr;
@@ -244,7 +244,7 @@ public class CreateInfoAct extends Activity {
 
     public void onClick(View view) {
         getDatePickDialog().show();
-        datePickDialog.setSelectedDate(new Date());
+//        datePickDialog.setSelectedDate(new Date());
 //        datePickDialog.setSelectedDate("2020-03-12", "18:08");
     }
 }

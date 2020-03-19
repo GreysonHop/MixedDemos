@@ -26,7 +26,7 @@ public class MonthView extends CalendarView {
         } else if (CalendarUtil.isNextMonth(localDate, mInitialDate)) {
             mCalendar.onClickNextMonthDate(localDate);
         } else {*/
-        mCalendar.onClickCurrectMonthOrWeekDate(localDate);//点击上或下个月的日期不切换月份
+        mCalendar.onClickCurrentMonthOrWeekDate(localDate);//点击上或下个月的日期不切换月份
 //        }
     }
 
