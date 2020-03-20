@@ -14,6 +14,7 @@ import androidx.core.view.NestedScrollingParent;
 
 import android.util.AttributeSet;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -34,6 +35,7 @@ import com.necer.painter.CalendarPainter;
 import com.necer.painter.InnerPainter;
 import com.necer.utils.Attrs;
 import com.necer.utils.AttrsUtil;
+import com.necer.utils.ViewUtil;
 
 import org.joda.time.LocalDate;
 
@@ -418,8 +420,15 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
 
     }
 
-/*
-    private float downY;
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            targetView = ViewUtil.getTargetView(getContext(), childView);
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    /*  private float downY;
     private float downX;
     private float lastY;//上次的y
     private float verticalY = 50.f;//竖直方向上滑动的临界值，大于这个值认为是竖直滑动
