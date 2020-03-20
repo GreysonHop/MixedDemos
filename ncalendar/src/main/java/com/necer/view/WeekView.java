@@ -20,7 +20,7 @@ public class WeekView extends CalendarView {
 
     @Override
     protected void dealClickDate(LocalDate localDate) {
-        mCalendar.onClickCurrectMonthOrWeekDate(localDate);
+        mCalendar.onClickCurrentMonthOrWeekDate(localDate);
     }
 
     @Override

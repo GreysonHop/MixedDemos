@@ -146,7 +146,7 @@ class TestNCalendarAct : Activity() {
         miui10Calendar.calendarPainter = madTalkPainter
 
         val jumpYear = { jumpMode: Int ->
-            miui10Calendar.currectSelectDateList?.let {
+            miui10Calendar.currentSelectDateList?.let {
                 if (it.size > 0) {
                     it[0]?.let { selectedLocalDate ->
                         val localDateToJump = when (jumpMode) {
