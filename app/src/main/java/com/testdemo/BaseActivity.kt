@@ -49,7 +49,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected open fun initialize() {}
 
     @LayoutRes
-    protected open fun getLayoutResId(): Int {
+    protected open fun getLayoutResId(): Int {//todo greyson 有没有注解可以标明两个方法中必须有一个被调用
         return 0
     }
 

@@ -5,6 +5,10 @@
 
     <com.testdemo.testCanvas.XFermodeView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="360dp" />
+
+    <com.testdemo.testCanvas.waveView.AnimWaveView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
