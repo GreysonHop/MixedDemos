@@ -1,0 +1,30 @@
+{
+  "name": "BlurAndSomeElse",
+  "version": "1.0.0",
+  "description": "个人的一些测试例子，为其它项目的测试过程而建。所以项目较乱无暇打理",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreysonHop/BlurAndSomeElse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreysonHop/BlurAndSomeElse/issues"
+  },
+  "homepage": "https://github.com/GreysonHop/BlurAndSomeElse#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "husky": "^4.2.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
