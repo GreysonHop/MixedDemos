@@ -8,6 +8,7 @@ import android.widget.ImageView;
 //import android.test.ApplicationTestCase;
 
 import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -25,11 +26,13 @@ public class ApplicationTest {
 
     @Before
     public void setUp() throws Exception {
-        mTargetContext = InstrumentationRegistry.getTargetContext();
+//        mTargetContext = InstrumentationRegistry.getTargetContext();//deprecated
+        mTargetContext = ApplicationProvider.getApplicationContext();
     }
 
     @Test
-    public void onCreate() {
+    public void onCreate() {//todo 还是不能正常运行？？。。。
+        String data = null;
         try {
             ImageView testBitmap = new ImageView(mTargetContext);
 
@@ -37,15 +40,17 @@ public class ApplicationTest {
             ApplicationInfo applicationInfo = mTargetContext.getPackageManager()
                     .getApplicationInfo(mTargetContext.getPackageName(), PackageManager.GET_META_DATA);
             Bundle metaData = ((ApplicationInfo) applicationInfo).metaData;
-            String data = metaData.getString("com");
-            assertEquals("1234567890", data);
+            data = metaData.getString("com.google.android.geo.API_KEY");
+            System.out.println("AndroidTest, data = " + data);
+//            assertEquals("1234567890", data);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        assertEquals("1234567890", data);
     }
 }
-/*
-public class ApplicationTest extends ApplicationTestCase<Application> {
+
+/*public class ApplicationTest extends ApplicationTestCase<Application> {
     public ApplicationTest() {
         super(Application.class);
     }

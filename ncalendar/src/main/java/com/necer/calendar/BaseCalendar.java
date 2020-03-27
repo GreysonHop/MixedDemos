@@ -124,7 +124,7 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         BaseCalendarAdapter calendarAdapter = getCalendarAdapter(mContext, mStartDate, mEndDate, mInitializeDate, mAttrs, this);
         calendarAdapter.setOnDataBoundForPage(new BaseCalendarAdapter.OnDataBoundForPage() {
             @Override
-            public void onPageAttachedToWindow(int position) {
+            public void onPageAttachedToWindow(int position) {//todo greyson 该方式不好，待删除！
                 if (mDirtyCurrentItem && position == mDirtyItemCount) {
                     mDirtyCurrentItem = false;
                     drawView(position);

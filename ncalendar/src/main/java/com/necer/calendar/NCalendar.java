@@ -284,18 +284,18 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-//        return true;
+        if (child instanceof BaseCalendar) {
+            return true;//如果月视图是纵向滚动的话，当在其上面滑动时消耗掉滚动事件，不传上一层
+        }
         return isNestedScroll;
     }
 
     @Override
     public void onNestedScrollAccepted(View child, View target, int axes) {
-        //super.onNestedScrollAccepted(child, target, axes);
     }
 
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        // super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
     }
 
     @Override

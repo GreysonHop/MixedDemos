@@ -66,10 +66,13 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'junit:junit:4.12'
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
 //    androidTestImplementation files('libs/httpunit-1.7.jar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -91,7 +94,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
 
 //    implementation 'com.github.GreysonHop:WeChatTag:v2.0.0'
-//    implementation 'com.necer.ncalendar:ncalendar:4.3.7'
     implementation project(path: ':ncalendar')
 
     implementation 'com.google.android.libraries.places:places:2.1.0'
@@ -99,6 +101,6 @@ dependencies {
 //    地图操作工具类，添加标记等
 //    implementation 'com.google.maps.android:android-maps-utils:0.5+'
 
-//    implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.multidex:multidex:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.2.5'
 }
