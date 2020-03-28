@@ -19,11 +19,12 @@
   "homepage": "https://github.com/GreysonHop/BlurAndSomeElse#readme",
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-angular": "^8.3.4",
+    "@commitlint/config-conventional": "^8.3.4",
     "husky": "^4.2.3"
   },
   "husky": {
     "hooks": {
+      "pre-commit": "./check_branch_name.sh",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }
