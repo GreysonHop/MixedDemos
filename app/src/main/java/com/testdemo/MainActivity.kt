@@ -20,6 +20,7 @@ import com.testdemo.testCanvas.TestCanvasActivity
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
+import com.testdemo.testFlipView.TestDataBindingAct
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testGiftAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct
@@ -63,6 +64,7 @@ class MainActivity : ListActivity() {
         menuListMap["测试启动模式"] = ActivityA::class.java
         menuListMap["测试绘画相关属性"] = TestCanvasActivity::class.java
         menuListMap["Constraint动画"] = ConstraintAnimAct::class.java
+        menuListMap["DataBinding"] = TestDataBindingAct::class.java
 
 
         classNameList.addAll(menuListMap.keys)

@@ -93,7 +93,7 @@
             android:screenOrientation="portrait" />
 
         <activity android:name="com.testdemo.testFlipView.TestFlipperActivity" />
-
+        <activity android:name=".testFlipView.TestDataBindingAct" />
 
         <activity android:name=".testMap.places.PlacesMainActivity" />
         <activity android:name=".testMap.places.AutocompleteTestActivity" />
