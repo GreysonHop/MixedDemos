@@ -54,9 +54,9 @@
         android:id="@+id/blackBgIV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.9"
+        android:alpha="0.0"
         android:background="#FF171619"
-        android:visibility="gone" />
+        android:clickable="false" />
 
     <LinearLayout
         android:id="@+id/shareLayout"
@@ -65,7 +65,7 @@
         android:layout_gravity="bottom"
         android:background="@color/button"
         android:gravity="center"
-        android:visibility="gone">
+        android:translationY="50dp">
 
         <TextView
             android:layout_width="wrap_content"

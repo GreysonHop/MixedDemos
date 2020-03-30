@@ -1,5 +1,6 @@
 package com.testdemo
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
 import android.view.animation.TranslateAnimation
 import android.widget.*
 import com.testdemo.broken_lib.Utils
@@ -136,6 +138,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
             }
 
             R.id.blackBgIV -> {
+                blackBgIV.isClickable = false
                 isSee = !isSee
                 showShareLayout(isSee)
             }
@@ -185,7 +188,18 @@ class TestActivity2 : Activity(), View.OnClickListener {
         }
     }
 
-    private fun showShareLayout(show: Boolean) {
+    private fun showShareLayout(show: Boolean) = if (show) {
+        println("greyson, height=${shareLayout.height}")
+        shareLayout.animate().setDuration(300).translationY(0f)
+                .withEndAction { blackBgIV.isClickable = true }
+                .start()
+        blackBgIV.animate().setDuration(300).alpha(0.9f).start()
+    } else {
+        shareLayout.animate().setDuration(300).translationY(shareLayout.height.toFloat()).start()
+        blackBgIV.animate().setDuration(300).alpha(0.0f).start()
+    }
+
+    /*private fun showShareLayout(show: Boolean) {
         if (show) {
             val alphaInAnimation = AlphaAnimation(0.0f, 0.9f)
             alphaInAnimation.duration = 300
@@ -216,7 +230,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
             blackBgIV.visibility = View.GONE
 
         }
-    }
+    }*/
 
     private fun getInviteCode() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
