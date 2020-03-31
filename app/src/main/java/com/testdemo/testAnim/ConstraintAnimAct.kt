@@ -1,4 +1,4 @@
-package com.testdemo.testStartMode
+package com.testdemo.testAnim
 
 import androidx.constraintlayout.widget.ConstraintSet
 import com.testdemo.BaseActivity

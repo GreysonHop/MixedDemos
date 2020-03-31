@@ -1,4 +1,4 @@
-package com.testdemo.testShader
+package com.testdemo.testView
 
 import android.content.Context
 import android.graphics.*
@@ -66,7 +66,8 @@ class MirrorImageView : View {
         canvas.drawColor(Color.BLACK)
         canvas.drawBitmap(mSrcBitmap, startX, startY, null)
 
-        allNonNull(mSrcBitmap, mRefBitmap) {(it1, it2) ->//TODO 如果参数超过5个会怎样？还能析构吗？
+        allNonNull(mSrcBitmap, mRefBitmap) { (it1, it2) ->
+            //TODO 如果参数超过5个会怎样？还能析构吗？
             val srcBitmap = it1 as Bitmap
             val refBitmap = it2 as Bitmap
             val sc = canvas.saveLayer(startX, startY + srcBitmap.height, startX + refBitmap.width, startY + srcBitmap.height * 2, null, Canvas.ALL_SAVE_FLAG)

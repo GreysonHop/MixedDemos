@@ -1,4 +1,4 @@
-package com.testdemo.testCanvas
+package com.testdemo.testView.canvas
 
 import com.testdemo.BaseActivity
 import com.testdemo.R

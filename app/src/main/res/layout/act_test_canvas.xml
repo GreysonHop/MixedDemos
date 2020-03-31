@@ -3,11 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.testdemo.testCanvas.XFermodeView
+    <com.testdemo.testView.canvas.XFermodeView
         android:layout_width="match_parent"
         android:layout_height="360dp" />
 
-    <com.testdemo.testCanvas.waveView.AnimWaveView
+    <com.testdemo.testView.AnimWaveView
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

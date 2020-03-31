@@ -44,7 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.testdemo.R;
-import com.testdemo.testShader.PictureWithTextDrawable;
+import com.testdemo.testView.shader.PictureWithTextDrawable;
 
 import java.util.Arrays;
 import java.util.List;

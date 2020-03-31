@@ -16,21 +16,21 @@ import com.google.android.libraries.places.api.Places
 import com.testdemo.testBlurAndGlass.BlurGlassSoOnActivity
 import com.testdemo.testCanDragLayout.TestDragViewActivity
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct
-import com.testdemo.testCanvas.TestCanvasActivity
+import com.testdemo.testView.canvas.TestCanvasActivity
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.testFlipView.TestDataBindingAct
 import com.testdemo.testFlipView.TestFlipperActivity
-import com.testdemo.testGiftAnim.TestGiftAnimAct
+import com.testdemo.testAnim.svgaAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct
 import com.testdemo.testNCalendar.TestNCalendarAct
 import com.testdemo.testPictureSelect.TestPictureSelectAct
 import com.testdemo.testRecyclerViewType.TestRecyclerViewAct
-import com.testdemo.testShader.TestShaderAct
+import com.testdemo.testView.shader.TestShaderAct
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
 import com.testdemo.testStartMode.ActivityA
-import com.testdemo.testStartMode.ConstraintAnimAct
+import com.testdemo.testAnim.ConstraintAnimAct
 import com.testdemo.testVerticalScrollView.TestActivity3
 
 /**

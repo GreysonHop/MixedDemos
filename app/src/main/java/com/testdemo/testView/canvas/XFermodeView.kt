@@ -1,4 +1,4 @@
-package com.testdemo.testCanvas
+package com.testdemo.testView.canvas
 
 import android.content.Context
 import android.graphics.*

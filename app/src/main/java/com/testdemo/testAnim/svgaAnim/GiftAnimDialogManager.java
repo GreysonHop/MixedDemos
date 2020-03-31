@@ -1,4 +1,4 @@
-package com.testdemo.testGiftAnim;
+package com.testdemo.testAnim.svgaAnim;
 
 import android.app.Dialog;
 import android.content.Context;

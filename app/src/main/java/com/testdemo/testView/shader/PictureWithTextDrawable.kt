@@ -1,14 +1,15 @@
-package com.testdemo.testShader
+package com.testdemo.testView.shader
 
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
-import android.util.TypedValue
 
 /**
  * Create by Greyson
+ * 本想自定义一个View，可以设置背景图、一个Icon和一些文字，来代替一整张的图片。以此来掌握自定义Drawable
+ * //todo greyson 还未完成，有Bug。
  */
 class PictureWithTextDrawable : Drawable {
 

@@ -1,4 +1,4 @@
-package com.testdemo.testShader
+package com.testdemo.testView.shader
 
 import android.app.Activity
 import android.content.Context
@@ -9,9 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import com.testdemo.R
 import kotlinx.android.synthetic.main.act_test_shader.*
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.widget.ImageView
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 

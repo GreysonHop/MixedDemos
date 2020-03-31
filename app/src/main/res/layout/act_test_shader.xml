@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <com.testdemo.testShader.MirrorImageView
+    <com.testdemo.testView.MirrorImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.testdemo.testShader.TestView
+    <com.testdemo.testView.canvas.TestCanvasOperateView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/bar_grey_90" />
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.testdemo.testShader.CornerLayout
+    <com.testdemo.testView.canvas.CornerLayout
         android:id="@+id/corner"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
@@ -68,7 +68,7 @@
             android:background="@android:color/holo_red_light"
             android:text="wo shi redd????" />
 
-    </com.testdemo.testShader.CornerLayout>
+    </com.testdemo.testView.canvas.CornerLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"

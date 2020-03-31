@@ -76,10 +76,10 @@
             android:name=".testSpecialEditLayout.SpecialEditLayoutAct"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".testGiftAnim.TestGiftAnimAct" />
-        <activity android:name=".testGiftAnim.GiftAnimActivity" />
+        <activity android:name=".testAnim.svgaAnim.TestGiftAnimAct" />
+        <activity android:name=".testAnim.svgaAnim.GiftAnimActivity" />
 
-        <activity android:name=".testShader.TestShaderAct" />
+        <activity android:name="com.testdemo.testView.shader.TestShaderAct" />
 
         <activity
             android:name=".testDatePicker.CreateInfoAct"
@@ -116,9 +116,9 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".testStartMode.ActivityB" />
-        <activity android:name=".testStartMode.ConstraintAnimAct" />
+        <activity android:name=".testAnim.ConstraintAnimAct" />
 
-        <activity android:name=".testCanvas.TestCanvasActivity" />
+        <activity android:name="com.testdemo.testView.canvas.TestCanvasActivity" />
 
     </application>
 

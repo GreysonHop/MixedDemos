@@ -1,4 +1,4 @@
-package com.testdemo.testCanvas.waveView
+package com.testdemo.testView
 
 import android.animation.ValueAnimator
 import android.content.Context

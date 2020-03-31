@@ -1,4 +1,4 @@
-package com.testdemo.testShader
+package com.testdemo.testView.canvas
 
 import android.content.Context
 import android.graphics.*
@@ -10,7 +10,7 @@ import com.testdemo.R
  * Created by Greyson on 2018/12/10.
  * 测试绘制组件时的画布缩放
  */
-class TestView : View {
+class TestCanvasOperateView : View {
     private var bmp1: Bitmap? = null
     private lateinit var bmp2: Bitmap
     private lateinit var bmp3: Bitmap
