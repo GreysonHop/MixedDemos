@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.IntDef;
 import androidx.core.content.ContextCompat;
 
 import android.text.TextUtils;
@@ -25,6 +26,8 @@ import com.testdemo.R;
 import com.testdemo.broken_lib.Utils;
 import com.testdemo.testDatePicker.datepicker.bizs.languages.DPLManager;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,9 +42,14 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * 2019/10/15 新增 {@link #changeMode(int)} 方法，用于Dialog显示后改变视图模式
  */
 public class DatePickDialog extends Dialog {
-    public static final int MODE_DATE_AND_TIME = 10;
+    public static final int MODE_DATE_AND_TIME = 0;
     public static final int MODE_DATE_ONLY = 1;
-    public static final int MODE_TIME_ONLY = 2;
+    public static final int MODE_TIME_ONLY = 1 << 1;
+
+    @IntDef({MODE_DATE_AND_TIME, MODE_DATE_ONLY, MODE_TIME_ONLY})//todo greyson 为什么加上“flag=true”就能传0和-1等值？
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Modes {
+    }
 
     private boolean hasInit;
     private int mMode;
@@ -85,11 +93,11 @@ public class DatePickDialog extends Dialog {
      * @param mode    指定dialog的显示模式，有 {@link #MODE_DATE_AND_TIME}显示日期和时间、{@link #MODE_DATE_ONLY}
      *                只显示日期、{@link #MODE_TIME_ONLY}只显示时间
      */
-    public DatePickDialog(Context context, int mode) {
+    public DatePickDialog(Context context, @Modes int mode) {
         this(context, R.style.ActionSheetDialogStyle, mode);
     }
 
-    public DatePickDialog(Context context, int themeResId, int mode) {
+    public DatePickDialog(Context context, int themeResId, @Modes int mode) {
         super(context, themeResId);
         mMode = mode;
     }
