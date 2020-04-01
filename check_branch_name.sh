@@ -7,7 +7,7 @@ function error() {
 
 local_branch="$(git rev-parse --abbrev-ref HEAD)"
 
-valid_branch_regex="^(feature|bugfix|improvement|library|prerelease|release|hotfix)\/[a-z0-9._-]+$"
+valid_branch_regex="^(master|feature|bugfix|improvement|library|prerelease|release|hotfix)\/[a-z0-9._-]+$"
 
 message="Invalid branch name. \nBranch names must adhere to: $valid_branch_regex. \nRename your branch to a valid name and try again."
 
