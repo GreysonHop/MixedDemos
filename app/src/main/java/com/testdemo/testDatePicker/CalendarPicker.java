@@ -343,7 +343,7 @@ public class CalendarPicker extends View {
                         , rect.centerY() - fontMetrics.bottom + fontMetrics.top
                         , rect.centerX() + fontRect.width() / 2
                         , rect.centerY()
-                        , mPaint);*///todo 测试查看字体的占用区域
+                        , mPaint);*/ //测试查看字体的占用区域
                 mPaint.setColor(isSelectedDay ? Color.WHITE : Color.parseColor("#3E82FB"));
 
                 mPaint.setTextSize(Utils.dp2px(14));

@@ -98,7 +98,7 @@ public class CreateInfoAct extends Activity {
                 mCalendarPicker.setVisibility(View.VISIBLE);
                 mTimePicker.setVisibility(View.GONE);
 
-                //todo wait for deleting
+                //wait for deleting
                 if (datePickDialog != null) {
                     datePickDialog.changeMode(DatePickDialog.MODE_DATE_ONLY);
                 }
@@ -113,7 +113,7 @@ public class CreateInfoAct extends Activity {
                 mCalendarPicker.setVisibility(View.GONE);
                 mTimePicker.setVisibility(View.VISIBLE);
 
-                //todo wait for deleting
+                //wait for deleting
                 if (datePickDialog != null) {
                     datePickDialog.changeMode(DatePickDialog.MODE_TIME_ONLY);
                 }

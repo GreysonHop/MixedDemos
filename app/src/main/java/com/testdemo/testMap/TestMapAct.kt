@@ -131,7 +131,6 @@ class TestMapAct : BaseActivity(), OnMapReadyCallback {
         mMap.uiSettings.isRotateGesturesEnabled = false//不能旋转地图
         mMap.uiSettings.isCompassEnabled = false//不显示指南针
         mMap.uiSettings.isMyLocationButtonEnabled = false
-//        mMap.isMyLocationEnabled = true//todo 必须有定位权限
         if (PermissionUtils.isGranted(android.Manifest.permission.ACCESS_COARSE_LOCATION
                         , android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             mMap.isMyLocationEnabled = true

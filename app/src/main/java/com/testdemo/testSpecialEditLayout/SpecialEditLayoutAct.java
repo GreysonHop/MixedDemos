@@ -302,7 +302,7 @@ public class SpecialEditLayoutAct extends Activity {
             public void onClick(@NonNull View widget) {
                 if (widget instanceof TextView) {
                     Toast.makeText(SpecialEditLayoutAct.this, "you click: " + ((TextView) widget).getText().toString(), Toast.LENGTH_SHORT).show();
-                    //todo show the input panel
+                    //to show the input panel
                 }
             }
 
