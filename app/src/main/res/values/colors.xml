@@ -14,6 +14,8 @@
 
     <color name="black_alpha80">#c000</color>
 
+    <color name="textBlack">#283851</color>
+    <color name="textBlue">#4092FF</color>
 
     <color name="cal_text_color">#283851</color>
     <color name="cal_selected_bg">@color/blue_date_picker</color>

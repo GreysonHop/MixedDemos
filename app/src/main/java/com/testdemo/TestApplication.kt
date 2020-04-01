@@ -3,6 +3,7 @@ package com.testdemo
 import android.app.Activity
 import android.app.Application
 import android.net.http.HttpResponseCache
+import io.realm.Realm
 import java.io.File
 import java.io.IOException
 
@@ -14,6 +15,7 @@ class TestApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Realm.init(this)
 
         //set for SVGA
         val dir = applicationContext.cacheDir

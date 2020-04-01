@@ -1,6 +1,4 @@
-package com.testdemo.testJava
-
-import com.testdemo.testjava.TestJava
+package com.testdemo.testjava
 
 open class TestKotlin {
     fun getString(): Int {

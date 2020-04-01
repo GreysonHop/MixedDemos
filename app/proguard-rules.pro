@@ -41,3 +41,17 @@
 #导航
 -keep class com.amap.api.navi.**{*;}
 -keep class com.autonavi.**{*;}
+
+
+# BaseRecyclerViewAdapterHelper
+-keep class com.chad.library.adapter.** {*;}
+-keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
+-keep public class * extends com.chad.library.adapter.base.BaseViewHolder
+-keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
+     <init>(...);
+}
+
+
+# Realm
+-keep class io.realm.** { *; }
+#对Realm相关的实体？ -keep class c.sachsen.bgim.user.realm.** { *; }

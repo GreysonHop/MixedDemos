@@ -31,6 +31,7 @@ import com.testdemo.testView.shader.TestShaderAct
 import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
 import com.testdemo.testStartMode.ActivityA
 import com.testdemo.testAnim.ConstraintAnimAct
+import com.testdemo.testAnim.activityAnim.DialogActivity
 import com.testdemo.testVerticalScrollView.TestActivity3
 
 /**
@@ -65,6 +66,7 @@ class MainActivity : ListActivity() {
         menuListMap["测试绘画相关属性"] = TestCanvasActivity::class.java
         menuListMap["Constraint动画"] = ConstraintAnimAct::class.java
         menuListMap["DataBinding"] = TestDataBindingAct::class.java
+        menuListMap["DialogActivity"] = DialogActivity::class.java
 
 
         classNameList.addAll(menuListMap.keys)

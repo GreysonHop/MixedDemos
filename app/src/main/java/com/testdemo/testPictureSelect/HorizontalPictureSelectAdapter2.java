@@ -83,7 +83,7 @@ public class HorizontalPictureSelectAdapter2 extends RecyclerView.Adapter<Horizo
         Glide.with(context)
                 .load(path)
                 .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .placeholder(R.drawable.image_placeholder)
                 .into(contentHolder.pictureIV);
 

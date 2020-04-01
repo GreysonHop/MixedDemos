@@ -83,7 +83,7 @@
 
         <activity
             android:name=".testDatePicker.CreateInfoAct"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
         <activity android:name=".testNCalendar.TestNCalendarAct" />
 
         <activity android:name=".testSpecialEditLayout.popupList.TestPopupListActivity" />
@@ -117,6 +117,7 @@
         </activity>
         <activity android:name=".testStartMode.ActivityB" />
         <activity android:name=".testAnim.ConstraintAnimAct" />
+        <activity android:name=".testAnim.activityAnim.DialogActivity" />
 
         <activity android:name="com.testdemo.testView.canvas.TestCanvasActivity" />
 

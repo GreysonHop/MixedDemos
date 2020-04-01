@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintDimensionRatio="1:1"
+    tools:layout_width="186dp">
+
+    <ImageView
+        android:id="@+id/iv_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_placeholder"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/item_pic_cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@null"
+        android:button="@drawable/ic_check_selector"
+        android:checked="true"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@id/iv_picture"
+        app:layout_constraintTop_toTopOf="@id/iv_picture" />
+
+    <ImageView
+        android:id="@+id/iv_video_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:src="@drawable/ic_videosign_white"
+        app:layout_constraintBottom_toBottomOf="@id/iv_picture"
+        app:layout_constraintEnd_toEndOf="@id/iv_picture" />
+
+    <TextView
+        android:id="@+id/video_msg_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:shadowColor="#FF666666"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="2"
+        android:text="0:11"
+        android:textColor="#FFFFFFFF"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_picture"
+        app:layout_constraintStart_toStartOf="@id/iv_picture" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_video_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="video_msg_duration,iv_video_sign" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
