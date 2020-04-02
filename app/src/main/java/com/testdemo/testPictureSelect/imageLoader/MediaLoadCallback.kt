@@ -1,5 +1,7 @@
 package com.testdemo.testPictureSelect.imageLoader
 
+import android.util.SparseArray
+
 /**
  * 图片扫描数据回调接口
  * Create by: chenWei.li
@@ -8,5 +10,5 @@ package com.testdemo.testPictureSelect.imageLoader
  * Email: lichenwei.me@foxmail.com
  */
 interface MediaLoadCallback {
-    fun loadMediaSuccess(mediaFolderList: Map<Int, Array<MediaFolder?>>)
+    fun loadMediaSuccess(mediaFolderMap: Map<Int, Array<MediaFolder?>>, mediaFolderList: SparseArray<MediaFolder>)
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.testdemo.testPictureSelect.imageLoader.thumbnail.RealmThumbHelper;
@@ -20,7 +19,7 @@ import io.realm.Realm;
  * Time: 上午1:01
  * Email: lichenwei.me@foxmail.com
  */
-public class VideoScanner extends AbsMediaScanner<ChatPictureBean> {
+public class VideoScanner extends AbsMediaScanner<MediaBean> {
 
     Realm realm;
 
@@ -76,8 +75,8 @@ public class VideoScanner extends AbsMediaScanner<ChatPictureBean> {
      * @return
      */
     @Override
-    protected ChatPictureBean parse(Cursor cur) {
-        ChatPictureBean chatPictureBean = null;
+    protected MediaBean parse(Cursor cur) {
+        MediaBean mediaBean = null;
 
         String path = cur.getString(cur.getColumnIndex(MediaStore.Video.Media.DATA));
         if (!isFileAvail(path)) {
@@ -93,13 +92,13 @@ public class VideoScanner extends AbsMediaScanner<ChatPictureBean> {
 
         Log.d("greyson", "mineType=" + mineType + ",path=" + new File(path).getName());
 
-        chatPictureBean = new ChatPictureBean();
-        chatPictureBean.setDateToken(dateToken);
-        chatPictureBean.setFolderId(folderId);
-        chatPictureBean.setFolderName(folderName);
-        chatPictureBean.setPath(path);
-        chatPictureBean.setDuration(duration / 1000);
-        chatPictureBean.setType(ChatPictureBean.TYPE_VIDEO);
+        mediaBean = new MediaBean();
+        mediaBean.setDateToken(dateToken);
+        mediaBean.setFolderId(folderId);
+        mediaBean.setFolderName(folderName);
+        mediaBean.setPath(path);
+        mediaBean.setDuration(duration / 1000);
+        mediaBean.setType(MediaBean.TYPE_VIDEO);
 
 //        String thumbPath = null;
 //
@@ -124,19 +123,9 @@ public class VideoScanner extends AbsMediaScanner<ChatPictureBean> {
 //            }
 //        }
 //
-//        if (FileUtils.isFileAvail(thumbPath)){
-//            chatPictureBean = new ChatPictureBean();
-//            chatPictureBean.setDateToken(dateToken);
-//            chatPictureBean.setFolderId(folderId);
-//            chatPictureBean.setFolderName(folderName);
-//            chatPictureBean.setPath(path);
-//            chatPictureBean.setDuration(duration/1000);
-//            chatPictureBean.setWidth(realmThumbnail.width);
-//            chatPictureBean.setHeight(realmThumbnail.height);
-//            chatPictureBean.setType(ChatPictureBean.TYPE_VIDEO);
 //        }
 
-        return chatPictureBean;
+        return mediaBean;
     }
 
 

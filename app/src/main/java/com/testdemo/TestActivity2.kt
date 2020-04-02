@@ -194,9 +194,15 @@ class TestActivity2 : Activity(), View.OnClickListener {
                 .withEndAction { blackBgIV.isClickable = true }
                 .start()
         blackBgIV.animate().setDuration(300).alpha(0.9f).start()
+
+        dragLayout.animate().setDuration(300).scaleX(0.0f).alpha(0.2f).start()
+        popupTV.animate().setDuration(300).scaleY(-1f).start()
     } else {
         shareLayout.animate().setDuration(300).translationY(shareLayout.height.toFloat()).start()
         blackBgIV.animate().setDuration(300).alpha(0.0f).start()
+
+        dragLayout.animate().setDuration(300).scaleX(1f).alpha(1f).start()
+        popupTV.animate().setDuration(300).scaleY(1f).start()
     }
 
     /*private fun showShareLayout(show: Boolean) {

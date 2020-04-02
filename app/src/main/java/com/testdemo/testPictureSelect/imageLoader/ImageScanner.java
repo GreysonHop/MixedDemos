@@ -12,7 +12,7 @@ import android.provider.MediaStore;
  * Time: 上午1:01
  * Email: lichenwei.me@foxmail.com
  */
-public class ImageScanner extends AbsMediaScanner<ChatPictureBean> {
+public class ImageScanner extends AbsMediaScanner<MediaBean> {
 
     public ImageScanner(Context context) {
         super(context);
@@ -65,7 +65,7 @@ public class ImageScanner extends AbsMediaScanner<ChatPictureBean> {
      * @return
      */
     @Override
-    protected ChatPictureBean parse(Cursor cursor) {
+    protected MediaBean parse(Cursor cursor) {
 
         String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
 
@@ -78,13 +78,13 @@ public class ImageScanner extends AbsMediaScanner<ChatPictureBean> {
         String folderName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
         long dateToken = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
 
-        ChatPictureBean chatPictrueBean = new ChatPictureBean();
+        MediaBean chatPictrueBean = new MediaBean();
         chatPictrueBean.setPath(path);
         chatPictrueBean.setMime(mime);
         chatPictrueBean.setFolderId(folderId);
         chatPictrueBean.setFolderName(folderName);
         chatPictrueBean.setDateToken(dateToken);
-        chatPictrueBean.setType(ChatPictureBean.TYPE_IMAGE);
+        chatPictrueBean.setType(MediaBean.TYPE_IMAGE);
 
         return chatPictrueBean;
     }

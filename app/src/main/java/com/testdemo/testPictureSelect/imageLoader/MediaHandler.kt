@@ -1,7 +1,10 @@
 package com.testdemo.testPictureSelect.imageLoader
 
 import android.content.Context
+import android.text.TextUtils
+import android.util.SparseArray
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 媒体处理类（对扫描出来的图片、视频做对应聚类处理）
@@ -45,35 +48,49 @@ object MediaHandler {
      * @param videoFileList
      * @return
      */
-    fun getMediaFolder(context: Context?, imageFileList: ArrayList<ChatPictureBean>?, videoFileList: ArrayList<ChatPictureBean>?): List<MediaFolder> {
-        val list = ArrayList<ChatPictureBean>()
+    fun getMediaFolder(context: Context?, imageFileList: ArrayList<MediaBean>?, videoFileList: ArrayList<MediaBean>?): List<MediaFolder> {
+        val list = ArrayList<MediaBean>()
         imageFileList?.let { list.addAll(it) }
         videoFileList?.let { list.addAll(it) }
         return getMediaFolder(context, list).values.toList()
     }
 
-    fun getMediaFolder22(context: Context?, imageFileList: ArrayList<ChatPictureBean>?, videoFileList: ArrayList<ChatPictureBean>?): Map<Int, Array<MediaFolder?>> {
+    fun getMediaFolderMap(context: Context?, imageFileList: ArrayList<MediaBean>?, videoFileList: ArrayList<MediaBean>?
+                          , callback: (mediaFolderMap: Map<Int, Array<MediaFolder?>>, mediaFolderList: SparseArray<MediaFolder>) -> Unit) {
         val imageFolderMap = imageFileList?.let { getMediaFolder(context, it) }//?.takeIf { it.isEmpty() }
         val videoFolderMap = videoFileList?.let { getMediaFolder(context, it) }
 
-        val fillDataToMap = { folderId: Int, mediaFolder: MediaFolder, allFolderMap: MutableMap<Int, Array<MediaFolder?>>, index: Int ->
+        val fillDataToMap = { folderId: Int, mediaFolder: MediaFolder, allFolderMap: MutableMap<Int, Array<MediaFolder?>>, index: Int, allFolderList: SparseArray<MediaFolder> ->
             var mediaArray = allFolderMap[folderId]
             if (mediaArray == null) {
                 mediaArray = arrayOf(null, null)
                 allFolderMap[folderId] = mediaArray
             }
             mediaArray[index] = mediaFolder
+
+            var folder = allFolderList[folderId]
+            if (folder == null) {
+                folder = MediaFolder(folderId, "", "", 0, ArrayList())
+                allFolderList.put(folderId, folder)
+            }
+            folder.mediaFileList.addAll(mediaFolder.mediaFileList)
+            if (TextUtils.isEmpty(folder.folderCover)) {//因为从视频开始解析，所以一般默认封面为第一视频的封面
+                folder.folderName = mediaFolder.folderName
+                folder.folderCover = mediaFolder.folderCover
+            }
         }
 
+        val folderList = SparseArray<MediaFolder>()
         val folderMediaMap = mutableMapOf<Int, Array<MediaFolder?>>()
-        videoFolderMap?.forEach { fillDataToMap(it.key, it.value, folderMediaMap, 0) }
-        imageFolderMap?.forEach { fillDataToMap(it.key, it.value, folderMediaMap, 1) }
+        videoFolderMap?.forEach { fillDataToMap(it.key, it.value, folderMediaMap, 0, folderList) }
+        imageFolderMap?.forEach { fillDataToMap(it.key, it.value, folderMediaMap, 1, folderList) }
 
-        return folderMediaMap
+        callback(folderMediaMap, folderList)
+//        return folderMediaMap
     }
 
     //根据媒体所在文件夹Id进行聚类（相册）
-    private fun getMediaFolder(context: Context?, fileList: ArrayList<ChatPictureBean>): Map<Int, MediaFolder> {
+    private fun getMediaFolder(context: Context?, fileList: ArrayList<MediaBean>): Map<Int, MediaFolder> {
 //        val mediaFolderMap: MutableMap<Int, MediaFolder> = HashMap()
         val mediaFolderMap = HashMap<Int, MediaFolder>()
 

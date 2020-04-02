@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.Comparator;
 
-public class ChatPictureBean implements Parcelable {
+public class MediaBean implements Parcelable {
     public static final int TYPE_IMAGE = 1000;
     public static final int TYPE_VIDEO = 1001;
 
@@ -23,11 +23,11 @@ public class ChatPictureBean implements Parcelable {
     private int height;
     private long selectTime;
 
-    public ChatPictureBean(){
+    public MediaBean(){
 
     }
 
-    protected ChatPictureBean(Parcel in) {
+    protected MediaBean(Parcel in) {
         itemPicIsChecked = in.readByte() != 0;
         path = in.readString();
         mime = in.readString();
@@ -46,15 +46,15 @@ public class ChatPictureBean implements Parcelable {
         selectTime = in.readLong();
     }
 
-    public static final Creator<ChatPictureBean> CREATOR = new Creator<ChatPictureBean>() {
+    public static final Creator<MediaBean> CREATOR = new Creator<MediaBean>() {
         @Override
-        public ChatPictureBean createFromParcel(Parcel in) {
-            return new ChatPictureBean(in);
+        public MediaBean createFromParcel(Parcel in) {
+            return new MediaBean(in);
         }
 
         @Override
-        public ChatPictureBean[] newArray(int size) {
-            return new ChatPictureBean[size];
+        public MediaBean[] newArray(int size) {
+            return new MediaBean[size];
         }
     };
 
@@ -181,10 +181,10 @@ public class ChatPictureBean implements Parcelable {
         dest.writeLong(selectTime);
     }
 
-    public static Comparator<ChatPictureBean> getComparator(){
-        Comparator t = new Comparator<ChatPictureBean>() {
+    public static Comparator<MediaBean> getComparator(){
+        Comparator t = new Comparator<MediaBean>() {
             @Override
-            public int compare(ChatPictureBean o1, ChatPictureBean o2) {
+            public int compare(MediaBean o1, MediaBean o2) {
                 int ret = 0;
                 long del = o1.getSelectTime() - o2.getSelectTime();
                 if(del > 0){

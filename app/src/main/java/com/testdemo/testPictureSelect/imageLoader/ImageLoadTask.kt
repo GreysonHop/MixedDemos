@@ -1,6 +1,7 @@
 package com.testdemo.testPictureSelect.imageLoader
 
 import android.content.Context
+import android.util.SparseArray
 import java.util.*
 
 /**
@@ -13,6 +14,7 @@ import java.util.*
 class ImageLoadTask(private val context: Context, private val mediaLoadCallback: MediaLoadCallback?) : Runnable {
     private val mImageScanner: ImageScanner?
     private val mVideoScanner: VideoScanner?
+
     init {
         mImageScanner = ImageScanner(context)
         mVideoScanner = VideoScanner(context)
@@ -20,7 +22,7 @@ class ImageLoadTask(private val context: Context, private val mediaLoadCallback:
 
     override fun run() {
         try { //存放所有照片
-            val imageFileList = ArrayList<ChatPictureBean>()
+            val imageFileList = ArrayList<MediaBean>()
             if (mImageScanner != null) {
                 imageFileList.addAll(mImageScanner.queryMedia())
             }
@@ -28,8 +30,11 @@ class ImageLoadTask(private val context: Context, private val mediaLoadCallback:
                 imageFileList.addAll(mVideoScanner.queryMedia())
             }
             if (mediaLoadCallback != null) {
-//                val list = MediaHandler.getMediaFolder(context, mImageScanner?.queryMedia(), mVideoScanner?.queryMedia())
-                mediaLoadCallback.loadMediaSuccess(MediaHandler.getMediaFolder22(context, mImageScanner?.queryMedia(),mVideoScanner?.queryMedia()))
+                MediaHandler.getMediaFolderMap(context, mImageScanner?.queryMedia(), mVideoScanner?.queryMedia()
+                ) { mediaFolderMap, mediaFolderList ->
+                    mediaLoadCallback.loadMediaSuccess(mediaFolderMap, mediaFolderList)
+                }
+
                 synchronized(ImageLoadTask::class.java) {
                     mediaFolderList.clear()
 //                    mediaFolderList.addAll(list)
@@ -58,9 +63,9 @@ class ImageLoadTask(private val context: Context, private val mediaLoadCallback:
             synchronized(ImageLoadTask::class.java) { mediaFolderList.clear() }
         }
 
-        val allSelectPic: List<ChatPictureBean>
+        val allSelectPic: List<MediaBean>
             get() {
-                val list: MutableList<ChatPictureBean> = ArrayList()
+                val list: MutableList<MediaBean> = ArrayList()
                 synchronized(ImageLoadTask::class.java) {
                     val folder = getMediaFolderById(MediaHandler.ALL_MEDIA_FOLDER)
                     if (folder != null) {

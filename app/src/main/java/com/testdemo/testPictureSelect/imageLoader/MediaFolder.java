@@ -1,6 +1,7 @@
 package com.testdemo.testPictureSelect.imageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 图片文件夹实体类
@@ -16,9 +17,9 @@ public class MediaFolder {
     private String folderCover;
     private int coverType;
     private boolean isCheck;
-    private ArrayList<ChatPictureBean> mediaFileList;
+    private List<MediaBean> mediaFileList;
 
-    public MediaFolder(int folderId, String folderName, String folderCover, int coverType, ArrayList<ChatPictureBean> mediaFileList) {
+    public MediaFolder(int folderId, String folderName, String folderCover, int coverType, List<MediaBean> mediaFileList) {
         this.folderId = folderId;
         this.folderName = folderName;
         this.folderCover = folderCover;
@@ -58,11 +59,11 @@ public class MediaFolder {
         isCheck = check;
     }
 
-    public ArrayList<ChatPictureBean> getMediaFileList() {
+    public List<MediaBean> getMediaFileList() {
         return mediaFileList;
     }
 
-    public void setMediaFileList(ArrayList<ChatPictureBean> mediaFileList) {
+    public void setMediaFileList(ArrayList<MediaBean> mediaFileList) {
         this.mediaFileList = mediaFileList;
     }
 
