@@ -570,7 +570,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         this.mMultipleNum = multipleNum;
     }
 
-    //todo greyson
     public void printCurrentCalendarView() {
         CalendarView currentCalendarView = mViewPager.findViewWithTag(mViewPager.getCurrentItem());
         Log.d("greyson", "BaseCalendar(" + getClass().getName() + ") current position: " + mViewPager.getCurrentItem() + ", CalendarView: " + currentCalendarView);
