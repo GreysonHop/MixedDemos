@@ -57,6 +57,6 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="20dp"
-        tools:src="@drawable/ic_blue_ring_checked" />
+        android:src="@drawable/ic_blue_ring_checked" />
 
 </RelativeLayout>

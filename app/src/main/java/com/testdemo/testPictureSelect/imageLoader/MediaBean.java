@@ -9,7 +9,7 @@ public class MediaBean implements Parcelable {
     public static final int TYPE_IMAGE = 1000;
     public static final int TYPE_VIDEO = 1001;
 
-    public boolean itemPicIsChecked;
+    private boolean itemPicIsChecked;
 
     private String path;
     private String mime;

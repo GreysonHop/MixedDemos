@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent">
+    android:background="@drawable/shape_corner10top_white">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_mediaType"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_height="44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:tabIndicator="@null"
+        app:tabPaddingTop="10dp"
         app:tabSelectedTextColor="@color/textBlue"
         app:tabTextColor="@color/textBlack" />
 
@@ -31,14 +31,24 @@
         android:id="@+id/rv_album_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="10dp"
         android:background="@color/white"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:visibility="visible" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/shape_corner10top_white"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
 
     <ImageView
         android:id="@+id/iv_close"
@@ -54,7 +64,8 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:minHeight="44dp"
         android:text="所有"
         android:textColor="@color/textBlack"
         android:textSize="18sp"
@@ -68,9 +79,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:src="@drawable/ic_arrow_drop_up_black_24dp"
         android:clickable="true"
         android:focusable="true"
+        android:src="@drawable/ic_arrow_drop_up_black_24dp"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_title"
@@ -81,11 +92,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
+        android:text="上传"
         android:textColor="@color/textBlue"
         android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_title"
-        tools:text="上传" />
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

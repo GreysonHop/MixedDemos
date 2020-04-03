@@ -7,6 +7,9 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
+import com.testdemo.R
 import com.testdemo.testPictureSelect.imageLoader.MediaBean
 
 /**
@@ -14,16 +17,26 @@ import com.testdemo.testPictureSelect.imageLoader.MediaBean
  */
 class MediaPageAdapter : PagerAdapter() {
     var dataList: Array<List<MediaBean>?>? = null
-    var adapterList = SparseArray<GridPicSelectAdapter>()
+    var adapterList = SparseArray<BaseQuickAdapter<MediaBean, BaseViewHolder>>()
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val adapter = GridPicSelectAdapter()
+        var adapter = adapterList.get(position)
+        if (adapter == null) {
+            adapter = GridMediaSelectAdapter()
+            adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+                if (R.id.item_pic_cb == view.id) {
+                    val adapterIndex = adapterList.indexOfValue(adapter as GridMediaSelectAdapter)
+                    onMediaCheckedListener?.onMediaChecked(adapterIndex, adapter, view, position)
+                }
+            }
+            adapterList.put(position, adapter)
+        }
+
         val rv = RecyclerView(container.context)
         rv.layoutManager = GridLayoutManager(container.context, 4)
         rv.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         rv.adapter = adapter
 
-        adapterList.put(position, adapter)
         dataList?.let {
             adapter.setNewData(it[position])
         }
@@ -53,5 +66,19 @@ class MediaPageAdapter : PagerAdapter() {
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         super.destroyItem(container, position, `object`)
+    }
+
+    interface OnMediaCheckedListener {
+        /**
+         * @param page 点击的媒体文件所在的RecyclerView是MediaPageAdapter中的第几页
+         * @param adapter 点击的媒体文件所在的RecyclerView.Adapter。如果为空，说明
+         * @param view 点击的CheckBox
+         */
+        fun onMediaChecked(page: Int, adapter: BaseQuickAdapter<MediaBean, BaseViewHolder>, view: View, checkedPosition: Int)
+    }
+
+    private var onMediaCheckedListener: OnMediaCheckedListener? = null
+    fun setOnMediaCheckedListener(listener: OnMediaCheckedListener) {
+        this.onMediaCheckedListener = listener
     }
 }

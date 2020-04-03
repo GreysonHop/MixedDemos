@@ -7,18 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.material.tabs.TabLayout
 import com.luck.picture.lib.permissions.RxPermissions
 import com.testdemo.BaseActivity
 import com.testdemo.R
-import com.testdemo.testPictureSelect.imageLoader.MediaBean
 import com.testdemo.testPictureSelect.imageLoader.ImageLoadTask
+import com.testdemo.testPictureSelect.imageLoader.MediaBean
 import com.testdemo.testPictureSelect.imageLoader.MediaFolder
 import com.testdemo.testPictureSelect.imageLoader.MediaLoadCallback
 import kotlinx.android.synthetic.main.act_dialog.*
-import kotlin.collections.ArrayList
 
 /**
  * Create by Greyson
@@ -30,27 +32,28 @@ class DialogActivity : BaseActivity() {
 
     var mediaPageAdapter = MediaPageAdapter()
     var folderListAdapter = FolderListAdapter()
-    //    var mediaFolderMap: Map<Int, Array<MediaFolder?>>? = null
-    var mediaIdList = ArrayList<Int>()
-
 
     private val folderList = ArrayList<MediaFolder>()
     private val videoFolderList = ArrayList<MediaFolder?>()
     private val imageFolderList = ArrayList<MediaFolder?>()
 
-    var allAlbumPathList = ArrayList<MediaBean?>() //所有图库图片的集合
-    private var picCheckedList = ArrayList<String>() //被选中的集合
+    private val videoCheckedList = ArrayList<String>(1)
+    private val picCheckedList = ArrayList<String>(1) //被选中的图片集合
     private var isOriginPick = false //是否原图
     private val mMaxSelectedCount = 9 //最多能选择9张图片
-    //文件夹数据源
-    private var mMediaFolderList: List<MediaFolder>? = null
-    private val selectMediaFolder: MediaFolder? = null
+
+    override fun initialize() {
+        super.initialize()
+        window.decorView.setBackgroundColor(resources.getColor(R.color.transparent))
+
+    }
 
     override fun getLayoutResId(): Int {
         return R.layout.act_dialog
     }
 
     override fun initView() {
+        iv_close.setOnClickListener { finish() }
         vp_media.adapter = mediaPageAdapter
         mediaPageAdapter.setNewData(arrayOfNulls(2))
         vp_media.currentItem = 0
@@ -61,35 +64,14 @@ class DialogActivity : BaseActivity() {
         (videoTab.findViewById(R.id.tv_tb_item_title) as TextView).text = "视频"
         val imageTab = LayoutInflater.from(this).inflate(R.layout.tab_item_media, null)
         (imageTab.findViewById(R.id.tv_tb_item_title) as TextView).text = "图片"
-        /*val tab1 = tab_mediaType.newTab()
-        tab1.customView = videoTab
-        tab_mediaType.addTab(tab1, true)
-        val tab2 =  tab_mediaType.newTab()
-        tab2.customView = imageTab
-        tab_mediaType.addTab(tab2, false)*/
         tab_mediaType.getTabAt(0)?.customView = videoTab
         tab_mediaType.getTabAt(1)?.customView = imageTab
-        tab_mediaType.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(p0: TabLayout.Tab?) {}
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {}
-
-            override fun onTabSelected(p0: TabLayout.Tab?) {
-
-            }
-        })
-        folderListAdapter.setOnFolderCheckedChangeListener(object : FolderListAdapter.OnFolderCheckedChangeListener {
-            override fun onFolderCheckedChange(view: View, position: Int) {
-                rv_album_list.visibility = View.GONE
-                changeSelectedFolder(position)
-            }
-        })
-
-        val showFolderList = {
+        val switchFolderList = {
             if (rv_album_list.visibility == View.GONE) {//to show
                 val translateInAnimation = TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
                         Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                        1.0f, Animation.RELATIVE_TO_SELF, 0.0f)
+                        -1.0f, Animation.RELATIVE_TO_SELF, 0.0f)
                 translateInAnimation.duration = 300
                 rv_album_list.animation = translateInAnimation
 
@@ -104,7 +86,7 @@ class DialogActivity : BaseActivity() {
             } else {
                 val translateOutAnimation = TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
                         Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                        0.0f, Animation.RELATIVE_TO_SELF, 1.0f)
+                        0.0f, Animation.RELATIVE_TO_SELF, -1.0f)
                 translateOutAnimation.duration = 300
                 rv_album_list.animation = translateOutAnimation
 
@@ -114,8 +96,28 @@ class DialogActivity : BaseActivity() {
 
             }
         }
-        iv_arrow.setOnClickListener { showFolderList() }
-        tv_title.setOnClickListener { showFolderList() }
+        iv_arrow.setOnClickListener { switchFolderList() }
+        tv_title.setOnClickListener { switchFolderList() }
+
+        folderListAdapter.setOnFolderCheckedChangeListener(object : FolderListAdapter.OnFolderCheckedChangeListener {
+            override fun onFolderCheckedChange(view: View, position: Int) {
+                if (rv_album_list.visibility == View.VISIBLE) {
+                    switchFolderList()
+                }
+                changeSelectedFolder(position)
+            }
+        })
+
+        mediaPageAdapter.setOnMediaCheckedListener(object : MediaPageAdapter.OnMediaCheckedListener {
+            override fun onMediaChecked(page: Int, adapter: BaseQuickAdapter<MediaBean, BaseViewHolder>, view: View, checkedPosition: Int) {
+                handleMediaChecked(page, adapter, view, checkedPosition)
+            }
+        })
+
+        tv_ok.setOnClickListener {
+//            setResult()
+            finish()
+        }
     }
 
     override fun initData() {
@@ -166,12 +168,10 @@ class DialogActivity : BaseActivity() {
             return
         }
 
-        mediaIdList.clear()
         imageFolderList.clear()
         videoFolderList.clear()
         folderList.clear()
         mediaFolderMap.forEach { (folderId, mediaFolderArray) ->
-            mediaIdList.add(folderId)
             videoFolderList.add(mediaFolderArray[0])
             imageFolderList.add(mediaFolderArray[1])
             folderList.add(mediaFolderList.get(folderId))
@@ -191,5 +191,65 @@ class DialogActivity : BaseActivity() {
         array[1] = imageFolderList[position]?.mediaFileList
         println("Greyson, 数组长度： ${array.size}")
         mediaPageAdapter.setNewData(array)
+    }
+
+    /**
+     * 处理最多选择9张的图片方法
+     *
+     * @param adapter
+     * @param view1
+     * @param position
+     */
+    private fun handleMediaChecked(page: Int, adapter: BaseQuickAdapter<MediaBean, BaseViewHolder>
+                                   , view1: View, position: Int) {
+        val mediaBean = adapter.data[position]
+        val checkBox = view1.findViewById<CheckBox>(R.id.item_pic_cb)
+        val isImageType = mediaBean.type == MediaBean.TYPE_IMAGE
+
+        if (isImageType) {
+            if (videoCheckedList.size > 0) {
+                //有已选的视频，只能选择图片或者视频
+                checkBox.isChecked = false
+                return
+            }
+
+            if (mediaBean.isItemPicIsChecked) {
+                mediaBean.isItemPicIsChecked = false
+                picCheckedList.remove(mediaBean.path)
+
+            } else {
+                if (picCheckedList.size >= mMaxSelectedCount) {//大于9
+                    checkBox.isChecked = false
+//                BGToast.showRed(R.string.most_select_pic_conut)
+                } else {
+                    mediaBean.isItemPicIsChecked = true
+                    picCheckedList.add(mediaBean.path)
+                }
+            }
+
+
+        } else {
+            if (picCheckedList.size > 0) {
+                //只能选择图片或视频
+                checkBox.isChecked = false
+                return
+            }
+
+            if (mediaBean.isItemPicIsChecked) {
+                mediaBean.isItemPicIsChecked = false
+                videoCheckedList.remove(mediaBean.path)
+            } else {
+                if (videoCheckedList.size >= 1) {
+                    checkBox.isChecked = false
+                    //todo toast
+                } else {
+                    mediaBean.isItemPicIsChecked = true
+                    videoCheckedList.add(mediaBean.path)
+                }
+            }
+        }
+
+        tv_ok.visibility = if (picCheckedList.size == 0 && videoCheckedList.size == 0) View.GONE else View.VISIBLE
+
     }
 }
