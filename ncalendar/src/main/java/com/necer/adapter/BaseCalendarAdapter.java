@@ -70,19 +70,6 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
     }
 
     @Override
-    public void onViewAttachedToWindow(@NonNull MyViewHolder holder) {
-        print("onViewAttachedToWindow()", holder);
-        ViewGroup parent = (ViewGroup) holder.itemView;
-        View view = parent.getChildAt(0);
-        if (view != null) {
-            if (mOnDataBoundForPage != null) {
-                mOnDataBoundForPage.onPageAttachedToWindow((Integer) view.getTag());
-            }
-        }
-        super.onViewAttachedToWindow(holder);
-    }
-
-    @Override
     public void onViewDetachedFromWindow(@NonNull MyViewHolder holder) {
         print("onViewDetachedFromWindow()", holder);
         super.onViewDetachedFromWindow(holder);
