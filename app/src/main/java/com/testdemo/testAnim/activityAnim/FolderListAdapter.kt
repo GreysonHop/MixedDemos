@@ -7,18 +7,18 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.testdemo.R
 import com.testdemo.testPictureSelect.imageLoader.MediaBean
-import com.testdemo.testPictureSelect.imageLoader.MediaFolder
+import com.testdemo.testPictureSelect.imageLoader.MediaFolderBean
 
 /**
  * Create by Greyson
  */
-class FolderListAdapter : BaseQuickAdapter<MediaFolder, BaseViewHolder> {
+class FolderListAdapter : BaseQuickAdapter<MediaFolderBean, BaseViewHolder> {
 
     private var currentCheckedIndex = 0
 
     constructor() : super(R.layout.item_folder_list, null)
 
-    override fun convert(helper: BaseViewHolder, item: MediaFolder?) {
+    override fun convert(helper: BaseViewHolder, item: MediaFolderBean?) {
         if (item == null) {
             return
         }

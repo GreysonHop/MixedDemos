@@ -24,7 +24,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./check_branch_name.sh",
+      "pre-commit": "./check_branch_name.s",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }

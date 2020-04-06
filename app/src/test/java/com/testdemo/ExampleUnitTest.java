@@ -50,9 +50,10 @@ public class ExampleUnitTest {
 
         assertEquals(4, 2 + 2);
 
-        Date date = new SimpleDateFormat("a hh:mm", Locale.ENGLISH).parse("下午 00:05");
+        Date date = new SimpleDateFormat("a hh:mm", Locale.CHINESE).parse("下午 00:05");
         SimpleDateFormat dateFormat = new SimpleDateFormat("'Today': EEEE, yyyy MMM d, hh:m,a", Locale.CHINA);
-        System.out.println("date = " + dateFormat.format(/*new Date()*/date));
+//        System.out.println("date = " + dateFormat.format(date));
+        System.out.println("date = " + dateFormat.format(new Date(1586025874L)));
 
     }
 

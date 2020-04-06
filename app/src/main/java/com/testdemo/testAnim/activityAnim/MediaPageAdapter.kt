@@ -7,8 +7,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.BaseQuickAdapter.OnItemChildClickListener
 import com.testdemo.R
 import com.testdemo.testPictureSelect.imageLoader.MediaBean
 
@@ -17,15 +16,15 @@ import com.testdemo.testPictureSelect.imageLoader.MediaBean
  */
 class MediaPageAdapter : PagerAdapter() {
     var dataList: Array<List<MediaBean>?>? = null
-    var adapterList = SparseArray<BaseQuickAdapter<MediaBean, BaseViewHolder>>()
+    var adapterList = SparseArray<GridMediaSelectAdapter>()
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         var adapter = adapterList.get(position)
         if (adapter == null) {
             adapter = GridMediaSelectAdapter()
-            adapter.onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+            adapter.onItemChildClickListener = OnItemChildClickListener { _, view, _ ->
                 if (R.id.item_pic_cb == view.id) {
-                    val adapterIndex = adapterList.indexOfValue(adapter as GridMediaSelectAdapter)
+                    val adapterIndex = adapterList.indexOfValue(adapter)
                     onMediaCheckedListener?.onMediaChecked(adapterIndex, adapter, view, position)
                 }
             }
@@ -74,7 +73,7 @@ class MediaPageAdapter : PagerAdapter() {
          * @param adapter 点击的媒体文件所在的RecyclerView.Adapter。如果为空，说明
          * @param view 点击的CheckBox
          */
-        fun onMediaChecked(page: Int, adapter: BaseQuickAdapter<MediaBean, BaseViewHolder>, view: View, checkedPosition: Int)
+        fun onMediaChecked(page: Int, adapter: GridMediaSelectAdapter, view: View, checkedPosition: Int)
     }
 
     private var onMediaCheckedListener: OnMediaCheckedListener? = null

@@ -10,5 +10,5 @@ import android.util.SparseArray
  * Email: lichenwei.me@foxmail.com
  */
 interface MediaLoadCallback {
-    fun loadMediaSuccess(mediaFolderMap: Map<Int, Array<MediaFolder?>>, mediaFolderList: SparseArray<MediaFolder>)
+    fun loadMediaSuccess(mediaFolderBeanMap: Map<Int, Array<MediaFolderBean?>>, mediaFolderBeanList: SparseArray<MediaFolderBean>)
 }

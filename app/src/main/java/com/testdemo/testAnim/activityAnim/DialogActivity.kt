@@ -10,15 +10,12 @@ import android.view.animation.TranslateAnimation
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
-import com.google.android.material.tabs.TabLayout
 import com.luck.picture.lib.permissions.RxPermissions
 import com.testdemo.BaseActivity
 import com.testdemo.R
 import com.testdemo.testPictureSelect.imageLoader.ImageLoadTask
 import com.testdemo.testPictureSelect.imageLoader.MediaBean
-import com.testdemo.testPictureSelect.imageLoader.MediaFolder
+import com.testdemo.testPictureSelect.imageLoader.MediaFolderBean
 import com.testdemo.testPictureSelect.imageLoader.MediaLoadCallback
 import kotlinx.android.synthetic.main.act_dialog.*
 
@@ -33,9 +30,9 @@ class DialogActivity : BaseActivity() {
     var mediaPageAdapter = MediaPageAdapter()
     var folderListAdapter = FolderListAdapter()
 
-    private val folderList = ArrayList<MediaFolder>()
-    private val videoFolderList = ArrayList<MediaFolder?>()
-    private val imageFolderList = ArrayList<MediaFolder?>()
+    private val folderList = ArrayList<MediaFolderBean>()
+    private val videoFolderList = ArrayList<MediaFolderBean?>()
+    private val imageFolderList = ArrayList<MediaFolderBean?>()
 
     private val videoCheckedList = ArrayList<String>(1)
     private val picCheckedList = ArrayList<String>(1) //被选中的图片集合
@@ -109,7 +106,10 @@ class DialogActivity : BaseActivity() {
         })
 
         mediaPageAdapter.setOnMediaCheckedListener(object : MediaPageAdapter.OnMediaCheckedListener {
-            override fun onMediaChecked(page: Int, adapter: BaseQuickAdapter<MediaBean, BaseViewHolder>, view: View, checkedPosition: Int) {
+            /*override fun onMediaChecked(page: Int, adapter: BaseQuickAdapter<*, *>, view: View, checkedPosition: Int) {
+                handleMediaChecked(page, adapter, view, checkedPosition)
+            }*/
+            override fun onMediaChecked(page: Int, adapter: GridMediaSelectAdapter, view: View, checkedPosition: Int) {
                 handleMediaChecked(page, adapter, view, checkedPosition)
             }
         })
@@ -145,10 +145,10 @@ class DialogActivity : BaseActivity() {
 
     private fun loadMedia() {
         val mediaLoadTask: Runnable = ImageLoadTask(this, object : MediaLoadCallback {
-            override fun loadMediaSuccess(mediaFolderMap: Map<Int, Array<MediaFolder?>>, mediaFolderList: SparseArray<MediaFolder>) {
+            override fun loadMediaSuccess(mediaFolderBeanMap: Map<Int, Array<MediaFolderBean?>>, mediaFolderBeanList: SparseArray<MediaFolderBean>) {
                 runOnUiThread {
-                    if (mediaFolderMap.isNotEmpty()) { //图片文件夹数据
-                        dealList(mediaFolderMap, mediaFolderList)
+                    if (mediaFolderBeanMap.isNotEmpty()) { //图片文件夹数据
+                        dealList(mediaFolderBeanMap, mediaFolderBeanList)
 
                         changeSelectedFolder(0)
 
@@ -163,18 +163,18 @@ class DialogActivity : BaseActivity() {
     }
 
     //将图片与视频的分开
-    private fun dealList(mediaFolderMap: Map<Int, Array<MediaFolder?>>, mediaFolderList: SparseArray<MediaFolder>) {
-        if (mediaFolderMap.isEmpty()) {
+    private fun dealList(mediaFolderBeanMap: Map<Int, Array<MediaFolderBean?>>, mediaFolderBeanList: SparseArray<MediaFolderBean>) {
+        if (mediaFolderBeanMap.isEmpty()) {
             return
         }
 
         imageFolderList.clear()
         videoFolderList.clear()
         folderList.clear()
-        mediaFolderMap.forEach { (folderId, mediaFolderArray) ->
+        mediaFolderBeanMap.forEach { (folderId, mediaFolderArray) ->
             videoFolderList.add(mediaFolderArray[0])
             imageFolderList.add(mediaFolderArray[1])
-            folderList.add(mediaFolderList.get(folderId))
+            folderList.add(mediaFolderBeanList.get(folderId))
         }
     }
 
@@ -200,7 +200,7 @@ class DialogActivity : BaseActivity() {
      * @param view1
      * @param position
      */
-    private fun handleMediaChecked(page: Int, adapter: BaseQuickAdapter<MediaBean, BaseViewHolder>
+    private fun handleMediaChecked(page: Int, adapter: GridMediaSelectAdapter
                                    , view1: View, position: Int) {
         val mediaBean = adapter.data[position]
         val checkBox = view1.findViewById<CheckBox>(R.id.item_pic_cb)

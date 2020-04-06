@@ -10,7 +10,7 @@ import java.util.List;
  * Time: 上午12:56
  * Email: lichenwei.me@foxmail.com
  */
-public class MediaFolder {
+public class MediaFolderBean {
 
     private int folderId;
     private String folderName;
@@ -19,7 +19,7 @@ public class MediaFolder {
     private boolean isCheck;
     private List<MediaBean> mediaFileList;
 
-    public MediaFolder(int folderId, String folderName, String folderCover, int coverType, List<MediaBean> mediaFileList) {
+    public MediaFolderBean(int folderId, String folderName, String folderCover, int coverType, List<MediaBean> mediaFileList) {
         this.folderId = folderId;
         this.folderName = folderName;
         this.folderCover = folderCover;

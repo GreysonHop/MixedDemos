@@ -48,7 +48,7 @@ object MediaHandler {
      * @param videoFileList
      * @return
      */
-    fun getMediaFolder(context: Context?, imageFileList: ArrayList<MediaBean>?, videoFileList: ArrayList<MediaBean>?): List<MediaFolder> {
+    fun getMediaFolder(context: Context?, imageFileList: ArrayList<MediaBean>?, videoFileList: ArrayList<MediaBean>?): List<MediaFolderBean> {
         val list = ArrayList<MediaBean>()
         imageFileList?.let { list.addAll(it) }
         videoFileList?.let { list.addAll(it) }
@@ -56,32 +56,32 @@ object MediaHandler {
     }
 
     fun getMediaFolderMap(context: Context?, imageFileList: ArrayList<MediaBean>?, videoFileList: ArrayList<MediaBean>?
-                          , callback: (mediaFolderMap: Map<Int, Array<MediaFolder?>>, mediaFolderList: SparseArray<MediaFolder>) -> Unit) {
+                          , callback: (mediaFolderBeanMap: Map<Int, Array<MediaFolderBean?>>, mediaFolderBeanList: SparseArray<MediaFolderBean>) -> Unit) {
         val imageFolderMap = imageFileList?.let { getMediaFolder(context, it) }//?.takeIf { it.isEmpty() }
         val videoFolderMap = videoFileList?.let { getMediaFolder(context, it) }
 
-        val fillDataToMap = { folderId: Int, mediaFolder: MediaFolder, allFolderMap: MutableMap<Int, Array<MediaFolder?>>, index: Int, allFolderList: SparseArray<MediaFolder> ->
-            var mediaArray = allFolderMap[folderId]
+        val fillDataToMap = { folderId: Int, mediaFolderBean: MediaFolderBean, allFolderBeanMap: MutableMap<Int, Array<MediaFolderBean?>>, index: Int, allFolderBeanList: SparseArray<MediaFolderBean> ->
+            var mediaArray = allFolderBeanMap[folderId]
             if (mediaArray == null) {
                 mediaArray = arrayOf(null, null)
-                allFolderMap[folderId] = mediaArray
+                allFolderBeanMap[folderId] = mediaArray
             }
-            mediaArray[index] = mediaFolder
+            mediaArray[index] = mediaFolderBean
 
-            var folder = allFolderList[folderId]
+            var folder = allFolderBeanList[folderId]
             if (folder == null) {
-                folder = MediaFolder(folderId, "", "", 0, ArrayList())
-                allFolderList.put(folderId, folder)
+                folder = MediaFolderBean(folderId, "", "", 0, ArrayList())
+                allFolderBeanList.put(folderId, folder)
             }
-            folder.mediaFileList.addAll(mediaFolder.mediaFileList)
+            folder.mediaFileList.addAll(mediaFolderBean.mediaFileList)
             if (TextUtils.isEmpty(folder.folderCover)) {//因为从视频开始解析，所以一般默认封面为第一视频的封面
-                folder.folderName = mediaFolder.folderName
-                folder.folderCover = mediaFolder.folderCover
+                folder.folderName = mediaFolderBean.folderName
+                folder.folderCover = mediaFolderBean.folderCover
             }
         }
 
-        val folderList = SparseArray<MediaFolder>()
-        val folderMediaMap = mutableMapOf<Int, Array<MediaFolder?>>()
+        val folderList = SparseArray<MediaFolderBean>()
+        val folderMediaMap = mutableMapOf<Int, Array<MediaFolderBean?>>()
         videoFolderMap?.forEach { fillDataToMap(it.key, it.value, folderMediaMap, 0, folderList) }
         imageFolderMap?.forEach { fillDataToMap(it.key, it.value, folderMediaMap, 1, folderList) }
 
@@ -90,14 +90,14 @@ object MediaHandler {
     }
 
     //根据媒体所在文件夹Id进行聚类（相册）
-    private fun getMediaFolder(context: Context?, fileList: ArrayList<MediaBean>): Map<Int, MediaFolder> {
+    private fun getMediaFolder(context: Context?, fileList: ArrayList<MediaBean>): Map<Int, MediaFolderBean> {
 //        val mediaFolderMap: MutableMap<Int, MediaFolder> = HashMap()
-        val mediaFolderMap = HashMap<Int, MediaFolder>()
+        val mediaFolderMap = HashMap<Int, MediaFolderBean>()
 
         //全部
         if (fileList.isNotEmpty()) {
             val pictureBean = fileList[0] //todo greyson 是否需要经过排序再获取第一个媒体文件来作为目录封面
-            mediaFolderMap[ALL_MEDIA_FOLDER] = MediaFolder(ALL_MEDIA_FOLDER, "All picture", pictureBean.path, pictureBean.type, fileList)
+            mediaFolderMap[ALL_MEDIA_FOLDER] = MediaFolderBean(ALL_MEDIA_FOLDER, "All picture", pictureBean.path, pictureBean.type, fileList)
 
             //对图片进行文件夹分类, 添加其他的图片文件夹
             fileList.forEach { file ->
@@ -105,7 +105,7 @@ object MediaHandler {
                 var mediaFolder = mediaFolderMap[folderId]
 
                 if (mediaFolder == null) {
-                    mediaFolder = MediaFolder(folderId, file.folderName, file.path, file.type, ArrayList())
+                    mediaFolder = MediaFolderBean(folderId, file.folderName, file.path, file.type, ArrayList())
                     mediaFolderMap[folderId] = mediaFolder
                 }
                 mediaFolder.mediaFileList.add(file)

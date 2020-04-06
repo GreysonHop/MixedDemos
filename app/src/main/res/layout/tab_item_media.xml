@@ -9,7 +9,7 @@
         android:id="@+id/tv_tb_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@drawable/color_selector_tb_title"
+        android:textColor="@drawable/color_selector_tb_media_title"
         android:textSize="14sp"
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toTopOf="@id/v_tab_item_line"
@@ -21,7 +21,7 @@
         android:id="@+id/v_tab_item_line"
         android:layout_width="0dp"
         android:layout_height="3dp"
-        android:background="@drawable/color_selector_tb_line"
+        android:background="@drawable/ic_selector_tb_line"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/tv_tb_item_title"
         app:layout_constraintStart_toStartOf="@id/tv_tb_item_title" />

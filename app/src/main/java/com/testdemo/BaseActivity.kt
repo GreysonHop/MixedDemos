@@ -1,6 +1,7 @@
 package com.testdemo
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -91,5 +92,13 @@ abstract class BaseActivity : AppCompatActivity() {
     fun setCloseAnim(@AnimRes enterAnim: Int, @AnimRes exitAnim: Int) {
         closeEnterAnim = enterAnim
         closeExitAnim = exitAnim
+    }
+
+    inline fun <reified T> go() {
+        startActivity(Intent(this, T::class.java))
+    }
+
+    inline fun <reified T> go(bundle: Bundle) {
+        startActivity(Intent(this, T::class.java).putExtras(bundle))
     }
 }

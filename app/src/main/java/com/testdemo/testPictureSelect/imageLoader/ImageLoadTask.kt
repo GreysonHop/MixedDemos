@@ -1,7 +1,6 @@
 package com.testdemo.testPictureSelect.imageLoader
 
 import android.content.Context
-import android.util.SparseArray
 import java.util.*
 
 /**
@@ -36,7 +35,7 @@ class ImageLoadTask(private val context: Context, private val mediaLoadCallback:
                 }
 
                 synchronized(ImageLoadTask::class.java) {
-                    mediaFolderList.clear()
+                    MEDIA_FOLDER_BEAN_LIST.clear()
 //                    mediaFolderList.addAll(list)
                 }
             }
@@ -46,21 +45,21 @@ class ImageLoadTask(private val context: Context, private val mediaLoadCallback:
     }
 
     companion object {
-        private val mediaFolderList: MutableList<MediaFolder> = ArrayList()
-        fun getMediaFolderById(folderId: Int): MediaFolder? {
-            var mediaFolder: MediaFolder? = null
+        private val MEDIA_FOLDER_BEAN_LIST: MutableList<MediaFolderBean> = ArrayList()
+        fun getMediaFolderById(folderId: Int): MediaFolderBean? {
+            var mediaFolderBean: MediaFolderBean? = null
             synchronized(ImageLoadTask::class.java) {
-                for (folder in mediaFolderList) {
+                for (folder in MEDIA_FOLDER_BEAN_LIST) {
                     if (folder.folderId == folderId) {
-                        mediaFolder = folder
+                        mediaFolderBean = folder
                     }
                 }
             }
-            return mediaFolder
+            return mediaFolderBean
         }
 
         fun clearMediaFolder() {
-            synchronized(ImageLoadTask::class.java) { mediaFolderList.clear() }
+            synchronized(ImageLoadTask::class.java) { MEDIA_FOLDER_BEAN_LIST.clear() }
         }
 
         val allSelectPic: List<MediaBean>
