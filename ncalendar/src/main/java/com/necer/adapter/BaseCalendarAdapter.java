@@ -111,17 +111,5 @@ public abstract class BaseCalendarAdapter extends RecyclerView.Adapter<BaseCalen
         }
     }
 
-    public interface OnDataBoundForPage {
-        void onPageAttachedToWindow(final int position);
-    }
-
-    public OnDataBoundForPage getOnDataBoundForPage() {
-        return mOnDataBoundForPage;
-    }
-
-    public void setOnDataBoundForPage(OnDataBoundForPage onDataBoundForPage) {
-        this.mOnDataBoundForPage = onDataBoundForPage;
-    }
-
 }
 

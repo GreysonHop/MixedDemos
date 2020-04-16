@@ -5,10 +5,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.ImageView;
-//import android.test.ApplicationTestCase;
 
-import androidx.test.InstrumentationRegistry;
-import androidx.test.core.app.ApplicationProvider;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -18,20 +16,31 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
 
 /**
+ * Instrumented test, which will execute on an Android device.
+ *
+ * See [testing documentation](http://d.android.com/tools/testing).
+ *
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
 @RunWith(AndroidJUnit4.class)
 public class ApplicationTest {
     private Context mTargetContext;
 
+    /*@Test
+    public void useAppContext() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        assertEquals("com.testdemo", appContext.getPackageName());
+    }*/
+
     @Before
     public void setUp() throws Exception {
-//        mTargetContext = InstrumentationRegistry.getTargetContext();//deprecated
-        mTargetContext = ApplicationProvider.getApplicationContext();
+        mTargetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+//        mTargetContext = ApplicationProvider.getApplicationContext();
     }
 
     @Test
-    public void onCreate() {//todo 还是不能正常运行？？。。。
+    public void testOnCreate() {//todo 还是不能正常运行？？。。。
         String data = null;
         try {
             ImageView testBitmap = new ImageView(mTargetContext);
@@ -49,9 +58,3 @@ public class ApplicationTest {
         assertEquals("1234567890", data);
     }
 }
-
-/*public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
-    }
-}*/

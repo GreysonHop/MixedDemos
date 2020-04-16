@@ -593,9 +593,9 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
     }
 
     @Override
-    public void setDefaultSelectFitst(boolean isDefaultSelectFitst) {
-        monthCalendar.setDefaultSelectFitst(isDefaultSelectFitst);
-//        weekCalendar.setDefaultSelectFitst(isDefaultSelectFitst);
+    public void setDefaultSelectFirst(boolean isDefaultSelectFirst) {
+        monthCalendar.setDefaultSelectFirst(isDefaultSelectFirst);
+//        weekCalendar.setDefaultSelectFirst(isDefaultSelectFirst);
     }
 
     @Override

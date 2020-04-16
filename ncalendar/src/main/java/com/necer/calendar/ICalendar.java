@@ -38,7 +38,7 @@ public interface ICalendar {
 
 
     //默认选中时，是否翻页选中第一个，只在selectedMode==SINGLE_SELECTED有效
-    void setDefaultSelectFitst(boolean isDefaultSelectFitst);
+    void setDefaultSelectFirst(boolean isDefaultSelectFirst);
 
 
     //跳转日期

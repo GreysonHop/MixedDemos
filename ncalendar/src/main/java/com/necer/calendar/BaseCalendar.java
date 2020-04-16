@@ -185,7 +185,6 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
         notifyCalendar();
 
         callBack();
-        return true;
     }
 
     public void onClickCurrentMonthOrWeekDate(LocalDate localDate) {
@@ -524,13 +523,13 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     protected abstract LocalDate getIntervalDate(LocalDate localDate, int count, boolean isJumpClick);
 
     @Override
-    public List<LocalDate> getCurrectSelectDateList() {
+    public List<LocalDate> getCurrentSelectDateList() {
         CalendarData data = mCalendarAdapter.getDataByPosition(mViewPager.getCurrentItem());
         return getCurrentSelectDateList(data.getDateList());
     }
 
     @Override
-    public List<LocalDate> getCurrectDateList() {
+    public List<LocalDate> getCurrentDateList() {
         return mCalendarAdapter.getDataByPosition(mViewPager.getCurrentItem()).getDateList();
     }
 
@@ -549,8 +548,8 @@ public abstract class BaseCalendar extends FrameLayout implements ICalendar {
     }
 
     @Override
-    public void setDefaultSelectFitst(boolean isDefaultSelectFitst) {
-        this.mIsDefaultSelectFirst = isDefaultSelectFitst;
+    public void setDefaultSelectFirst(boolean isDefaultSelectFirst) {
+        this.mIsDefaultSelectFirst = isDefaultSelectFirst;
     }
 
     @Override

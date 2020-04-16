@@ -17,6 +17,7 @@ open class TestKotlin {
     }*/
     fun canNoParam(param: String = "yes") {
         println("canNoParam param = $param")
+        printMy()
     }
 }
 

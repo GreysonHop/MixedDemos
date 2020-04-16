@@ -194,9 +194,6 @@ public class SpecialEditLayoutAct extends Activity {
             Geocoder gc = new Geocoder(this, Locale.getDefault());
             List<Address> list = gc.getFromLocation(mLat, mLng, 5);
             for (Address address : list) {
-                if ("CN".equalsIgnoreCase(address.getLocale().getCountry())) {
-
-                }
                 Log.d("greyson", "address = " + address);
             }
         } catch (Exception e) {
@@ -398,7 +395,7 @@ class PhoneReceiver extends BroadcastReceiver {
             }
         }
         //去电
-        if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
+        if (Intent.ACTION_NEW_OUTGOING_CALL.equals(intent.getAction())) {
             String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
             //这个地方只有你拨号的瞬间会调用
             Log.e("PhoneReceiver", "call OUT:" + phoneNumber);
