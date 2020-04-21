@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 背景 -->
     <item android:id="@android:id/background">
         <shape>
-            <corners android:radius="1dp" />
+            <corners android:radius="2dp" />
             <solid android:color="#f4f4f4" />
         </shape>
     </item>
@@ -24,14 +23,14 @@
 
     <!-- 第一进度条样式，我想修改的，修改成简单的灰色 -->
     <item android:id="@android:id/progress">
-        <clip>
-            <shape>
-                <!-- 圆角设置 -->
-                <corners android:radius="1dp" />
+        <clip android:drawable="@drawable/ic_progress_bar">
+            <!--<shape>
+                &lt;!&ndash; 圆角设置 &ndash;&gt;
+                <corners android:radius="2dp" />
                 <gradient
-                    android:endColor="#97F0CC"
-                    android:startColor="#48B2AE" />
-            </shape>
+                    android:endColor="#629DF6"
+                    android:startColor="#90CEF8" />
+            </shape>-->
         </clip>
     </item>
 </layer-list>

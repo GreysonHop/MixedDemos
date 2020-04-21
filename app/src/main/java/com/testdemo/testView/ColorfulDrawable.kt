@@ -2,11 +2,12 @@ package com.testdemo.testView
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.util.Log
 
 /**
  * Create by Greyson
  */
-class ColorfulView() : Drawable() {
+class ColorfulDrawable() : Drawable() {
 
     private var paint: Paint = Paint()
     private val path = Path()
@@ -27,6 +28,7 @@ class ColorfulView() : Drawable() {
     override fun draw(canvas: Canvas) {
         canvas.drawColor(0x3E82FB)
         paint.color = 0xAAC8FF
+        Log.d("greyson", "width:$intrinsicWidth, height=$intrinsicHeight")
         val number = intrinsicWidth / inclinedRectWidth
         for (i in 0..number.toInt() + 1 step 2) {
             drawInclinedRect(canvas, i)
@@ -34,7 +36,7 @@ class ColorfulView() : Drawable() {
     }
 
     private fun drawInclinedRect(canvas: Canvas, offset: Int) {
-        path.reset()
+//        path.reset()
         path.moveTo(offset * inclinedRectWidth, 0f)
         path.rLineTo(inclinedRectWidth, 0f)
         path.rLineTo(-inclinedLineWidth, inclinedLineWidth)
@@ -43,9 +45,17 @@ class ColorfulView() : Drawable() {
         canvas.drawPath(path, paint)
     }
 
-    /*override fun getIntrinsicHeight(): Int {
-        return super.getIntrinsicHeight()
-    }*/
+    override fun getMinimumWidth(): Int {
+        return 400
+    }
+
+    override fun getIntrinsicHeight(): Int {
+        return 30
+    }
+
+    override fun getIntrinsicWidth(): Int {
+        return 600
+    }
 
     override fun setAlpha(alpha: Int) {
         paint.alpha = alpha

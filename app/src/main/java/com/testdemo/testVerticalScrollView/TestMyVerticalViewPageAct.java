@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.testdemo.R;
 import com.testdemo.testVerticalScrollView.viewPager2.TestViewPager2Act;
+import com.testdemo.testView.ColorfulDrawable;
 
 import java.util.ArrayList;
 
@@ -105,22 +106,22 @@ public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollVi
         indexPointLayout.setPointCount(4, 1);
 
         ProgressBar ratingPB = findViewById(R.id.ratingPB);
-        ratingPB.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar));
         ratingPB.setMax(10);
-        ratingPB.setProgress(7);
+        ratingPB.setProgress(8);
 
         ProgressBar ratingPB2 = findViewById(R.id.ratingPB2);
-        ratingPB2.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB2.setProgressDrawable(getResources().getDrawable(R.drawable.layer_progress_bar));
         ratingPB2.setMax(10);
-        ratingPB2.setProgress(5);
+        ratingPB2.setProgress(9);
 
         ProgressBar ratingPB3 = findViewById(R.id.ratingPB3);
-        ratingPB3.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB3.setProgressDrawable(getResources().getDrawable(R.drawable.layer_progress_bar));
         ratingPB3.setMax(10);
-        ratingPB3.setProgress(3);
+        ratingPB3.setProgress(4);
 
         ProgressBar ratingPB4 = findViewById(R.id.ratingPB4);
-        ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar2));
+        ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar));
         ratingPB4.setMax(10);
         ratingPB4.setProgress(1);
 
