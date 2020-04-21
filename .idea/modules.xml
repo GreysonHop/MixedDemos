@@ -3,11 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BlurAndSomeElse.iml" filepath="$PROJECT_DIR$/BlurAndSomeElse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/BlurAndSomeElse-app.iml" filepath="$PROJECT_DIR$/app/BlurAndSomeElse-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/BlurAndSomeElse-app.iml" filepath="$PROJECT_DIR$/app/BlurAndSomeElse-app.iml" group="BlurAndSomeElse/app" />
       <module fileurl="file://$PROJECT_DIR$/ncalendar/BlurAndSomeElse-ncalendar.iml" filepath="$PROJECT_DIR$/ncalendar/BlurAndSomeElse-ncalendar.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GitRepo-BlurAndSomeElse.iml" filepath="$PROJECT_DIR$/GitRepo-BlurAndSomeElse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GitRepo-BlurAndSomeElse.iml" filepath="$PROJECT_DIR$/GitRepo-BlurAndSomeElse.iml" group="BlurAndSomeElse" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ncalendar/ncalendar.iml" filepath="$PROJECT_DIR$/ncalendar/ncalendar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ncalendar/ncalendar.iml" filepath="$PROJECT_DIR$/ncalendar/ncalendar.iml" group="BlurAndSomeElse/ncalendar" />
     </modules>
   </component>
 </project>
