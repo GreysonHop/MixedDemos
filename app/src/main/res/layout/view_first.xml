@@ -4,7 +4,7 @@
     android:id="@+id/firstView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".testVerticalScrollView.TestActivity3">
+    tools:context=".testVerticalScrollView.TestMyVerticalViewPageAct">
 
     <LinearLayout
         android:id="@+id/holdUpView"

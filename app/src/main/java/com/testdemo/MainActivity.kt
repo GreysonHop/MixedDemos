@@ -32,7 +32,7 @@ import com.testdemo.testSpecialEditLayout.SpecialEditLayoutAct
 import com.testdemo.testStartMode.ActivityA
 import com.testdemo.testAnim.ConstraintAnimAct
 import com.testdemo.testAnim.activityAnim.DialogActivity
-import com.testdemo.testVerticalScrollView.TestActivity3
+import com.testdemo.testVerticalScrollView.TestMyVerticalViewPageAct
 
 /**
  * Create by Greyson on 2019/9/14
@@ -47,8 +47,8 @@ class MainActivity : ListActivity() {
 
         val menuListMap = linkedMapOf<String, Class<out Activity>>()
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity::class.java)
-        menuListMap["动画实现弹窗"] = TestActivity2::class.java
-        menuListMap["上下滑动切换界面的ViewPager？"] = TestActivity3::class.java
+        menuListMap["动画实现弹窗"] = TestAnimationDialogAct::class.java
+        menuListMap["上下滑动切换界面的ViewPager？"] = TestMyVerticalViewPageAct::class.java
         menuListMap["可以在容器间拖曳的组件"] = TestDragViewActivity::class.java
         menuListMap["子View可被拉伸回弹的ScrollView"] = DraggableScrollViewAct::class.java
         menuListMap["中间刷新的List"] = CollapsingRecyclerActivity::class.java

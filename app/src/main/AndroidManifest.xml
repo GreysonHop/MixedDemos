@@ -39,9 +39,9 @@
             android:value="@string/google_map_api_key" />
 
         <activity android:name=".TestActivity2BlurBg" />
-        <activity android:name=".TestActivity2" />
+        <activity android:name=".TestAnimationDialogAct" />
         <activity android:name=".testCanDragLayout.TestDragViewActivity" />
-        <activity android:name=".testVerticalScrollView.TestActivity3" />
+        <activity android:name=".testVerticalScrollView.TestMyVerticalViewPageAct" />
         <activity android:name=".testVerticalScrollView.viewPager2.TestViewPager2Act" />
 
         <activity android:name=".testBlurAndGlass.BlurGlassSoOnActivity" />

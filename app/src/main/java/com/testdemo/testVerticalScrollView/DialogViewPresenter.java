@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
@@ -42,7 +40,7 @@ public class DialogViewPresenter implements View.OnClickListener {
         this.context = context;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        dialogView = inflater.inflate(R.layout.test_act3_dialog, null);
+        dialogView = inflater.inflate(R.layout.dialog_viewpresenter, null);
         backgroundIV = dialogView.findViewById(R.id.backgroundIV);
         itemsLayout = dialogView.findViewById(R.id.itemsLayout);
         hireLayout = dialogView.findViewById(R.id.hireLayout);

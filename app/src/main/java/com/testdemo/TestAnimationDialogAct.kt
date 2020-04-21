@@ -1,6 +1,5 @@
 package com.testdemo
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
@@ -13,13 +12,9 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.TranslateAnimation
 import android.widget.*
 import com.testdemo.broken_lib.Utils
-import kotlinx.android.synthetic.main.test_act2.*
+import kotlinx.android.synthetic.main.act_test_animationdialog.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,7 +24,7 @@ import java.util.regex.Pattern
  * Create by Greyson on 2019/09/15
  * 通过动画做一个从屏幕下外面慢慢向上移动的组件，和可上下拉的组件
  */
-class TestActivity2 : Activity(), View.OnClickListener {
+class TestAnimationDialogAct : Activity(), View.OnClickListener {
     private val TAG = "greyson_Test2"
 
     private var isSee = false
@@ -39,7 +34,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.test_act2)
+        setContentView(R.layout.act_test_animationdialog)
 
         chronometer.base = SystemClock.elapsedRealtime()
         chronometer.setOnChronometerTickListener {
@@ -64,7 +59,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
                     }
 
                     override fun onFinish() {
-                        Toast.makeText(this@TestActivity2, "倒计时完成！！！", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TestAnimationDialogAct, "倒计时完成！！！", Toast.LENGTH_SHORT).show()
                         popupTV.text = "已过期"
                     }
                 }
@@ -170,7 +165,7 @@ class TestActivity2 : Activity(), View.OnClickListener {
                         menuList.add("月榜单")
                         it.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_activated_1, menuList)
                         it.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-                            Toast.makeText(this@TestActivity2, "you click $position", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@TestAnimationDialogAct, "you click $position", Toast.LENGTH_SHORT).show()
                         }
 
                         popupWindow = PopupWindow(this)

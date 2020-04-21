@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Greyson on 2018/1/25.
  */
-public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollChangeListener, DialogViewPresenter.OnViewClickListener {
+public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollView.OnScrollChangeListener, DialogViewPresenter.OnViewClickListener {
     private final static String TAG = "Test3-greyson";
 
     IndexPointLayout indexPointLayout;
@@ -73,7 +72,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_act3);
+        setContentView(R.layout.act_test_myvertical_viewpage);
 
         ThreeScrollView threeScrollView = findViewById(R.id.threeScrollView);
 
@@ -146,7 +145,7 @@ public class TestActivity3 extends Activity implements ThreeScrollView.OnScrollC
         overlayListLayout.addView(imageView3);*/
 
         final PhoneEditText etPhone = findViewById(R.id.et_phone);
-        findViewById(R.id.btn_print_phone).setOnClickListener(v -> Toast.makeText(TestActivity3.this, etPhone.getPhone(), Toast.LENGTH_SHORT).show());
+        findViewById(R.id.btn_print_phone).setOnClickListener(v -> Toast.makeText(TestMyVerticalViewPageAct.this, etPhone.getPhone(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
