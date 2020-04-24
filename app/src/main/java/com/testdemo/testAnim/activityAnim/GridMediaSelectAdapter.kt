@@ -1,8 +1,10 @@
 package com.testdemo.testAnim.activityAnim
 
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -15,15 +17,16 @@ class GridMediaSelectAdapter : BaseQuickAdapter<MediaBean, BaseViewHolder> {
 
     override fun convert(helper: BaseViewHolder, item: MediaBean) {
         helper.addOnClickListener(R.id.item_pic_cb)
-        if (item.type == MediaBean.TYPE_IMAGE) {
-            Glide.with(mContext)
-                    .load(item.path)
-                    .into(helper.getView<View>(R.id.iv_picture) as ImageView)
-        } else if (item.type == MediaBean.TYPE_VIDEO) {
-            /*Glide.with(mContext)
-                    .load(new VideoUrl(item.getPath()))
-                    .into((ImageView) helper.getView(R.id.iv_picture));*/
-        }
+
+        val iv = helper.getView<ImageView>(R.id.iv_picture)
+        iv.setColorFilter(
+            Color.parseColor("#33000000"),
+            android.graphics.PorterDuff.Mode.SRC_ATOP
+        )
+        Glide.with(mContext)
+                .load(item.path)
+                .into(iv)
+
         helper.setChecked(R.id.item_pic_cb, item.isItemPicIsChecked)
         helper.setGone(R.id.group_video_sign, item.type == MediaBean.TYPE_VIDEO)
         //helper.setText(R.id.video_msg_duration, ChatTimeUtils.videoDurationToStr(item.getDuration()));

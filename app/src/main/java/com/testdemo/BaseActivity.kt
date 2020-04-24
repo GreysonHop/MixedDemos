@@ -24,12 +24,19 @@ abstract class BaseActivity : AppCompatActivity() {
     @AnimRes
     private var closeExitAnim = 0
 
+    /**
+     * 取消默认的requestedOrientation
+     */
+    protected var disableDefaultOrientation = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("greyson", "BaseActivity onCreate()___")
 
         initialize()
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        if (!disableDefaultOrientation) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
 
         if (getLayoutResId() != 0) {
             setContentView(getLayoutResId())

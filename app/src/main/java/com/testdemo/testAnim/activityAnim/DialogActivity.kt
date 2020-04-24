@@ -42,7 +42,7 @@ class DialogActivity : BaseActivity() {
     override fun initialize() {
         super.initialize()
         window.decorView.setBackgroundColor(resources.getColor(R.color.transparent))
-
+        disableDefaultOrientation = true
     }
 
     override fun getLayoutResId(): Int {
