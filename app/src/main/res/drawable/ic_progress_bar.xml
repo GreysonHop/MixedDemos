@@ -1,41 +1,29 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="200dp"
-    android:height="10dp"
-    android:tint="#AAC8FF"
-    android:tintMode="multiply"
-    android:viewportWidth="200.0"
+    android:width="118dp"
+    android:height="5dp"
+    android:viewportWidth="236.0"
     android:viewportHeight="10.0">
 
     <path
+        android:name="background"
         android:fillColor="#AAC8FF"
-        android:pathData="M0,0 L200,0 L200,10 L0,10" />
-
+        android:pathData="M0,0 L236,0 L236,10 L0,10" />
 
     <path
         android:fillColor="#3E82FB"
-        android:fillType="evenOdd"
         android:pathData="M0,0 l13,0 l-10,10 l-13,0 z" />
 
-    <!--<path
-        android:fillColor="#AAC8FF"
-        android:pathData="M13,0 l13,0 l-10,10 l-13,0 Z" />-->
-
     <path
         android:name="path3"
-        android:fillType="nonZero"
         android:fillColor="#3E82FB"
-        android:pathData="M26,0 l13,0 l-10,10 l-13,0 l10,-10" />
-
-    <path
-        android:name="path3"
-        android:fillType="nonZero"
-        android:fillColor="#3E82FB"
-        android:pathData="M52,0 l13,0 l-10,10 l-13,0 l10,-10
+        android:pathData="M26,0 l13,0 l-10,10 l-13,0 l10,-10
+            M52,0 l13,0 l-10,10 l-13,0 l10,-10
             M78,0 l13,0 l-10,10 l-13,0 l10,-10
             M104,0 l13,0 l-10,10 l-13,0 l10,-10
             M130,0 l13,0 l-10,10 l-13,0 l10,-10
             M156,0 l13,0 l-10,10 l-13,0 l10,-10
             M182,0 l13,0 l-10,10 l-13,0 l10,-10
-            M208,0 l13,0 l-10,10 l-13,0 l10,-10" />
+            M208,0 l13,0 l-10,10 l-13,0 l10,-10
+            M234,0 l13,0 l-10,10 l-13,0 l10,-10" />
 
 </vector>

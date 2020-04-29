@@ -191,6 +191,7 @@
         <!--<item name="android:windowIsFloating">true</item>-->
         <!--设置动画，在这里使用让它继承系统的Animation.Dialog-->
         <item name="android:windowAnimationStyle">@style/animBottomMenu</item>
+        <item name="statusBarBackground">@color/black</item>
 
         <item name="android:windowFullscreen">true</item>
     </style>

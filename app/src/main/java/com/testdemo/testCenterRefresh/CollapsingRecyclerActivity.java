@@ -116,7 +116,7 @@ public class CollapsingRecyclerActivity extends Activity {
             }
         });
 
-        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+        /*mRecyclerView.setOnTouchListener(new View.OnTouchListener() {//TODO greyson_2020/4/29 一点用都没有，不如试试嵌套滚动？
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 float y = event.getY();
@@ -159,7 +159,7 @@ public class CollapsingRecyclerActivity extends Activity {
 
                 return false;
             }
-        });
+        });*/
 
         refreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
