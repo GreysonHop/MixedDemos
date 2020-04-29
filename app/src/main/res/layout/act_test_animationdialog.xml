@@ -50,6 +50,13 @@
         android:textSize="38sp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/btn_showPopMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="showPopMenu" />
+
     <View
         android:id="@+id/blackBgIV"
         android:layout_width="match_parent"

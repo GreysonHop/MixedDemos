@@ -112,4 +112,5 @@ dependencies {
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
 
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.0'
+    implementation 'com.facebook.rebound:rebound:0.3.8'
 }

@@ -14,6 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.testdemo.broken_lib.Utils
+import com.testdemo.testView.popmenu.PopMenu
+import com.testdemo.testView.popmenu.PopMenuItem
 import kotlinx.android.synthetic.main.act_test_animationdialog.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -31,6 +33,7 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
 
     private lateinit var popupWindow: PopupWindow
     private var popupMenuView: ListView? = null
+    private lateinit var popMenu: PopMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,12 +72,54 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
             e.printStackTrace()
         }
 
+        popMenu = PopMenu.Builder().attachToActivity(this)
+                .horizontalPadding(10)
+                .verticalPadding(0)
+                .addMenuItem(
+                    PopMenuItem(
+                        getString(R.string.picture_take_picture),
+                        resources.getDrawable(R.mipmap.ic_launcher),
+                        resources.getColor(R.color.textBlack)
+                    )
+                )
+                .addMenuItem(
+                    PopMenuItem(
+                        getString(R.string.picture_camera),
+                        resources.getDrawable(R.mipmap.refresh_loading01),
+                        resources.getColor(R.color.textBlack)
+                    )
+                )
+                .addMenuItem(
+                    PopMenuItem(
+                        getString(R.string.picture_done),
+                        resources.getDrawable(R.mipmap.ic_launcher),
+                        resources.getColor(R.color.textBlack)
+                    )
+                )
+                .setOnItemClickListener { _, position ->
+                    when (position) {
+                        0 -> {
+                            Log.d("greyson", "TestAnimationDialogAct-onCreate: click0")
+                        }
+
+                        1 -> Log.d("greyson", "TestAnimationDialogAct-onCreate: click1")
+
+                        2 -> {
+                            Log.d("greyson", "TestAnimationDialogAct-onCreate: click2")
+                        }
+                    }
+                }
+                .build()
+
         dragTV.setOnClickListener(this)
 
         blackBgIV.setOnClickListener(this)
         anim_btn.setOnClickListener(this)
         popupTV.setOnClickListener(this)
         shareLayout.setOnClickListener(this)
+        btn_showPopMenu.setOnClickListener {
+            popMenu.show()
+        }
 
         val scaleAnim = ObjectAnimator.ofFloat(dragLayout, "scaleX", 0f, 1f)
         val scaleAnim2 = ObjectAnimator.ofFloat(dragLayout, "scaleY", 0f, 1f)
@@ -246,5 +291,10 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
                 Log.i("greyson", " group=$mInviteCode")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        popMenu.destroy()
     }
 }
