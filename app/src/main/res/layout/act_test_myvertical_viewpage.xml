@@ -28,8 +28,8 @@
         android:id="@+id/threeScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="75dp"
         android:layout_marginTop="44dp"
+        android:layout_marginBottom="75dp"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -222,5 +222,43 @@
 
         </FrameLayout>
     </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_test_temp"
+        android:contentDescription="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp" />
+
+    <ImageView
+        android:id="@+id/iv_test_temp2"
+        android:layout_width="236dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="10dp" />
+
+    <ImageView
+        android:id="@+id/iv_test_temp3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="10dp"/>
+
+    <ImageView
+        android:id="@+id/iv_test_temp4"
+        android:layout_width="236dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginStart="10dp" />
+
+    <!--<com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar
+        android:layout_width="235dp"
+        android:layout_height="10dp"
+        three:rcIconSrc="@drawable/ic_progress_bar"
+        three:rcProgress="80"
+        three:rcMax="100"
+        android:layout_marginTop="110dp"/>-->
 
 </FrameLayout>

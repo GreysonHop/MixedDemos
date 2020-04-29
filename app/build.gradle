@@ -110,4 +110,6 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     api 'io.reactivex.rxjava2:rxjava:2.2.5'
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+
+    implementation 'com.akexorcist:round-corner-progress-bar:2.1.0'
 }

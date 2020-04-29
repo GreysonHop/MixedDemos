@@ -3,6 +3,8 @@ package com.testdemo.testVerticalScrollView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -12,6 +14,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,10 +94,6 @@ public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollVi
         callerServiceInfoLayout = findViewById(R.id.callerServiceInfoLayout);
         mediaChatTV = findViewById(R.id.mediaChatTV);
         mediaChatTV.setOnClickListener(v -> {
-            /*if (containLayout == null || dialogViewPresenter == null || dialogViewPresenter.getDialogView() == null) {
-                return;
-            }
-            containLayout.addView(dialogViewPresenter.getDialogView());*/
             dialogViewPresenter.showDialog();
         });
 
@@ -106,9 +105,9 @@ public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollVi
         indexPointLayout.setPointCount(4, 1);
 
         ProgressBar ratingPB = findViewById(R.id.ratingPB);
-        ratingPB.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar));
+        ratingPB.setProgressDrawable(getResources().getDrawable(R.drawable.layer_progress_bar));
         ratingPB.setMax(10);
-        ratingPB.setProgress(8);
+        ratingPB.setProgress(10);
 
         ProgressBar ratingPB2 = findViewById(R.id.ratingPB2);
         ratingPB2.setProgressDrawable(getResources().getDrawable(R.drawable.layer_progress_bar));
@@ -121,9 +120,9 @@ public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollVi
         ratingPB3.setProgress(4);
 
         ProgressBar ratingPB4 = findViewById(R.id.ratingPB4);
-        ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.bg_progressbar));
+        ratingPB4.setProgressDrawable(getResources().getDrawable(R.drawable.layer_progress_bar));
         ratingPB4.setMax(10);
-        ratingPB4.setProgress(1);
+        ratingPB4.setProgress(0);
 
 
         ArrayList<Integer> list = new ArrayList<>();
@@ -132,21 +131,27 @@ public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollVi
         list.add(R.drawable.ic_camera);
         OverlayListLayout overlayListLayout = findViewById(R.id.overlayListLayout);
         overlayListLayout.setAdapter(new AvatarListAdapter(this, list));
-        /*ImageView imageView = new ImageView(this);
-        imageView.setImageResource(R.drawable.ic_launcher);
-        overlayListLayout.addView(imageView);
-        ImageView imageView2 = new ImageView(this);
-        imageView2.setImageResource(R.mipmap.ic_launcher);
-        imageView2.setBackgroundResource(R.drawable.bg_corner18_grad_fe820f);
-        overlayListLayout.addView(imageView2);
-
-        ImageView imageView3 = new ImageView(this);
-        imageView3.setImageResource(R.drawable.ic_camera);
-        imageView3.setBackgroundResource(R.drawable.bg_popup);
-        overlayListLayout.addView(imageView3);*/
 
         final PhoneEditText etPhone = findViewById(R.id.et_phone);
         findViewById(R.id.btn_print_phone).setOnClickListener(v -> Toast.makeText(TestMyVerticalViewPageAct.this, etPhone.getPhone(), Toast.LENGTH_SHORT).show());
+
+        Drawable drawable = getColorfulDrawable();
+        ((ImageView)findViewById(R.id.iv_test_temp)).setImageDrawable(drawable);
+        ((ImageView)findViewById(R.id.iv_test_temp2)).setImageDrawable(drawable);
+        ((ImageView)findViewById(R.id.iv_test_temp3)).setBackground(drawable);
+        ((ImageView)findViewById(R.id.iv_test_temp4)).setBackground(drawable);
+    }
+    private Drawable getColorfulDrawable() {
+        return new ColorfulDrawable(this);
+    }
+    private Drawable getLayerProgressBar() {
+        return getDrawable(R.drawable.layer_progress_bar);
+    }
+    private Drawable getProgressBarCorner() {
+        return getDrawable(R.drawable.ic_progress_bar_corner);
+    }
+    private Drawable getProgressBar() {
+        return getDrawable(R.drawable.ic_progress_bar);
     }
 
     @Override
