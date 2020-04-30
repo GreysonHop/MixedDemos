@@ -12,10 +12,11 @@ open class TestKotlin {
 
     fun <R> myLet(sign: Int, block: (Int) -> R): R = block(sign)
 
-    /*fun canNoParam() {
+    /*fun canNoParam() {//会优先调用这个函数而不是有默认值的带参函数
         println("canNoParam")
     }*/
-    fun canNoParam(param: String = "yes") {
+    @JvmOverloads
+    fun canNoParam(param: String = "yes", param2: Int, param3: Boolean) {
         println("canNoParam param = $param")
         printMy()
     }
@@ -52,6 +53,10 @@ fun foo() {
     println("fun forEach has not been forced to return")
 }
 
+fun getRunnable() : Runnable {
+    return Runnable { TODO("not implemented") }
+}
+
 fun main(args: Array<String>) {
     var a = 1
     val s1 = "a is $a"
@@ -63,7 +68,8 @@ fun main(args: Array<String>) {
 
     val testInstance = TestKotlin()
     println("Test's code = ${TestKotlin().getString()}\nTest's canNoParam invoke:")
-    testInstance.canNoParam()
+    testInstance.canNoParam(param2 = 0, param3 = false)
+    testInstance.canNoParam("", 0, true)
 
     var test = SunTest(s1)
     test.printThing()
@@ -75,6 +81,8 @@ fun main(args: Array<String>) {
     println("-p = ${-testpp}, unary = ${testpp.unaryMinus()}")
 
     val testJava = TestJava()
+    testJava.setOnClickListener {  }
+    testJava.setOnClickListener { println(it) }
     var testJavaResult: String
     testJavaResult = testJava.getInstance(1)
     println("now the testJavaResult is $testJavaResult")

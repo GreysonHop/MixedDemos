@@ -1,6 +1,7 @@
 package com.testdemo.testjava;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -28,6 +29,14 @@ public class TestJava {
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set(2021, 0, 1);
         TestUtils.getDayBetweenDates(calendar1, calendar2);
+
+        TestKotlin testKotlin = new TestKotlin();
+        testKotlin.canNoParam("", 0, false);
+        testKotlin.canNoParam(0, false);
+        testKotlin.myLet(0, (number) -> {
+            Log.d("TAG", "main: i");
+            return null;
+        });
     }
 
     public String getInstance(int type) {
@@ -145,5 +154,15 @@ public class TestJava {
         ArrayList<? extends Goods> list2 = new ArrayList<Paint>();
 //        list2.add(new Book());
 //        list2.add(new Goods());//什么都不能加。。。？？？
+    }
+
+
+    /**-----------测试Lambda和Java与Kotlin函数式接口的互相调用 -----------*/
+    interface OnClickListener {
+        void onClick(String action);
+    }
+    private OnClickListener mOnClickListener;
+    public void setOnClickListener(OnClickListener listener) {
+        this.mOnClickListener = listener;
     }
 }
