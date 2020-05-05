@@ -20,7 +20,7 @@ import com.testdemo.testView.canvas.TestCanvasActivity
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
-import com.testdemo.testFlipView.TestDataBindingAct
+import com.testdemo.architecture.TestDataBindingAct
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testAnim.svgaAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct

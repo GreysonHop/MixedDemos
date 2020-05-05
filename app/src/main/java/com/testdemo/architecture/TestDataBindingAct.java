@@ -1,4 +1,4 @@
-package com.testdemo.testFlipView;
+package com.testdemo.architecture;
 
 import android.view.View;
 import android.widget.Toast;
