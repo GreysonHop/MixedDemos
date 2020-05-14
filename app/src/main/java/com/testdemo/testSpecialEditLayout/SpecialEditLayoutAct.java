@@ -1,6 +1,7 @@
 package com.testdemo.testSpecialEditLayout;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -23,6 +24,8 @@ import androidx.core.app.ActivityCompat;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.text.Layout;
@@ -34,7 +37,10 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.testdemo.R;
+import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
 import com.testdemo.testView.shader.PictureWithTextDrawable;
 
 import java.util.Arrays;
@@ -61,6 +68,7 @@ public class SpecialEditLayoutAct extends Activity {
     private ImageView ivGift;
 
     private LinearLayout fl_content;
+    private TextView message_tv_content;
     private PopupWindow mPopupWindow;
     private MenuLinearLayout mMenuLinearLayout;
 
@@ -70,6 +78,8 @@ public class SpecialEditLayoutAct extends Activity {
     private float mOffsetX;
     private float mOffsetY;
 
+    private final int MENU_ID_MY = 10086;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,24 +88,14 @@ public class SpecialEditLayoutAct extends Activity {
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 
         ImageView iv = findViewById(R.id.iv_picture);
-        PictureWithTextDrawable drawable = new PictureWithTextDrawable(
-                getResources().getDrawable(R.drawable.call_icon_gift)
-                , getResources().getDrawable(R.drawable.galata)
-                , "图片已过期");
-        drawable.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()));
-        iv.setImageDrawable(drawable);
-
         tv_test_clickable = findViewById(R.id.tv_test_clickable);
         toolLayout = findViewById(R.id.layout_tool);
         editText = findViewById(R.id.et_msg);
         ivGift = findViewById(R.id.iv_gift);
 
         fl_content = findViewById(R.id.fl_content);
-        fl_content.setOnTouchListener((view, event) -> {
-            mOffsetX = event.getX();
-            mOffsetY = event.getY();
-            return false;
-        });
+        message_tv_content = findViewById(R.id.message_tv_content);
+
         tv_test_clickable.post(() -> {
             Layout layout = tv_test_clickable.getLayout();
             if (layout != null) {
@@ -107,13 +107,6 @@ public class SpecialEditLayoutAct extends Activity {
             }
         });
 
-        fl_content.setOnLongClickListener((v) -> {
-            showMenuPopup();
-            return true;
-        });
-
-//        fl_content.setOnClickListener((v) -> startActivity(new Intent(this, TestPopupListActivity.class)));
-
         /*editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -122,10 +115,84 @@ public class SpecialEditLayoutAct extends Activity {
                 }
             }
         });*/
+        PictureWithTextDrawable drawable = new PictureWithTextDrawable(
+                getResources().getDrawable(R.drawable.call_icon_gift)
+                , getResources().getDrawable(R.drawable.galata)
+                , "图片已过期");
+        drawable.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()));
+        iv.setImageDrawable(drawable);
 
+        setCustomSelectableTextCallBack();
+        observeKeyboardHeight();
+        setTextClickable();
+        setTelephony();
+        setLocation();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setCustomSelectableTextCallBack() {
+        fl_content.setOnClickListener((v) -> {
+            startActivity(new Intent(this, TestPopupListActivity.class));
+            Log.d("greyson", "onClick() fl_content");
+        });
+
+        tv_test_clickable.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                Log.d("greyson", "onCreateActionMode mode="+mode+"_menu=" + menu.size());
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                Log.d("greyson", "onPrepareActionMode mode="+mode+"_menu=" + menu);
+                if (menu.findItem(MENU_ID_MY) == null) {
+                    menu.add(Menu.NONE, MENU_ID_MY, 0, "myMenu)");
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                Log.d("greyson", "onActionItemClicked mode="+mode+"_menuItem=" + item);
+                if (item.getItemId() == MENU_ID_MY) {
+                    Toast.makeText(SpecialEditLayoutAct.this, "点击了自定义菜单项", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                Log.d("greyson", "onDestroyActionMode mode="+mode);
+            }
+        });
+
+
+        fl_content.setOnTouchListener((view, event) -> {
+            mOffsetX = event.getX();
+            mOffsetY = event.getY();
+            return false;
+        });
+
+        fl_content.setOnLongClickListener((v) -> {
+            System.out.println("greyson:" +message_tv_content.getSelectionStart() + "_" + message_tv_content.getSelectionEnd());
+            CharSequence sp = message_tv_content.getText();
+            if (sp instanceof Spannable) {
+                Selection.selectAll((Spannable) sp);
+            }
+            System.out.println("greyson:" +message_tv_content.getSelectionStart() + "_" + message_tv_content.getSelectionEnd());
+            showMenuPopup();
+            return true;
+        });
+
+    }
+
+    private void observeKeyboardHeight() {
         toolLayout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-//            System.out.println("greyson onLayoutChange: " + left + " - " + right + " - " + top + " - " + bottom
-//                    + " \n" + oldLeft + " - " + oldRight + " - " + oldTop + " - " + oldBottom);
+            //System.out.println("greyson onLayoutChange: " + left + " - " + right + " - " + top + " - " + bottom
+            //    + " \n" + oldLeft + " - " + oldRight + " - " + oldTop + " - " + oldBottom);
 
             Rect rect = new Rect();
             // 获取当前页面窗口的显示范围
@@ -133,7 +200,7 @@ public class SpecialEditLayoutAct extends Activity {
             int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
             int keyboardHeight = screenHeight - rect.bottom; // 拟定输入法的高度
-//                if (Math.abs(keyboardHeight) > screenHeight / 4) {// 超过屏幕四分之一则表示弹出了输入法
+            //if (Math.abs(keyboardHeight) > screenHeight / 4) {// 超过屏幕四分之一则表示弹出了输入法
             if (Math.abs(keyboardHeight) > screenHeight / 4) {
                 toolLayout.fullEdit(true);
             } else {
@@ -168,10 +235,6 @@ public class SpecialEditLayoutAct extends Activity {
                     }
                 }
         );*/
-
-        setTextClickable();
-        setTelephony();
-        setLocation();
     }
 
     //定位、获取设备位置、所在国家等信息
