@@ -3,7 +3,6 @@ package com.testdemo.testVerticalScrollView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +27,8 @@ import java.util.ArrayList;
 /**
  * Created by Greyson on 2018/1/25.
  */
-public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollView.OnScrollChangeListener, DialogViewPresenter.OnViewClickListener {
+public class TestMyVerticalViewPageAct extends Activity
+        implements ThreeScrollView.OnScrollChangeListener, DialogViewPresenter.OnViewClickListener {
     private final static String TAG = "Test3-greyson";
 
     IndexPointLayout indexPointLayout;
@@ -164,22 +164,22 @@ public class TestMyVerticalViewPageAct extends Activity implements ThreeScrollVi
 
     @Override
     public void onVideoClick() {
-
+        Toast.makeText(this, "click video service", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAudioClick() {
-
+        Toast.makeText(this, "audio", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onHireClick() {
-
+        Toast.makeText(this, "click Hire", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBackGroundClick() {
-
+        Toast.makeText(this, "click bg", Toast.LENGTH_SHORT).show();
     }
 
     private void initDialogView() {

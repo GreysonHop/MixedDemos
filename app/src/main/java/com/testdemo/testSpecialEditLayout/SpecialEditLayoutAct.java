@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import com.testdemo.R;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
+import com.testdemo.testView.delayDialog.DelayDialog;
 import com.testdemo.testView.shader.PictureWithTextDrawable;
 
 import java.util.Arrays;
@@ -66,6 +67,7 @@ public class SpecialEditLayoutAct extends Activity {
     private ToolLayout toolLayout;
     private EditText editText;
     private ImageView ivGift;
+    private ImageView ivVideo;
 
     private LinearLayout fl_content;
     private TextView message_tv_content;
@@ -92,6 +94,7 @@ public class SpecialEditLayoutAct extends Activity {
         toolLayout = findViewById(R.id.layout_tool);
         editText = findViewById(R.id.et_msg);
         ivGift = findViewById(R.id.iv_gift);
+        ivVideo = findViewById(R.id.iv_video);
 
         fl_content = findViewById(R.id.fl_content);
         message_tv_content = findViewById(R.id.message_tv_content);
@@ -127,6 +130,26 @@ public class SpecialEditLayoutAct extends Activity {
         setTextClickable();
         setTelephony();
         setLocation();
+        testDelayDialog();
+    }
+
+    private void testDelayDialog() {
+        ivVideo.setOnClickListener((v) -> {
+            DelayDialog dialog = new DelayDialog.Builder(this)
+                    .setDismissDelayMillis(1000)
+                    .enableAnim(true)
+                    .setAnimDuration(250)
+                    .setContent("正在重命名...")
+                    .show();
+//            dialog.setOnDismissListener(dialog -> Toast.makeText(this, "dialog dismiss!!!", Toast.LENGTH_SHORT).show());
+            ivVideo.postDelayed(() -> {
+                dialog.setContent("重命名成功！");
+                dialog.dismiss(dialogInterface -> {
+                    Toast.makeText(this, "dialog dismiss!!", Toast.LENGTH_SHORT).show();
+                    return null;
+                });
+            }, 0);//模拟任务执行完后再关闭对话框
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
