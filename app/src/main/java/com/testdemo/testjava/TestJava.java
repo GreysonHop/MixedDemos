@@ -1,8 +1,5 @@
 package com.testdemo.testjava;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,8 +32,8 @@ public class TestJava {
         TestKotlin testKotlin = new TestKotlin();
         testKotlin.canNoParam("", 0, false);
         testKotlin.canNoParam(0, false);
-        testKotlin.myLet(0, (number) -> {
-            Log.d("TAG", "main: i");
+        testKotlin.myLet(110, (number) -> {
+            System.out.println("Java调用kotlin的函数类型变量: " + number);
             return null;
         });
 

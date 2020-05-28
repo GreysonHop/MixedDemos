@@ -147,5 +147,12 @@
             tools:src="@drawable/timg"
             app:resize_base_on="width" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textIsSelectable="true"
+            android:text="单纯为了测试textIsSelectable属性而创建的"/>
+
     </LinearLayout>
 </RelativeLayout>
