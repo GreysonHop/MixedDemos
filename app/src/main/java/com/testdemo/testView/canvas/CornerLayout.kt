@@ -12,6 +12,8 @@ import com.testdemo.R
 /**
  * Create by Greyson
  * 可以设置四个角落的任一个或多个为圆角的RelativeLayout
+ * 附：目前两种方式抗锯齿，一个是给Paint设置ANTI_ALIAS_FLAG，另一个是给Canvas设置PaintFlagsDrawFilter(0, Paint.FILTER_BITMAP_FLAG)；
+ * 但是2020/05/29日在三星上对比有无加Filter都没有区别，效果都是有一点点锯齿！
  */
 class CornerLayout : RelativeLayout {
 
@@ -41,7 +43,7 @@ class CornerLayout : RelativeLayout {
         mBottomLeftRadius = typedArray.getDimension(R.styleable.CornerLayout_bottomLeftRadius, 0f)
         mBottomRightRadius = typedArray.getDimension(R.styleable.CornerLayout_bottomRightRadius, 0f)
         typedArray.recycle()
-        mSetfil = PaintFlagsDrawFilter(0, Paint.FILTER_BITMAP_FLAG)
+        mSetfil = PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -83,7 +85,7 @@ class CornerLayout : RelativeLayout {
     }
 
     override fun dispatchDraw(canvas: Canvas?) {
-        canvas?.drawFilter = mSetfil//抗锯齿，是否有用待证
+        canvas?.drawFilter = mSetfil//抗锯齿
         super.dispatchDraw(canvas)
     }
 
