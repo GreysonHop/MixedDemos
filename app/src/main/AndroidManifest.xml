@@ -38,6 +38,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api_key" />
 
+        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL_VALUE}" />
+
         <activity android:name=".TestActivity2BlurBg" />
         <activity android:name=".TestAnimationDialogAct" />
         <activity android:name=".testCanDragLayout.TestDragViewActivity" />

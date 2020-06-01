@@ -23,6 +23,8 @@ android {
 
         resValue "string", "google_search_api_key", (project.findProperty("GOOGLE_SEARCH_API_KEY") ?: "")
         resValue "string", "google_map_api_key", (project.findProperty("GOOGLE_MAP_API_KEY") ?: "")
+
+        manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Default'] // 默认渠道为Default
     }
 
     signingConfigs {
@@ -46,12 +48,35 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        /*debug {
+        debug {
             signingConfig signingConfigs.release
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }*/
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                if (variant.buildType.name == "debug") {
+                    outputFileName = outputFile.name.replace(
+                            ".apk",
+                            "-v${defaultConfig.versionName}" + ".apk")
+                } else if (variant.buildType.name == "release") {
+                    outputFileName = "TestDemo_V${variant.versionName}" +
+                            "_${new Date().format("yyyyMMdd")}_release.apk"
+                }
+            }
+        }
+    }
+
+    //测试多渠道打包，参考官网：https://developer.android.com/studio/build/build-variants
+    flavorDimensions "version"//, "test"
+    productFlavors {
+        greyson {
+            dimension "version"
+            manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Greyson'] //博客者应该是用了友盟的渠道统计SDK
+        }
+        demo {manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Demo']}
     }
 
     compileOptions {
