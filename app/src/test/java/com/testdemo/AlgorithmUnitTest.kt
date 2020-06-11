@@ -34,46 +34,40 @@ class AlgorithmUnitTest {
         node5.left = node8
         node5.right = node9
         assertEquals(node2, lowestCommonAncestor(root, node2, node9))
-//        printTree(root)
-//
-//        assertEquals(3, lengthOfLongestSubstring("pwwkew"))
-//        assertEquals(4, findInMountainArray(3, intArrayOf(1,2,4,5,3,1)))
-//
-//        assertEquals(4, 2 + 2)
+        //        printTree(root)
+        //
+        //        assertEquals(3, lengthOfLongestSubstring("pwwkew"))
+        //        assertEquals(4, findInMountainArray(3, intArrayOf(1,2,4,5,3,1)))
+        //
+        //        assertEquals(4, 2 + 2)
 
 
     }
 
+    //不触动警报情报下盗窃最多金额（盗窃连续的两间房子即报警）
     fun rob(nums: IntArray): Int {
-        if (nums.size <= 0 ) return 0
+        if (nums.isEmpty()) return 0
 
         var maxSum = 0
         val maxMap = mutableMapOf<Int, Int>()
         var currentMax = 0
         nums.forEachIndexed { index, i ->
-            if (index == 0) {
-                currentMax = i
-            } else if (index == 1) {
-                currentMax = Math.max(maxMap[0] ?: 0, i)
-            } else {
-                currentMax = Math.max(maxMap[index - 1] ?: 0, (maxMap[index - 2] ?: 0) + i)
+            currentMax = when (index) {
+                0 -> {
+                    i
+                }
+                1 -> {
+                    max(maxMap[0] ?: 0, i)
+                }
+                else -> {
+                    Math.max(maxMap[index - 1] ?: 0, (maxMap[index - 2] ?: 0) + i)
+                }
             }
             maxMap[index] = currentMax
-
-            maxSum = Math.max(maxSum, currentMax)
+            maxSum = Math.max(maxSum, maxMap[index] ?: 0)
         }
 
         return maxSum
-    }
-
-    fun robMax(nums: IntArray, k: Int): Int {
-        if (k > 1) {
-            return Math.max(robMax(nums, k - 1), robMax(nums, k - 2) + nums[k])
-        } else if (k == 1) {
-            return Math.max(nums[0], nums[1])
-        } else { //index = 0
-            return nums[0]
-        }
     }
 
     @Test
@@ -82,12 +76,13 @@ class AlgorithmUnitTest {
         assertTrue(validPalindrome("a"))
         assertTrue(validPalindrome("aca"))
         assertTrue(validPalindrome("abca"))
-        assertTrue(!validPalindrome("cabca"))
-        assertTrue(!validPalindrome("dmaadedaeeddeeadedafad"))
+        assertFalse(validPalindrome("cabca"))
+        assertFalse(validPalindrome("dmaadedaeeddeeadedafad"))
         assertTrue(validPalindrome("aguokepatgbnvfqmgmlcupuufxoohdfpgjdmysgvhmvffcnqxjjxqncffvmhvgsymdjgpfdhooxfuupuculmgmqfvnbgtapekouga"))
     }
 
-    fun validPalindrome(s: String): Boolean { //验证回文字符串
+    //验证回文字符串（在最多可删除一个字符的情况下）
+    fun validPalindrome(s: String): Boolean {
         var start = 0
         var end = s.length - 1
         var remove = false //已经删除一个
@@ -144,7 +139,8 @@ class AlgorithmUnitTest {
         assertEquals(2, subarraysDivByK(intArrayOf(2, -2, 2, -4), 6))
     }
 
-    fun subarraysDivByK(A: IntArray, K: Int): Int { //和为K的倍数的子数组数目
+    //和为K的倍数的子数组数目
+    fun subarraysDivByK(A: IntArray, K: Int): Int {
         val map = mutableMapOf<Int, Int>() //记录当前轮询位置之前的所有不重复的前缀合，并与K取余后作为key，出现次数作为value
         var preSum = 0 //当前位置的前缀合
         var preSumYuShu = 0 //当前位置的前缀合与K取余后的值,取正数
@@ -179,6 +175,7 @@ class AlgorithmUnitTest {
         return count
     }
 
+    //查找最小公共树根结点
     fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
         findTree(root, p, q)
         return finalR
@@ -201,13 +198,13 @@ class AlgorithmUnitTest {
                                 || rightFound && isRoot
                         )
         ) {
-            finalR = root//既然找到目标，能否快速跳出所有递归？
+            finalR = root //既然找到目标，能否快速跳出所有递归？
             return true
         }
         return leftFound || rightFound || isRoot
     }
 
-    fun printTree(root: TreeNode?) {//todo 这里是中序遍历，请实现后序遍历！
+    fun printTree(root: TreeNode?) { //todo 这里是中序遍历，请实现后序遍历！
         var node = root
         val stack = Stack<TreeNode>()
 
@@ -230,7 +227,7 @@ class AlgorithmUnitTest {
         var right: TreeNode? = null
     }
 
-
+    //最长不重复子数组的长度
     fun lengthOfLongestSubstring(s: String): Int {
         if (s.length == 1) return 1
 
@@ -250,7 +247,7 @@ class AlgorithmUnitTest {
 
                 charSet.add(s[j])
 
-                if (j == s.length - 1) {//如果到最后一个元素了还没重复
+                if (j == s.length - 1) { //如果到最后一个元素了还没重复
                     if (charSet.size > maxLength) {
                         maxLength = charSet.size
                     }
@@ -261,23 +258,8 @@ class AlgorithmUnitTest {
         return maxLength
     }
 
+    //打印出和为target的两个数
     fun twoSum(nums: IntArray, target: Int): IntArray {
-        val result = intArrayOf(-1, -1)
-        for (i in 0 until nums.size - 1) {
-            result[0] = nums[i]
-
-            for (j in i + 1 until nums.size) {
-                if (result[0] + nums[j] == target) {
-                    result[1] = nums[j]
-                    return result;
-                }
-            }
-
-        }
-        return result
-    }
-
-    fun twoSum2(nums: IntArray, target: Int): IntArray {
         val result = intArrayOf(-1, -1)
         val map = mutableMapOf<Int, Int>()
         nums.mapIndexed { index, value ->
@@ -292,15 +274,16 @@ class AlgorithmUnitTest {
         return result
     }
 
+    //在山脉数组中查找target的下标
     private fun findInMountainArray(target: Int, mountainArr: IntArray): Int {
         val length = mountainArr.size
         var start = 0
         var end = length - 1
         var mid: Int
         var topIndex = 0
-        while (start < end) {//代替递归实现二分查找山顶
-            mid = (start + end) / 2//每次循环的中心
-            if (mountainArr[mid] > mountainArr[mid + 1]) {//山顶在mid之前（包括mid)
+        while (start < end) { //代替递归实现二分查找山顶
+            mid = (start + end) / 2 //每次循环的中心
+            if (mountainArr[mid] > mountainArr[mid + 1]) { //山顶在mid之前（包括mid)
                 end = mid
                 topIndex = mid
             } else {
@@ -316,7 +299,7 @@ class AlgorithmUnitTest {
         var startVal: Int
         var endVal: Int
         var midVal: Int
-        while (start <= end) {//先从前半段开始找
+        while (start <= end) { //先从前半段开始找
             startVal = mountainArr[start]
             if (startVal == target) {
                 targetIndex = start
@@ -328,14 +311,14 @@ class AlgorithmUnitTest {
                 break
             }
 
-            mid = (start + end) / 2//每次循环的中心
+            mid = (start + end) / 2 //每次循环的中心
             midVal = mountainArr[mid]
             if (midVal == target) {
                 targetIndex = mid
                 break
             }
 
-            if (target > endVal) {//因为==等于的情况上面已经判断过了，所以下面可以不判断
+            if (target > endVal) { //因为==等于的情况上面已经判断过了，所以下面可以不判断
                 break
             } else if (target > midVal) {
                 start = mid + 1
@@ -343,7 +326,7 @@ class AlgorithmUnitTest {
             } else if (target > startVal) {
                 start += 1
                 end = mid - 1
-            } else {//target < startVal
+            } else { //target < startVal
                 break
             }
         }
@@ -367,7 +350,7 @@ class AlgorithmUnitTest {
                 break
             }
 
-            mid = (start + end) / 2//每次循环的中心
+            mid = (start + end) / 2 //每次循环的中心
             midVal = mountainArr[mid]
             if (midVal == target) {
                 targetIndex = mid
