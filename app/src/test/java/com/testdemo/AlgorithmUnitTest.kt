@@ -4,7 +4,6 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import java.util.*
-import kotlin.math.abs
 import kotlin.math.max
 
 /**
@@ -34,14 +33,66 @@ class AlgorithmUnitTest {
         node5.left = node8
         node5.right = node9
         assertEquals(node2, lowestCommonAncestor(root, node2, node9))
-        //        printTree(root)
-        //
-        //        assertEquals(3, lengthOfLongestSubstring("pwwkew"))
-        //        assertEquals(4, findInMountainArray(3, intArrayOf(1,2,4,5,3,1)))
-        //
-        //        assertEquals(4, 2 + 2)
+//        printTree(root)
 
+        assertEquals(3, lengthOfLongestSubstring("pwwkew"))
+        assertEquals(4, findInMountainArray(3, intArrayOf(1, 2, 4, 5, 3, 1)))
+    }
 
+    @Test
+    fun testTranslateNum() {
+        assertEquals(4, translateNum(2147483647))
+        assertEquals(1, translateNum(-1))
+        assertEquals(1, translateNum(0))
+        assertEquals(2, translateNum(-10))
+        assertEquals(2, translateNum(-101))
+        assertEquals(5, translateNum(12258))
+        assertEquals(2, translateNum(5108))
+        assertEquals(2, translateNum(100001))
+        assertEquals(4, translateNum(1000100001))
+        assertEquals(4, translateNum(1492916348))
+    }
+
+    //面试题46. 把数字翻译成字符串
+    fun translateNum(num: Int): Int {
+        if (num > -10 && num < 10) { //单位数只有一种情况
+            return 1
+        }
+        val numAbs = Math.abs(num)
+
+        var time = 1
+        val nums = arrayListOf<Int>() //将数字存为单位数的数组
+
+        while (numAbs / time > 0 && nums.size < 10) { //int的最长位数为10
+            nums.add(numAbs / time % 10)
+            time *= 10
+        }
+
+        val countForIndex = mutableMapOf<Int, Int>()
+        countForIndex[0] = 1 //从数组的右边到左边，下标为key，value则为能译成字符串的种类数
+        nums.mapIndexed { index, value ->
+            if (index < 1) {
+                countForIndex[index] = 1
+
+            } else if (index == 1) {
+                countForIndex[index] = if (value == 0 || value * 10 + nums[index - 1] > 25) 1 else 2
+
+            } else {
+                if (value == 0) {
+                    countForIndex[index] = countForIndex[index - 1] ?: 1
+                } else {
+                    countForIndex[index] = (countForIndex[index - 1] ?: 1) + //当前数字单独译成字符
+                            if (value * 10 + nums[index - 1] <= 25) { //当前数字为十位数、上一个数字为个位数的两位数能译成字符
+                                countForIndex[index - 2] ?: 1 //则获取这两个数字以外的数字能组成字符的情况数
+                            } else {
+                                0
+                            }
+                }
+
+            }
+        }
+
+        return countForIndex[countForIndex.size - 1] ?: 1
     }
 
     //不触动警报情报下盗窃最多金额（盗窃连续的两间房子即报警）
