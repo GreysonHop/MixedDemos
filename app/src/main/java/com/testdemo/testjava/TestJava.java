@@ -38,7 +38,89 @@ public class TestJava {
         });
 
         System.out.println(lengthOfLongestSubstring("pwwkew"));
+
+        System.out.println("greyson: " + Arrays.toString(spiralOrder(new int[][]{{1, 11}, {2, 12}, {3, 13},{4,14},{5,15},{6,16},{7,17},{8,18},{9,19},{10,20}})));
     }
+
+    //由外到内一层层打印出矩阵
+    public static int[] spiralOrder(int[][] matrix) {//LeetCode面试题29. 顺时针打印矩阵。注：有更多优化再上传
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return new int[0];
+
+        int[] result = new int[matrix[0].length * matrix.length];
+        int index = 0;
+        int orientation = 0;//代替四个遍历方向，分别是矩阵的左上到右上、右上到右下、右下到左下、左下到左上
+        int floor = 0;//遍历到第几层，由外而内
+
+        int x = 0;//纵向坐标，代表行
+        int y = 0;//横向坐标，代表列
+        while (index < result.length) {
+
+            if (orientation == 0) {
+                if (y >= matrix[0].length - floor) {//y已经超标，下面判断是否能换行
+                    if (x + 1 >= matrix.length - floor) { //没有下一行
+                        break;
+                    } else {
+                        orientation++;
+                        y--;
+                        x++;
+                    }
+
+                } else {
+                    result[index++] = matrix[x][y];
+                    y++;
+                }
+
+            } else if (orientation == 1) {
+                if (x >= matrix.length - floor) {//x已经超过最大行数，判断左边是否有更多列
+                    if (y - 1 < floor) {
+                        break;
+                    } else {
+                        orientation++;
+                        x--;
+                        y--;
+                    }
+
+                } else {
+                    result[index++] = matrix[x][y];
+                    x++;
+                }
+
+            } else if (orientation == 2) {//遍历长方形底边，从右到左
+                if (y < floor) {//左边超标，判断是否有上一行没遍历的
+                    if (x - 1 < floor + 1) {
+                        break;
+                    } else {
+                        orientation++;
+                        y++;
+                        x--;
+                    }
+
+                } else {
+                    result[index++] = matrix[x][y];
+                    y--;
+                }
+
+            } else {
+                if (x < floor + 1) {
+                    if (y + 1 >= matrix[0].length - floor) {
+                        break;
+                    } else {
+                        floor++;
+                        orientation = 0;
+                        x++;
+                        y++;
+                    }
+
+                } else {
+                    result[index++] = matrix[x][y];
+                    x--;
+                }
+
+            }
+        }
+        return result;
+    }
+
 
     public static int lengthOfLongestSubstring(String s) {
         // 哈希集合，记录每个字符是否出现过

@@ -37,6 +37,7 @@ class AlgorithmUnitTest {
 
         assertEquals(3, lengthOfLongestSubstring("pwwkew"))
         assertEquals(4, findInMountainArray(3, intArrayOf(1, 2, 4, 5, 3, 1)))
+        assertEquals("fl", longestCommonPrefix(arrayOf("flower", "flow", "flight")))
     }
 
     @Test
@@ -93,6 +94,40 @@ class AlgorithmUnitTest {
         }
 
         return countForIndex[countForIndex.size - 1] ?: 1
+    }
+
+    fun longestCommonPrefix(strs: Array<String>): String {
+        if (strs.size == 1) {
+            return strs[0]
+        } else if (strs.isEmpty()) {
+            return ""
+        }
+        val result = StringBuilder()
+        var index = 0 //遍历到所有字符串的第几个字符
+
+        goto@ while (true) {
+            var currentChar = '-' //只用来初始化，没什么用处的字符
+            for (i in strs.indices) {
+                val str = strs[i]
+                if (str.length <= index) {
+                    break@goto
+                }
+
+                if (i == 0) {
+                    currentChar = str[index] //保存字符串数组的第一个字符串的当前遍历字符
+
+                } else if (str[index] != currentChar) {
+                    break@goto//某个字符不相等，则已经是最长相同前缀了。退出while
+
+                } else if (i == strs.size - 1) {
+                    result.append(str[index])
+                }
+            }
+
+            index++
+        }
+
+        return result.toString()
     }
 
     //不触动警报情报下盗窃最多金额（盗窃连续的两间房子即报警）
