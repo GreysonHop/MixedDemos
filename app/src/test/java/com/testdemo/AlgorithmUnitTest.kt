@@ -42,7 +42,7 @@ class AlgorithmUnitTest {
 
     @Test
     fun testTranslateNum() {
-        assertEquals(4, translateNum(2147483647))
+        assertEquals(3, translateNum(2147483647))
         assertEquals(1, translateNum(-1))
         assertEquals(1, translateNum(0))
         assertEquals(2, translateNum(-10))
