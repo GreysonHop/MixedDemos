@@ -12,8 +12,18 @@ import kotlin.math.max
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class AlgorithmUnitTest {
+
     @Test
-    fun addition_isCorrect() {
+    fun commonTest() {
+        /**
+         *           3
+         *         /   \
+         *        5     1
+         *      /  \   / \
+         *     6   2  0  8
+         *    /   / \     \
+         *  10   7   4     9
+         */
         val root = TreeNode(3)
         val node2 = TreeNode(5)
         val node3 = TreeNode(1)
@@ -23,6 +33,8 @@ class AlgorithmUnitTest {
         val node7 = TreeNode(8)
         val node8 = TreeNode(7)
         val node9 = TreeNode(4)
+        val node10 = TreeNode(10)
+        val node11 = TreeNode(9)
 
         root.left = node2
         root.right = node3
@@ -30,10 +42,14 @@ class AlgorithmUnitTest {
         node2.right = node5
         node3.left = node6
         node3.right = node7
+        node4.left = node10
         node5.left = node8
         node5.right = node9
+        node7.right = node11
         assertEquals(node2, lowestCommonAncestor(root, node2, node9))
-//        printTree(root)
+        printTree1(root)
+        printTree0(root)
+        printTree2(root)
 
         assertEquals(3, lengthOfLongestSubstring("pwwkew"))
         assertEquals(4, findInMountainArray(3, intArrayOf(1, 2, 4, 5, 3, 1)))
@@ -290,7 +306,26 @@ class AlgorithmUnitTest {
         return leftFound || rightFound || isRoot
     }
 
-    fun printTree(root: TreeNode?) { //todo 这里是中序遍历，请实现后序遍历！
+    //前序遍历
+    fun printTree0(root: TreeNode?) {
+        var node = root
+        val stack = Stack<TreeNode>()
+        while (node != null || stack.isNotEmpty()) {
+            while (node != null) {
+                println("greyson前序遍历: ${node.`val`}")
+                stack.push(node)
+                node = node.left
+            }
+
+            if (stack.isNotEmpty()) {
+                node = stack.pop()
+                node = node.right
+            }
+        }
+    }
+
+    //中序遍历
+    fun printTree1(root: TreeNode?) {
         var node = root
         val stack = Stack<TreeNode>()
 
@@ -301,9 +336,32 @@ class AlgorithmUnitTest {
             }
 
             if (stack.isNotEmpty()) {
-                node = stack.peek()
-                println("greyson: ${node.`val`}")
+                node = stack.pop()
+                println("greyson中序遍历: ${node.`val`}")
                 node = node.right
+            }
+        }
+    }
+
+    //后序遍历
+    fun printTree2(root: TreeNode?) {
+        var node = root
+        val stack = Stack<TreeNode>()
+        var lastVisitNode: TreeNode? = null
+        while (node != null || stack.isNotEmpty()) {
+            while (node != null) {
+                stack.push(node)
+                node = node.left
+            }
+
+            if (stack.isNotEmpty()) {
+                if (stack.peek().right != null && stack.peek().right != lastVisitNode) {
+                    node = stack.peek().right //右子树不为空并且还未遍历过，则先遍历右子树
+
+                } else { //如果右子树为空或已经遍历过，则直接打印出自己
+                    lastVisitNode = stack.pop()
+                    println("greyson后序遍历: ${lastVisitNode.`val`}")
+                }
             }
         }
     }
