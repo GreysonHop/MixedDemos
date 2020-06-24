@@ -96,7 +96,9 @@
             android:screenOrientation="portrait" />
 
         <activity android:name="com.testdemo.testFlipView.TestFlipperActivity" />
+        <activity android:name=".architecture.viewmodel.ViewModelAct" />
         <activity android:name=".architecture.TestDataBindingAct" />
+        <activity android:name=".architecture.SaveStateAct" android:launchMode="singleInstance" />
 
         <activity android:name=".testMap.places.PlacesMainActivity" />
         <activity android:name=".testMap.places.AutocompleteTestActivity" />

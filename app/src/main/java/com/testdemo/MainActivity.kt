@@ -44,6 +44,7 @@ class MainActivity : ListActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.e("greyson", "MainActivity-onCreate: savedInstanceState = $savedInstanceState, task = $taskId")
 
         val menuListMap = linkedMapOf<String, Class<out Activity>>()
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity::class.java)

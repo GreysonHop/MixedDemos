@@ -6,7 +6,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="visible"
+            name="isVisible"
             type="boolean" />
 
         <variable
@@ -21,19 +21,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/Green">
 
         <Button
-        android:id="@+id/btn_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="@{(view) -> listener.onClick(view)}"
-        android:text="加数"/>
-
-        <Button
+            android:id="@+id/btn_test_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_visible"
+            android:onClick="@{(view) -> listener.onClick(view)}"
+            android:text="加数"
+            android:visibility="@{isVisible ? View.VISIBLE : View.INVISIBLE}" />
+
+        <Button
+            android:id="@+id/btn_test_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:onClick="@{listener::onClick}"
             android:text="隐藏" />
 
@@ -43,6 +45,13 @@
             android:layout_height="wrap_content"
             android:text="@{title}"
             android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_test_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{listener::onClick}"
+            android:text="跳转到单例" />
 
     </LinearLayout>
 
