@@ -57,6 +57,50 @@ class AlgorithmUnitTest {
     }
 
     @Test
+    fun testAddBinary() {
+        assertEquals("100", addBinary("11", "1010111000"))
+    }
+    private fun addBinary(a: String, b: String): String {
+        var index = 0
+        var move = false
+        val maxLong = Math.max(a.length, b.length)
+        val resultStr = StringBuilder()
+
+        while (index < maxLong || move) { //如果最高位相加有进位，则继续计算更高一位的值
+            val char1 = if (index < a.length) a[a.length - index - 1] else '0'
+            val char2 = if (index < b.length) b[b.length - index - 1] else '0'
+
+            var jinwei = false
+            val c =
+            if (char1 != char2) {
+                if (move) { //前面有进位，加上当前的1，也得进位
+                    jinwei = true
+                    '0'
+                } else {
+                    '1'
+                }
+
+            } else if (char1 == '0') {
+                if (move) '1' else '0'
+
+            } else {
+                jinwei = true
+                if (move) {
+                    '1'
+                } else {
+                    '0'
+                }
+            }
+
+            index++
+            move = jinwei
+            resultStr.insert(0, c)
+        }
+
+        return resultStr.toString()
+    }
+
+    @Test
     fun testTranslateNum() {
         assertEquals(3, translateNum(2147483647))
         assertEquals(1, translateNum(-1))
@@ -65,7 +109,6 @@ class AlgorithmUnitTest {
         assertEquals(2, translateNum(-101))
         assertEquals(5, translateNum(12258))
         assertEquals(2, translateNum(5108))
-        assertEquals(2, translateNum(100001))
         assertEquals(4, translateNum(1000100001))
         assertEquals(4, translateNum(1492916348))
     }
@@ -112,6 +155,7 @@ class AlgorithmUnitTest {
         return countForIndex[countForIndex.size - 1] ?: 1
     }
 
+    //多个字符串的最长共同前缀
     fun longestCommonPrefix(strs: Array<String>): String {
         if (strs.size == 1) {
             return strs[0]
