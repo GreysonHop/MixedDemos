@@ -560,4 +560,54 @@ class AlgorithmUnitTest {
 
         return targetIndex
     }
+
+    @Test
+    fun testThreeSumClosest () {
+        assertEquals(2, threeSumClosest(intArrayOf(-1, 2, 1, -4), 1))
+        assertEquals(-1, threeSumClosest(intArrayOf(-1, 2, 1, -4), 0))
+        assertEquals(-3, threeSumClosest(intArrayOf(-1, 2, 1, -4), -2))
+    }
+
+    //三个数之和最接近目标值
+    fun threeSumClosest(nums: IntArray, target: Int): Int {
+        nums.sort()
+        var bestSum: Int? = null
+
+        for (i in nums.indices) { //遍历三个加数中的第一个数
+            if (i > 0 && nums[i - 1] == nums[i]) {
+                continue
+            }
+
+            var j = i + 1
+            var k = nums.size - 1 //两个变量分别为另外两个加数的下标
+
+            while (j < k) {
+                val sum = nums[i] + nums[j] + nums[k]
+                if (target == sum) {//跟目标值完全一样则视为最接近目标值的结果，直接返回
+                    return target
+                }
+
+                if (bestSum == null || Math.abs(sum - target) < Math.abs(bestSum - target)) {
+                    bestSum = sum
+                }
+
+                if (sum > target) {
+                    var k0 = k - 1
+                    while (j < k0 && nums[k0] == nums[k]) {//寻找比下标k的值还小的值所对应的下标
+                        k0--
+                    }
+                    k = k0
+
+                } else {
+                    var j0 = j + 1
+                    while (j0 < k && nums[j0] == nums[j]) {//寻找比下标j的值还大的值所对应的下标
+                        j0++
+                    }
+                    j = j0
+                }
+            }
+        }
+
+        return bestSum!!
+    }
 }
