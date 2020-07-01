@@ -126,6 +126,7 @@
             android:theme="@style/DialogActivityStyle"/>
 
         <activity android:name="com.testdemo.testView.canvas.TestCanvasActivity" />
+        <activity android:name=".testView.nineView.TestNineViewAct" />
 
     </application>
 

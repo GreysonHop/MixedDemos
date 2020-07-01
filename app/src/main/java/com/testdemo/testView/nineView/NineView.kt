@@ -1,9 +1,12 @@
 package com.testdemo.testView.nineView
 
 import android.content.Context
-import android.graphics.Canvas
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.annotation.Px
+import kotlin.math.min
 
 /**
  * Created by Greyson on 2020/06/30
@@ -14,61 +17,89 @@ class NineView : LinearLayout {
 
     constructor(context: Context) : super(context)
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = MeasureSpec.getSize(widthMeasureSpec)
-        val mode = MeasureSpec.getMode(widthMeasureSpec)
+    fun setGap(@Px gap: Int) {
+        this.gap = gap
+        invalidate()
+    }
 
-        for (i in 0 until childCount) {
-            val childView = getChildAt(i)
-            when {
-                childCount <= 4 -> {
-                    val childWidth = (measuredWidth - gap) / 2
-                    measureChild(childView, widthMeasureSpec, heightMeasureSpec)
-                    childView.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST)
-                        , MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY))
-                }
+    fun getGap(): Int {
+        return gap
+    }
 
-                childCount <= 9 -> {
-                    val childWidth = (measuredWidth - gap * 2) / 3
-                    childView.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST)
-                        , MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY))
-                }
-
-                else -> childView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.EXACTLY)
-                    , MeasureSpec.makeMeasureSpec(0, MeasureSpec.EXACTLY))
-            }
-
+    override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
+        if (childCount == 9) {
+            return
         }
-        setMeasuredDimension(width, MeasureSpec.getSize(heightMeasureSpec))
+        super.addView(child, index, params)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+
+        val getModeStr: (Int) -> String = {
+            when (it) {
+                MeasureSpec.EXACTLY -> "EXACTLY"
+                MeasureSpec.AT_MOST -> "AT_MOST"
+                else -> "UNSPECIFIED"
+            }
+        }
+        Log.e("greyson", "NineView-onMeasure: mode=${getModeStr(widthMode)} _ size = $widthSize" +
+                " \nmode2= ${getModeStr(heightMode)} _ size2= $heightSize")
+
+        val column = if (childCount <= 4) 2 else 3 //总共多少列
+        val row = (childCount - 1) / column + 1
+        val childWidth = (measuredWidth - gap * (column - 1)) / column
+        val expectedHeight = row * childWidth + (row - 1) * gap
+
+        for (i in 0 until childCount.coerceAtMost(9)) {
+            val childView = getChildAt(i)
+            Log.e("greyson", "NineView-onMeasure's child$i: ${childView.layoutParams.width} _ ${childView.layoutParams.height}")
+            //measureChild(childView, widthMeasureSpec, heightMeasureSpec)
+            childView.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
+                MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST))
+        }
+
+        //如果是UNSPECIFIED模式怎么给出宽呢？
+        setMeasuredDimension(widthSize,
+            when (heightMode) {
+                MeasureSpec.AT_MOST -> {
+                    min(heightSize, expectedHeight)
+                }
+                MeasureSpec.EXACTLY -> {
+                    heightSize
+                }
+                else -> {
+                    expectedHeight
+                }
+            })
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        var layoutX = l //当前布局开始点的X坐标
-        var layoutY = t
-        when {
-            childCount <= 4 -> {
-                val childWidth = (measuredWidth - gap) / 2
-                for (i in 0 until childCount) {
-                    val column = i % 2
-                    val row = i / 2
+        val column = if (childCount <= 4) 2 else 3 //总共多少列
+        val childWidth = (measuredWidth - gap * (column - 1)) / column
 
-                    val childView = getChildAt(i)
-//                    childView.layout(layoutX + column * (childWidth + gap), layoutX + row * (childWidth + gap)
-//                        , )
-                }
-            }
+        for (i in 0 until childCount.coerceAtMost(9)) {
+            val col = i % column //当前子控件在第几列
+            val row = i / column
+            val childView = getChildAt(i)
 
-            childCount == 3 -> {
-                val childWidth = (measuredWidth - gap) / 2
-            }
-            childCount >= 4 -> {
+            if (childCount == 3 && i == 2) {
+                val offsetThird = (childWidth + gap) / 2
+                childView.layout(l + col * (childWidth + gap) + offsetThird,
+                    t + row * (childWidth + gap),
+                    l + col * (childWidth + gap) + offsetThird + childWidth,
+                    t + row * (childWidth + gap) + childWidth)
 
+            } else {
+                childView.layout(l + col * (childWidth + gap),
+                    t + row * (childWidth + gap),
+                    l + col * (childWidth + gap) + childWidth,
+                    t + row * (childWidth + gap) + childWidth)
             }
         }
     }
 
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-    }
 }

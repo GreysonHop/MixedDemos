@@ -33,6 +33,7 @@ import com.testdemo.testStartMode.ActivityA
 import com.testdemo.testAnim.ConstraintAnimAct
 import com.testdemo.testAnim.activityAnim.DialogActivity
 import com.testdemo.testVerticalScrollView.TestMyVerticalViewPageAct
+import com.testdemo.testView.nineView.TestNineViewAct
 
 /**
  * Create by Greyson on 2019/9/14
@@ -68,6 +69,7 @@ class MainActivity : ListActivity() {
         menuListMap["Constraint动画"] = ConstraintAnimAct::class.java
         menuListMap["DataBinding"] = TestDataBindingAct::class.java
         menuListMap["DialogActivity"] = DialogActivity::class.java
+        menuListMap["NineView"] = TestNineViewAct::class.java
 
 
         classNameList.addAll(menuListMap.keys)
