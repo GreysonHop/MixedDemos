@@ -55,6 +55,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
+        /**
+         * The `initWith` property allows you to copy configurations from other build types,
+         * then configure only the settings you want to change. This one copies the debug build
+         * type, and then changes the manifest placeholder and application ID.
+         */
+        staging {
+            initWith debug
+            manifestPlaceholders = [hostName:"internal.example.com"]
+            applicationIdSuffix ".debugStaging"
+        }
+
         applicationVariants.all { variant ->
             variant.outputs.all {
                 if (variant.buildType.name == "debug") {
@@ -76,7 +87,9 @@ android {
             dimension "version"
             manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Greyson'] //博客者应该是用了友盟的渠道统计SDK
         }
-        demo {manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Demo']}
+        demo {
+            manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Demo']
+        }
     }
 
     compileOptions {
