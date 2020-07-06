@@ -28,6 +28,9 @@
     <color name="cal_today_bg">@color/bg_date_picker_today</color>
     <color name="cal_today_text">#283851</color>
 
+    <color name="avchat_btn_text_color">#a5a5a5</color>
+    <color name="avchat_state_text_color">#E5E5E5</color>
+
     <string-array name="colors">
         <item>#3F51B5</item>
         <item>#FF4081</item>

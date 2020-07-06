@@ -1,6 +1,7 @@
 package com.testdemo.testView.nineView
 
 import android.content.Context
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -13,18 +14,23 @@ import kotlin.math.min
  */
 class NineView : LinearLayout {
 
-    private var gap = 0
+    var gap = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
 
-    constructor(context: Context) : super(context)
+    @JvmOverloads
+    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs)
 
-    fun setGap(@Px gap: Int) {
+    /*fun setGap(@Px gap: Int) {
         this.gap = gap
         invalidate()
     }
 
     fun getGap(): Int {
         return gap
-    }
+    }*/
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
         if (childCount == 9) {

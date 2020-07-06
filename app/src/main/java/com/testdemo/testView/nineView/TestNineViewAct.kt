@@ -1,6 +1,7 @@
 package com.testdemo.testView.nineView
 
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
@@ -16,6 +17,7 @@ class TestNineViewAct : BaseActivity() {
 
     override fun getLayoutView(): View? {
         nineView = NineView(this)
+        nineView.gap = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.0f, resources.displayMetrics).toInt()
         nineView.setBackgroundColor(Color.GREEN)
         nineView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         return nineView

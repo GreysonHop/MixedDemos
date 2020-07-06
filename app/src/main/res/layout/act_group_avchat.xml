@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_groupAvChat_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:scaleType="centerCrop" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_groupAvChat_minimize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_avchat_minimize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_groupAvChat_addMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_avchat_add_member"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.testdemo.testView.nineView.NineView
+        android:id="@+id/nv_groupAvChat_userStateList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_groupAvChat_minimize" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_groupAvChat_mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/selector_avchat_mute"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:textColor="@color/avchat_btn_text_color"
+        android:textSize="12sp"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="@id/tv_groupAvChat_hangup"
+        app:layout_constraintEnd_toStartOf="@id/tv_groupAvChat_hangup"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="静音" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_groupAvChat_hangup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:drawableTop="@drawable/ic_avchat_hangup"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:textColor="@color/avchat_btn_text_color"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_groupAvChat_speaker"
+        app:layout_constraintStart_toEndOf="@id/tv_groupAvChat_mute"
+        tools:text="挂断" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_groupAvChat_speaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/selector_avchat_speaker"
+        android:drawablePadding="12dp"
+        android:enabled="false"
+        android:gravity="center"
+        android:textColor="@color/avchat_btn_text_color"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_groupAvChat_hangup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_groupAvChat_hangup"
+        tools:text="免提" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_avchat_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/avchat_state_text_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_groupAvChat_hangup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="hanging..." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

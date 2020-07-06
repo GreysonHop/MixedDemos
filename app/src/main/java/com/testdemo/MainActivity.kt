@@ -34,6 +34,7 @@ import com.testdemo.testAnim.ConstraintAnimAct
 import com.testdemo.testAnim.activityAnim.DialogActivity
 import com.testdemo.testVerticalScrollView.TestMyVerticalViewPageAct
 import com.testdemo.testView.nineView.TestNineViewAct
+import com.testdemo.webrtc.webrtctest.TestAVChatActivity
 
 /**
  * Create by Greyson on 2019/9/14
@@ -70,6 +71,7 @@ class MainActivity : ListActivity() {
         menuListMap["DataBinding"] = TestDataBindingAct::class.java
         menuListMap["DialogActivity"] = DialogActivity::class.java
         menuListMap["NineView"] = TestNineViewAct::class.java
+        menuListMap["多人聊天室"] = TestAVChatActivity::class.java
 
 
         classNameList.addAll(menuListMap.keys)
