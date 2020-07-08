@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.KeyEvent
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -70,8 +71,8 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
             toggleSpeaker(it.isSelected)
         }
 
-        ivMinimize.setOnClickListener {  }
-        ivAddMember.setOnClickListener {  }
+        ivMinimize.setOnClickListener { }
+        ivAddMember.setOnClickListener { }
 
         tvHangup.setOnClickListener { hangup() }
     }
@@ -88,7 +89,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
 
         thread { //模拟数据加载后，按钮变成可点击
             Thread.sleep(2000)
-            runOnUiThread{
+            runOnUiThread {
                 enableReaction(true)
                 tvState.text = "等待接受邀请"
             }
@@ -106,7 +107,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         grantResults.forEach {
-            //            Log.i(PeerConnectionHelper.TAG, "[Permission] " + permissions[i] + " is " + if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "granted" else "denied")
+            // Log.i(PeerConnectionHelper.TAG, "[Permission] " + permissions[i] + " is " + if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "granted" else "denied")
             if (it != PackageManager.PERMISSION_GRANTED) {
                 finish()
                 return@forEach
@@ -123,6 +124,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
                 }
             }
             runOnUiThread {
+                toggleSpeaker(false)
                 addUserView(socketId, this)
             }
         }
@@ -192,7 +194,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
         videoSinks[id] = sink
         memberList.add(MemberBean(id))
 
-        userStateList.addView(renderer)
+        userStateList.addView(renderer, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
     }
 
     private fun removeUserView(id: String) {

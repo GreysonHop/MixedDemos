@@ -94,16 +94,16 @@ class NineView : LinearLayout {
 
             if (childCount == 3 && i == 2) {
                 val offsetThird = (childWidth + gap) / 2
-                childView.layout(l + col * (childWidth + gap) + offsetThird,
-                    t + row * (childWidth + gap),
-                    l + col * (childWidth + gap) + offsetThird + childWidth,
-                    t + row * (childWidth + gap) + childWidth)
+                childView.layout( col * (childWidth + gap) + offsetThird,
+                    row * (childWidth + gap),
+                    col * (childWidth + gap) + offsetThird + childWidth,
+                    row * (childWidth + gap) + childWidth)
 
             } else {
-                childView.layout(l + col * (childWidth + gap),
-                    t + row * (childWidth + gap),
-                    l + col * (childWidth + gap) + childWidth,
-                    t + row * (childWidth + gap) + childWidth)
+                childView.layout( col * (childWidth + gap),
+                    row * (childWidth + gap),
+                    + col * (childWidth + gap) + childWidth,
+                    row * (childWidth + gap) + childWidth)
             }
         }
     }

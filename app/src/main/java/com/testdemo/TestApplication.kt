@@ -3,6 +3,7 @@ package com.testdemo
 import android.app.Activity
 import android.app.Application
 import android.net.http.HttpResponseCache
+import com.squareup.leakcanary.LeakCanary
 import com.wonderkiln.blurkit.BlurKit
 import io.realm.Realm
 import java.io.File
@@ -18,6 +19,11 @@ class TestApplication : Application() {
         super.onCreate()
         Realm.init(this)
         BlurKit.init(this)
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+        LeakCanary.install(this)
 
         //set for SVGA
         val dir = applicationContext.cacheDir
