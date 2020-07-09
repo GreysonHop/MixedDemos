@@ -60,6 +60,7 @@ class AlgorithmUnitTest {
     fun testAddBinary() {
         assertEquals("100", addBinary("11", "1010111000"))
     }
+
     private fun addBinary(a: String, b: String): String {
         var index = 0
         var move = false
@@ -71,8 +72,7 @@ class AlgorithmUnitTest {
             val char2 = if (index < b.length) b[b.length - index - 1] else '0'
 
             var jinwei = false
-            val c =
-            if (char1 != char2) {
+            val c = if (char1 != char2) {
                 if (move) { //前面有进位，加上当前的1，也得进位
                     jinwei = true
                     '0'
@@ -353,7 +353,7 @@ class AlgorithmUnitTest {
     //前序遍历
     fun printTree0(root: TreeNode?) {
         var node = root
-        val stack = Stack<TreeNode>()
+        val stack = ArrayDeque<TreeNode>()
         while (node != null || stack.isNotEmpty()) {
             while (node != null) {
                 println("greyson前序遍历: ${node.`val`}")
@@ -371,7 +371,7 @@ class AlgorithmUnitTest {
     //中序遍历
     fun printTree1(root: TreeNode?) {
         var node = root
-        val stack = Stack<TreeNode>()
+        val stack = ArrayDeque<TreeNode>()
 
         while (node != null || stack.isNotEmpty()) {
             while (node != null) {
@@ -390,7 +390,7 @@ class AlgorithmUnitTest {
     //后序遍历
     fun printTree2(root: TreeNode?) {
         var node = root
-        val stack = Stack<TreeNode>()
+        val stack = ArrayDeque<TreeNode>()
         var lastVisitNode: TreeNode? = null
         while (node != null || stack.isNotEmpty()) {
             while (node != null) {
@@ -562,7 +562,7 @@ class AlgorithmUnitTest {
     }
 
     @Test
-    fun testThreeSumClosest () {
+    fun testThreeSumClosest() {
         assertEquals(2, threeSumClosest(intArrayOf(-1, 2, 1, -4), 1))
         assertEquals(-1, threeSumClosest(intArrayOf(-1, 2, 1, -4), 0))
         assertEquals(-3, threeSumClosest(intArrayOf(-1, 2, 1, -4), -2))
@@ -610,4 +610,99 @@ class AlgorithmUnitTest {
 
         return bestSum!!
     }
+
+
+    @Test
+    fun testMinSubArrayLen() {
+        assertEquals(2, minSubArrayLen(7, intArrayOf(2, 3, 1, 2, 4, 3)))
+        assertEquals(1, minSubArrayLen(7, intArrayOf(2, 3, 1, 7, 4, 3)))
+        assertEquals(1, minSubArrayLen(7, intArrayOf(7, 3, 1, 7, 4, 3)))
+        assertEquals(0, minSubArrayLen(3, intArrayOf(1, 1)))
+        assertEquals(6, minSubArrayLen(80, intArrayOf(10, 5, 13, 4, 8, 4, 5, 11, 14, 9, 16, 10, 20, 8)))
+    }
+
+    //子数组之和大于等于目标值，求满足条件的最短子数组长度
+    fun minSubArrayLen(s: Int, nums: IntArray): Int {
+        if (nums.isEmpty()) {
+            return 0
+        }
+
+        var minLen = 0
+        var start = 0 //窗口的开端
+        var end = 0
+        var curSum = 0 //当前窗口内数组的值之和
+
+        while (end < nums.size) {
+            curSum += nums[end]
+
+            if (curSum >= s) {
+                minLen = with(end - start + 1) {
+                    if (minLen != 0) {
+                        coerceAtMost(minLen)
+                    } else {
+                        this
+                    }
+                }
+
+                do {
+                    curSum -= nums[start]
+                    start++
+                    if (curSum >= s) {
+                        minLen = minLen.coerceAtMost(end - start + 1)
+                    } else {
+                        break
+                    }
+                } while (start < end)
+            }
+
+            end++
+        }
+
+        return minLen
+    }
+
+    @Test
+    fun testUniquePathsWithObstacles() {
+        assertEquals(0, uniquePathsWithObstacles(Array(1) { IntArray(1) { 1 } }))
+    }
+
+    //矩阵左上角到右角的路径
+    fun uniquePathsWithObstacles(obstacleGrid: Array<IntArray>): Int {
+        if (obstacleGrid.isEmpty()) {
+            return 0
+        }
+
+        if (obstacleGrid[0].isEmpty()) {
+            println("greyson:" + obstacleGrid[0].size)
+        }
+
+        val m = obstacleGrid.size //多少行
+        val n = obstacleGrid[0].size
+        val routeArray = Array(m) { Array(n) { 0 } }
+
+        for (i in 0 until m) {
+            for (j in 0 until n) {
+                if (obstacleGrid[i][j] != 1) {
+
+                    if (i == 0 && j == 0) {
+                        routeArray[i][j] = 1
+
+                    } else if (i == 0) { //第一行的元素
+                        routeArray[i][j] = routeArray[i][j - 1]
+
+                    } else if (j == 0) { //第一列
+                        routeArray[i][j] = routeArray[i - 1][j]
+
+                    } else { //不在第一行和第一列的元素
+                        routeArray[i][j] = routeArray[i - 1][j] + routeArray[i][j - 1]
+
+                    }
+
+                }
+            }
+        }
+
+        return routeArray[m - 1][n - 1]
+    }
+
 }

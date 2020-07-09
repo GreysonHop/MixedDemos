@@ -14,6 +14,7 @@ class ViewModelAct: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        ViewModelProvider(null) //TODO greyson_2020/7/9 听说推荐用此方式
         model = ViewModelProviders.of(this).get(MyViewModel::class.java)
 
         val user = model.getCurrentUser()
