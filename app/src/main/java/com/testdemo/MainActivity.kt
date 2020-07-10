@@ -44,6 +44,19 @@ class MainActivity : ListActivity() {
     private val classNameList = mutableListOf<String>()
     private val classList = mutableListOf<Class<out Activity>>()
 
+    private val observer = object : ContentObserver(Handler()) {
+        override fun onChange(selfChange: Boolean) {
+            val timeFormat = Settings.System.getInt(contentResolver, Settings.System.TIME_12_24, 24)
+            Log.d("greyson", "监听系统小时制变化，timeFormat:$timeFormat")
+            var mTimeFormat = 12
+            if (12 == timeFormat) {
+                mTimeFormat = 12
+            } else if (24 == timeFormat) {
+                mTimeFormat = 24
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("greyson", "MainActivity-onCreate: savedInstanceState = $savedInstanceState, task = $taskId")
@@ -86,19 +99,14 @@ class MainActivity : ListActivity() {
         }
 
         // 注册监听系统时间12/24小时制的变动
-        contentResolver.registerContentObserver(Settings.System.getUriFor(Settings.System.TIME_12_24), true, object : ContentObserver(Handler()) {
-            override fun onChange(selfChange: Boolean) {
-                val timeFormat = Settings.System.getInt(contentResolver, Settings.System.TIME_12_24, 24)
-                Log.d("greyson", "监听系统小时制变化，timeFormat:$timeFormat")
-                var mTimeFormat = 12
-                if (12 == timeFormat) {
-                    mTimeFormat = 12
-                } else if (24 == timeFormat) {
-                    mTimeFormat = 24
-                }
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.TIME_12_24), true, observer
+        )
+    }
 
-            }
-        })
+    override fun onDestroy() {
+        super.onDestroy()
+        contentResolver.unregisterContentObserver(observer)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {

@@ -334,7 +334,7 @@ public class PeerConnectionHelper {
     }
 
     // 设置自己静音
-    public void toggleMute(boolean enable) {
+    public void enableLocalAudio(boolean enable) {
         if (_localAudioTrack != null) {
             _localAudioTrack.setEnabled(enable);
         }

@@ -98,7 +98,7 @@ public class WebRTCManager implements ISignalingEvents {
 
     public void toggleMute(boolean enable) {
         if (_peerHelper != null) {
-            _peerHelper.toggleMute(enable);
+            _peerHelper.enableLocalAudio(!enable);
         }
     }
 

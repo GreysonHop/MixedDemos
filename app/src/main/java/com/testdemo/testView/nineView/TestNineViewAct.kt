@@ -3,23 +3,31 @@ package com.testdemo.testView.nineView
 import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
 import com.testdemo.BaseActivity
 import com.testdemo.R
+import com.testdemo.webrtc.webrtclib.utils.Utils
 
 /**
  * Created by Greyson on 2020/07/01
  */
 class TestNineViewAct : BaseActivity() {
 
-    lateinit var nineView : NineView
+    lateinit var nineView: NineView
 
     override fun getLayoutView(): View? {
         nineView = NineView(this)
         nineView.gap = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1.0f, resources.displayMetrics).toInt()
         nineView.setBackgroundColor(Color.GREEN)
-        nineView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        nineView.layoutParams = ViewGroup.MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            .apply {
+                topMargin = Utils.dip2px(this@TestNineViewAct, 43f)
+                leftMargin = Utils.dip2px(this@TestNineViewAct, 20f)
+                rightMargin = Utils.dip2px(this@TestNineViewAct, 20f)
+            }
+        nineView
         return nineView
     }
 
@@ -63,7 +71,7 @@ class TestNineViewAct : BaseActivity() {
             imgView.setBackgroundColor(Color.GRAY)
             imgView.scaleType = ImageView.ScaleType.CENTER
             imgView.setImageResource(R.drawable.call_icon_gift)
-            imgView.layoutParams = LayoutParams(150, 100)
+            // imgView.layoutParams = LayoutParams(150, 100)
             nineView.addView(imgView)
         }
     }

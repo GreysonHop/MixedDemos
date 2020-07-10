@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.act_group_avchat.tv_avchat_state as tvStat
  */
 class GroupAVChatActivity : BaseActivity(), IViewCallback {
 
-    private var webRTCManager: WebRTCManager? = null
+    private lateinit var webRTCManager: WebRTCManager
     private val videoViews = mutableMapOf<String, SurfaceViewRenderer>()
     private val videoSinks = mutableMapOf<String, ProxyVideoSink>()
     private val memberList = mutableListOf<MemberBean>()
@@ -62,7 +62,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
         tvMute.isSelected = false*/
         tvMute.setOnClickListener {
             val state = !it.isSelected
-            toggleMute(state)
+            webRTCManager.toggleMute(state)
             it.isSelected = state
         }
 
@@ -113,7 +113,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
                 return@forEach
             }
         }
-        webRTCManager?.joinRoom(applicationContext, rootEglBase)
+        webRTCManager.joinRoom(applicationContext, rootEglBase)
     }
 
     override fun onSetLocalStream(stream: MediaStream?, socketId: String) {
@@ -147,15 +147,11 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
     }
 
     fun switchCamera() {
-        webRTCManager?.switchCamera();
-    }
-
-    fun toggleMute(enable: Boolean) {
-        webRTCManager?.toggleMute(enable)
+        webRTCManager.switchCamera();
     }
 
     fun toggleSpeaker(enable: Boolean) {
-        webRTCManager?.toggleSpeaker(enable)
+        webRTCManager.toggleSpeaker(enable)
     }
 
     fun toggleCamera(enable: Boolean) {
@@ -211,7 +207,7 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
     }
 
     private fun release() {
-        webRTCManager?.exitRoom()
+        webRTCManager.exitRoom()
         videoViews.values.forEach { it.release() }
         videoSinks.values.forEach { it.setTarget(null) }
         videoViews.clear()

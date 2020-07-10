@@ -9,6 +9,8 @@ import com.testdemo.webrtc.webrtclib.bean.MyIceServer;
 import com.testdemo.webrtc.webrtclib.ui.GroupAVChatActivity;
 import com.testdemo.webrtc.webrtclib.ws.IConnectEvent;
 
+import java.lang.ref.SoftReference;
+
 
 /**
  * Created by dds on 2019/1/7.
@@ -34,10 +36,10 @@ public class WebrtcUtil {
     };
 
     // signalling
-//    private static String WSS = "wss://" + HOST + "/wss";
+    // private static String WSS = "wss://" + HOST + "/wss";
 
     //本地测试信令地址
-     public static String WSS = "ws://10.0.2.164:3000";
+    public static String WSS = "ws://10.0.2.164:3000";
 
     // one to one
     /*public static void callSingle(Activity activity, String wss, String roomId, boolean videoEnable) {
@@ -63,10 +65,12 @@ public class WebrtcUtil {
         if (TextUtils.isEmpty(wss)) {
             wss = WSS;
         }
+        SoftReference<Activity> reference = new SoftReference<>(activity);
         WebRTCManager.getInstance().init(wss, iceServers, new IConnectEvent() {
             @Override
             public void onSuccess() {
-                GroupAVChatActivity.Companion.openActivity(activity);
+                if (reference.get() != null)
+                    GroupAVChatActivity.Companion.openActivity(reference.get());
             }
 
             @Override
