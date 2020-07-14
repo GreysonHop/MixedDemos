@@ -35,7 +35,10 @@ public class TestActivity2BlurBg extends Activity {
         final Activity activity = ((TestApplication) getApplication()).getActivity();
         Log.i("greyson", "TestActivity2BlurBg last activity = " + activity);
 
-        blurBackground(activity);
+        if (activity != null) {
+            blurBackground(activity);
+            ((TestApplication) getApplication()).setActivity(null);
+        }
     }
 
     private void blurBackground(final Activity activity) {

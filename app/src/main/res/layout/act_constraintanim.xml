@@ -26,19 +26,27 @@
         android:text="无敌破坏王2"
         android:textColor="#282828"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/iv_poster"
-        app:layout_constraintTop_toTopOf="@+id/iv_poster" />
+        app:layout_constraintStart_toEndOf="@+id/cv_poster"
+        app:layout_constraintTop_toTopOf="@+id/cv_poster" />
 
-    <ImageView
-        android:id="@+id/iv_poster"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_poster"
         android:layout_width="120dp"
         android:layout_height="160dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:scaleType="centerCrop"
+        app:cardCornerRadius="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img5" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_poster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/img5" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
