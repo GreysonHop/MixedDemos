@@ -49,6 +49,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.testdemo.R;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
 import com.testdemo.testView.delayDialog.DelayDialog;
@@ -69,6 +70,7 @@ public class SpecialEditLayoutAct extends Activity {
     private ImageView ivGift;
     private ImageView ivVideo;
 
+    private ImageView ivAvatar;
     private LinearLayout fl_content;
     private TextView message_tv_content;
     private PopupWindow mPopupWindow;
@@ -96,6 +98,7 @@ public class SpecialEditLayoutAct extends Activity {
         ivGift = findViewById(R.id.iv_gift);
         ivVideo = findViewById(R.id.iv_video);
 
+        ivAvatar = findViewById(R.id.iv_avatar);
         fl_content = findViewById(R.id.fl_content);
         message_tv_content = findViewById(R.id.message_tv_content);
 
@@ -118,6 +121,17 @@ public class SpecialEditLayoutAct extends Activity {
                 }
             }
         });*/
+
+        Glide.with(this)
+                .load(R.drawable.ic_launcher)
+                /*.apply(RequestOptions.bitmapTransform(
+                        new RoundedCornersTransformation(
+                                ScreenUtils.dip2px(this, 12),
+                                0,
+                                RoundedCornersTransformation.CornerType.OTHER_TOP_RIGHT)
+                ))*/
+                .into(ivAvatar);
+
         PictureWithTextDrawable drawable = new PictureWithTextDrawable(
                 getResources().getDrawable(R.drawable.call_icon_gift)
                 , getResources().getDrawable(R.drawable.galata)

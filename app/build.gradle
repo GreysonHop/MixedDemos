@@ -105,6 +105,10 @@ android {
         //noinspection DataBindingWithoutKapt
         enabled = true
     }
+
+    /*packagingOptions {//so库冲突时，用下面代码表示只采用第一次读取到的那个
+        pickFirst "lib/mips/*.so"
+    }*/
 }
 
 repositories {
@@ -146,8 +150,8 @@ dependencies {
     implementation 'com.github.GreysonHop:WeChatTag:v2.0.0' //测试自己项目的Gradle导入
     implementation project(path: ':ncalendar')
 
-    implementation 'com.google.android.libraries.places:places:2.1.0'//谷歌地图必需包
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'//谷歌地图必需包
 //    地图操作工具类，添加标记等
 //    implementation 'com.google.maps.android:android-maps-utils:0.5+'
 
