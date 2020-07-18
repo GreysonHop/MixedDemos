@@ -705,4 +705,79 @@ class AlgorithmUnitTest {
         return routeArray[m - 1][n - 1]
     }
 
+    //两个数组中的相同整数
+    fun intersect(nums1: IntArray, nums2: IntArray): IntArray {
+        Arrays.sort(nums1)
+        Arrays.sort(nums2)
+        val re = mutableListOf<Int>()
+
+        var pin1 = 0
+        var pin2 = 0
+        while (pin1 < nums1.size && pin2 < nums2.size) {
+            if (nums1[pin1] == nums2[pin2]) {
+                re.add(nums1[pin1])
+                pin1++
+                pin2++
+
+            } else {
+                if (nums1[pin1] > nums2[pin2]) {
+                    pin2++
+                } else {
+                    pin1++
+                }
+            }
+        }
+
+        return re.toIntArray()
+    }
+
+    @Test
+    fun testSearchInsert() {
+        assertEquals(0, searchInsert(intArrayOf(1, 3, 5, 6), 0))
+        assertEquals(0, searchInsert(intArrayOf(1, 3, 5, 6), 1))
+        assertEquals(1, searchInsert(intArrayOf(1, 3, 5, 6), 2))
+        assertEquals(1, searchInsert(intArrayOf(1, 3, 5, 6), 3))
+        assertEquals(2, searchInsert(intArrayOf(1, 3, 5, 6), 4))
+        assertEquals(2, searchInsert(intArrayOf(1, 3, 5, 6), 5))
+        assertEquals(3, searchInsert(intArrayOf(1, 3, 5, 6), 6))
+        assertEquals(4, searchInsert(intArrayOf(1, 3, 5, 6), 7))
+    }
+
+    //目标整数是否在数组中，是则返回下标，否则返回其插入的下标
+    fun searchInsert(nums: IntArray, target: Int): Int {
+        if (nums.isEmpty() || target < nums[0]) {
+            return 0
+        }
+
+        //简单的二分查找
+        var start = 0
+        var end = nums.size - 1
+        var mid: Int
+
+        while (start <= end) {
+            mid = (start + end) / 2
+
+            when {
+                target > nums[end] -> {
+                    return end + 1
+                }
+                target < nums[start] -> {
+                    return start
+                }
+                target == nums[mid] -> {
+                    return mid
+                }
+                target > nums[mid] -> {
+                    start = mid + 1
+
+                }
+                else -> {
+                    end = mid - 1
+                }
+            }
+
+        }
+
+        return -1
+    }
 }
