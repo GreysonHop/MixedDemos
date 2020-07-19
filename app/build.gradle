@@ -106,6 +106,19 @@ android {
         enabled = true
     }
 
+    /**
+     * 如果您希望在生成绑定类时忽略某个布局文件，请将 tools:viewBindingIgnore="true" 属性添加到相应布局文件的根视图中：
+     * <LinearLayout
+     *  ...
+     *  tools:viewBindingIgnore="true" >
+     *  ...
+     * </LinearLayout>
+     * 附：图绑定不需要特别标记的XML布局文件，因此在应用中采用速度更快。在模块中启用视图绑定后，它会自动应用于该模块的所有布局
+     */
+    viewBinding { //启用视图绑定功能
+        enabled = true
+    }
+
     /*packagingOptions {//so库冲突时，用下面代码表示只采用第一次读取到的那个
         pickFirst "lib/mips/*.so"
     }*/

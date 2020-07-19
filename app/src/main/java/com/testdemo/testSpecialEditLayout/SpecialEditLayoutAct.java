@@ -42,15 +42,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.testdemo.R;
+import com.testdemo.databinding.ActTestSpecialEditLayoutBinding;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
 import com.testdemo.testView.delayDialog.DelayDialog;
 import com.testdemo.testView.shader.PictureWithTextDrawable;
@@ -64,19 +61,12 @@ import java.util.Locale;
  */
 
 public class SpecialEditLayoutAct extends Activity {
-    private PhoneReceiver phoneReceiver;
-    private ToolLayout toolLayout;
-    private EditText editText;
-    private ImageView ivGift;
-    private ImageView ivVideo;
+    private ActTestSpecialEditLayoutBinding binding;
 
-    private ImageView ivAvatar;
-    private LinearLayout fl_content;
-    private TextView message_tv_content;
-    private PopupWindow mPopupWindow;
+    private PhoneReceiver phoneReceiver;
+    //private PopupWindow mPopupWindow;
     private MenuLinearLayout mMenuLinearLayout;
 
-    private TextView tv_test_clickable;
 
     private MenuPopUp menuPopUp;
     private float mOffsetX;
@@ -87,25 +77,16 @@ public class SpecialEditLayoutAct extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_test_special_edit_layout);
+        binding = ActTestSpecialEditLayoutBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot()); //视图绑定方式
+//        setContentView(R.layout.act_test_special_edit_layout);
 
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 
-        ImageView iv = findViewById(R.id.iv_picture);
-        tv_test_clickable = findViewById(R.id.tv_test_clickable);
-        toolLayout = findViewById(R.id.layout_tool);
-        editText = findViewById(R.id.et_msg);
-        ivGift = findViewById(R.id.iv_gift);
-        ivVideo = findViewById(R.id.iv_video);
-
-        ivAvatar = findViewById(R.id.iv_avatar);
-        fl_content = findViewById(R.id.fl_content);
-        message_tv_content = findViewById(R.id.message_tv_content);
-
-        tv_test_clickable.post(() -> {
-            Layout layout = tv_test_clickable.getLayout();
+        binding.tvTestClickable.post(() -> {
+            Layout layout = binding.tvTestClickable.getLayout();
             if (layout != null) {
-                if (layout.getEllipsisCount(tv_test_clickable.getLineCount() - 1) > 0) {
+                if (layout.getEllipsisCount(binding.tvTestClickable.getLineCount() - 1) > 0) {
                     Toast.makeText(this, "有省略号哦。", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "没有省略号呢！", Toast.LENGTH_SHORT).show();
@@ -113,11 +94,11 @@ public class SpecialEditLayoutAct extends Activity {
             }
         });
 
-        /*editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*binding.etMsg.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (v == editText) {
-                    toolLayout.fullEdit(hasFocus);
+                if (v == binding.etMsg) {
+                    binding.layoutTool.fullEdit(hasFocus);
                 }
             }
         });*/
@@ -130,14 +111,14 @@ public class SpecialEditLayoutAct extends Activity {
                                 0,
                                 RoundedCornersTransformation.CornerType.OTHER_TOP_RIGHT)
                 ))*/
-                .into(ivAvatar);
+                .into(binding.ivAvatar);
 
         PictureWithTextDrawable drawable = new PictureWithTextDrawable(
                 getResources().getDrawable(R.drawable.call_icon_gift)
                 , getResources().getDrawable(R.drawable.galata)
                 , "图片已过期");
         drawable.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()));
-        iv.setImageDrawable(drawable);
+        binding.ivPicture.setImageDrawable(drawable);
 
         setCustomSelectableTextCallBack();
         observeKeyboardHeight();
@@ -148,7 +129,7 @@ public class SpecialEditLayoutAct extends Activity {
     }
 
     private void testDelayDialog() {
-        ivVideo.setOnClickListener((v) -> {
+        binding.ivVideo.setOnClickListener((v) -> {
             DelayDialog dialog = new DelayDialog.Builder(this)
                     .setDismissDelayMillis(1000)
                     .enableAnim(true)
@@ -156,7 +137,7 @@ public class SpecialEditLayoutAct extends Activity {
                     .setContent("正在重命名...")
                     .show();
 //            dialog.setOnDismissListener(dialog -> Toast.makeText(this, "dialog dismiss!!!", Toast.LENGTH_SHORT).show());
-            ivVideo.postDelayed(() -> {
+            binding.ivVideo.postDelayed(() -> {
                 dialog.setContent("重命名成功！");
                 dialog.dismiss(dialogInterface -> {
                     Toast.makeText(this, "dialog dismiss!!", Toast.LENGTH_SHORT).show();
@@ -168,12 +149,12 @@ public class SpecialEditLayoutAct extends Activity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setCustomSelectableTextCallBack() {
-        fl_content.setOnClickListener((v) -> {
+        binding.flContent.setOnClickListener((v) -> {
             startActivity(new Intent(this, TestPopupListActivity.class));
             Log.d("greyson", "onClick() fl_content");
         });
 
-        tv_test_clickable.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+        binding.tvTestClickable.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 Log.d("greyson", "onCreateActionMode mode="+mode+"_menu=" + menu.size());
@@ -207,19 +188,19 @@ public class SpecialEditLayoutAct extends Activity {
         });
 
 
-        fl_content.setOnTouchListener((view, event) -> {
+        binding.flContent.setOnTouchListener((view, event) -> {
             mOffsetX = event.getX();
             mOffsetY = event.getY();
             return false;
         });
 
-        fl_content.setOnLongClickListener((v) -> {
-            System.out.println("greyson:" +message_tv_content.getSelectionStart() + "_" + message_tv_content.getSelectionEnd());
-            CharSequence sp = message_tv_content.getText();
+        binding.flContent.setOnLongClickListener((v) -> {
+            System.out.println("greyson:" + binding.messageTvContent.getSelectionStart() + "_" + binding.messageTvContent.getSelectionEnd());
+            CharSequence sp = binding.messageTvContent.getText();
             if (sp instanceof Spannable) {
                 Selection.selectAll((Spannable) sp);
             }
-            System.out.println("greyson:" +message_tv_content.getSelectionStart() + "_" + message_tv_content.getSelectionEnd());
+            System.out.println("greyson:" +binding.messageTvContent.getSelectionStart() + "_" + binding.messageTvContent.getSelectionEnd());
             showMenuPopup();
             return true;
         });
@@ -227,30 +208,30 @@ public class SpecialEditLayoutAct extends Activity {
     }
 
     private void observeKeyboardHeight() {
-        toolLayout.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+        binding.layoutTool.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             //System.out.println("greyson onLayoutChange: " + left + " - " + right + " - " + top + " - " + bottom
             //    + " \n" + oldLeft + " - " + oldRight + " - " + oldTop + " - " + oldBottom);
 
             Rect rect = new Rect();
             // 获取当前页面窗口的显示范围
-            toolLayout.getWindowVisibleDisplayFrame(rect);
+            binding.layoutTool.getWindowVisibleDisplayFrame(rect);
             int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
             int keyboardHeight = screenHeight - rect.bottom; // 拟定输入法的高度
             //if (Math.abs(keyboardHeight) > screenHeight / 4) {// 超过屏幕四分之一则表示弹出了输入法
             if (Math.abs(keyboardHeight) > screenHeight / 4) {
-                toolLayout.fullEdit(true);
+                binding.layoutTool.fullEdit(true);
             } else {
-                if (toolLayout.getEditTextMode() == ToolLayout.MODE_EDIT_MIDDLE
-                        || toolLayout.getEditTextMode() == ToolLayout.MODE_EDIT_MIN) {
+                if (binding.layoutTool.getEditTextMode() == ToolLayout.MODE_EDIT_MIDDLE
+                        || binding.layoutTool.getEditTextMode() == ToolLayout.MODE_EDIT_MIN) {
                     return;
                 }
-                toolLayout.fullEdit(false);
+                binding.layoutTool.fullEdit(false);
             }
 
         });
 
-        /*final View main = toolLayout.getRootView();
+        /*final View main = binding.layoutTool.getRootView();
         main.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -261,13 +242,13 @@ public class SpecialEditLayoutAct extends Activity {
                         int mainInvisibleHeight = main.getRootView().getHeight() - rect.bottom;
                         int screenHeight = main.getRootView().getHeight();//屏幕高度
                         if (mainInvisibleHeight > screenHeight / 4) {
-                            toolLayout.fullEdit(true);
+                            binding.layoutTool.fullEdit(true);
                         } else {
-                            if (toolLayout.getEditTextMode() == ToolLayout.MODE_EDIT_MIDDLE
-                                    || toolLayout.getEditTextMode() == ToolLayout.MODE_EDIT_MIN) {
+                            if (binding.layoutTool.getEditTextMode() == ToolLayout.MODE_EDIT_MIDDLE
+                                    || binding.layoutTool.getEditTextMode() == ToolLayout.MODE_EDIT_MIN) {
                                 return;
                             }
-                            toolLayout.fullEdit(false);
+                            binding.layoutTool.fullEdit(false);
                         }
                     }
                 }
@@ -315,7 +296,7 @@ public class SpecialEditLayoutAct extends Activity {
         });
         registerReceiver(phoneReceiver, filters);
 
-        ivGift.setOnClickListener((v) -> {
+        binding.ivGift.setOnClickListener((v) -> {
             TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             tm.listen(myPhoneCallListener, PhoneStateListener.LISTEN_NONE);
         });
@@ -369,7 +350,7 @@ public class SpecialEditLayoutAct extends Activity {
                 mPopupWindow.setContentView(mMenuLinearLayout);
                 mMenuLinearLayout.setMenuList(menuList);
             }
-            mPopupWindow.showAsDropDown(fl_content);*/
+            mPopupWindow.showAsDropDown(binding.flContent);*/
 
         if (menuPopUp == null) {
             menuPopUp = new MenuPopUp(this);
@@ -379,12 +360,12 @@ public class SpecialEditLayoutAct extends Activity {
                 Toast.makeText(this, "press: " + position, Toast.LENGTH_SHORT).show();
             });
         }
-        menuPopUp.showPopupWindow(fl_content, mOffsetX, mOffsetY, false, true);
-//      menuPopUp.showPopupWindow(fl_content);
+        menuPopUp.showPopupWindow(binding.flContent, mOffsetX, mOffsetY, false, true);
+//      menuPopUp.showPopupWindow(binding.flContent);
     }
 
     private void setTextClickable() {
-        tv_test_clickable.setHighlightColor(getResources().getColor(R.color.transparent));
+        binding.tvTestClickable.setHighlightColor(getResources().getColor(R.color.transparent));
         SpannableStringBuilder spannableStBuilder = new SpannableStringBuilder();
         spannableStBuilder.append("回复").append(" ");
         int colorStart = spannableStBuilder.length() - 1;
@@ -414,8 +395,8 @@ public class SpecialEditLayoutAct extends Activity {
         spannableStBuilder.setSpan(new ForegroundColorSpan(Color.BLACK), colorEnd, clickableEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         spannableStBuilder.append("I am Iron man! Can you beat me!---- But I never give up!");
 
-        tv_test_clickable.setMovementMethod(LinkMovementMethod.getInstance());
-        tv_test_clickable.setText(spannableStBuilder);
+        binding.tvTestClickable.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.tvTestClickable.setText(spannableStBuilder);
     }
 
     public void onClick(View view) {
@@ -436,7 +417,7 @@ public class SpecialEditLayoutAct extends Activity {
     }
 
     private void testSomeMethod() {
-        int h1 = toolLayout.getContext().getResources().getDisplayMetrics().heightPixels;
+        int h1 = binding.layoutTool.getContext().getResources().getDisplayMetrics().heightPixels;
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -449,21 +430,21 @@ public class SpecialEditLayoutAct extends Activity {
         System.out.println("屏幕高：" + h1 + " - " + h2 + " - " + h3);
 
         Rect rect = new Rect();
-        toolLayout.getRootView().getWindowVisibleDisplayFrame(rect);
+        binding.layoutTool.getRootView().getWindowVisibleDisplayFrame(rect);
         Rect rect2 = new Rect();
-        toolLayout.getWindowVisibleDisplayFrame(rect2);
+        binding.layoutTool.getWindowVisibleDisplayFrame(rect2);
         System.out.println("rect：" + rect.height() + " - " + rect2.height()
                 + "\n" + rect.hashCode() + " - " + rect2.hashCode() + "\n" + rect.bottom + " - " + rect2.bottom
                 + "\n" + rect.top + " - " + rect2.top);
 
-        System.out.println("rootView : " + toolLayout.getRootView() + " - " + editText.getRootView());
+        System.out.println("rootView : " + binding.layoutTool.getRootView() + " - " + binding.etMsg.getRootView());
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (editText.hasFocus()) {
-                editText.clearFocus();
+            if (binding.etMsg.hasFocus()) {
+                binding.etMsg.clearFocus();
             }
         }
         return super.onKeyDown(keyCode, event);
