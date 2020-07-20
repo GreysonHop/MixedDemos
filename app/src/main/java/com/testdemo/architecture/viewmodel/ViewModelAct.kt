@@ -20,14 +20,14 @@ class ViewModelAct : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //TODO greyson_2020/7/9 听说推荐用此方式，但还不知道怎么实现？？
         //ViewModelProvider(viewModelStore, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
-        //下面是谷歌官方视频中演示的实现方式
-        //model = ViewModelProviders.of(this).get(MyViewModel::class.java)
+
+        //model = ViewModelProviders.of(this).get(MyViewModel::class.java)//这是谷歌官方视频中演示的实现方式
         // model = ViewModelProvider(this).get(MyViewModel::class.java)
 
         val binding = DataBindingUtil.setContentView<ActViewModelBinding>(this, R.layout.act_view_model)
             .apply {
                 lifecycleOwner = this@ViewModelAct
-                // viewmodel = model
+                viewmodel = model
             }
 
         /*model.userPwd.observe(this, Observer { name ->

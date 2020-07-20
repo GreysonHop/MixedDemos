@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import com.testdemo.BaseActivity
 import com.testdemo.R
+import com.testdemo.architecture.viewmodel.ViewModelAct
 import com.testdemo.databinding.ActTestDatabindingBinding
 
 /**
@@ -37,6 +38,11 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
             R.id.btn_test_hide -> {
                 mBinding?.apply { isVisible = !isVisible }
             }
+
+            R.id.btn_view_model -> {
+                startActivity(Intent(this, ViewModelAct::class.java))
+            }
+
             else -> {
                 startActivity(Intent(this, SaveStateAct::class.java))
                 //overridePendingTransition(R.anim.bottom_menu_in, R.anim.activity_hold)

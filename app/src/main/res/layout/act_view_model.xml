@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewmodel"
+            type="com.testdemo.architecture.viewmodel.MyViewModel" />
 
     </data>
 
@@ -14,27 +17,43 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_userName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:hint="user name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_userPwd"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_userName" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tv_btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_userPwd" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cb_remember_pwd"
+            android:checked="@={viewmodel.rememberMe}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{() -> viewmodel.rememberMeChanged()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_btn_login" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
