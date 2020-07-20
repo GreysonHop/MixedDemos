@@ -177,7 +177,7 @@ class AlgorithmUnitTest {
                     currentChar = str[index] //保存字符串数组的第一个字符串的当前遍历字符
 
                 } else if (str[index] != currentChar) {
-                    break@goto//某个字符不相等，则已经是最长相同前缀了。退出while
+                    break@goto //某个字符不相等，则已经是最长相同前缀了。退出while
 
                 } else if (i == strs.size - 1) {
                     result.append(str[index])
@@ -583,7 +583,7 @@ class AlgorithmUnitTest {
 
             while (j < k) {
                 val sum = nums[i] + nums[j] + nums[k]
-                if (target == sum) {//跟目标值完全一样则视为最接近目标值的结果，直接返回
+                if (target == sum) { //跟目标值完全一样则视为最接近目标值的结果，直接返回
                     return target
                 }
 
@@ -593,14 +593,14 @@ class AlgorithmUnitTest {
 
                 if (sum > target) {
                     var k0 = k - 1
-                    while (j < k0 && nums[k0] == nums[k]) {//寻找比下标k的值还小的值所对应的下标
+                    while (j < k0 && nums[k0] == nums[k]) { //寻找比下标k的值还小的值所对应的下标
                         k0--
                     }
                     k = k0
 
                 } else {
                     var j0 = j + 1
-                    while (j0 < k && nums[j0] == nums[j]) {//寻找比下标j的值还大的值所对应的下标
+                    while (j0 < k && nums[j0] == nums[j]) { //寻找比下标j的值还大的值所对应的下标
                         j0++
                     }
                     j = j0

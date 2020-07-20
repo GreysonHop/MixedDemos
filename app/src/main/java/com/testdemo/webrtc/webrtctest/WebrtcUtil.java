@@ -78,7 +78,7 @@ public class WebrtcUtil {
 
             }
         });
-        WebRTCManager.getInstance().connect(MediaType.TYPE_MEETING, roomId);
+        WebRTCManager.getInstance().connect(MediaType.TYPE_AUDIO, roomId);
     }
 
 

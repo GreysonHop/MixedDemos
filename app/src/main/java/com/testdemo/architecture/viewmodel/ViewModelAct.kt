@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModelProviders
 /**
  * Create by Greyson on 2020/05/05
  */
-class ViewModelAct: AppCompatActivity() {
+class ViewModelAct : AppCompatActivity() {
 
     private lateinit var model: MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        ViewModelProvider(null) //TODO greyson_2020/7/9 听说推荐用此方式
+        //TODO greyson_2020/7/9 听说推荐用此方式，但还不知道怎么实现？？
+        //ViewModelProvider(viewModelStore, ViewModelProvider.AndroidViewModelFactory.getInstance(application))
         model = ViewModelProviders.of(this).get(MyViewModel::class.java)
 
         val user = model.getCurrentUser()

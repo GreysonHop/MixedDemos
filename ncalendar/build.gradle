@@ -17,9 +17,11 @@ dependencies {
     api 'androidx.appcompat:appcompat:1.1.0'
     api 'joda-time:joda-time:2.10.1'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+    //Core KTX 模块为属于 Android 框架的通用库提供扩展程序。这些库没有您需要添加到 build.gradle 的基于 Java 的依赖项。
 //    api "androidx.core:core-ktx:1.2.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+
 repositories {
     mavenCentral()
 }
