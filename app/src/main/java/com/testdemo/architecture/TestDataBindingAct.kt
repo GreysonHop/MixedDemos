@@ -21,6 +21,7 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
         Log.d("greyson", "TestDataBindingAct-initView: task = $taskId")
         mBinding = DataBindingUtil.setContentView<ActTestDatabindingBinding>(this, R.layout.act_test_databinding)
             .apply {
+                lifecycleOwner = this@TestDataBindingAct// Specify the current activity as the lifecycle owner.
                 listener = this@TestDataBindingAct
                 isVisible = true
                 title = "还没点击"
@@ -42,4 +43,5 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
 }

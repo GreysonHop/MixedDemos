@@ -24,7 +24,7 @@ android {
         resValue "string", "google_search_api_key", (project.findProperty("GOOGLE_SEARCH_API_KEY") ?: "")
         resValue "string", "google_map_api_key", (project.findProperty("GOOGLE_MAP_API_KEY") ?: "")
 
-        manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Default'] // 默认渠道为Default
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Default'] // 默认渠道为Default
     }
 
     signingConfigs {
@@ -62,7 +62,7 @@ android {
          */
         staging {
             initWith debug
-            manifestPlaceholders = [hostName:"internal.example.com"]
+            manifestPlaceholders = [hostName: "internal.example.com"]
             applicationIdSuffix ".debugStaging"
         }
 
@@ -85,10 +85,10 @@ android {
     productFlavors {
         greyson {
             dimension "version"
-            manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Greyson'] //博客者应该是用了友盟的渠道统计SDK
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Greyson'] //博客者应该是用了友盟的渠道统计SDK
         }
         demo {
-            manifestPlaceholders=[UMENG_CHANNEL_VALUE:'Demo']
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Demo']
         }
     }
 
@@ -132,6 +132,8 @@ repositories {
 }
 
 dependencies {
+    def lifecycle_version = "2.2.0"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //跟创建项目时自带的配置一样
     testImplementation 'junit:junit:4.13'
@@ -143,8 +145,21 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6' //引入协程
     //implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'//which is proper
 
+    implementation 'androidx.core:core-ktx:1.3.0' //
+    //ViewModel开发所需要：
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version" // ViewModel
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version" // LiveData
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    // Annotation processor
+    //kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.fragment:fragment-ktx:1.2.5" //辅助工具库，
+    implementation "androidx.activity:activity-ktx:1.1.0"
+
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
 
