@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableField
 import com.testdemo.BaseActivity
 import com.testdemo.R
 import com.testdemo.databinding.ActTestDatabindingBinding
@@ -23,20 +24,21 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
                 listener = this@TestDataBindingAct
                 isVisible = true
                 title = "还没点击"
+                observableInput = ObservableField()//TODO greyson_7/20/20 ObservableField类用什么用？
             }
     }
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_test_add -> {
-                mBinding?.title = "第" + time++ + "次点击"
+                mBinding?.title = "第" + ++time + "次点击"
             }
             R.id.btn_test_hide -> {
                 mBinding?.apply { isVisible = !isVisible }
             }
             else -> {
                 startActivity(Intent(this, SaveStateAct::class.java))
-//                overridePendingTransition(R.anim.bottom_menu_in, R.anim.activity_hold)
+                //overridePendingTransition(R.anim.bottom_menu_in, R.anim.activity_hold)
             }
         }
     }

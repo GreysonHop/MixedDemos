@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <import type="android.view.View" />
+
+        <import type="androidx.databinding.ObservableField" />
 
         <variable
             name="isVisible"
@@ -16,12 +19,17 @@
         <variable
             name="listener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="observableInput"
+            type="ObservableField&lt;String>" />
+
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:animateLayoutChanges="true"
         android:background="@color/Green">
 
         <Button
@@ -30,29 +38,64 @@
             android:layout_height="wrap_content"
             android:onClick="@{(view) -> listener.onClick(view)}"
             android:text="加数"
-            android:visibility="@{isVisible ? View.VISIBLE : View.INVISIBLE}" />
+            android:visibility="@{isVisible ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_test_hide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:onClick="@{listener::onClick}"
-            android:text="隐藏" />
+            android:text="隐藏"
+            app:layout_constraintStart_toEndOf="@id/btn_test_add"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{title}"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_test_add" />
 
         <Button
             android:id="@+id/btn_test_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:onClick="@{listener::onClick}"
-            android:text="跳转到单例" />
+            android:text="跳转到单例"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_test" />
 
-    </LinearLayout>
+        <!--  @={}可以理解为组件的该属性值与其中的变量的值始终保持一致！
+            目前这里的observableInput变量就算是普通的String类型也能同步et_observable和tv_observer
+            那么ObservableField类到底有什么用？？？
+          -->
+        <EditText
+            android:id="@+id/et_observable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="input number"
+            android:maxLength="10"
+            android:text="@={observableInput}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_test_temp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_observer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:hint="observer"
+            android:text="@{observableInput}"
+            app:layout_constraintStart_toEndOf="@id/et_observable"
+            app:layout_constraintTop_toTopOf="@id/et_observable" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

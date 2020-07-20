@@ -2,14 +2,28 @@ package com.testdemo.architecture
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import androidx.databinding.library.baseAdapters.BR
 
 /**
  * Created by Greyson on 2020/06/30
  */
-class UserBean : Parcelable {
+class UserBean : BaseObservable, Parcelable {
 
+    @get:Bindable
     var id = -1
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.id)
+        }
+
+    @get:Bindable
     var name = ""
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.name)
+        }
 
     constructor(id: Int, name: String) {
         this.id = id
