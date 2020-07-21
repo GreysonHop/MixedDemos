@@ -70,7 +70,7 @@ fun foo() {
 }
 
 fun getRunnable(): Runnable {
-    return Runnable { TODO("not implemented") }
+    return Runnable { /* 不用object的内部类写法 */ }
 }
 
 fun main(args: Array<String>) {

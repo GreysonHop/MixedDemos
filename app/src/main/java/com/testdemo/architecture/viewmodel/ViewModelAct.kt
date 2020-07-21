@@ -26,6 +26,10 @@ class ViewModelAct : AppCompatActivity() {
 
         val binding = DataBindingUtil.setContentView<ActViewModelBinding>(this, R.layout.act_view_model)
             .apply {
+                /**
+                 * 要将 LiveData 对象与绑定类一起使用，您需要指定生命周期所有者来定义 LiveData 对象的范围。
+                 * 以下示例在绑定类实例化后将 Activity 指定为生命周期所有者：
+                 */
                 lifecycleOwner = this@ViewModelAct
                 viewmodel = model
             }

@@ -40,7 +40,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testOnCreate() {//todo 还是不能正常运行？？。。。
+    public void testOnCreate() {
         String data = null;
         try {
             ImageView testBitmap = new ImageView(mTargetContext);
@@ -51,10 +51,10 @@ public class ApplicationTest {
             Bundle metaData = ((ApplicationInfo) applicationInfo).metaData;
             data = metaData.getString("com.google.android.geo.API_KEY");
             System.out.println("AndroidTest, data = " + data);
-//            assertEquals("1234567890", data);
+            System.out.println("AndroidTest, UMENG_CHANNEL = " + metaData.getString("UMENG_CHANNEL"));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        assertEquals("1234567890", data);
+        assertEquals("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI", data);
     }
 }

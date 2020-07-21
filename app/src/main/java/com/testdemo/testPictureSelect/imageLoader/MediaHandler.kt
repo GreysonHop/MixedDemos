@@ -96,7 +96,7 @@ object MediaHandler {
 
         //全部
         if (fileList.isNotEmpty()) {
-            val pictureBean = fileList[0] //todo greyson 是否需要经过排序再获取第一个媒体文件来作为目录封面
+            val pictureBean = fileList[0]
             mediaFolderMap[ALL_MEDIA_FOLDER] = MediaFolderBean(ALL_MEDIA_FOLDER, "All picture", pictureBean.path, pictureBean.type, fileList)
 
             //对图片进行文件夹分类, 添加其他的图片文件夹

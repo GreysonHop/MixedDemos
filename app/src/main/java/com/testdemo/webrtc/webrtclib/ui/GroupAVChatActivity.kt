@@ -59,8 +59,6 @@ class GroupAVChatActivity : BaseActivity(), IViewCallback {
     override fun initView() {
         tvState.text = "拨号中..."
         tvHangup.text = "取消"
-        /*tvMute.setTextImage(R.drawable.ic_avchat_mute_invalid) //todo 可以不用了？！！
-        tvMute.isSelected = false*/
         tvMute.setOnClickListener {
             val state = !it.isSelected
             webRTCManager.toggleMute(state)

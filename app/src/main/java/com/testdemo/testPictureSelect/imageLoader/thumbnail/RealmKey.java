@@ -21,7 +21,7 @@ public class RealmKey {
     }
 
     public byte[] getKeyByAid(String aid){
-        String key = "realm_key" + aid;//todo greyson 如何写
+        String key = "realm_key" + aid;
 
         if (key.length() < 64){
             while (key.length()<64){

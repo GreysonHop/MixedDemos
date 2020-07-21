@@ -241,7 +241,7 @@ class DialogActivity : BaseActivity() {
             } else {
                 if (videoCheckedList.size >= 1) {
                     checkBox.isChecked = false
-                    //todo toast
+                    // toast
                 } else {
                     mediaBean.isItemPicIsChecked = true
                     videoCheckedList.add(mediaBean.path)
