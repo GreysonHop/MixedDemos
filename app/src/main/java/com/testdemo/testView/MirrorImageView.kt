@@ -13,7 +13,7 @@ import com.testdemo.R
  * 镜像图片的绘制
  */
 class MirrorImageView : View {
-    private var mSrcBitmap: Bitmap? = null
+    private lateinit var mSrcBitmap: Bitmap
     private var mRefBitmap: Bitmap? = null
     private lateinit var mPaint: Paint
     private var mXfermode: PorterDuffXfermode? = null
@@ -29,7 +29,7 @@ class MirrorImageView : View {
 
     private fun initRes(context: Context) {
         // 获取源图
-        mSrcBitmap = BitmapFactory.decodeResource(resources, R.drawable.img6)//如果Java的方法里面返回了Null，Kotlin代码会直接崩溃！
+        mSrcBitmap = BitmapFactory.decodeResource(resources, R.drawable.img6) //如果Java的方法里面返回了Null，Kotlin代码会直接崩溃！
 
         // 实例化一个矩阵对象
         val matrix = Matrix()
@@ -37,28 +37,26 @@ class MirrorImageView : View {
         matrix.setScale(1f, -1f)
 
         mPaint = Paint()
-        mSrcBitmap?.let {
-            // 生成倒影图
-            mRefBitmap = Bitmap.createBitmap(it, 0, 0, it.width, it.height, matrix, true)
+        // 生成倒影图
+        mRefBitmap = Bitmap.createBitmap(mSrcBitmap, 0, 0, mSrcBitmap.width, mSrcBitmap.height, matrix, true)
 
-            val screenW = ScreenUtils.getScreenWidth(context)
-            val screenH = ScreenUtils.getScreenHeight(context)
-            Log.d("greyson", "width = $screenW  height = $screenH")
+        val screenW = ScreenUtils.getScreenWidth(context)
+        val screenH = ScreenUtils.getScreenHeight(context)
+        Log.d("greyson", "width = $screenW  height = $screenH")
 
-            startX = (screenW / 2 - it.width / 2).toFloat()
-            startY = (screenH / 2 - it.height / 2).toFloat()
+        startX = (screenW / 2 - mSrcBitmap.width / 2).toFloat()
+        startY = (screenH / 2 - mSrcBitmap.height / 2).toFloat()
 
-            mPaint.shader = LinearGradient(
-                    startX
-                    , (startY + it.height)
-                    , startX
-                    , (startY + it.height + it.height / 3)
-                    , 0xAA000000.toInt()
-                    , Color.TRANSPARENT
-                    , Shader.TileMode.CLAMP)
+        mPaint.shader = LinearGradient(
+            startX
+            , (startY + mSrcBitmap.height)
+            , startX
+            , (startY + mSrcBitmap.height + mSrcBitmap.height / 3)
+            , 0xAA000000.toInt()
+            , Color.TRANSPARENT
+            , Shader.TileMode.CLAMP)
 
-            mXfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
-        }
+        mXfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
 
     }
 

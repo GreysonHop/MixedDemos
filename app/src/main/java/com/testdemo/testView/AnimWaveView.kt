@@ -7,17 +7,33 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 
 /**
  * Create by Greyson on 2020/03/22
  */
-class AnimWaveView : View {
+class AnimWaveView : View, LifecycleObserver {
     private val mPaint: Paint = Paint()
     private val mPath: Path = Path()
     private val mItemWaveLength = 1200f
     private var dx: Int = 0
+
+    private val animator by lazy { //这里其实没必要lazy，反正在构造器中就会实例化。只是小测试一下lazy属性而已
+        ValueAnimator.ofInt(0, mItemWaveLength.toInt()).apply {
+            duration = 2000
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = LinearInterpolator()
+            addUpdateListener {
+                dx = it.animatedValue as Int
+                postInvalidate()
+            }
+        }
+    }
 
     constructor(context: Context) : super(context)
 
@@ -25,7 +41,7 @@ class AnimWaveView : View {
         mPaint.color = Color.GREEN
         mPaint.style = Paint.Style.FILL
 
-        startAnim()
+        animator.start()
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -50,15 +66,11 @@ class AnimWaveView : View {
 
     }
 
-    private fun startAnim() {
-        val animator = ValueAnimator.ofInt(0, mItemWaveLength.toInt())
-        animator.duration = 2000
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.interpolator = LinearInterpolator()
-        animator.addUpdateListener {
-            dx = it.animatedValue as Int
-            postInvalidate()
-        }
-        animator.start()
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun stopAnim() {
+        Log.d("greyson", "AnimWaveView-stopAnim: activity destroy")
+        animator.cancel()
+        animator.removeAllListeners()
+        // animator.removeAllUpdateListeners()
     }
 }

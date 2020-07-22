@@ -22,7 +22,7 @@ class SaveStateAct : AppCompatActivity() {
         Log.e("greyson", "SaveStateAct-onCreate: $savedInstanceState, task= $taskId")
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         Log.e("greyson", "SaveStateAct-onRestoreInstanceState: $savedInstanceState")
     }

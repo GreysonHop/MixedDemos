@@ -109,7 +109,7 @@ class MainActivity : ListActivity() {
         contentResolver.unregisterContentObserver(observer)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         Log.d("greyson", "newConfig: ${newConfig}")
     }
