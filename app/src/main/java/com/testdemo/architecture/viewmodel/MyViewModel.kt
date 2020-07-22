@@ -14,10 +14,10 @@ class MyViewModel : ViewModel() {
 
     var rememberMe = false
 
-    /*val userPwd: LiveData<String> //TODO greyson_7/20/20 数据绑定一栏中《将布局视图绑定到架构组件》
+    /*val userPwd: LiveData<String>
 
     init {
-        val result = Repository.userPwd
+        val result = Repository.userPwd //这是模拟从远程或数据库中获取数据的LiveData
         userPwd = Transformations.map(result) { result -> result.value }
     }*/
 

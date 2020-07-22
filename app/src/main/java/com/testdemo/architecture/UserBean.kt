@@ -21,7 +21,7 @@ class UserBean : BaseObservable, Parcelable {
     @get:Bindable
     var name = ""
         set(value) {
-            field = value
+            field = value //防止无限循环
             notifyPropertyChanged(BR.name)
         }
 

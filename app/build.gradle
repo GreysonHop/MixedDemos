@@ -5,13 +5,13 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.testdemo"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -135,17 +135,27 @@ dependencies {
     def lifecycle_version = "2.2.0"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(path: ':ncalendar')
+    implementation files('libs/brokenview.jar')
+
     //跟创建项目时自带的配置一样
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-//    androidTestImplementation files('libs/httpunit-1.7.jar')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" //让模块支持Kotlin编程
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6' //引入协程
-    //implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'//which is proper
+    /*    安卓官方架构相关包    */
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation 'androidx.core:core-ktx:1.3.0' //
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" //让模块支持Kotlin编程
+//    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7' //引入协程
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'//与上面的是什么关系？
+
+    implementation 'androidx.core:core-ktx:1.3.0' //暂时不知道什么时候该用
+
     //ViewModel开发所需要：
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version" // ViewModel
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version" // LiveData
@@ -158,26 +168,25 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.2.5" //辅助工具库，
     implementation "androidx.activity:activity-ktx:1.1.0"
 
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
 
-    /*IdeMavenCoordinates{myGroupId='com.android.support'; myArtifactId='appcompat-v7'
-        ; myVersion='24.2.1'; myPacking='aar'; myClassifier='null'}*/
-
-    implementation files('libs/brokenview.jar')
-    implementation 'com.wonderkiln:blurkit:1.0.0'
-
+    /*    一些UI组件    */
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50' //BaseQuickAdapter
     implementation 'com.jcodecraeer:xrecyclerview:1.5.9' //下拉刷新、上拉加载组件
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7' //各种下拉刷新、Behavior实现的列表外上头组件等效果
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.0.0' //仿微信的高级图片选择组件
     implementation 'com.github.yyued:SVGAPlayer-Android:2.1.8'
+    implementation 'com.akexorcist:round-corner-progress-bar:2.1.0'//进度条圆角，好像因为什么问题而没采用
+    implementation 'com.facebook.rebound:rebound:0.3.8' //引用谷歌的一些动画加速器
+    implementation 'com.wonderkiln:blurkit:1.0.0'
+    implementation 'com.github.GreysonHop:WeChatTag:v2.0.0' //测试自己项目的Gradle导入
+
+
+    /*    工具类包（网络访问、加载图片等）    */
+    api 'io.reactivex.rxjava2:rxjava:2.2.5'
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
 
-    implementation 'com.github.GreysonHop:WeChatTag:v2.0.0' //测试自己项目的Gradle导入
-    implementation project(path: ':ncalendar')
 
+    /*    第三方框架整体功能的导包    */
     implementation 'com.google.android.libraries.places:places:2.1.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'//谷歌地图必需包
 //    地图操作工具类，添加标记等
@@ -187,13 +196,6 @@ dependencies {
     implementation 'org.webrtc:google-webrtc:1.0.30039'
     implementation 'org.java-websocket:Java-WebSocket:1.3.9'
     implementation 'com.alibaba:fastjson:1.1.64.android'
-
-    implementation 'androidx.multidex:multidex:2.0.1'
-    api 'io.reactivex.rxjava2:rxjava:2.2.5'
-    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
-
-    implementation 'com.akexorcist:round-corner-progress-bar:2.1.0'//进度条圆角，好像因为什么问题而没采用
-    implementation 'com.facebook.rebound:rebound:0.3.8' //引用谷歌的一些动画加速器
 
     //内存泄漏检查工具的三个包，分Debug与否
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
