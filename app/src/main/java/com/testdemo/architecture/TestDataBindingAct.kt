@@ -27,6 +27,7 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
                 isVisible = true
                 title = "还没点击"
                 observableInput = ObservableField()//TODO greyson_7/20/20 ObservableField类用什么用？
+                userName = ObservableField("??")
             }
     }
 

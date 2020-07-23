@@ -6,6 +6,10 @@
 
         <import type="android.view.View" />
 
+        <import type="com.testdemo.architecture.UserBean" />
+
+        <import type="com.testdemo.architecture.viewmodel.Convertor" />
+
         <import type="androidx.databinding.ObservableField" />
 
         <variable
@@ -22,6 +26,10 @@
 
         <variable
             name="observableInput"
+            type="ObservableField&lt;String>" />
+
+        <variable
+            name="userName"
             type="ObservableField&lt;String>" />
 
     </data>
@@ -106,6 +114,34 @@
             android:text="@{observableInput}"
             app:layout_constraintStart_toEndOf="@id/et_observable"
             app:layout_constraintTop_toTopOf="@id/et_observable" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_twoway_test_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="test custom property in two-way binding"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_observable" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_two-way"
+            inverseText="@={Convertor.name2Tip(context, userName)}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_twoway_test_tip" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_tip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{userName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_two-way"
+            app:layout_constraintTop_toBottomOf="@id/tv_twoway_test_tip" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

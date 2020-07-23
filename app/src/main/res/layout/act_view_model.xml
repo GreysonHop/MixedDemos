@@ -47,9 +47,9 @@
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_remember_pwd"
-            android:checked="@={viewmodel.rememberMe}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="@={viewmodel.rememberMe}"
             android:onCheckedChanged="@{() -> viewmodel.rememberMeChanged()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

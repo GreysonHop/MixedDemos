@@ -10,4 +10,6 @@
 
     <string name="text_calendar_cn">%1$s年%2$s月%3$s日</string>
 
+    <string name="viewmodel_name_tip">入力したアカウント</string>
+
 </resources>
