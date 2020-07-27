@@ -14,16 +14,25 @@ class UserBean : BaseObservable, Parcelable {
     @get:Bindable
     var id = -1
         set(value) {
+            if (field == value) return //防止无限循环
             field = value
             notifyPropertyChanged(BR.id)
+            notifyPropertyChanged(BR.unique)
         }
 
     @get:Bindable
     var name = ""
         set(value) {
-            field = value //防止无限循环
+            if (field == value) return //防止无限循环
+            field = value
             notifyPropertyChanged(BR.name)
+            notifyPropertyChanged(BR.unique)
         }
+
+    @Bindable
+    fun getUnique(): String { //可以不是属性，也可以没有setter方法
+        return name + id
+    }
 
     constructor(id: Int, name: String) {
         this.id = id
