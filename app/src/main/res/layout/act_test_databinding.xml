@@ -32,6 +32,16 @@
             name="userName"
             type="ObservableField&lt;String>" />
 
+        <variable
+            name="data1"
+            type="ObservableField&lt;String>" />
+        <variable
+            name="data2"
+            type="ObservableField&lt;String>" />
+        <variable
+            name="mediatorData"
+            type="androidx.lifecycle.MediatorLiveData&lt;String>" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,8 +136,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_observable" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_two-way"
-            inverseText="@={Convertor.name2Tip(context, userName)}"
+            android:id="@+id/et_two_way"
+            inverseText="@{Convertor.name2Tip(context, userName)}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -139,9 +149,35 @@
             android:layout_height="wrap_content"
             android:text="@{userName}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/et_two-way"
+            app:layout_constraintStart_toEndOf="@id/et_two_way"
             app:layout_constraintTop_toBottomOf="@id/tv_twoway_test_tip" />
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_mediator1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@={data1}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_tip" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_mediator2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:text="@={data2}"
+            app:layout_constraintStart_toEndOf="@id/et_mediator1"
+            app:layout_constraintTop_toBottomOf="@id/tv_tip" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_mediator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{mediatorData}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_mediator1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
