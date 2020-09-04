@@ -3,6 +3,7 @@ package com.testdemo.webrtc.webrtctest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +17,7 @@ import com.testdemo.R;
 public class TestAVChatActivity extends AppCompatActivity {
     private EditText et_signal;
     private EditText et_room;
-
+    private boolean videoEnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,10 @@ public class TestAVChatActivity extends AppCompatActivity {
     private void initView() {
         et_signal = findViewById(R.id.et_signal);
         et_room = findViewById(R.id.et_room);
+
+        ((RadioGroup) findViewById(R.id.rg_media_selection)).setOnCheckedChangeListener(
+                (radioGroup, id) -> videoEnable = id == R.id.rb_video
+        );
     }
 
     private void initVar() {
@@ -49,9 +54,10 @@ public class TestAVChatActivity extends AppCompatActivity {
     }*/
 
     public void JoinRoom(View view) {
-        WebrtcUtil.call(this, et_signal.getText().toString(), et_room.getText().toString().trim());
-
+        WebrtcUtil.call(this,
+                et_signal.getText().toString(),
+                et_room.getText().toString().trim(),
+                videoEnable);
     }
-
 
 }

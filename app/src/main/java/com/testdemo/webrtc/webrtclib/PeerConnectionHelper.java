@@ -82,7 +82,6 @@ public class PeerConnectionHelper {
     private AudioManager mAudioManager;
 
 
-
     enum Role {Caller, Receiver,}
 
     private Role _role;
@@ -158,6 +157,7 @@ public class PeerConnectionHelper {
             try {
                 Peer mPeer = new Peer(socketId);
                 mPeer.pc.addStream(_localStream);
+                Log.d(TAG, "onRemoteJoinToRoom create a peer");
                 _connectionIdArray.add(socketId);
                 _connectionPeerDic.put(socketId, mPeer);
             } catch (Exception e) {
@@ -171,6 +171,7 @@ public class PeerConnectionHelper {
         executor.execute(() -> {
             Peer peer = _connectionPeerDic.get(socketId);
             if (peer != null) {
+                Log.d(TAG, "onRemoteIceCandidate addIceCandidate: " + iceCandidate);
                 peer.pc.addIceCandidate(iceCandidate);
             }
         });
@@ -200,6 +201,7 @@ public class PeerConnectionHelper {
             SessionDescription sdp = new SessionDescription(SessionDescription.Type.OFFER, sessionDescription);
 
             if (mPeer != null) {
+                Log.d(TAG, "onReceiveOffer and setRemoteDescription for type Offer");
                 mPeer.pc.setRemoteDescription(mPeer, sdp);
             }
         });
@@ -211,6 +213,7 @@ public class PeerConnectionHelper {
             Peer mPeer = _connectionPeerDic.get(socketId);
             SessionDescription sessionDescription = new SessionDescription(SessionDescription.Type.ANSWER, sdp);
             if (mPeer != null) {
+                Log.d(TAG, "onReceiverAnswer and setRemoteDescription for type ANSWER");
                 mPeer.pc.setRemoteDescription(mPeer, sessionDescription);
             }
         });
@@ -300,6 +303,7 @@ public class PeerConnectionHelper {
         for (Map.Entry<String, Peer> entry : _connectionPeerDic.entrySet()) {
             _role = Role.Caller;
             Peer mPeer = entry.getValue();
+            Log.d(TAG, "createOffers(" + mPeer.socketId + "): " + mPeer.pc);
             mPeer.pc.createOffer(mPeer, offerOrAnswerConstraint());
         }
 
@@ -518,17 +522,19 @@ public class PeerConnectionHelper {
 
         @Override
         public void onIceCandidate(IceCandidate iceCandidate) {
+            Log.i(TAG, "onIceCandidate(" + this.hashCode() + "):" + iceCandidate.toString());
             // 发送IceCandidate
             _webSocket.sendIceCandidate(socketId, iceCandidate);
         }
 
         @Override
         public void onIceCandidatesRemoved(IceCandidate[] iceCandidates) {
-            Log.i(TAG, "onIceCandidatesRemoved:");
+            Log.i(TAG, "onIceCandidatesRemoved(" + this.hashCode() + "):");
         }
 
         @Override
         public void onAddStream(MediaStream mediaStream) {
+            Log.i(TAG, "onAddStream(" + this.hashCode() + "):" + mediaStream);
             if (viewCallback != null) {
                 viewCallback.onAddRemoteStream(mediaStream, socketId);
             }
@@ -536,29 +542,30 @@ public class PeerConnectionHelper {
 
         @Override
         public void onRemoveStream(MediaStream mediaStream) {
+            Log.i(TAG, "onRemoveStream(" + this.hashCode() + "):" + mediaStream);
             if (viewCallback != null) {
-                viewCallback.onCloseWithId(socketId);
+                viewCallback.onCloseWithId(socketId);//todo greyson 经过一个试验，房间里别人退出，不会走这里
             }
         }
 
         @Override
         public void onDataChannel(DataChannel dataChannel) {
-
+            Log.i(TAG, "onDataChannel(" + this.hashCode() + "):" + dataChannel);
         }
 
         @Override
         public void onRenegotiationNeeded() {
-
+            Log.i(TAG, "onRenegotiationNeeded(" + this.hashCode() + "):");
         }
 
         @Override
         public void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams) {
-
+            Log.i(TAG, "onAddTrack(" + this.hashCode() + "):" + Arrays.toString(mediaStreams));
         }
 
         @Override
         public void onTrack(RtpTransceiver transceiver) {
-
+            Log.i(TAG, "onTrack(" + this.hashCode() + "):" + transceiver);
         }
 
 
@@ -582,7 +589,8 @@ public class PeerConnectionHelper {
 
         @Override
         public void onSetSuccess() {
-            Log.v(TAG, "sdp连接成功        " + pc.signalingState().toString());
+            Log.v(TAG, "sdp连接成功        " + pc.signalingState().toString() + " _role=" + _role
+                    + " _sdp_type=" + (pc.getLocalDescription() == null ? null : pc.getLocalDescription().type));
 
             if (pc.signalingState() == PeerConnection.SignalingState.HAVE_REMOTE_OFFER) {
                 pc.createAnswer(Peer.this, offerOrAnswerConstraint());
@@ -609,12 +617,12 @@ public class PeerConnectionHelper {
 
         @Override
         public void onCreateFailure(String s) {
-
+            Log.i(TAG, "onCreateFailure(" + this.hashCode() + "):" + s);
         }
 
         @Override
         public void onSetFailure(String s) {
-
+            Log.i(TAG, "onSetFailure(" + this.hashCode() + "):" + s);
         }
 
 

@@ -67,7 +67,26 @@
                 android:text="一对一视频聊天"
                 tools:ignore="OnClick" />-->
 
-        </LinearLayout>
-    </ScrollView>
+            <RadioGroup
+                android:id="@+id/rg_media_selection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rb_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="audio"
+                    android:checked="true" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rb_video"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="video" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

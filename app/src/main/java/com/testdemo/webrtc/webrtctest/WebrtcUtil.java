@@ -23,7 +23,7 @@ public class WebrtcUtil {
 
     // turn and stun，内网测试时不需要
     private static MyIceServer[] iceServers = {
-            new MyIceServer("stun:stun.l.google.com:19302"),
+            /*new MyIceServer("stun:stun.l.google.com:19302"),
 
             // 测试地址1
             new MyIceServer("stun:" + HOST + ":3478?transport=udp"),
@@ -32,14 +32,17 @@ public class WebrtcUtil {
                     "123456"),
             new MyIceServer("turn:" + HOST + ":3478?transport=tcp",
                     "ddssingsong",
-                    "123456"),
+                    "123456"),*/
+            new MyIceServer("turn:202.104.122.147:3478",
+                    "user",
+                    "asdf"),
     };
 
     // signalling
     // private static String WSS = "wss://" + HOST + "/wss";
 
     //本地测试信令地址
-    public static String WSS = "ws://10.0.2.164:3000";
+    public static String WSS = "ws://10.0.2.111:3000";
 
     // one to one
     /*public static void callSingle(Activity activity, String wss, String roomId, boolean videoEnable) {
@@ -61,7 +64,7 @@ public class WebrtcUtil {
     }*/
 
     // Videoconferencing
-    public static void call(Activity activity, String wss, String roomId) {
+    public static void call(Activity activity, String wss, String roomId, boolean videoEnable) {
         if (TextUtils.isEmpty(wss)) {
             wss = WSS;
         }
@@ -78,7 +81,7 @@ public class WebrtcUtil {
 
             }
         });
-        WebRTCManager.getInstance().connect(MediaType.TYPE_AUDIO, roomId);
+        WebRTCManager.getInstance().connect(videoEnable ? MediaType.TYPE_VIDEO : MediaType.TYPE_AUDIO, roomId);
     }
 
 
