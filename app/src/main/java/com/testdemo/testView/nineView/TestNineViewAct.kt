@@ -27,7 +27,6 @@ class TestNineViewAct : BaseActivity() {
                 leftMargin = Utils.dip2px(this@TestNineViewAct, 20f)
                 rightMargin = Utils.dip2px(this@TestNineViewAct, 20f)
             }
-        nineView
         return nineView
     }
 
