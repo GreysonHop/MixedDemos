@@ -1,9 +1,12 @@
 package com.testdemo.testRecyclerViewType
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.R
@@ -28,6 +31,7 @@ class TestRecyclerViewAct : AppCompatActivity() {
         btn_goto_other_demo.setOnClickListener { startActivity(Intent(this, ItemMoveMainActivity::class.java)) }
 
         initListView()
+        initMemberList()
     }
 
     inner class SimpleItemTouchCallback : ItemTouchHelper.Callback() {
@@ -55,7 +59,7 @@ class TestRecyclerViewAct : AppCompatActivity() {
         })
         userList.add(MediaBean().apply {
             folderName = "555"
-            type = R.drawable.img5
+            type = R.drawable.img3
         })
         userList.add(MediaBean().apply {
             folderName = "666"
@@ -75,5 +79,20 @@ class TestRecyclerViewAct : AppCompatActivity() {
         }*/
         rv_list.layoutManager = NineLayoutManager().apply { gap = 30 }
         rv_list.adapter = NineAdapter().apply { setDataList(userList) }
+    }
+
+    private fun initMemberList() {
+        val list = listOf(R.drawable.img1, R.drawable.img2, R.drawable.img3, R.drawable.img4, R.drawable.img5, R.drawable.img6)
+        rv_members.apply {
+            layoutManager = GridLayoutManager(this@TestRecyclerViewAct, 4)
+            adapter = CallInPicAdapter(list)
+
+            addItemDecoration(object: RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                    super.getItemOffsets(outRect, view, parent, state)
+
+                }
+            })
+        }
     }
 }

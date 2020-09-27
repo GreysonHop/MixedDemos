@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutParams
  * Created by Greyson on 2020/09/10
  */
 class NineLayoutManager : RecyclerView.LayoutManager() {
-
+//TODO greyson_9/15/20 RecyclerView无法使用WRAP_CONTENT！
     var gap = 0
     /*set(value) {
         field = value

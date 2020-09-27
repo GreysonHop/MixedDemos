@@ -8,12 +8,13 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.testdemo.R;
 
 /*用来演示用颜色矩阵设置滤镜的效果*/
-public class ColorView extends ImageView {
+public class ColorView extends AppCompatImageView {
 
     private Paint myPaint = null;
     private Bitmap bitmap = null;
@@ -23,7 +24,6 @@ public class ColorView extends ImageView {
     public ColorView(Context context, AttributeSet attrs) {
         super(context, attrs);
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.contact_image);
-//        invalidate();//这里没必要调用。。。
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ColorView extends ImageView {
         myPaint.setColorFilter(new ColorMatrixColorFilter(myColorMatrix));
         //描画（处理后的图片）
         canvas.drawBitmap(bitmap, 0, 0, myPaint);
-//        invalidate();//写这例子的人怎么想的，在这里调用该方法会无限循环onDraw，手机不崩也得残
+        //invalidate();//写这例子的人怎么想的，在这里调用该方法会无限循环onDraw，手机不崩也得残
     }
 
     //设置颜色数值  

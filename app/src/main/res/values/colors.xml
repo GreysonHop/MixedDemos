@@ -40,4 +40,6 @@
         <item>#e72061</item>
         <item>#e27061</item>
     </string-array>
+
+    <color name="black_50alpha">#7000</color>
 </resources>
