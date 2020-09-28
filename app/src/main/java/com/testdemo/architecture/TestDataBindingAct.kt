@@ -3,7 +3,6 @@ package com.testdemo.architecture
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -14,6 +13,7 @@ import com.testdemo.BaseActivity
 import com.testdemo.R
 import com.testdemo.architecture.viewmodel.ViewModelAct
 import com.testdemo.databinding.ActTestDatabindingBinding
+import com.testdemo.util.AVChatNotification
 
 /**
  * Create by Greyson on 2020/03/29
@@ -32,6 +32,7 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
             field = value
         }*/
     // get() = field
+    private var notifier = AVChatNotification(this)
 
     override fun initView() {
         Log.d("greyson", "TestDataBindingAct-initView: task = $taskId")
@@ -77,6 +78,8 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
         mediator.observe(this, Observer {
             println("greyson")
         })
+
+        notifier.init("haha")
     }
 
     override fun onClick(v: View) {
@@ -91,6 +94,11 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
             R.id.btn_view_model -> {
                 startActivity(Intent(this, ViewModelAct::class.java))
             }
+
+            R.id.btn_notify -> {
+                mBinding?.root?.postDelayed({ notifier.activeCallingNotification(true) }, 2000)
+            }
+            R.id.btn_notify_cancel -> notifier.activeCallingNotification(false)
 
             else -> {
                 startActivity(Intent(this, SaveStateAct::class.java))

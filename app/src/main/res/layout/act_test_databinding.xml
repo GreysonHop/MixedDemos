@@ -35,9 +35,11 @@
         <variable
             name="data1"
             type="ObservableField&lt;String>" />
+
         <variable
             name="data2"
             type="ObservableField&lt;String>" />
+
         <variable
             name="mediatorData"
             type="androidx.lifecycle.MediatorLiveData&lt;String>" />
@@ -165,8 +167,8 @@
             android:id="@+id/et_mediator2"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
             android:text="@={data2}"
             app:layout_constraintStart_toEndOf="@id/et_mediator1"
             app:layout_constraintTop_toBottomOf="@id/tv_tip" />
@@ -178,6 +180,26 @@
             android:text="@{mediatorData}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_mediator1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="@{listener::onClick}"
+            android:text="Notify"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mediator" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_notify_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="@{listener::onClick}"
+            android:text="close Notify"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mediator" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

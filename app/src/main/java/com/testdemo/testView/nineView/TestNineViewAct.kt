@@ -50,7 +50,7 @@ class TestNineViewAct : BaseActivity() {
         val imageView4 = ImageView(this)
         imageView4.setBackgroundColor(Color.BLUE)
         imageView4.scaleType = ImageView.ScaleType.CENTER
-        imageView4.setImageResource(R.drawable.ic_launcher)
+        imageView4.setImageResource(R.drawable.ic_sport_man)
         imageView4.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
         val imageView5 = ImageView(this)

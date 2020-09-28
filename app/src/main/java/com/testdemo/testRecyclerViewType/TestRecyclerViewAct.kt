@@ -66,7 +66,7 @@ class TestRecyclerViewAct : AppCompatActivity() {
             type = R.drawable.img6
         })
         /*userList.add(MediaBean().apply {
-            type = R.drawable.ic_launcher
+            type = R.drawable.ic_sport_man
         })
         userList.add(MediaBean().apply {
             type = R.drawable.galata

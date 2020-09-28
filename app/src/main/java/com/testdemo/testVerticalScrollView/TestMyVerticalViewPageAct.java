@@ -126,7 +126,7 @@ public class TestMyVerticalViewPageAct extends Activity
 
 
         ArrayList<Integer> list = new ArrayList<>();
-        list.add(R.drawable.ic_launcher);
+        list.add(R.drawable.ic_sport_man);
         list.add(R.mipmap.ic_launcher);
         list.add(R.drawable.ic_camera);
         OverlayListLayout overlayListLayout = findViewById(R.id.overlayListLayout);

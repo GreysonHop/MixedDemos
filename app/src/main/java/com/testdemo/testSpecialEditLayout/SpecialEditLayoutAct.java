@@ -104,7 +104,7 @@ public class SpecialEditLayoutAct extends Activity {
         });*/
 
         Glide.with(this)
-                .load(R.drawable.ic_launcher)
+                .load(R.drawable.ic_sport_man)
                 /*.apply(RequestOptions.bitmapTransform(
                         new RoundedCornersTransformation(
                                 ScreenUtils.dip2px(this, 12),
