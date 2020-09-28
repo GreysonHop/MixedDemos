@@ -780,4 +780,34 @@ class AlgorithmUnitTest {
 
         return -1
     }
+
+    @Test
+    fun testMinArray() {
+        assertEquals(1, minArray(intArrayOf(3, 4, 5, 1, 2)))
+        assertEquals(0, minArray(intArrayOf(2, 2, 2, 0, 1)))
+        assertEquals(0, minArray(intArrayOf(2, 2, 0, 1, 2)))
+        assertEquals(1, minArray(intArrayOf(1, 2, 3, 4, 5)))
+        assertEquals(2, minArray(intArrayOf(10, 2, 10, 10, 10)))
+    }
+
+    //对折的有序数组中查找最小值
+    fun minArray(numbers: IntArray): Int {
+        var start = 0
+        var end = numbers.lastIndex
+        var mid: Int
+
+        while (start <= end) {
+
+            mid = (start + end) / 2
+            when {
+                numbers[mid] < numbers[end] -> end = mid //后半段顺序正常，最小值可能是mid，也可能在前半段中
+
+                numbers[mid] > numbers[end] -> start = mid + 1 //后半段顺序异常，则最小值肯定在后半段中，不包含mid了
+
+                else -> end -= 1 //如果中间值和结尾值一样，则只能先排除掉最后一位，再继续用前面的判断查找结果
+            }
+        }
+        return numbers[start]
+    }
+
 }
