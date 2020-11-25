@@ -63,12 +63,16 @@ fun max(any: Any) = when {
 }
 
 fun foo() {
-    var ints = intArrayOf(1, 4, 5, 2)
-    ints.forEach {
-        if (it == 5) return@forEach
-        println(it)
+    val ints = intArrayOf(1, 2, 3, 4, 5, 6)
+    run break1@{
+        ints.forEach continue1@{
+            if (it == 3) return@continue1 //等于[return forEach]
+            if (it == 5) return@break1 //forEach之类的
+            println(it)
+        }
+        println("fun 'forEach' end.")
     }
-    println("fun forEach has not been forced to return")
+    println("fun 'run' end.")
 }
 
 fun getRunnable(): Runnable {

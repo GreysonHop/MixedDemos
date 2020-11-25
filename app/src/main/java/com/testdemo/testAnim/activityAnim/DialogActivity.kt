@@ -2,6 +2,8 @@ package com.testdemo.testAnim.activityAnim
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.util.Log
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,8 @@ import android.view.animation.TranslateAnimation
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.view.WindowInsetsCompat
 import com.luck.picture.lib.permissions.RxPermissions
 import com.testdemo.BaseActivity
 import com.testdemo.R
@@ -18,6 +22,7 @@ import com.testdemo.testPictureSelect.imageLoader.MediaBean
 import com.testdemo.testPictureSelect.imageLoader.MediaFolderBean
 import com.testdemo.testPictureSelect.imageLoader.MediaLoadCallback
 import kotlinx.android.synthetic.main.act_dialog.*
+import kotlin.collections.ArrayList
 
 /**
  * Create by Greyson
@@ -65,10 +70,13 @@ class DialogActivity : BaseActivity() {
         tab_mediaType.getTabAt(1)?.customView = imageTab
 
         val switchFolderList = {
-            if (rv_album_list.visibility == View.GONE) {//to show
-                val translateInAnimation = TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                        -1.0f, Animation.RELATIVE_TO_SELF, 0.0f)
+            if (rv_album_list.visibility == View.GONE) { //to show
+                val translateInAnimation = TranslateAnimation(
+                    Animation.RELATIVE_TO_SELF, 0.0f,
+                    Animation.RELATIVE_TO_SELF, 0.0f,
+                    Animation.RELATIVE_TO_SELF, -1.0f,
+                    Animation.RELATIVE_TO_SELF, 0.0f
+                )
                 translateInAnimation.duration = 300
                 rv_album_list.animation = translateInAnimation
 
@@ -77,18 +85,19 @@ class DialogActivity : BaseActivity() {
                     rv_album_list.translationY = -rv_height
                 }*/
                 rv_album_list.visibility = View.VISIBLE
-//                rv_album_list.animate().setDuration(300).translationY(0f).start()
+                // rv_album_list.animate().setDuration(300).translationY(0f).start()
                 iv_arrow.animate().setDuration(300).scaleY(-1f).start()
 
             } else {
-                val translateOutAnimation = TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                        Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                        0.0f, Animation.RELATIVE_TO_SELF, -1.0f)
+                val translateOutAnimation = TranslateAnimation(
+                    Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+                    Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f
+                )
                 translateOutAnimation.duration = 300
                 rv_album_list.animation = translateOutAnimation
 
                 rv_album_list.visibility = View.GONE
-//                rv_album_list.animate().setDuration(300).translationY(-rv_album_list.height.toFloat()).start()
+                // rv_album_list.animate().setDuration(300).translationY(-rv_album_list.height.toFloat()).start()
                 iv_arrow.animate().setDuration(300).scaleY(1f).start()
 
             }
@@ -115,18 +124,39 @@ class DialogActivity : BaseActivity() {
         })
 
         tv_ok.setOnClickListener {
-//            setResult()
+            // setResult()
             finish()
         }
+
+        val windowInsets = WindowInsetsCompat.Builder().build()
+        Log.d("greyson", "DialogActivity: StatusBar的高度=${windowInsets.systemWindowInsetTop}, 异形屏的安全Top=" +
+                "${windowInsets.displayCutout?.safeInsetTop}，stableInsetTop=${windowInsets.stableInsetTop}")
     }
 
     override fun initData() {
-        checkPermission()
+        // checkPermission()
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 110)
+        } else {
+            loadMedia()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         scanThread?.takeIf { it.isAlive }?.interrupt()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        grantResults.forEachIndexed { index, value ->
+            if (PackageManager.PERMISSION_DENIED == value) {
+                Toast.makeText(this, "请求的第${index}个权限没被允许 ", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+        loadMedia()
     }
 
     @SuppressLint("CheckResult")
@@ -187,7 +217,7 @@ class DialogActivity : BaseActivity() {
             tv_title.text = folderList[position].folderName
         }
         val array = arrayOfNulls<List<MediaBean>?>(2)
-        array[0] = videoFolderList[position]?.mediaFileList//?.toList()
+        array[0] = videoFolderList[position]?.mediaFileList //?.toList()
         array[1] = imageFolderList[position]?.mediaFileList
         println("Greyson, 数组长度： ${array.size}")
         mediaPageAdapter.setNewData(array)
@@ -200,8 +230,7 @@ class DialogActivity : BaseActivity() {
      * @param view1
      * @param position
      */
-    private fun handleMediaChecked(page: Int, adapter: GridMediaSelectAdapter
-                                   , view1: View, position: Int) {
+    private fun handleMediaChecked(page: Int, adapter: GridMediaSelectAdapter, view1: View, position: Int) {
         val mediaBean = adapter.data[position]
         val checkBox = view1.findViewById<CheckBox>(R.id.item_pic_cb)
         val isImageType = mediaBean.type == MediaBean.TYPE_IMAGE
@@ -218,9 +247,9 @@ class DialogActivity : BaseActivity() {
                 picCheckedList.remove(mediaBean.path)
 
             } else {
-                if (picCheckedList.size >= mMaxSelectedCount) {//大于9
+                if (picCheckedList.size >= mMaxSelectedCount) { //大于9
                     checkBox.isChecked = false
-//                BGToast.showRed(R.string.most_select_pic_conut)
+                    // BGToast.showRed(R.string.most_select_pic_conut)
                 } else {
                     mediaBean.isItemPicIsChecked = true
                     picCheckedList.add(mediaBean.path)
