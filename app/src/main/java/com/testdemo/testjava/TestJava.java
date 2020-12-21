@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by Greyson on 2018/2/1.
  */
@@ -145,6 +147,7 @@ public class TestJava {
     }
 
 
+    @Nullable
     public String getInstance(int type) {
         if (type == 1) {
             return null;

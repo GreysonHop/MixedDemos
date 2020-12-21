@@ -1,5 +1,7 @@
 package com.testdemo.testjava
 
+import android.text.TextUtils
+
 open class TestKotlin {
     fun getString(): Int {
         return this.hashCode()
@@ -100,6 +102,12 @@ fun main(args: Array<String>) {
     testJava.setOnClickListener { }
     testJava.setOnClickListener { println(it) }
     var testJavaResult: String
-    testJavaResult = testJava.getInstance(1)
+    testJavaResult = testJava.getInstance(1) ?: ""
     println("now the testJavaResult is $testJavaResult")
+
+
+    val (x: Float, y: Float) = "".let {
+        0f to 0.1f
+    }
+    println("show me the x[$x] and y[$y]")
 }
