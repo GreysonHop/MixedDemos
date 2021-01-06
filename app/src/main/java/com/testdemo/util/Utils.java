@@ -148,7 +148,7 @@ public final class Utils {
         }
     }
 
-    static boolean isAppForeground() {
+    public static boolean isAppForeground() {
         ActivityManager am =
                 (ActivityManager) Utils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
         //noinspection ConstantConditions

@@ -1,8 +1,18 @@
 package com.testdemo.architecture
 
+import android.Manifest
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.provider.CallLog
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -13,7 +23,10 @@ import com.testdemo.BaseActivity
 import com.testdemo.R
 import com.testdemo.architecture.viewmodel.ViewModelAct
 import com.testdemo.databinding.ActTestDatabindingBinding
+import com.testdemo.testView.nineView.TestNineViewAct
 import com.testdemo.util.AVChatNotification
+import com.testdemo.util.Utils
+
 
 /**
  * Create by Greyson on 2020/03/29
@@ -82,6 +95,28 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
         notifier.init("haha")
     }
 
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var runCount = 0
+
+    private val callTimeout = object : Runnable {
+        override fun run() {
+            mBinding?.tvRunText?.text = "running: $runCount"
+            runCount++
+            Log.e("greyson", "thread=${Thread.currentThread()} , running!!this=$this。应用是否在前台：${Utils.isAppForeground()}")
+
+            if (Utils.isAppForeground()) {
+                startActivity(Intent(this@TestDataBindingAct, TestNineViewAct::class.java))
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(Intent(this@TestDataBindingAct, AVChatService::class.java))
+                } else {
+                    startService(Intent(this@TestDataBindingAct, AVChatService::class.java))
+                }
+            }
+        }
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btn_test_add -> {
@@ -91,14 +126,43 @@ class TestDataBindingAct : BaseActivity(), View.OnClickListener {
                 mBinding?.apply { isVisible = !isVisible }
             }
 
-            R.id.btn_view_model -> {
-                startActivity(Intent(this, ViewModelAct::class.java))
+            R.id.btn_view_model -> startActivity(Intent(this, ViewModelAct::class.java))
+
+            R.id.btn_notify -> mBinding?.root?.postDelayed({
+                if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+                    notifier.activeCallingNotification(true)
+                } else {
+                    Toast.makeText(this, "没有通知权限！！", Toast.LENGTH_SHORT).show()
+                }
+            }, 2000)
+
+            R.id.btn_notify_cancel -> notifier.activeCallingNotification(false)
+
+            R.id.btn_startRun -> {
+                Log.e("greyson", "post's thread=${Thread.currentThread()}")
+                handler.postDelayed(callTimeout, 2000)
             }
 
-            R.id.btn_notify -> {
-                mBinding?.root?.postDelayed({ notifier.activeCallingNotification(true) }, 2000)
+            R.id.btn_stopRun -> {
+                Log.e("greyson", "remove's thread=${Thread.currentThread()}")
+                handler.removeCallbacks(callTimeout)
+                val intent = Intent(this@TestDataBindingAct, AVChatService::class.java)
+                intent.putExtra("order", -1)
+                startService(intent)
             }
-            R.id.btn_notify_cancel -> notifier.activeCallingNotification(false)
+
+            R.id.callLog -> { //插入本地通话记录
+                val values = ContentValues()
+                values.put(CallLog.Calls.NUMBER, "10322031")
+                values.put(CallLog.Calls.DATE, System.currentTimeMillis())
+                values.put(CallLog.Calls.DURATION, 75)
+                values.put(CallLog.Calls.TYPE, 2)
+                values.put(CallLog.Calls.NEW, 1)
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALL_LOG) !== PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, arrayOf<String>(Manifest.permission.WRITE_CALL_LOG), 1000)
+                }
+                contentResolver.insert(CallLog.Calls.CONTENT_URI, values)
+            }
 
             else -> {
                 startActivity(Intent(this, SaveStateAct::class.java))

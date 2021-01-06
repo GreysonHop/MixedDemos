@@ -33,7 +33,7 @@ class TestShaderAct : Activity() {
         }
 
 
-        val myBitmap = readBitMap(this, R.drawable.img5)
+        val myBitmap = readBitmap(this, R.drawable.img5)
         myBitmap?.let {
             Log.i("greyson", "通过压缩获取的Bitmap：byteCount=${it.byteCount}, height=${it.height}" +
                     "-width=${it.width}, density=${it.density},config=${it.config},ninePatchChunk=${it.ninePatchChunk}")
@@ -57,7 +57,7 @@ class TestShaderAct : Activity() {
                 "\nydpi = ${resources.displayMetrics.ydpi}")
     }
 
-    fun readBitMap(context: Context, resId: Int): Bitmap? {
+    fun readBitmap(context: Context, resId: Int): Bitmap? {
         val opt = BitmapFactory.Options()
         opt.inPreferredConfig = Bitmap.Config.RGB_565
         opt.inPurgeable = true

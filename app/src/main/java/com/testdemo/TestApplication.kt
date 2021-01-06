@@ -3,6 +3,7 @@ package com.testdemo
 import android.app.Activity
 import android.app.Application
 import android.net.http.HttpResponseCache
+import android.util.Log
 import com.squareup.leakcanary.LeakCanary
 import com.wonderkiln.blurkit.BlurKit
 import io.realm.Realm
@@ -33,5 +34,11 @@ class TestApplication : Application() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    //TODO greyson_1/6/21 如何监听应用被杀掉
+    override fun onTerminate() {
+        super.onTerminate()
+        Log.w("TestApplication", "onTerminate: 应用关闭")
     }
 }

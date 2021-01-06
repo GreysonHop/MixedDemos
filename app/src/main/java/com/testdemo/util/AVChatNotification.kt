@@ -7,10 +7,13 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.testdemo.MainActivity
 import com.testdemo.R
+import com.testdemo.testView.nineView.TestNineViewAct
 
 /**
  * 音视频聊天通知栏
@@ -19,9 +22,9 @@ import com.testdemo.R
 class AVChatNotification(private val context: Context) {
     companion object {
         private const val BG_CHANNEL_ID = "avchat_tip_channel_001"
-        private const val BG_CHANNEL_NAME = "avchat tip channel"
-        private const val BG_CHANNEL_DESC = "avchat tip notification"
-        private const val CALLING_NOTIFY_ID = 0x101
+        private const val BG_CHANNEL_NAME = "音视频通话相关的通知"
+        private const val BG_CHANNEL_DESC = "如果不打开可能会收不到音视频通话的通知"
+        public const val CALLING_NOTIFY_ID = 0x101
         private const val MISS_CALL_NOTIFY_ID = 0x102
     }
 
@@ -64,21 +67,22 @@ class AVChatNotification(private val context: Context) {
     专用于响应通知的 Activity。用户在正常使用应用时不会无缘无故想导航到这个 Activity，因此该 Activity 会启动一个新任务，而不是添加到应用的现有任务和返回堆栈。这就是以上示例中创建的 Intent 类型。
     应用的常规应用流程中存在的 Activity。在这种情况下，启动 Activity 时应创建返回堆栈，以便保留用户对返回和向上按钮的预期。
      */
-    private fun buildCallingNotification() {
+    fun buildCallingNotification(): Notification? {
         if (callingNotification == null) {
             val localIntent = Intent().apply {
-                setClass(context, MainActivity::class.java)
+                setClass(context, TestNineViewAct::class.java)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             }
             val title = displayName
             val content = "测试通知的内容！。。。"
             val iconId = R.drawable.call_icon_gift
-            val pendingIntent = PendingIntent.getActivity(context, CALLING_NOTIFY_ID, localIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            callingNotification = makeNotification(pendingIntent, title, content, title,
-                iconId, false, vibrate = false).apply {
-                flags = flags or Notification.FLAG_NO_CLEAR
-            }
+            val pendingIntent = PendingIntent.getActivity(context, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            callingNotification = makeNotification(pendingIntent, title, content, title, iconId, false, vibrate = false)
+                .apply {
+                    flags = flags or Notification.FLAG_NO_CLEAR
+                }
         }
+        return callingNotification
     }
 
     private fun buildMissCallNotification() {
@@ -87,7 +91,7 @@ class AVChatNotification(private val context: Context) {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 action = Intent.ACTION_VIEW
             }
-            val pendingIntent = PendingIntent.getActivity(context, CALLING_NOTIFY_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val content = "语音通话"
             val tickerText = "$displayName: 【网络通话】"
             val iconId = R.drawable.call_icon_gift
@@ -96,14 +100,9 @@ class AVChatNotification(private val context: Context) {
     }
 
     private fun makeNotification(
-            pendingIntent: PendingIntent, title: String?, content: String, tickerText: String?,
-            iconId: Int, ring: Boolean, vibrate: Boolean
+        pendingIntent: PendingIntent, title: String?, content: String, tickerText: String?,
+        iconId: Int, ring: Boolean, vibrate: Boolean
     ): Notification {
-        val builder = if (isBuildAndTargetO()) {
-            NotificationCompat.Builder(context, BG_CHANNEL_ID)
-        } else {
-            NotificationCompat.Builder(context)
-        }
         var defaults = Notification.DEFAULT_LIGHTS
         if (vibrate) {
             defaults = defaults or Notification.DEFAULT_VIBRATE
@@ -111,7 +110,8 @@ class AVChatNotification(private val context: Context) {
         if (ring) {
             defaults = defaults or Notification.DEFAULT_SOUND
         }
-        builder.setContentTitle(title)
+        return NotificationCompat.Builder(context, BG_CHANNEL_ID)
+            .setContentTitle(title)
             .setContentText(content)
             .setSmallIcon(iconId).setDefaults(defaults)
             .setTicker(tickerText)
@@ -121,7 +121,7 @@ class AVChatNotification(private val context: Context) {
             .setFullScreenIntent(pendingIntent, false)
             .setPriority(NotificationCompat.PRIORITY_MAX) //官方表示必须有，兼容7.1及以下
             // .setCategory()
-        return builder.build()
+            .build()
     }
 
     private fun createMessageNotificationChannel() {
@@ -148,7 +148,14 @@ class AVChatNotification(private val context: Context) {
             lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             enableVibration(true)
             enableLights(true)
-            setShowBadge(false)
+            setShowBadge(true)
+            /*val uri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+            if (uri != null) {
+                setSound(uri, AudioAttributes.Builder().setHapticChannelsMuted())
+            }*/
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                setAllowBubbles(true)
+            }
         }
     }
 

@@ -201,6 +201,45 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_mediator" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_startRun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="@{listener::onClick}"
+            android:text="start run"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_notify" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_run_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="something"
+            app:layout_constraintBottom_toBottomOf="@id/btn_startRun"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_startRun" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_stopRun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="@{listener::onClick}"
+            android:text="stop run"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_notify" />
+
+        <Button
+            android:id="@+id/callLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="insert Call Log"
+            android:onClick="@{listener::onClick}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_stopRun"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

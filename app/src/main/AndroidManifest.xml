@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,6 +22,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <!-- 安卓10及更高版本的属性，以便系统启动与时效性通知关联的全屏 Activity-->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".TestApplication"
@@ -39,11 +42,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api_key" />
 
-        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL_VALUE}" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
 
         <activity android:name=".TestActivity2BlurBg" />
         <activity android:name=".TestAnimationDialogAct" />
@@ -101,7 +107,9 @@
         <activity android:name="com.testdemo.testFlipView.TestFlipperActivity" />
         <activity android:name=".architecture.viewmodel.ViewModelAct" />
         <activity android:name=".architecture.TestDataBindingAct" />
-        <activity android:name=".architecture.SaveStateAct" android:launchMode="singleInstance" />
+        <activity
+            android:name=".architecture.SaveStateAct"
+            android:launchMode="singleInstance" />
 
         <activity android:name=".testMap.places.PlacesMainActivity" />
         <activity android:name=".testMap.places.AutocompleteTestActivity" />
@@ -125,8 +133,9 @@
         </activity>
         <activity android:name=".testStartMode.ActivityB" />
         <activity android:name=".testAnim.ConstraintAnimAct" />
-        <activity android:name=".testAnim.activityAnim.DialogActivity"
-            android:theme="@style/DialogActivityStyle"/>
+        <activity
+            android:name=".testAnim.activityAnim.DialogActivity"
+            android:theme="@style/DialogActivityStyle" />
 
         <activity android:name="com.testdemo.testView.shader.TestShaderAct" />
         <activity android:name="com.testdemo.testView.canvas.TestCanvasActivity" />
@@ -138,6 +147,8 @@
             android:configChanges="locale|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
+
+        <service android:name=".architecture.AVChatService" />
 
     </application>
 
