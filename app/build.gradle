@@ -80,7 +80,7 @@ android {
         }
     }
 
-    //测试多渠道打包，参考官网：https://developer.android.com/studio/build/build-variants
+    //测试多渠道打包，参考官网：https://developer.android.google.cn/studio/build/build-variants
     flavorDimensions "version"//, "test"
     productFlavors {
         greyson {

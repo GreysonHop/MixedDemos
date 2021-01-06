@@ -139,6 +139,7 @@
 
         <activity android:name="com.testdemo.testView.shader.TestShaderAct" />
         <activity android:name="com.testdemo.testView.canvas.TestCanvasActivity" />
+        <activity android:name="com.testdemo.testView.doodle.TestDoodleAct" />
         <activity android:name=".testView.nineView.TestNineViewAct" />
 
         <activity android:name=".webrtc.webrtctest.TestAVChatActivity" />

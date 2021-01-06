@@ -33,6 +33,7 @@ import com.testdemo.testStartMode.ActivityA
 import com.testdemo.testAnim.ConstraintAnimAct
 import com.testdemo.testAnim.activityAnim.DialogActivity
 import com.testdemo.testVerticalScrollView.TestMyVerticalViewPageAct
+import com.testdemo.testView.doodle.TestDoodleAct
 import com.testdemo.testView.nineView.TestNineViewAct
 import com.testdemo.webrtc.webrtctest.TestAVChatActivity
 
@@ -80,6 +81,7 @@ class MainActivity : ListActivity() {
         menuListMap["RecyclerView实现的日历"] = DateMsgLogAct::class.java
         menuListMap["测试启动模式"] = ActivityA::class.java
         menuListMap["测试绘画相关属性"] = TestCanvasActivity::class.java
+        menuListMap["测试涂鸦相关功能"] = TestDoodleAct::class.java
         menuListMap["Constraint动画"] = ConstraintAnimAct::class.java
         menuListMap["DataBinding"] = TestDataBindingAct::class.java
         menuListMap["DialogActivity"] = DialogActivity::class.java
