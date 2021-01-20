@@ -38,6 +38,7 @@ import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 import org.webrtc.audio.JavaAudioDeviceModule;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -278,6 +279,7 @@ public class PeerConnectionHelper {
     private void createPeerConnections() {
         for (Object str : _connectionIdArray) {
             Peer peer = new Peer((String) str);
+            peer.createChannel();
             _connectionPeerDic.put((String) str, peer);
         }
     }
@@ -349,6 +351,15 @@ public class PeerConnectionHelper {
             mAudioManager.setSpeakerphoneOn(enable);
         }
 
+        final String msg;
+        if (enable) {
+            msg = "打开扬声器";
+        } else {
+            msg = "关闭扬声器!";
+        }
+        for (Peer value : _connectionPeerDic.values()) {
+            value.sendMsg(msg);
+        }
     }
 
     // 退出房间
@@ -483,13 +494,48 @@ public class PeerConnectionHelper {
     private class Peer implements SdpObserver, PeerConnection.Observer {
         private PeerConnection pc;
         private String socketId;
+        private DataChannel dataChannel;
+        private final DataChannel.Observer dataObserver = new DataChannel.Observer() {
+            @Override
+            public void onBufferedAmountChange(long l) {
+                Log.d("greyson", "onBufferedAmountChange(): " + l);
+            }
+
+            @Override
+            public void onStateChange() {
+                Log.d("greyson", "onStateChange(): " + dataChannel.state());
+            }
+
+            @Override
+            public void onMessage(DataChannel.Buffer buffer) {
+                Log.d("Greyson", "onMessage(): " + buffer.binary + ", " + buffer.data);
+                try {
+                    byte[] data = new byte[buffer.data.remaining()];
+                    buffer.data.get(data);
+                    String msg = new String(data);
+                    Log.d("greyson", "解析后的数据：" + msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         public Peer(String socketId) {
             this.pc = createPeerConnection();
             this.socketId = socketId;
-
         }
 
+        public void createChannel() {
+            this.dataChannel = this.pc.createDataChannel("socketID-" + socketId, new DataChannel.Init());
+            this.dataChannel.registerObserver(dataObserver);
+        }
+
+        public void sendMsg(String msg) {
+            if (dataChannel == null) return;
+
+            DataChannel.Buffer buffer = new DataChannel.Buffer(ByteBuffer.wrap(msg.getBytes()), false);
+            dataChannel.send(buffer);
+        }
 
         //****************************PeerConnection.Observer****************************/
         @Override
@@ -550,7 +596,9 @@ public class PeerConnectionHelper {
 
         @Override
         public void onDataChannel(DataChannel dataChannel) {
-            Log.i(TAG, "onDataChannel(" + this.hashCode() + "):" + dataChannel);
+            Log.i(TAG, "onDataChannel(" + this.hashCode() + "):" + dataChannel.state() + ", " + dataChannel.id() + ", " + dataChannel.label());
+            this.dataChannel = dataChannel;
+            dataChannel.registerObserver(dataObserver);
         }
 
         @Override
