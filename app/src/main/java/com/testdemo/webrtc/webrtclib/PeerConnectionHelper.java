@@ -498,22 +498,22 @@ public class PeerConnectionHelper {
         private final DataChannel.Observer dataObserver = new DataChannel.Observer() {
             @Override
             public void onBufferedAmountChange(long l) {
-                Log.d("greyson", "onBufferedAmountChange(): " + l);
+                Log.d(TAG, "onBufferedAmountChange(): " + l);
             }
 
             @Override
             public void onStateChange() {
-                Log.d("greyson", "onStateChange(): " + dataChannel.state());
+                Log.d(TAG, "onStateChange(): " + dataChannel.state());
             }
 
             @Override
             public void onMessage(DataChannel.Buffer buffer) {
-                Log.d("Greyson", "onMessage(): " + buffer.binary + ", " + buffer.data);
+                Log.d(TAG, "onMessage(): " + buffer.binary + ", " + buffer.data);
                 try {
                     byte[] data = new byte[buffer.data.remaining()];
                     buffer.data.get(data);
                     String msg = new String(data);
-                    Log.d("greyson", "解析后的数据：" + msg);
+                    Log.d(TAG, "解析后的数据：" + msg);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
