@@ -35,7 +35,7 @@ public class ChannelActivity extends AppCompatActivity {
 
     private void init() {
         final List<ChannelEntity> items = new ArrayList<>();
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 28; i++) {
             ChannelEntity entity = new ChannelEntity();
             entity.setName("频道" + i);
             items.add(entity);
