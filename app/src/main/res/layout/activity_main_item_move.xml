@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
-
-   <Button
-       android:id="@+id/btn_drag"
-       android:layout_marginTop="32dp"
-       android:layout_width="match_parent"
-       android:text="简单拖拽Demo"
-       android:layout_height="56dp"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_channl"
+        android:id="@+id/btn_drag"
         android:layout_width="match_parent"
-        android:text="排序增删Demo"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:text="简单拖拽Demo" />
+
+    <Button
+        android:id="@+id/btn_channel"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
         android:layout_marginTop="16dp"
-        android:layout_height="56dp"/>
+        android:text="排序增删Demo" />
+
+    <Button
+        android:id="@+id/btn_contact"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="可翻页的排序Demo" />
 </LinearLayout>
