@@ -120,6 +120,7 @@
         <activity android:name=".testRecyclerViewType.itemtouchhelperdemo.demodrag.DragActivity" />
         <activity android:name=".testRecyclerViewType.itemtouchhelperdemo.demochannel.ChannelActivity" />
         <activity android:name=".testRecyclerViewType.itemtouchhelperdemo.contactList.TestDragListAct" />
+        <activity android:name=".testRecyclerViewType.gridpagersanphelper.vertical.VerticalRVActivity" />
         <activity android:name=".testRecyclerViewType.TestRecyclerViewAct" />
         <activity android:name=".testDateMsgLog.DateMsgLogAct" />
 
