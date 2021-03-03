@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/spacing_large"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:viewBindingIgnore="true">
 
   <Button
       android:id="@+id/autocomplete_button"

@@ -1,15 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -30,7 +32,7 @@
                 android:layout_height="170dp"
                 android:layout_alignParentLeft="true"
                 android:background="@android:color/transparent"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY" />
 
             <ListView
                 android:id="@+id/demo_list"
@@ -39,16 +41,15 @@
                 android:layout_below="@id/demo_image"
                 android:layout_marginTop="30dp"
                 android:divider="@null"
-                android:dividerHeight="0dp">
-            </ListView>
+                android:dividerHeight="0dp"></ListView>
 
             <com.testdemo.testBlurAndGlass.MyView
                 android:id="@+id/demo_myview"
                 android:layout_width="150dp"
                 android:layout_height="160dp"
-                android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/demo_list"
-                android:background="@color/colorPrimaryDark"/>
+                android:layout_alignParentRight="true"
+                android:background="@color/colorPrimaryDark" />
 
             <Button
                 android:id="@+id/demo_button"
@@ -60,7 +61,7 @@
                 android:text="Button"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
         </RelativeLayout>
 
         <LinearLayout
@@ -78,12 +79,12 @@
 
                 <TextView
                     style="@style/ToggleText"
-                    android:text="Effect"/>
+                    android:text="Effect" />
 
                 <ToggleButton
                     android:id="@+id/toggle_effect"
                     style="@style/ToggleButton"
-                    android:checked="true"/>
+                    android:checked="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -94,12 +95,12 @@
 
                 <TextView
                     style="@style/ToggleText"
-                    android:text="Callback"/>
+                    android:text="Callback" />
 
                 <ToggleButton
                     android:id="@+id/toggle_callback"
                     style="@style/ToggleButton"
-                    android:checked="false"/>
+                    android:checked="false" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -111,12 +112,12 @@
                 <TextView
                     android:id="@+id/complexity_text"
                     style="@style/SeekBarTextLeft"
-                    android:text="Complexity"/>
+                    android:text="Complexity" />
 
                 <TextView
                     android:id="@+id/complexity_value"
                     style="@style/SeekBarTextRight"
-                    android:text="12"/>
+                    android:text="12" />
 
                 <SeekBar
                     android:id="@+id/seekbar_complexity"
@@ -124,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/complexity_text"
                     android:max="8"
-                    android:progress="4"/>
+                    android:progress="4" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -136,12 +137,12 @@
                 <TextView
                     android:id="@+id/break_text"
                     style="@style/SeekBarTextLeft"
-                    android:text="Break-Duration"/>
+                    android:text="Break-Duration" />
 
                 <TextView
                     android:id="@+id/break_value"
                     style="@style/SeekBarTextRight"
-                    android:text="700ms"/>
+                    android:text="700ms" />
 
                 <SeekBar
                     android:id="@+id/seekbar_break"
@@ -149,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/break_text"
                     android:max="4500"
-                    android:progress="200"/>
+                    android:progress="200" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -161,12 +162,12 @@
                 <TextView
                     android:id="@+id/fall_text"
                     style="@style/SeekBarTextLeft"
-                    android:text="Fall-Duration"/>
+                    android:text="Fall-Duration" />
 
                 <TextView
                     android:id="@+id/fall_value"
                     style="@style/SeekBarTextRight"
-                    android:text="2000ms"/>
+                    android:text="2000ms" />
 
                 <SeekBar
                     android:id="@+id/seekbar_fall"
@@ -174,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/fall_text"
                     android:max="9000"
-                    android:progress="1000"/>
+                    android:progress="1000" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -186,12 +187,12 @@
                 <TextView
                     android:id="@+id/radius_text"
                     style="@style/SeekBarTextLeft"
-                    android:text="CircleRifts-Radius"/>
+                    android:text="CircleRifts-Radius" />
 
                 <TextView
                     android:id="@+id/radius_value"
                     style="@style/SeekBarTextRight"
-                    android:text="66dp"/>
+                    android:text="66dp" />
 
                 <SeekBar
                     android:id="@+id/seekbar_radius"
@@ -199,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/radius_text"
                     android:max="130"
-                    android:progress="46"/>
+                    android:progress="46" />
             </RelativeLayout>
         </LinearLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
