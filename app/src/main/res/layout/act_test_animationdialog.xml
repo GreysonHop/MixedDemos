@@ -11,6 +11,12 @@
         android:scaleType="fitXY"
         android:src="@drawable/galata" />
 
+    <com.testdemo.testView.shader.ShadowLayerView
+        android:id="@+id/shadowlayerview"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_marginTop="475dp"/>
+
     <TextView
         android:id="@+id/anim_btn"
         android:layout_width="wrap_content"
@@ -63,7 +69,8 @@
         android:layout_height="match_parent"
         android:alpha="0.0"
         android:background="#FF171619"
-        android:clickable="false" />
+        android:clickable="false"
+        android:longClickable="false"/>
 
     <LinearLayout
         android:id="@+id/shareLayout"
@@ -123,8 +130,8 @@
             android:textSize="28sp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/contact_image" />
     </com.testdemo.testCanDragLayout.DraggableLayout>
 

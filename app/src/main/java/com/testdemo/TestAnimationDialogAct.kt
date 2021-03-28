@@ -6,13 +6,17 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.animation.addListener
 import com.testdemo.broken_lib.Utils
 import com.testdemo.testView.popmenu.PopMenu
 import com.testdemo.testView.popmenu.PopMenuItem
@@ -127,6 +131,13 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
         set.duration = 800
         set.setTarget(dragLayout)
         set.playTogether(scaleAnim, scaleAnim2)
+        set.addListener({
+            val paint = Paint()
+            paint.color = Color.RED
+            paint.setShadowLayer(1f, 10f, 10f, Color.GREEN)
+            popupTV.setLayerType(LAYER_TYPE_SOFTWARE, null)
+            popupTV.setLayerPaint(paint)
+        })
         set.start()
     }
 
