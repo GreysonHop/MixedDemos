@@ -18,9 +18,14 @@ import com.testdemo.testRecyclerViewType.itemtouchhelperdemo.helper.OnItemMoveLi
  */
 class ContactsAdapter(val context: Context?, items: MutableList<String>) : RecyclerView.Adapter<ContactViewHolder>(), OnItemMoveListener {
     private val mItems: MutableList<String> = items
+    var onItemClickListener: ((item: String, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        return ContactViewHolder(LayoutInflater.from(context).inflate(R.layout.item_contact_list, parent, false))
+        return ContactViewHolder(LayoutInflater.from(context).inflate(R.layout.item_contact_list, parent, false)).apply {
+            itemView.setOnClickListener {
+                onItemClickListener?.invoke(mItems[adapterPosition], adapterPosition)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {

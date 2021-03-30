@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowInsetsCompat
 import com.luck.picture.lib.permissions.RxPermissions
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.R
 import com.testdemo.testPictureSelect.imageLoader.ImageLoadTask
 import com.testdemo.testPictureSelect.imageLoader.MediaBean
@@ -27,7 +27,7 @@ import kotlin.collections.ArrayList
 /**
  * Create by Greyson
  */
-class DialogActivity : BaseActivity() {
+class DialogActivity : BaseCommonActivity() {
 
     var rxPermissions: RxPermissions? = null
     var scanThread: Thread? = null

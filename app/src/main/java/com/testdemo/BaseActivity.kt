@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.annotation.AnimRes
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 
 /**
@@ -31,18 +29,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("greyson", "BaseActivity onCreate()___")
+        Log.e("greyson", "BaseActivity onCreate()__当前类名：${javaClass.simpleName}")
 
         initialize()
         if (!disableDefaultOrientation) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
-        if (getLayoutResId() != 0) {
-            setContentView(getLayoutResId())
-        } else if (getLayoutView() != null) {
-            setContentView(getLayoutView())
-        }
+        setContentView()
         initView()
         initData()
 
@@ -56,14 +50,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected open fun initialize() {}
 
-    @LayoutRes
-    protected open fun getLayoutResId(): Int {//todo greyson 有没有注解可以标明两个方法中必须有一个被调用
-        return 0
-    }
-
-    protected open fun getLayoutView(): View? {
-        return null
-    }
+    protected abstract fun setContentView()
 
     protected abstract fun initView()
 

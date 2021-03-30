@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.R
 import com.testdemo.webrtc.webrtclib.utils.Utils
 
 /**
  * Created by Greyson on 2020/07/01
  */
-class TestNineViewAct : BaseActivity() {
+class TestNineViewAct : BaseCommonActivity() {
 
     lateinit var nineView: NineView
 

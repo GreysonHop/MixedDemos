@@ -7,11 +7,11 @@ import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
-import com.testdemo.BaseActivity
 import com.testdemo.broken_lib.Utils
 import android.os.Build
 import android.transition.TransitionInflater
 import android.view.View
+import com.testdemo.BaseCommonActivity
 
 import com.testdemo.R
 
@@ -19,7 +19,7 @@ import com.testdemo.R
 /**
  * Create by Greyson
  */
-class ActivityB : BaseActivity() {
+class ActivityB : BaseCommonActivity() {
 
     lateinit var button: Button
 

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.testdemo.testView.canvas.AvatarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:layout_height="49dp"
-    tools:layout_width="49dp"
-    android:layout_margin="6dp">
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="6dp"
+    android:layout_marginBottom="13dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_contact_avatar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/call_icon_gift" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/img5" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_contact_name"
@@ -33,4 +35,4 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="yourFather is sister" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.testdemo.testView.canvas.AvatarLayout>

@@ -2,13 +2,13 @@ package com.testdemo.testView.doodle
 
 import android.view.View
 import android.view.ViewGroup
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.R
 
 /**
  * Create by Greyson on 2021/01/06
  */
-class TestDoodleAct : BaseActivity() {
+class TestDoodleAct : BaseCommonActivity() {
 
     override fun getLayoutResId(): Int {
         return R.layout.test_doodle

@@ -1,17 +1,17 @@
 package com.testdemo.testAnim
 
 import androidx.constraintlayout.widget.ConstraintSet
-import com.testdemo.BaseActivity
 import com.testdemo.R
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.transition.TransitionManager
+import com.testdemo.BaseCommonActivity
 import kotlinx.android.synthetic.main.act_constraintanim.*
 
 
 /**
  * Create by Greyson
  */
-class ConstraintAnimAct : BaseActivity() {
+class ConstraintAnimAct : BaseCommonActivity() {
 
     private lateinit var constraintLayout: ConstraintLayout
     private var isDetail = false

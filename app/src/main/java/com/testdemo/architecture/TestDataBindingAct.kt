@@ -19,7 +19,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.R
 import com.testdemo.architecture.viewmodel.ViewModelAct
 import com.testdemo.databinding.ActTestDatabindingBinding
@@ -31,7 +31,7 @@ import com.testdemo.util.Utils
 /**
  * Create by Greyson on 2020/03/29
  */
-class TestDataBindingAct : BaseActivity(), View.OnClickListener {
+class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
     var mBinding: ActTestDatabindingBinding? = null
     var time = 0
 

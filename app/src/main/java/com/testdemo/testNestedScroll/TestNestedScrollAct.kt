@@ -1,7 +1,7 @@
 package com.testdemo.testNestedScroll
 
 import androidx.fragment.app.Fragment
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.R
 import kotlinx.android.synthetic.main.act_test_nestedscroll.*
 import java.util.ArrayList
@@ -9,7 +9,7 @@ import java.util.ArrayList
 /**
  * Create by Greyson on 2020/03/21
  */
-class TestNestedScrollAct : BaseActivity() {
+class TestNestedScrollAct : BaseCommonActivity() {
 
     override fun getLayoutResId(): Int {
         return R.layout.act_test_nestedscroll

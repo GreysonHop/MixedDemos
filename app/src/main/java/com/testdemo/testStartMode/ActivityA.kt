@@ -10,13 +10,13 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.broken_lib.Utils
 
 /**
  * Create by Greyson
  */
-class ActivityA : BaseActivity() {
+class ActivityA : BaseCommonActivity() {
 
     lateinit var textView: TextView
 

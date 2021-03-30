@@ -9,7 +9,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 import com.testdemo.R
 import com.testdemo.webrtc.webrtclib.IViewCallback
 import com.testdemo.webrtc.webrtclib.ProxyVideoSink
@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.act_group_avchat.tv_avchat_state as tvStat
  * Created by Greyson on 2020/07/02
  * WebRTC的多人聊天室
  */
-class GroupAVChatActivity : BaseActivity(), IViewCallback {
+class GroupAVChatActivity : BaseCommonActivity(), IViewCallback {
 
     private lateinit var webRTCManager: WebRTCManager
     private val videoViews = mutableMapOf<String, SurfaceViewRenderer>()

@@ -60,8 +60,9 @@ class TestShaderAct : Activity() {
     fun readBitmap(context: Context, resId: Int): Bitmap? {
         val opt = BitmapFactory.Options()
         opt.inPreferredConfig = Bitmap.Config.RGB_565
-        opt.inPurgeable = true
-        opt.inInputShareable = true
+        // opt.inBitmap //如何使用？
+        // opt.inPurgeable = true
+        // opt.inInputShareable = true
         //获取资源图片
         val `is` = context.resources.openRawResource(resId)
         return BitmapFactory.decodeStream(`is`, null, opt)

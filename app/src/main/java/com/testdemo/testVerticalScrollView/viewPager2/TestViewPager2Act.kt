@@ -2,12 +2,12 @@ package com.testdemo.testVerticalScrollView.viewPager2
 
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.testdemo.BaseActivity
+import com.testdemo.BaseCommonActivity
 
 /**
  * Create by Greyson
  */
-class TestViewPager2Act : BaseActivity() {
+class TestViewPager2Act : BaseCommonActivity() {
 
     lateinit var viewpager2 : ViewPager2
 
