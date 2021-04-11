@@ -58,9 +58,12 @@ class AlgorithmUnitTest {
 
     @Test
     fun testAddBinary() {
-        assertEquals("100", addBinary("11", "1010111000"))
+        assertEquals("1010111010", addBinary("111", "1010110011"))
     }
 
+    /**
+     * 两个二进制字符串相加
+     */
     private fun addBinary(a: String, b: String): String {
         var index = 0
         var move = false

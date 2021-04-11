@@ -1,11 +1,13 @@
 package com.testdemo.testjava
 
+import android.annotation.SuppressLint
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeoutException
 import kotlin.random.Random
 
 /**
@@ -13,19 +15,24 @@ import kotlin.random.Random
  */
 
 fun main(args: Array<String>) {
+    println("-------------主线程[${Thread.currentThread().name}] ${getCurrentTime()} 开始运行------------")
     val java = TestRxJava2()
-    java.test()
-    /*println("----------------")
-    java.test()
-    println("----------------")
-    java.test()*/
+//    java.testTotal()
 
-    Thread.sleep(10 * 1000)
+    java.testArrayOneByOne()
+
+    println("-------------主线程[${Thread.currentThread().name}] ${getCurrentTime()} 开始阻塞------------")
+    Thread.sleep(12 * 1000) //模拟线程任务的时候主线程不能结束，所以得阻塞住
+    println("--------------主线程 ${getCurrentTime()} 结束-----------")
+}
+
+fun getCurrentTime() : String {
+    return SimpleDateFormat("mm:ss", Locale.CHINA).format(System.currentTimeMillis())
 }
 
 class TestRxJava2 {
 
-    fun test() {
+    fun testTotal() {
         val intList = listOf(1, 2, 3, 5)
         val observable1 = Observable.just(2, 3)
         val observable2 = Observable.fromIterable(intList)
@@ -95,6 +102,34 @@ class TestRxJava2 {
 
     }
 
+    @SuppressLint("CheckResult")
+    fun testArrayOneByOne() { //同时请求多个网站，只返回第一个请求成功的
+        Observable.just(listOf("a", "b", "c", "d"))
+                .flatMap { Observable.fromIterable(it) }
+                .flatMap { id ->
+                    val seconds = when (id) {
+                        "a" -> 4
+                        "b" -> -1
+                        "c" -> 5
+                        else -> 2
+                    }
+                    Observable.fromCallable { netReq(id, seconds) }
+//                            .concatMapDelayError()
+                            .doOnError { println("任务[${Thread.currentThread().name}]报错:${it.cause}, ") }
+                            .onErrorResumeNext(Observable.empty())
+                            .subscribeOn(Schedulers.io())
+                }
+                .toList()
+                .subscribe { result ->
+                    println("得到的结果：$result --线程[${Thread.currentThread().name}], 输出时间：${getCurrentTime()}")
+                }
+
+        /*Observable.defer{ Observable.just(netReq("ni")) }
+         //直接Observable.just()接.subscribeOn()的话，不能切换线程！使用fromCallable()或defer()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe { println("result=$it") }*/
+    }
+
     fun getInfo(list: List<Int>) : Observable<Map<Int, String>> {
         val add: (List<Int>) -> Int = { it.sum() }
         val getMap: (List<Int>) -> Map<Int, String> = {
@@ -120,5 +155,28 @@ class TestRxJava2 {
 
     private fun printG(param: String, value: Any) {
         println("greyson(${Thread.currentThread().name}), $param: $value")
+    }
+
+    companion object {
+        const val TIMEOUT_SECONDS = 5
+
+        fun netReq(param: String, runSeconds: Int = 0): String {
+            if (runSeconds < 0) throw IllegalArgumentException()
+
+            val rspTime = if (runSeconds == 0) Random.nextInt(3, 8) else runSeconds //网络请求响应所花的时间（秒）
+
+            for (i in 1..rspTime) {
+                println("[$param]线程[${Thread.currentThread().name}]运行了第${i}秒")
+                if (i == TIMEOUT_SECONDS) {
+                    println("线程[${Thread.currentThread().name}]的网络访问超时了！")
+                    throw TimeoutException("greyson warn：线程[${Thread.currentThread().name}]超时")
+                }
+                try {
+                    Thread.sleep(500L)
+                } catch (e: Exception) { }
+            }
+
+            return "[$param]线程[${Thread.currentThread().name}]花费${rspTime}秒返回" //网络请求返回数据
+        }
     }
 }
