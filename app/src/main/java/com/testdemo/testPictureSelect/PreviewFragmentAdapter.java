@@ -2,18 +2,22 @@ package com.testdemo.testPictureSelect;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -94,16 +98,19 @@ public class PreviewFragmentAdapter extends PagerAdapter {
 
             Glide.with(contentView.getContext())
                     .load(path)
-                    .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(new SimpleTarget<Bitmap>(480, 800) {
+                    .into(new CustomTarget<Drawable>(480, 800) {
                         @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                             /*if (eqLongImg) {
                                     displayLongPic(resource, longImg);
                             } else {*/
-                                imageView.setImageBitmap(resource);
+                            imageView.setImageDrawable(resource);
 //                            }
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
                         }
                     });
 
@@ -116,16 +123,13 @@ public class PreviewFragmentAdapter extends PagerAdapter {
                 }
             });*/
 
-            iv_play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("video_path", path);
-                    intent.putExtras(bundle);
-                    intent.setClass(mContext, PictureVideoPlayActivity.class);
-                    mContext.startActivity(intent);
-                }
+            iv_play.setOnClickListener(v -> {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("video_path", path);
+                intent.putExtras(bundle);
+                intent.setClass(mContext, PictureVideoPlayActivity.class);
+                mContext.startActivity(intent);
             });
         }
         (container).addView(contentView, 0);

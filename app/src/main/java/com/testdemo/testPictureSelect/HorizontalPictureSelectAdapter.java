@@ -83,7 +83,6 @@ public class HorizontalPictureSelectAdapter extends RecyclerView.Adapter<Horizon
         contentHolder.durationTV.setText(DateUtils.timeParse(duration));
         Glide.with(context)
                 .load(path)
-                .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.image_placeholder)
                 .into(contentHolder.pictureIV);
