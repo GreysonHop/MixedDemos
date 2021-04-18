@@ -1,11 +1,16 @@
 package com.testdemo.testjava;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +27,7 @@ public class TestJava {
         String cardNo = "12098915703";
         System.out.println(cardNo + " - " + isPhoneNumber(cardNo));
 
-
+        testStringEncode();
         testStringRegex();
         TestUtils.printMy();
         Calendar calendar1 = Calendar.getInstance();
@@ -184,6 +189,34 @@ public class TestJava {
         for (String s : list) {
             System.out.println(s);
         }
+    }
+
+    public static void testStringEncode() {
+        System.out.println("---------------testStringEncode----------------");
+        final String chineseStr = "严";
+        final char chineseChar = '严';
+
+        /*System.out.println("支持的编码：");
+        final Iterator<Map.Entry<String, Charset>> iterator = Charset.availableCharsets().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Charset> entry = iterator.next();
+            System.out.println(entry.getKey() + " -- " + entry.getValue());
+        }*/
+        byte[] utf8Code = chineseStr.getBytes(StandardCharsets.UTF_8); //这就是默认编码格式
+        //下面所有的hex合起来就是‘严’字的Utf-8编码：e4b8a5
+        for (byte b : utf8Code) {
+            System.out.println("b = " + b + ", hex=" + Integer.toHexString(b));
+        }
+
+        // Character.isLetterOrDigit('严');
+        final String sourceStr = "a你b他严";
+        int cpCount = sourceStr.codePointCount(0, sourceStr.length());
+        for (int i = 0; i < cpCount; i++) {
+            int charValue = sourceStr.codePointAt(i);
+            //这里的hex就是字符的Unicode，‘严’字为：4e25
+            System.out.printf("index=%d, charValue=%d, hexStr=%s\n", i, charValue, Integer.toHexString(charValue));
+        }
+        System.out.println();
     }
 
     public static void testDecimalFormat() {
