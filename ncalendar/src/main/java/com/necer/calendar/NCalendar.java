@@ -422,7 +422,7 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {//todo greyson ActionMasked()
             targetView = ViewUtil.getTargetView(getContext(), childView);
         }
         return super.onInterceptTouchEvent(ev);

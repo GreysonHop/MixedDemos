@@ -134,6 +134,23 @@ class TestRxJava2 {
 
     }
 
+    //TODO greyson_4/29/21 一个个循环访问，第一个成功的就返回。同样遇到一个难道，请求失败的也会走 firstElement()，！
+    fun testOneByOneJustFirst() {
+
+        /*.concatMap { ipList -> Observable.fromIterable(ipList) } //一个个顺序发送，访问接口看是否能成功
+        .flatMap(
+            { ip ->
+                Observable.fromCallable { ApiUtils.getBGCodeInfo(codeString, ip.host, ip.port, code.type) }
+            },
+            { ip, rsp -> ServerThread.IP_Response<BGCodeInfoRsp>(ip, rsp)})
+        .doOnError{ Log.e("LogPresenter", "请求 getBGCodeInfo 接口出错！：${it.message}") }
+        .onErrorResumeNext(Observable.empty())
+        .filter { ip_rsp -> ip_rsp.rsp.hasRsp() && ip_rsp.rsp.rsp.codeValue == Ximbase.ResponseCode.Succ_VALUE }
+        .firstElement()
+        .flatMapObservable { rsp -> Observable.just(rsp) }*/
+
+    }
+
     @SuppressLint("CheckResult")
     fun testArrayOneByOne() { //同时请求多个网站，只返回第一个请求成功的
         val concurrentEmitter = Observable.just(listOf("a", "b", "c", "d"))

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="#83FF4081"
+    tools:targetApi="lollipop">
+    <item android:id="@android:id/mask">
+        <shape android:shape="oval" >
+            <!-- 如果Shape 不加颜色，那么 ripple 就显示不出来！ -->
+            <solid android:color="@color/black"/>
+        </shape>
+    </item>
+</ripple>
