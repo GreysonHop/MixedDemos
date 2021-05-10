@@ -1,8 +1,14 @@
 package com.testdemo.testjava
 
-import android.text.TextUtils
+import kotlin.properties.Delegates
+
+var topLevelInt: Int = 0
 
 open class TestKotlin {
+
+    // 委托的用法——委托参数
+    var delegatedToTopLevel: Int by ::topLevelInt
+
     fun getString(): Int {
         return this.hashCode()
     }
@@ -109,6 +115,10 @@ fun main(args: Array<String>) {
     testJavaResult = testJava.getInstance(1) ?: ""
     println("now the testJavaResult is $testJavaResult")
 
+    // 委托的用法——监听
+    var testBy by Delegates.observable(0) { property, oldV, newV ->
+        println("参数 testBy 从${oldV}变成${newV}")
+    }
 
     val (x: Float, y: Float) = "".let {
         0f to 0.1f
