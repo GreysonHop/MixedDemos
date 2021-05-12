@@ -212,6 +212,7 @@ public class TestJava {
         final String sourceStr = "a你b他严";
         int cpCount = sourceStr.codePointCount(0, sourceStr.length());
         for (int i = 0; i < cpCount; i++) {
+            //int i = testCode.offsetByCodePoints(0, index);
             int charValue = sourceStr.codePointAt(i);
             //这里的hex就是字符的Unicode，‘严’字为：4e25
             System.out.printf("index=%d, charValue=%d, hexStr=%s\n", i, charValue, Integer.toHexString(charValue));

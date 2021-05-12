@@ -21,6 +21,7 @@ import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.architecture.TestDataBindingAct
+import com.testdemo.fileAccess.FileAccessMenuAct
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testAnim.svgaAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct
@@ -65,6 +66,7 @@ class MainActivity : ListActivity() {
         val menuListMap = linkedMapOf<String, Class<out Activity>>()
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity::class.java)
         menuListMap["动画实现弹窗"] = TestAnimationDialogAct::class.java
+        menuListMap["文件操作相关"] = FileAccessMenuAct::class.java
         menuListMap["上下滑动切换界面的ViewPager？"] = TestMyVerticalViewPageAct::class.java
         menuListMap["可以在容器间拖曳的组件"] = TestDragViewActivity::class.java
         menuListMap["子View可被拉伸回弹的ScrollView"] = DraggableScrollViewAct::class.java
