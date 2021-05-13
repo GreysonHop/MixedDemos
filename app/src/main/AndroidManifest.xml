@@ -31,6 +31,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
@@ -51,6 +52,10 @@
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
 
+        <meta-data
+            android:name="com.testdemo.testPictureSelect.CustomGlideConfig"
+            android:value="GlideModule"/>
+
         <activity android:name=".TestActivity2BlurBg" />
         <activity android:name=".TestAnimationDialogAct" />
         <activity android:name=".testCanDragLayout.TestDragViewActivity" />
@@ -58,7 +63,7 @@
         <activity android:name=".testVerticalScrollView.viewPager2.TestViewPager2Act" />
 
         <activity android:name=".testBlurAndGlass.BlurGlassSoOnActivity" />
-        <activity android:name=".testBlurAndGlass.MainActivity_Blur2"/>
+        <activity android:name=".testBlurAndGlass.MainActivity_Blur2" />
         <!--模糊背景界面-->
         <activity android:name=".testBlurAndGlass.MainActivity_Blur" />
         <activity android:name=".testBlurAndGlass.MainActivity_Broken" />

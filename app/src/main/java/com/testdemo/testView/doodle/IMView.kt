@@ -3,6 +3,7 @@ package com.testdemo.testView.doodle
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.FrameLayout
 
@@ -31,6 +32,17 @@ class IMView : FrameLayout { //如果在布局文件中不设置背景色，那�
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Kotlin 同时给两个变量赋值
+        val (xPos: Int, yPos: Int) = event.actionMasked.let { action ->
+            Log.d("IMView", "The action is ${actionToString(action)}")
+            // Get the index of the pointer associated with the action.
+            event.actionIndex.let { index ->
+                // The coordinates of the current screen contact, relative to
+                // the responding View or Activity.
+                event.getX(index).toInt() to event.getY(index).toInt()
+            }
+        }
+
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 path.moveTo(event.x, event.y)
@@ -72,5 +84,18 @@ class IMView : FrameLayout { //如果在布局文件中不设置背景色，那�
         )
 
         return region.contains(x.toInt(), y.toInt())
+    }
+
+    fun actionToString(action: Int): String {
+        return when (action) {
+            MotionEvent.ACTION_DOWN -> "Down"
+            MotionEvent.ACTION_MOVE -> "Move"
+            MotionEvent.ACTION_POINTER_DOWN -> "Pointer Down"
+            MotionEvent.ACTION_UP -> "Up"
+            MotionEvent.ACTION_POINTER_UP -> "Pointer Up"
+            MotionEvent.ACTION_OUTSIDE -> "Outside"
+            MotionEvent.ACTION_CANCEL -> "Cancel"
+            else -> ""
+        }
     }
 }

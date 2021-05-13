@@ -46,6 +46,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.request.RequestOptions;
 import com.testdemo.R;
 import com.testdemo.databinding.ActTestSpecialEditLayoutBinding;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
@@ -79,9 +81,9 @@ public class SpecialEditLayoutAct extends Activity {
         super.onCreate(savedInstanceState);
         binding = ActTestSpecialEditLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot()); //视图绑定方式
-//        setContentView(R.layout.act_test_special_edit_layout);
+        // setContentView(R.layout.act_test_special_edit_layout);
 
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
+        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 
         binding.tvTestClickable.post(() -> {
             Layout layout = binding.tvTestClickable.getLayout();
@@ -104,7 +106,9 @@ public class SpecialEditLayoutAct extends Activity {
         });*/
 
         Glide.with(this)
-                .load(R.drawable.ic_sport_man)
+                .asBitmap()
+                .load("https://120.25.249.33:6001/file/1/46296f74389a47285beab56f89606fd3/3edc7cbacb050fd8b2df66992deffc6c/image.png")
+                .apply(new RequestOptions().format(DecodeFormat.PREFER_RGB_565).disallowHardwareConfig())
                 /*.apply(RequestOptions.bitmapTransform(
                         new RoundedCornersTransformation(
                                 ScreenUtils.dip2px(this, 12),
@@ -136,7 +140,7 @@ public class SpecialEditLayoutAct extends Activity {
                     .setAnimDuration(250)
                     .setContent("正在重命名...")
                     .show();
-//            dialog.setOnDismissListener(dialog -> Toast.makeText(this, "dialog dismiss!!!", Toast.LENGTH_SHORT).show());
+            // dialog.setOnDismissListener(dialog -> Toast.makeText(this, "dialog dismiss!!!", Toast.LENGTH_SHORT).show());
             binding.ivVideo.postDelayed(() -> {
                 dialog.setContent("重命名成功！");
                 dialog.dismiss(dialogInterface -> {
@@ -157,13 +161,13 @@ public class SpecialEditLayoutAct extends Activity {
         binding.tvTestClickable.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                Log.d("greyson", "onCreateActionMode mode="+mode+"_menu=" + menu.size());
+                Log.d("greyson", "onCreateActionMode mode=" + mode + "_menu=" + menu.size());
                 return true;
             }
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                Log.d("greyson", "onPrepareActionMode mode="+mode+"_menu=" + menu);
+                Log.d("greyson", "onPrepareActionMode mode=" + mode + "_menu=" + menu);
                 if (menu.findItem(MENU_ID_MY) == null) {
                     menu.add(Menu.NONE, MENU_ID_MY, 0, "myMenu)");
                     return true;
@@ -173,7 +177,7 @@ public class SpecialEditLayoutAct extends Activity {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                Log.d("greyson", "onActionItemClicked mode="+mode+"_menuItem=" + item);
+                Log.d("greyson", "onActionItemClicked mode=" + mode + "_menuItem=" + item);
                 if (item.getItemId() == MENU_ID_MY) {
                     Toast.makeText(SpecialEditLayoutAct.this, "点击了自定义菜单项", Toast.LENGTH_SHORT).show();
                     return true;
@@ -183,7 +187,7 @@ public class SpecialEditLayoutAct extends Activity {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                Log.d("greyson", "onDestroyActionMode mode="+mode);
+                Log.d("greyson", "onDestroyActionMode mode=" + mode);
             }
         });
 
@@ -200,7 +204,7 @@ public class SpecialEditLayoutAct extends Activity {
             if (sp instanceof Spannable) {
                 Selection.selectAll((Spannable) sp);
             }
-            System.out.println("greyson:" +binding.messageTvContent.getSelectionStart() + "_" + binding.messageTvContent.getSelectionEnd());
+            System.out.println("greyson:" + binding.messageTvContent.getSelectionStart() + "_" + binding.messageTvContent.getSelectionEnd());
             showMenuPopup();
             return true;
         });
@@ -265,7 +269,7 @@ public class SpecialEditLayoutAct extends Activity {
         }
 
         LocationManager mManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        Log.d("greyson", "" + mManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));//这个判断是否必须
+        // Log.d("greyson", "" + mManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));//这个判断是否必须
         Location mLocation = mManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);//GPS_PROVIDER一直返回null?
 
         try {
@@ -283,6 +287,7 @@ public class SpecialEditLayoutAct extends Activity {
     }
 
     private PhoneStateListener myPhoneCallListener;
+
     //监听电话状态的两种方式
     private void setTelephony() {
         //第一种方式，需要权限
@@ -361,7 +366,7 @@ public class SpecialEditLayoutAct extends Activity {
             });
         }
         menuPopUp.showPopupWindow(binding.flContent, mOffsetX, mOffsetY, false, true);
-//      menuPopUp.showPopupWindow(binding.flContent);
+        // menuPopUp.showPopupWindow(binding.flContent);
     }
 
     private void setTextClickable() {

@@ -10,6 +10,7 @@ abstract class BaseBindingActivity<T : ViewBinding> : BaseActivity() {
 
     final override fun setContentView() {
         binding = getViewBinding()
+        setContentView(binding.root)
     }
 
     protected abstract fun getViewBinding() : T

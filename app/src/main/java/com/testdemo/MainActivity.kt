@@ -44,7 +44,7 @@ import com.testdemo.webrtc.webrtctest.TestAVChatActivity
 class MainActivity : ListActivity() {
 
     private val classNameList = mutableListOf<String>()
-    private val classList = mutableListOf<Class<out Activity>>()
+    private val menuListMap = linkedMapOf<String, Class<out Activity>>()
 
     private val observer = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean) {
@@ -63,7 +63,6 @@ class MainActivity : ListActivity() {
         super.onCreate(savedInstanceState)
         Log.e("greyson", "MainActivity-onCreate: savedInstanceState = $savedInstanceState, task = $taskId")
 
-        val menuListMap = linkedMapOf<String, Class<out Activity>>()
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity::class.java)
         menuListMap["动画实现弹窗"] = TestAnimationDialogAct::class.java
         menuListMap["文件操作相关"] = FileAccessMenuAct::class.java
@@ -92,7 +91,6 @@ class MainActivity : ListActivity() {
 
 
         classNameList.addAll(menuListMap.keys)
-        classList.addAll(menuListMap.values)
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, classNameList)
         listAdapter = adapter
@@ -122,7 +120,7 @@ class MainActivity : ListActivity() {
         super.onListItemClick(l, v, position, id)
 
         val intent = Intent()
-        intent.setClass(this, classList[position])
+        intent.setClass(this, menuListMap[classNameList[position]] as Class<*>)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }

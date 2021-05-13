@@ -18,9 +18,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.animation.addListener
 import com.testdemo.broken_lib.Utils
+import com.testdemo.databinding.ActTestAnimationdialogBinding
 import com.testdemo.testView.popmenu.PopMenu
 import com.testdemo.testView.popmenu.PopMenuItem
-import kotlinx.android.synthetic.main.act_test_animationdialog.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,7 +30,7 @@ import java.util.regex.Pattern
  * Create by Greyson on 2019/09/15
  * 通过动画做一个从屏幕下外面慢慢向上移动的组件，和可上下拉的组件
  */
-class TestAnimationDialogAct : Activity(), View.OnClickListener {
+class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding>(), View.OnClickListener {
     private val TAG = "greyson_Test2"
 
     private var isSee = false
@@ -39,18 +39,21 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
     private var popupMenuView: ListView? = null
     private lateinit var popMenu: PopMenu
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getViewBinding(): ActTestAnimationdialogBinding {
+        return ActTestAnimationdialogBinding.inflate(layoutInflater)
+    }
+
+    override fun initView() {
         setContentView(R.layout.act_test_animationdialog)
 
-        chronometer.base = SystemClock.elapsedRealtime()
-        chronometer.setOnChronometerTickListener {
-            Log.i(TAG, "base = ${chronometer.base} - ${chronometer.text}" +
-                    " - ${timeTick2Second(chronometer.text.toString())}")
+        binding.chronometer.base = SystemClock.elapsedRealtime()
+        binding.chronometer.setOnChronometerTickListener {
+            Log.i(TAG, "base = ${binding.chronometer.base} - ${binding.chronometer.text}" +
+                    " - ${timeTick2Second(binding.chronometer.text.toString())}")
         }
-        chronometer.setOnClickListener {
-            chronometer.base = SystemClock.elapsedRealtime() - (9 * 3600 + 59 * 60 + 55) * 1000
-            chronometer.start()
+        binding.chronometer.setOnClickListener {
+            binding.chronometer.base = SystemClock.elapsedRealtime() - (9 * 3600 + 59 * 60 + 55) * 1000
+            binding.chronometer.start()
         }
 
         //倒计时
@@ -62,12 +65,12 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
             if (expireMilliseconds > currentMilliseconds) {
                 val countDownTimer = object : CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
                     override fun onTick(millisUntilFinished: Long) {
-                        popupTV.text = second2Minute(millisUntilFinished / 1000)
+                        binding.popupTV.text = second2Minute(millisUntilFinished / 1000)
                     }
 
                     override fun onFinish() {
                         Toast.makeText(this@TestAnimationDialogAct, "倒计时完成！！！", Toast.LENGTH_SHORT).show()
-                        popupTV.text = "已过期"
+                        binding.popupTV.text = "已过期"
                     }
                 }
                 countDownTimer.start()
@@ -115,28 +118,28 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
                 }
                 .build()
 
-        dragTV.setOnClickListener(this)
+        binding.dragTV.setOnClickListener(this)
 
-        blackBgIV.setOnClickListener(this)
-        anim_btn.setOnClickListener(this)
-        popupTV.setOnClickListener(this)
-        shareLayout.setOnClickListener(this)
-        btn_showPopMenu.setOnClickListener {
+        binding.blackBgIV.setOnClickListener(this)
+        binding.animBtn.setOnClickListener(this)
+        binding.popupTV.setOnClickListener(this)
+        binding.shareLayout.setOnClickListener(this)
+        binding.btnShowPopMenu.setOnClickListener {
             popMenu.show()
         }
 
-        val scaleAnim = ObjectAnimator.ofFloat(dragLayout, "scaleX", 0f, 1f)
-        val scaleAnim2 = ObjectAnimator.ofFloat(dragLayout, "scaleY", 0f, 1f)
+        val scaleAnim = ObjectAnimator.ofFloat(binding.dragLayout, "scaleX", 0f, 1f)
+        val scaleAnim2 = ObjectAnimator.ofFloat(binding.dragLayout, "scaleY", 0f, 1f)
         val set = AnimatorSet()
         set.duration = 800
-        set.setTarget(dragLayout)
+        set.setTarget(binding.dragLayout)
         set.playTogether(scaleAnim, scaleAnim2)
         set.addListener({
             val paint = Paint()
             paint.color = Color.RED
             paint.setShadowLayer(1f, 10f, 10f, Color.GREEN)
-            popupTV.setLayerType(LAYER_TYPE_SOFTWARE, null)
-            popupTV.setLayerPaint(paint)
+            binding.popupTV.setLayerType(LAYER_TYPE_SOFTWARE, null)
+            binding.popupTV.setLayerPaint(paint)
         })
         set.start()
     }
@@ -189,7 +192,7 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
             }
 
             R.id.blackBgIV -> {
-                blackBgIV.isClickable = false
+                binding.blackBgIV.isClickable = false
                 isSee = !isSee
                 showShareLayout(isSee)
             }
@@ -204,8 +207,8 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
             }
 
             R.id.anim_btn -> {
-                Log.i(TAG, "click button dragLayout's y=${dragLayout.y} - top=${dragLayout.top}")
-                anim_btn.isSelected = !anim_btn.isSelected
+                Log.i(TAG, "click button dragLayout's y=${binding.dragLayout.y} - top=${binding.dragLayout.top}")
+                binding.animBtn.isSelected = !binding.animBtn.isSelected
 
                 isSee = !isSee
                 showShareLayout(isSee)
@@ -234,26 +237,26 @@ class TestAnimationDialogAct : Activity(), View.OnClickListener {
                         //popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
                     }
                 }
-                popupWindow.showAsDropDown(popupTV)
+                popupWindow.showAsDropDown(binding.popupTV)
             }
         }
     }
 
     private fun showShareLayout(show: Boolean) = if (show) {
-        println("greyson, height=${shareLayout.height}")
-        shareLayout.animate().setDuration(300).translationY(0f)
-                .withEndAction { blackBgIV.isClickable = true }
+        println("greyson, height=${binding.shareLayout.height}")
+        binding.shareLayout.animate().setDuration(300).translationY(0f)
+                .withEndAction { binding.blackBgIV.isClickable = true }
                 .start()
-        blackBgIV.animate().setDuration(300).alpha(0.9f).start()
+        binding.blackBgIV.animate().setDuration(300).alpha(0.9f).start()
 
-        dragLayout.animate().setDuration(300).scaleX(0.0f).alpha(0.2f).start()
-        popupTV.animate().setDuration(300).scaleY(-1f).start()
+        binding.dragLayout.animate().setDuration(300).scaleX(0.0f).alpha(0.2f).start()
+        binding.popupTV.animate().setDuration(300).scaleY(-1f).start()
     } else {
-        shareLayout.animate().setDuration(300).translationY(shareLayout.height.toFloat()).start()
-        blackBgIV.animate().setDuration(300).alpha(0.0f).start()
+        binding.shareLayout.animate().setDuration(300).translationY(binding.shareLayout.height.toFloat()).start()
+        binding.blackBgIV.animate().setDuration(300).alpha(0.0f).start()
 
-        dragLayout.animate().setDuration(300).scaleX(1f).alpha(1f).start()
-        popupTV.animate().setDuration(300).scaleY(1f).start()
+        binding.dragLayout.animate().setDuration(300).scaleX(1f).alpha(1f).start()
+        binding.popupTV.animate().setDuration(300).scaleY(1f).start()
     }
 
     /*private fun showShareLayout(show: Boolean) {

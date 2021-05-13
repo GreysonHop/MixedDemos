@@ -96,7 +96,7 @@ class TestMapAct : BaseCommonActivity(), OnMapReadyCallback {
             val request = Request.Builder().url("http://ip.taobao.com/service/getIpInfo.php?ip=myip").get().build()
             try {
                 val response = client.newCall(request).execute()
-                Log.i("greyson", "淘宝接口调用：${response.body().string()}")
+                Log.i("greyson", "淘宝接口调用：${response.body?.string()}")
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -163,7 +163,7 @@ class TestMapAct : BaseCommonActivity(), OnMapReadyCallback {
             val request1 = Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latLng.latitude},${latLng.longitude}&rankby=distance&type=food&key=${getString(R.string.google_search_api_key)}").get().build()
             try {
                 val response = client.newCall(request1).execute()
-                val bodyStr = response.body().string()
+                val bodyStr = response.body?.string() ?: ""
                 if (bodyStr.contains("error")) {//请求有错误
                     Toast.makeText(this, "请求出现问题！", Toast.LENGTH_SHORT).show()
                     Log.i("greyson", "谷歌周围API调用：${bodyStr}")
