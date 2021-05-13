@@ -13,6 +13,22 @@ import kotlin.math.max
  */
 class AlgorithmUnitTest {
 
+    class ListNode(var `val`: Int) {
+        var next: ListNode? = null
+    }
+
+    @Test
+    fun test12() {
+        val node = ListNode(1).apply {
+            next = ListNode(2)
+            next?.next = ListNode(3)
+            next?.next?.next = ListNode(4)
+            next?.next?.next?.next = ListNode(5)
+        }
+//        assertEquals(getKthFromEnd(node, 2), node.next?.next?.next)
+    }
+
+
     @Test
     fun commonTest() {
         /**
@@ -813,4 +829,67 @@ class AlgorithmUnitTest {
         return numbers[start]
     }
 
+    @Test
+    fun test91() {
+        assertEquals(1, numDecodings("1062"))
+        assertEquals(0, numDecodings("11601"))
+        assertEquals(4, numDecodings("1110623"))
+        assertEquals(0, numDecodings("11106230"))
+        assertEquals(2, numDecodings("12"))
+        assertEquals(3, numDecodings("226"))
+        assertEquals(0, numDecodings("0"))
+        assertEquals(0, numDecodings("06"))
+        assertEquals(1, numDecodings("6"))
+    }
+
+    //LeetCode91
+    fun numDecodings(s: String): Int {
+        if (s[0] == '0') return 0
+        if (s.length == 1) return 1
+
+        var lastNo = 0 //
+        var lastHas = 0
+
+        s.forEachIndexed { i, c ->
+            if (i < 1) {
+                lastNo = 1
+                lastHas = 0
+
+            } else {
+
+                var curNo = 0
+                var curHas = 0
+                val curDouble = Integer.parseInt(s.substring(i - 1, i + 1))
+
+                if (c == '0') {
+
+                    //0不能单独存在
+                    if (curDouble != 10 && curDouble != 20) {
+                        return 0
+                    } else {
+                        curNo = 0
+                        curHas = lastNo
+                    }
+
+                } else {
+                    //计算当前值单独存在的情况：
+                    curNo = lastNo + lastHas
+
+                    //计算当前值与前一个值结成两位数的情况：
+                    curHas = if (curDouble < 1 || curDouble > 26) {
+                        0
+                    } else {
+                        lastNo
+                    }
+
+                }
+
+                lastNo = curNo
+                lastHas = curHas
+            }
+
+        }
+
+        return lastNo + lastHas
+    }
 }
