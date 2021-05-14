@@ -107,7 +107,9 @@ public class SpecialEditLayoutAct extends Activity {
 
         Glide.with(this)
                 .asBitmap()
-                .load("https://120.25.249.33:6001/file/1/46296f74389a47285beab56f89606fd3/3edc7cbacb050fd8b2df66992deffc6c/image.png")
+                .load("http://img1.12580.tv/qita/qi10_76982ovg5ktilrn1.jpg")
+                // 直接域名访问的如何配置证书
+                // .load("https://120.25.249.33:6001/file/1/46296f74389a47285beab56f89606fd3/3edc7cbacb050fd8b2df66992deffc6c/image.png")
                 .apply(new RequestOptions().format(DecodeFormat.PREFER_RGB_565).disallowHardwareConfig())
                 /*.apply(RequestOptions.bitmapTransform(
                         new RoundedCornersTransformation(

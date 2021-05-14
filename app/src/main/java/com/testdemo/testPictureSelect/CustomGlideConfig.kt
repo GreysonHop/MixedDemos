@@ -31,7 +31,8 @@ import javax.net.ssl.X509TrustManager
     android:value="GlideModule" />
  </pre>
  */
-class CustomGlideConfig : GlideModule {
+@com.bumptech.glide.annotation.GlideModule
+class CustomGlideConfig : AppGlideModule() {
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         //设置图片的显示格式ARGB_8888(指图片大小为32bit)
