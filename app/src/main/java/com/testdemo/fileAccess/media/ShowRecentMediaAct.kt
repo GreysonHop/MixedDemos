@@ -19,8 +19,8 @@ import kotlin.collections.ArrayList
  */
 class ShowRecentMediaAct : BaseBindingActivity<ActRecentMediaBinding>() {
     companion object {
-        private const val ImageLoaderID = 0x110
-        private const val VideoLoaderID = 0x111
+//        private const val ImageLoaderID = 0x110
+        private const val MediaLoaderID = 0x111
 
         private val IMAGE_PROJECTION = arrayOf<String>( //查询图片需要的数据列
             MediaStore.Images.Media.DISPLAY_NAME,  //图片的显示名称  aaa.jpg
@@ -41,10 +41,10 @@ class ShowRecentMediaAct : BaseBindingActivity<ActRecentMediaBinding>() {
     override fun initView() {
         binding.btnShowPic.setOnClickListener {
             LoaderManager.getInstance(this).apply {
-                if (getLoader<Cursor>(ImageLoaderID) == null) {
-                    initLoader(ImageLoaderID, null, loaderCallback)
+                if (getLoader<Cursor>(MediaLoaderID) == null) {
+                    initLoader(MediaLoaderID, null, loaderCallback)
                 } else {
-                    restartLoader(ImageLoaderID, null, loaderCallback)
+                    restartLoader(MediaLoaderID, null, loaderCallback)
                     // getLoader<CursorLoader>(ImageLoaderID)?.reset()
                 }
             }
@@ -53,7 +53,7 @@ class ShowRecentMediaAct : BaseBindingActivity<ActRecentMediaBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LoaderManager.getInstance(this).destroyLoader(ImageLoaderID)
+        LoaderManager.getInstance(this).destroyLoader(MediaLoaderID)
     }
 
     private val loaderCallback = object : LoaderManager.LoaderCallbacks<Cursor> {
@@ -65,10 +65,7 @@ class ShowRecentMediaAct : BaseBindingActivity<ActRecentMediaBinding>() {
             val cursorLoader: CursorLoader?
             cursorLoader = CursorLoader(
                 this@ShowRecentMediaAct,
-                if (id == ImageLoaderID)
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                else
-                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Files.getContentUri("external"),
                 IMAGE_PROJECTION,
                 /*null*/"${MediaStore.Images.ImageColumns.DATE_TAKEN} > $timeLimit",
                 null,
