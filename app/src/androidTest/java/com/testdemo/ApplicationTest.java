@@ -36,7 +36,7 @@ public class ApplicationTest {
     @Before
     public void setUp() throws Exception {
         mTargetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//        mTargetContext = ApplicationProvider.getApplicationContext();
+        // mTargetContext = ApplicationProvider.getApplicationContext();
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ApplicationTest {
 
             ApplicationInfo applicationInfo = mTargetContext.getPackageManager()
                     .getApplicationInfo(mTargetContext.getPackageName(), PackageManager.GET_META_DATA);
-            Bundle metaData = ((ApplicationInfo) applicationInfo).metaData;
+            Bundle metaData = applicationInfo.metaData;
             data = metaData.getString("com.google.android.geo.API_KEY");
             System.out.println("AndroidTest, data = " + data);
             System.out.println("AndroidTest, UMENG_CHANNEL = " + metaData.getString("UMENG_CHANNEL"));
