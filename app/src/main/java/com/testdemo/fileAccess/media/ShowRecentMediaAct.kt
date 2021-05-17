@@ -90,7 +90,7 @@ class ShowRecentMediaAct : BaseBindingActivity<ActRecentMediaBinding>() {
                                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                                     if (moving) {
                                         if (totalXOffset > measuredWidth / 2) {
-                                            animate().translationX(measuredWidth.toFloat()).setDuration(150)
+                                            animate().translationX(measuredWidth.toFloat()).setDuration(100)
                                                 .setListener(object : AnimatorListenerAdapter() {
                                                     override fun onAnimationEnd(animation: Animator?) {
                                                         visibility = View.GONE
@@ -99,7 +99,7 @@ class ShowRecentMediaAct : BaseBindingActivity<ActRecentMediaBinding>() {
                                                 }).start()
 
                                         } else {
-                                            animate().translationX(0f).setDuration(150).start()
+                                            animate().translationX(0f).setDuration(150).setListener(null).start()
                                         }
 
                                     } else if (abs(totalXOffset) < min && abs(event.rawY - downY) < min) {
