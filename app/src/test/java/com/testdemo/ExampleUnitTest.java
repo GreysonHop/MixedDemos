@@ -1,10 +1,18 @@
 package com.testdemo;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.testdemo.webrtc.webrtclib.bean.MyIceServer;
+
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.*;
@@ -22,6 +30,66 @@ public class ExampleUnitTest {
             System.out.println(author + " invoke printSomeThing. " + getClass().getName() + " thread = " + Thread.currentThread());
         }
     }
+
+    @Test
+    public void testGson() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("time", "1287349827");
+        map.put("text", "hello");
+        final String json = new Gson().toJson(map);
+        System.out.println("json: \n" + json);
+        HashMap<String, String> map1 = new Gson().fromJson(json, HashMap.class);
+        HashMap<String, String> map2 = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
+        System.out.println("map2:" + map1.get("text"));
+
+
+        ArrayList<Float> list = new ArrayList<>();
+        list.add(10.1f);
+        list.add(22.9f);
+        // String jsonForList = new Gson().toJson(list);
+        String jsonForList = putForList(list);
+
+        try {
+            List<Float> list1 = getForList(jsonForList, Float.class);
+            for (Float s : list1) {
+                System.out.println("解析： " + s);
+            }
+        } catch (Exception e) {e.printStackTrace();}
+
+        List<MyIceServer> ipList = new ArrayList<>();
+        ipList.add(new MyIceServer("192.3.1.10"));
+        ipList.add(new MyIceServer("184.4.13.9"));
+        final String ipListStr = new Gson().toJson(ipList);
+
+        List<MyIceServer> ipList1 = getForList(ipListStr, MyIceServer.class);
+        System.out.println("ipList： " + ipListStr); // 没法直接解析成自定义类，只能像上面的 String 一样的才行！
+        for (MyIceServer myIceServer : ipList1) {
+            System.out.println("--: " + myIceServer.uri);
+        }
+    }
+
+    private <K, V> HashMap<K, V> getForMap(String jsonStr, Class<K> clazzK, Class<V> clazzV) {
+        return new Gson().fromJson(jsonStr, new TypeToken<HashMap<K, V>>(){}.getType());
+    }
+
+    public <T> String putForList(List<T> value) {
+        Type listType = new TypeToken<List<T>>(){}.getType();
+        String data = new Gson().toJson(value, value.getClass());
+        return data;
+    }
+    private <T> List<T> getForList(String jsonForList, Class<T> clazz) {
+        try {
+            new Gson().fromJson(jsonForList, clazz);
+            List<T> ret = new Gson().fromJson(jsonForList, new TypeToken<List<T>>(){}.getType());
+            return ret;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
     @Test
     public void addition_isCorrect() {
