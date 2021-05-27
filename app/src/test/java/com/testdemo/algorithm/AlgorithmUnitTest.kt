@@ -1,4 +1,4 @@
-package com.testdemo
+package com.testdemo.algorithm
 
 import org.junit.Test
 
@@ -12,10 +12,6 @@ import kotlin.math.max
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class AlgorithmUnitTest {
-
-    class ListNode(var `val`: Int) {
-        var next: ListNode? = null
-    }
 
     @Test
     fun test12() {
@@ -429,10 +425,6 @@ class AlgorithmUnitTest {
         }
     }
 
-    class TreeNode(var `val`: Int = 0) {
-        var left: TreeNode? = null
-        var right: TreeNode? = null
-    }
 
     //最长不重复子数组的长度
     fun lengthOfLongestSubstring(s: String): Int {
@@ -891,5 +883,173 @@ class AlgorithmUnitTest {
         }
 
         return lastNo + lastHas
+    }
+
+
+    fun countTriplets(arr: IntArray): Int {
+        var ret = 0
+        for (i in 0 until arr.lastIndex) {
+            var curHeadXor = arr[i]
+            var curCount = 1
+            for (j in (i + 1)..arr.lastIndex) {
+                curHeadXor = curHeadXor xor arr[j]
+                curCount += 1
+                if (curHeadXor == 0) {
+                    ret += curCount - 1
+                }
+            }
+        }
+        return ret
+    }
+
+
+    // 692题
+    fun topKFrequent(words: Array<String>, k: Int): List<String> {
+        val map = mutableMapOf<String, Int>()
+
+        words.forEach {
+            map[it] = (map[it] ?: 0) + 1
+        }
+
+        return map.entries.sortedWith(kotlin.Comparator { o1, o2 ->
+            when {
+                o1.value > o2.value -> {
+                    -1
+                }
+                o1.value < o2.value -> {
+                    1
+                }
+                else -> {
+                    /*val str1 = o1.key
+                    val str2 = o2.key
+                    var index = 0
+
+                    var ret = 0
+                    while (str1.length > index && str2.length > index) {
+                        val c1 = str1[index]
+                        val c2 = str2[index]
+                        ++index
+
+                        if (c1 == c2) continue
+
+                        if (c1 > c2) {
+                            ret = 1
+                            break
+                        } else {
+                            ret = -1
+                            break
+                        }
+                    }
+                    if (ret == 0) {
+                        ret = if (str1.length > str2.length) 1 else -1
+                    }
+                    ret*/
+                    o1.key.compareTo(o2.key)
+                }
+            }
+        }).subList(0, k).map {
+            it.key
+        }
+    }
+
+    public fun topKFrequent2(words: Array<String>, k: Int): List<String> {
+        val cnt = HashMap<String, Int>()
+        words.forEach {
+            cnt[it] = cnt.getOrDefault(it, 0) + 1
+        }
+
+        val pq = PriorityQueue<Map.Entry<String, Int>>(Comparator<Map.Entry<String, Int>> { entry1, entry2 ->
+            if (entry1.value == entry2.value)
+                entry2.key.compareTo(entry1.key)
+            else
+                entry1.value - entry2.value
+        })
+
+        cnt.entries.forEach {
+            pq.offer(it)
+            if (pq.size > k) {
+                pq.poll()
+            }
+        }
+
+        val ret = ArrayList<String>()
+        while (!pq.isEmpty()) {
+            ret.add(pq.poll().key)
+        }
+        ret.reverse()
+        return ret
+    }
+
+
+    fun kthLargestValue(matrix: Array<IntArray>, k: Int): Int {
+        val wholeXor = Array(matrix.size + 1) { IntArray(matrix[0].size + 1) { 0 } }
+        val xorResultSet = mutableListOf<Int>()
+
+        for (i in 1..wholeXor.size) {
+            for (j in 1..wholeXor[i].size) {
+                wholeXor[i][j] = matrix[i - 1][j - 1] xor wholeXor[i][j - 1] xor wholeXor[i - 1][j] xor wholeXor[i - 1][j - 1]
+                xorResultSet.add(wholeXor[i][j])
+            }
+        }
+
+        return xorResultSet.sortedDescending().let {
+            it[k - 1]
+        }
+    }
+
+
+    @Test
+    fun test1035() {
+        assertEquals(maxUncrossedLines(intArrayOf(2, 5, 1, 3, 5), intArrayOf(10, 5, 2, 1, 5)), 3)
+    }
+
+    // 1035
+    fun maxUncrossedLines(nums1: IntArray, nums2: IntArray): Int {
+        val find: (IntArray, IntArray) -> Int = { array1, array2 ->
+            var lastObjectIndex = -1
+            var i = 0
+            var j = 0
+            var count = 0
+            while (i < array1.size && j < array2.size) {
+                if (array1[i] == array2[j]) {
+                    lastObjectIndex = i
+                    ++count
+
+                    ++i
+                    ++j
+
+                } else {
+                    if (i == array1.lastIndex && i != lastObjectIndex) {
+                        i = lastObjectIndex + 1
+                        ++j
+                    } else {
+                        ++i
+                    }
+                }
+            }
+            count
+        }
+
+        val count1 = find(nums1, nums2)
+        val count2 = find(nums2, nums1)
+        return if (count1 >= count2) count1 else count2
+    }
+
+
+    //private lateinit var retArray : Array<Char?>
+    private val retCharList = mutableListOf<Char>()
+    fun reverseParentheses(s: String): String {
+        //retArray = arrayOfNulls(s.length)
+
+        read(s, 0, s.lastIndex, false)
+        return retCharList.toString()
+    }
+
+    private fun read(str: String, start: Int, end: Int, reverse: Boolean) {
+        val findTarget = if (reverse) ')' else '('
+
+        if (reverse) {
+            retCharList.add(str[start])
+        }
     }
 }
