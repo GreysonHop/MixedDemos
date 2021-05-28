@@ -1035,22 +1035,38 @@ class AlgorithmUnitTest {
         return if (count1 >= count2) count1 else count2
     }
 
+    // 15. 三数之和
+    fun threeSum(nums: IntArray): List<List<Int>> {
+        nums.sort()
 
-    //private lateinit var retArray : Array<Char?>
-    private val retCharList = mutableListOf<Char>()
-    fun reverseParentheses(s: String): String {
-        //retArray = arrayOfNulls(s.length)
+        val retList = ArrayList<List<Int>>()
+        for (first in nums.indices) {
+            if (first > 0 && nums[first] == nums[first - 1]) {
+                continue
+            }
 
-        read(s, 0, s.lastIndex, false)
-        return retCharList.toString()
-    }
+            val targetValue = -nums[first]
 
-    private fun read(str: String, start: Int, end: Int, reverse: Boolean) {
-        val findTarget = if (reverse) ')' else '('
+            for (second in (first + 1) .. nums.lastIndex) {
+                if (second > first + 1 && nums[second] == nums[second - 1]) {
+                    continue
+                }
 
-        if (reverse) {
-            retCharList.add(str[start])
+                var third = nums.lastIndex
+                while (second < third && nums[second] + nums[third] > targetValue) {
+                    --third
+                }
+                // 如果第二和第三指针重叠时两个值之和才开始小于或等于目标值，则第二指针没必要再遍历下去了，因为随着它的右移，第二和第三指针的值之和只会更大！
+                if (second == third) break
+
+                if (second < third && nums[second] + nums[third] == targetValue) {
+                    retList.add(listOf(nums[first], nums[second], nums[third]))
+                }
+
+            }
         }
+
+        return retList
     }
 
     @Test
