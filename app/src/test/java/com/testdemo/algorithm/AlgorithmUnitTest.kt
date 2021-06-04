@@ -21,7 +21,7 @@ class AlgorithmUnitTest {
             next?.next?.next = ListNode(4)
             next?.next?.next?.next = ListNode(5)
         }
-//        assertEquals(getKthFromEnd(node, 2), node.next?.next?.next)
+        // assertEquals(getKthFromEnd(node, 2), node.next?.next?.next)
     }
 
 
@@ -1052,4 +1052,34 @@ class AlgorithmUnitTest {
             retCharList.add(str[start])
         }
     }
+
+    @Test
+    fun test477() {
+        assertEquals(totalHammingDistance(intArrayOf(2, 14, 4)), 6)
+    }
+
+    //477. 汉明距离总和
+    fun totalHammingDistance(nums: IntArray): Int {
+        var ret = 0
+
+        // 从右到左，一位一位取，判断所有数值在这一位上有多少个1和0，1和0的个数相乘就等于所有数值在该位数上的不同个数
+        // 最后将每一位的不同个数加起来，就是答案了
+        for (bit in 0..30) { // bit表现从右向左取第几位。用数字1去做向左的位移运算，第一位则1不用位移，即bit为0
+            val index = 1 shl bit
+
+            var countOfOne = 0 // 所有数组每一项在当前Bit位上的数字为1的个数
+
+            for (i in nums.indices) {
+                val valueInBit = nums[i] and index
+                if (valueInBit != 0) {
+                    countOfOne++
+                }
+            }
+            ret += countOfOne * (nums.size - countOfOne) // 数组长度减去该二进制位上数字为1的总个数便等于该二进制位上数字为0的总个数
+
+        }
+
+        return ret
+    }
+
 }
