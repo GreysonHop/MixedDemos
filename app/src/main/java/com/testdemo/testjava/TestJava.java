@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -307,5 +308,25 @@ public class TestJava {
     private OnClickListener mOnClickListener;
     public void setOnClickListener(OnClickListener listener) {
         this.mOnClickListener = listener;
+    }
+
+    // 想了45分钟左右，先用Kotlin写出来的，结果内存使用居然是官方的两倍，有点不信邪。。
+    private int kthLargestValue(int[][] matrix, int k) {
+        int[] lastRowWholeXor = new int[matrix[0].length]; // 上一行的每一列的总异或值
+        int curRowXor;
+        final ArrayList<Integer> xorResultSet = new ArrayList<>(matrix.length * matrix[0].length);
+
+        for (int[] ints : matrix) {
+            curRowXor = 0;
+            for (int j = 0; j < ints.length; ++j) {
+                curRowXor = curRowXor ^ ints[j]; // 当前行前几列的异或值与当前列的值 异或
+
+                lastRowWholeXor[j] = lastRowWholeXor[j] ^ curRowXor; // 上一行总的异或值更新成当前的
+                xorResultSet.add(lastRowWholeXor[j]);
+            }
+        }
+
+        Collections.sort(xorResultSet);
+        return xorResultSet.get(xorResultSet.size() - k);
     }
 }
