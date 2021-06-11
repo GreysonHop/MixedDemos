@@ -70,7 +70,7 @@
         android:paddingTop="9dp"
         android:paddingRight="13dp"
         android:paddingBottom="9dp"
-        android:text="anim btn" />
+        android:text="@string/anim_btn" />
 
     <TextView
         android:id="@+id/popupTV"
@@ -84,7 +84,7 @@
         android:paddingTop="9dp"
         android:paddingRight="13dp"
         android:paddingBottom="9dp"
-        android:text="popupTV"
+        android:text="@string/popup"
         android:textColor="#fff" />
 
     <Chronometer
@@ -165,7 +165,8 @@
         android:background="#FF171619"
         android:clickable="false"
         android:longClickable="false"
-        tools:visibility="gone" />
+        tools:visibility="visible"
+        tools:alpha="0.7f"/>
 
     <LinearLayout
         android:id="@+id/shareLayout"

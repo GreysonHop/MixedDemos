@@ -1,12 +1,16 @@
 package com.testdemo
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import android.util.Log
 import androidx.annotation.AnimRes
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 
 /**
  * Create by Greyson
@@ -15,10 +19,13 @@ import androidx.appcompat.app.AppCompatActivity
 abstract class BaseActivity : AppCompatActivity() {
     @AnimRes
     private var openEnterAnim = 0
+
     @AnimRes
     private var openExitAnim = 0
+
     @AnimRes
     private var closeEnterAnim = 0
+
     @AnimRes
     private var closeExitAnim = 0
 
@@ -33,7 +40,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
         initialize()
         if (!disableDefaultOrientation) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            requestedOrientation =
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         setContentView()
@@ -43,6 +52,21 @@ abstract class BaseActivity : AppCompatActivity() {
         if (openEnterAnim != 0 && openExitAnim != 0) {
             overridePendingTransition(openEnterAnim, openExitAnim)
         }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(
+            if (newBase != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                newBase.createConfigurationContext(
+                    newBase.resources.configuration.apply {
+                        setLocale(Locale.JAPANESE)
+                        setLocales(LocaleList(Locale.JAPANESE))
+                    }
+                )
+            } else {
+                newBase
+            }
+        )
     }
 
     /**

@@ -121,6 +121,7 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
         binding.dragTV.setOnClickListener(this)
 
         binding.blackBgIV.setOnClickListener(this)
+        binding.blackBgIV.isClickable = false //TODO greyson_2021/6/11 这句是否有用？？
         binding.animBtn.setOnClickListener(this)
         binding.popupTV.setOnClickListener(this)
         binding.shareLayout.setOnClickListener(this)

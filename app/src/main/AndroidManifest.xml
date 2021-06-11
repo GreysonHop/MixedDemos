@@ -24,6 +24,8 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".TestApplication"
         android:allowBackup="true"
@@ -159,6 +161,14 @@
         <activity android:name=".fileAccess.media.ShowRecentMediaAct" />
 
         <service android:name=".architecture.AVChatService" />
+
+<!--     据说能开机启动？   -->
+        <receiver android:name="BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

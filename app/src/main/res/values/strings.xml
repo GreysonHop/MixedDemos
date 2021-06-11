@@ -4,14 +4,14 @@
     <string
         name="pattern_search">Android是一种基于Linux的自由及开放源代码的操作系统，Android操作系统最初由Andy Rubin开发，主要支持手机。Android系统。随后Google以Apache开源许可证的授权方式，发布了Android的源代码。第一部Android智能手机发布于2008年10月。Android逐渐扩展到平板电脑，Android在全球的市场份额首次超过塞班系统</string>
 
-    <string name="text_send_picture_with_num">send(%d)</string>
-    <string name="text_send_picture">send</string>
+    <string name="text_send_picture_with_num">发送(%d)</string>
+    <string name="text_send_picture">发送</string>
 
     <string name="text_calendar_cn">%1$s年%2$s月%3$s日</string>
 
-    <string name="viewmodel_name_tip">user name input</string>
-
-
+    <string name="viewmodel_name_tip">输入的用户名</string>
+    <string name="anim_btn">执行动画</string>
+    <string name="popup">弹窗</string>
 
     <!--下面都是测试谷歌位置服务-->
     <!-- title for error alerts. -->

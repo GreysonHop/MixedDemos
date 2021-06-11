@@ -1098,4 +1098,18 @@ class AlgorithmUnitTest {
         return ret
     }
 
+    fun isValid(s: String): Boolean {
+        if (s.length % 2 != 0) return false
+
+        val signPairs = mapOf(')' to '(', ']' to '[', '}' to '{')
+        val stack = ArrayDeque<Char>()
+        for (index in s.indices) {
+            when (val curChar = s[index]) {
+                '(', '[', '{' -> stack.push(curChar)
+                ')', ']', '}' -> if (stack.size <= 0 || stack.pop() != signPairs[curChar]) return false
+            }
+        }
+        return stack.size == 0
+    }
+
 }
