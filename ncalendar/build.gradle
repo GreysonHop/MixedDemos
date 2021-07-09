@@ -1,13 +1,13 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.library' // Groovy语法
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 30
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 30
         versionCode 1
         versionName "4.3.7"
     }

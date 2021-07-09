@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+    <domain-config>
+        <domain includeSubdomains="true">www.qq.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">ALY3cP4zBW5E7fjTo4W5vLUTZLTTMMGzZYaKvSbiI20=</pin>
+            <pin digest="SHA-256">3mc/12C2pwvtV5JjfcxLmbbWYQSbj9yqSWLXKfZcMUw=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>

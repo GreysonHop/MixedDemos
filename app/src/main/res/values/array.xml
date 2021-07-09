@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="imgArray">
-    <item>@drawable/img1</item>
-    <item>@drawable/img2</item>
-    <item>@drawable/img3</item>
-    <item>@drawable/img4</item>
-    <item>@drawable/img5</item>
-    <item>@drawable/img6</item>
-</string-array>
+    <string-array name="imgArray">
+        <item>@drawable/img1</item>
+        <item>@drawable/img2</item>
+        <item>@drawable/img3</item>
+        <item>@drawable/img4</item>
+        <item>@drawable/img5</item>
+        <item>@drawable/img6</item>
+    </string-array>
+
+    <!--  类型化数组  -->
+    <!--在 XML 中定义的 TypedArray。您可以使用这种资源创建其他资源（例如可绘制对象）的数组。
+    请注意，此类数组不要求所含的资源具有相同的类型，因此您可以创建混合资源类型的数组，但必须知
+    道数组中有哪些数据类型及其位置，以便可以使用 TypedArray 的 get...() 方法正确获取每一项
+    数据。-->
+    <!--
+    使用示例：
+    val icons: TypedArray = resources.obtainTypedArray(R.array.icons)
+    val drawable: Drawable = icons.getDrawable(4)
+    -->
+    <array name="typedArray">
+        <item>250</item>
+        <item>@string/app_name</item>
+        <item>@color/colorPrimary</item>
+        <item>@dimen/dp_4</item>
+        <item>@drawable/arrow_up</item>
+    </array>
 </resources>

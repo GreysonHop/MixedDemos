@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -56,5 +58,23 @@ public class ApplicationTest {
             e.printStackTrace();
         }
         assertEquals("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI", data);
+    }
+
+
+    @Test
+    public void testBase64() {
+        String s = "ChphcHAuSW52aXRhdGlvbk5vdGlmaWNhdGlvblKqAQoudHlwZS5nb29nbGVhcGlzLmNvbS9hcHAuSW52aXRhdGlvbk5vdGlmaWNhdGlvbhJ4CiQ3MGU2NzdhNS05MWQxLTQzODItOGNlMS02YWM1MDY2NzZlZjQSOgoYNjA4YTljMTU0ZjM4NmExYTA0MDc1MzUxEglFQk9BMDAwMjQ6DwoLMTMzODAzNDQ2ODEQVkICQ04YASIHZWJvX2FpcioJbGN3MDItMDAx";
+        byte[] bytes = Base64.decode(s, Base64.DEFAULT);
+        byte[] bytes2 = Base64.decode(s, Base64.CRLF);
+        byte[] bytes3 = Base64.decode(s, Base64.NO_CLOSE);
+        byte[] bytes4 = Base64.decode(s, Base64.NO_WRAP);
+        byte[] bytes5 = Base64.decode(s, Base64.URL_SAFE);
+        byte[] bytes6 = Base64.decode(s, Base64.NO_PADDING);
+        Log.d("greyson", new String(bytes));
+        Log.d("greyson", new String(bytes2));
+        Log.d("greyson", new String(bytes3));
+        Log.d("greyson", new String(bytes4));
+        Log.d("greyson", new String(bytes5));
+        Log.d("greyson", new String(bytes6));
     }
 }
