@@ -6,10 +6,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.NestedScrollingParent2
-import androidx.recyclerview.widget.RecyclerView
 import androidx.core.view.ViewCompat
 import com.testdemo.broken_lib.Utils
 
@@ -25,49 +23,53 @@ class ScrollShrinkView : LinearLayout, NestedScrollingParent2 {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     var mViewToShrink: View? = null
-    lateinit var mScrollingView: RecyclerView
+//    lateinit var mScrollingView: RecyclerView
 
-    private var mOriginHeight = 0
+    private var shrinkViewMinHeight = 0
+    private var shrinkViewMaxHeight = 0
 
     override fun onFinishInflate() {
         super.onFinishInflate()
         mViewToShrink = getChildAt(0)
-        val viewGroup = getChildAt(1) as ViewGroup
+        /*val viewGroup = getChildAt(1) as ViewGroup
         for (index in 0..viewGroup.childCount) {
             if (viewGroup.getChildAt(index) is RecyclerView) {
                 mScrollingView = viewGroup.getChildAt(index) as RecyclerView
                 break
             }
-        }
+        }*/
         mViewToShrink?.post {
-            mOriginHeight = mViewToShrink?.let { it.height - mCollapseOffset } ?: 0
+            shrinkViewMinHeight = mViewToShrink?.let { it.height - mCollapseOffset } ?: mCollapseOffset
+            shrinkViewMaxHeight = mViewToShrink?.height ?: mCollapseOffset * 2
         }
 
-//        mScrollingView = (getChildAt(1) as ViewGroup).getChildAt(0) as RecyclerView
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+    }
 
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
-        Log.d("greyson", "child=$child\ntarget=$target\nmScrollingView=$mScrollingView\nmViewToShrink=$mViewToShrink")
+        Log.d("greyson", "onStartNestedScroll， ")
+        if (type == ViewCompat.TYPE_NON_TOUCH) {
+            return false
+        }
         return axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
     }
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
-        val scrollHeight = mViewToShrink?.height ?: mOriginHeight
-        Log.i("greyson", "onNestedPreScroll: dy=$dy - ${mScrollingView.canScrollVertically(-1)} " +
-                "- mIsAnimating=$mIsAnimating - mIsCollapse=$mIsCollapse - mOriginHeight=$mOriginHeight - scrollHeight=$scrollHeight")
-        if (dy < 0 && !mScrollingView.canScrollVertically(-1) /*&& mIsCollapse*/ && !mIsAnimating
-                && scrollHeight <= mOriginHeight + mCollapseOffset && scrollHeight >= mOriginHeight) {
+        val currentShrinkViewHeight = mViewToShrink?.height ?: shrinkViewMinHeight
+        Log.i("greyson", "onNestedPreScroll: dy=$dy, 能向下滑动${target.canScrollVertically(-1)}" +
+                ", shrinkViewMinHeight=$shrinkViewMinHeight, shrinkViewMaxHeight=$shrinkViewMaxHeight, scrollHeight=$currentShrinkViewHeight")
 
+        if (dy < 0 && !target.canScrollVertically(-1) && currentShrinkViewHeight <= shrinkViewMaxHeight) {//向下滑动，想放大
             updateHeight(dy)
 //            extendMap(true)
             consumed[1] = dy
-        } else if (dy > 0 /*&& !mIsCollapse*/ && !mIsAnimating
-                &&( scrollHeight <= mOriginHeight + mCollapseOffset && scrollHeight != mOriginHeight
-                /*|| scrollHeight == mOriginHeight + mCollapseOffset &&  */)) {
 
+        } else if (dy > 0 && /*currentShrinkViewHeight <= shrinkViewMaxHeight && */currentShrinkViewHeight > shrinkViewMinHeight) {
             updateHeight(dy)
-
 //            extendMap(false)
             consumed[1] = dy
         }
@@ -82,7 +84,7 @@ class ScrollShrinkView : LinearLayout, NestedScrollingParent2 {
     override fun onStopNestedScroll(target: View, type: Int) {}
 
     override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
-        return !mIsCollapse
+        return false
     }
 
 

@@ -45,12 +45,15 @@ public class ExampleUnitTest {
 
         ArrayList<Float> list = new ArrayList<>();
         list.add(10.1f);
+        list.add(12.9f);
         list.add(22.9f);
+        list.add(24.9f);
         // String jsonForList = new Gson().toJson(list);
-        String jsonForList = putForList(list);
+        String jsonForList =/*putForList(list);*/new Gson().toJson(list);
 
         try {
-            List<Float> list1 = getForList(jsonForList, Float.class);
+            List<Float> list1 = new Gson().fromJson(jsonForList, new TypeToken<List<Float>>() {}.getType());
+            // List<Float> list1 = getForList(jsonForList, Float.class);
             for (Float s : list1) {
                 System.out.println("解析： " + s);
             }
