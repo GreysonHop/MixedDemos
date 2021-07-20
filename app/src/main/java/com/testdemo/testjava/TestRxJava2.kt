@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import kotlin.random.Random
 
@@ -200,7 +201,9 @@ class TestRxJava2 {
         val add: (List<Int>) -> Int = { it.sum() }
         val getMap: (List<Int>) -> Map<Int, String> = {
             Thread.sleep(2 * 1000)
-            mapOf(Pair(2, "gan"), Pair(3, "hu"), Pair(1, "nong"))
+            Collections.unmodifiableMap(
+                mapOf(Pair(2, "gan"), Pair(3, "hu"), Pair(1, "nong"))
+            )
         }
 
         return Observable.fromIterable(list)
@@ -245,5 +248,20 @@ class TestRxJava2 {
 
             return "[$param]线程[${Thread.currentThread().name}]花费${rspTime}秒返回" //网络请求返回数据
         }
+    }
+
+    fun test() {
+        Observable.combineLatest(
+                Observable.intervalRange(0, 3, 1, 1, TimeUnit.SECONDS),
+                Observable.intervalRange(5, 3, 1, 1, TimeUnit.SECONDS),
+                //            Observable.just(4L, 5L, 6L),
+                //            Observable.just(1L, 2L, 3L),
+                BiFunction<Long, Long, Long> { t1, t2 ->
+                    println("$t1 - $t2")
+                    t1 + t2
+                }
+        )
+                //            .toList().toObservable()
+                .subscribe { t -> println("greyson, result = $t") }
     }
 }

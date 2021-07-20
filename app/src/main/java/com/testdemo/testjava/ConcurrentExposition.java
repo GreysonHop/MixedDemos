@@ -1,8 +1,11 @@
 package com.testdemo.testjava;
 
+import androidx.annotation.GuardedBy;
+
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
@@ -13,6 +16,11 @@ import java.util.concurrent.FutureTask;
 class ConcurrentExposition {
 
     public static void main(String[] args) {
+        // @GuardedBy("this")
+
+Thread.dumpStack();
+
+        new Exception().printStackTrace();
 
         Callable<Integer> eval = new Callable<Integer>() {
             @Override
@@ -29,6 +37,7 @@ class ConcurrentExposition {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         new TimerTask() {
             @Override
             public void run() {
@@ -37,5 +46,10 @@ class ConcurrentExposition {
         };
 
         new ArrayBlockingQueue<Integer>(10);
+
+        int cpuCount = Runtime.getRuntime().availableProcessors();
+        new CyclicBarrier(cpuCount, () -> {
+
+        });
     }
 }
