@@ -56,6 +56,11 @@ android {
             // signingConfig signingConfigs.release
             debuggable true
             minifyEnabled false
+
+            // 如果您使用的是 Android 插件 3.0.0 或更高版本，默认情况下仅针对“调试” build 类型停用 PNG 处理。
+            // 如需针对其他 build 类型停用此优化，请将以下代码添加到 build.gradle 文件中：
+            // Disables PNG crunching for the release build type.
+            crunchPngs false
         }
 
         /**
@@ -83,15 +88,39 @@ android {
         }
     }
 
-    // 测试多渠道打包，参考官网：https://developer.android.google.cn/studio/build/build-variants
-    flavorDimensions "version"//, "test"
+    // 测试多渠道打包（网上很多人将产品变种运用于渠道打包）。
+    // 参考官网：https://developer.android.google.cn/studio/build/build-variants。
+    // 请注意，具有不同应用 ID 的 APK 在 Google Play 商店中会被视为不同的应用。所以如果您想要改用相同的应用详情分发
+    // 多个 APK，每个 APK 以不同设备配置（如 API 级别）为目标，那么您必须对每个构建变体使用相同的应用 ID，但为每个 APK
+    // 提供不同的 versionCode。如需了解详情，请参阅多 APK 支持。
+    flavorDimensions "stage", "version"
     productFlavors {
-        greyson {
+        prod {
             dimension "version"
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Greyson'] //博客者应该是用了友盟的渠道统计SDK
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'prod'] //博客者应该是用了友盟的渠道统计SDK
         }
-        demo {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Demo']
+
+        dev {
+            dimension "version"
+            // The following configuration limits the "dev" flavor to using
+            // English stringresources and xxhdpi screen-density resources.
+            resConfigs "en", "xxhdpi"
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'dev']
+
+            // 会与build变体中的后缀连接到一起，比如".dev.debugStaging"。
+            // 如果希望同一设备上同时具有调试版本和发布版本，这会很有用，因为两个 APK 不能具有相同的应用 ID。
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
+
+        huawei {
+            dimension "stage"
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'HuaWei']
+        }
+
+        xiaomi {
+            dimension "stage"
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'XiaoMi']
         }
     }
 

@@ -72,9 +72,6 @@
   *** rewind();
 }
 
-# for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
-
 
 #PictureSelector 2.0
 -keep class com.luck.picture.lib.** { *; }
