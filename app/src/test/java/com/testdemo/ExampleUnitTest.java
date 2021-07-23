@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
 
-
     private TestClass testClass = new TestClass();
 
     class TestClass {
@@ -39,7 +38,7 @@ public class ExampleUnitTest {
         final String json = new Gson().toJson(map);
         System.out.println("json: \n" + json);
         HashMap<String, String> map1 = new Gson().fromJson(json, HashMap.class);
-        HashMap<String, String> map2 = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
+        HashMap<String, String> map2 = new Gson().fromJson(json, new TypeToken<HashMap<String, String>>() {}.getType());
         System.out.println("map2:" + map1.get("text"));
 
 
@@ -72,26 +71,25 @@ public class ExampleUnitTest {
     }
 
     private <K, V> HashMap<K, V> getForMap(String jsonStr, Class<K> clazzK, Class<V> clazzV) {
-        return new Gson().fromJson(jsonStr, new TypeToken<HashMap<K, V>>(){}.getType());
+        return new Gson().fromJson(jsonStr, new TypeToken<HashMap<K, V>>() {}.getType());
     }
 
     public <T> String putForList(List<T> value) {
-        Type listType = new TypeToken<List<T>>(){}.getType();
+        Type listType = new TypeToken<List<T>>() {}.getType();
         String data = new Gson().toJson(value, value.getClass());
         return data;
     }
+
     private <T> List<T> getForList(String jsonForList, Class<T> clazz) {
         try {
             new Gson().fromJson(jsonForList, clazz);
-            List<T> ret = new Gson().fromJson(jsonForList, new TypeToken<List<T>>(){}.getType());
+            List<T> ret = new Gson().fromJson(jsonForList, new TypeToken<List<T>>() {}.getType());
             return ret;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
-
 
 
     @Test
@@ -162,43 +160,5 @@ public class ExampleUnitTest {
             System.out.println(getName() + " final = " + value);
         }
     }
-}
 
-class ThreadTest {
-
-    public static void main(String[] args) throws InterruptedException {
-        One one = new One();
-
-        Someone someone = new Someone();
-        someone.test(one);
-
-        Thread.sleep(1500);
-        one.stop = true;
-        Thread.sleep(1500);
-    }
-}
-
-class Someone {
-
-    void test(One one) {
-        System.out.println("main's one=" + one);
-        new Thread(() -> {
-            while(!one.stop) {
-                System.out.println("t1's one=" + one);
-            }
-        }).start();
-
-        /*new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("t2's one=" + one);
-            one.stop = true;
-        }).start();*/
-    }
-}
-class One {
-    boolean stop = false;
 }

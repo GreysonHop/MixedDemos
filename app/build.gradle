@@ -135,6 +135,7 @@ android {
 
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 
     /**
@@ -146,9 +147,9 @@ android {
      * </LinearLayout>
      * 附：视图绑定不需要特别标记的XML布局文件，因此在应用中采用速度更快。在模块中启用视图绑定后，它会自动应用于该模块的所有布局
      */
-    viewBinding { //启用视图绑定功能。看官方的一些Demo发现dataBinding为true时，viewBinding可以不用设置？但自己测试却还是需要
-        enabled = true
-    }
+    /*viewBinding { //启用视图绑定功能。看官方的一些Demo发现dataBinding为true时，viewBinding可以不用设置？但自己测试却还是需要
+        enabled = true // 另见buildFeatures
+    }*/
 
     /*packagingOptions {//so库冲突时，用下面代码表示只采用第一次读取到的那个
         pickFirst "lib/mips/*.so"
