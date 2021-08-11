@@ -3,10 +3,15 @@ package com.testdemo;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsProvider;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
@@ -22,6 +27,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
@@ -90,25 +97,40 @@ public class ApplicationTest {
     @Test
     public void testAndroidQ() {
         BufferedInputStream bufferedInputStream = null;
+        InputStream uriFileViaQueryIS = null;
         try {
             File file = mTargetContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-            Log.d("greyson", "Documents' path: " + file.getAbsolutePath());
+
+            Log.d("greyson", "Documents' path: " + file.getAbsolutePath() + "\nFilesDir="
+                    + mTargetContext.getFilesDir().getAbsolutePath());
+
             final String fileName = "test.txt";
             // final String filePath = file.getAbsolutePath() + "/" + fileName;
             final String filePath = "/storage/emulated/0/Documents/" + fileName;
             Log.d("greyson", "filePath's path: " + filePath);
-            final String uriPath = "content://com.android.externalstorage.documents/document/primary%3ADocuments%2Ftest.txt";
+            final String uriPath = "content://com.android.externalstorage.documents/document/primary:Documents/test.txt";
 
-Uri uri1 = Uri.parse(uriPath);
-// Uri uri1 = Uri.parse("file:///sdcard/Documents/test.txt");
-String uri2 = Uri.decode("file:///sdcard/Documents/test.txt");
+            Uri uriFromFile = Uri.fromFile(new File(filePath));
+            Cursor cursor = mTargetContext.getContentResolver().query(uriFromFile,
+                    new String[]{MediaStore.Files.FileColumns.DATA},
+                    null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                String uriViaQuery = cursor.getString(0);
+                System.out.println("greyson: uriFilePath=" + uriViaQuery);
+                uriFileViaQueryIS = mTargetContext.getContentResolver().openInputStream(Uri.parse(uriViaQuery));
+            }
+
+             //Uri uri = Uri.fromFile(new File(filePath));
+             Uri uri1 = Uri.parse(uriPath);
+            // Uri uri1 = Uri.parse("file:///sdcard/Documents/test.txt");
+            String uri2 = Uri.decode("file:///sdcard/Documents/test.txt");
             Log.d("greyson", "testAndroidQ: " + uri2);
-            // Uri uri = Uri.fromFile(new File(filePath));
 
-            InputStream is = mTargetContext.getContentResolver().openInputStream(uri1);
+            //mTargetContext.getContentResolver().getPersistedUriPermissions()
+            InputStream directlyOpenIS = mTargetContext.getContentResolver().openInputStream(uri1);
             // InputStream is = mTargetContext.openFileInput(filePath);
 
-            bufferedInputStream = new BufferedInputStream(is);
+            bufferedInputStream = new BufferedInputStream(directlyOpenIS);
             Scanner scanner = new Scanner(bufferedInputStream);
             while (scanner.hasNextLine()) {
                 Log.d("greyson", "content: " + scanner.nextLine());
@@ -123,12 +145,31 @@ String uri2 = Uri.decode("file:///sdcard/Documents/test.txt");
             e.printStackTrace();
         } finally {
             try {
+                uriFileViaQueryIS.close();
                 if (bufferedInputStream != null) {
                     bufferedInputStream.close();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Test
+    public void testGeo() {
+        double longitude = 114.163823; double latitude = 22.412874;
+
+        try {
+            Geocoder gc = new Geocoder(mTargetContext, Locale.getDefault());
+            List<Address> addressList = gc.getFromLocation(latitude, longitude, 5);
+            Address address = addressList.get(0);
+            boolean isAbroad = false;
+            if (address != null) {
+                isAbroad = !TextUtils.equals("CN", address.getLocale().getCountry());
+            }
+            Log.d("greyson","isAbroad = " + isAbroad);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
