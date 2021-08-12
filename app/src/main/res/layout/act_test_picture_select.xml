@@ -17,4 +17,9 @@
 
     <include layout="@layout/nim_picture_panel" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_read_file"
+        android:text="Read"/>
 </LinearLayout>
