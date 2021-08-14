@@ -9,8 +9,8 @@ import kotlinx.coroutines.*
  */
 
 class TestCoroutines : BaseCommonActivity(), CoroutineScope by MainScope() {
-    companion object{
-        private const val TAG = "TestCoroutines"
+    init {
+        TAG = "TestCoroutines"
     }
 
     override fun initView() {
@@ -28,7 +28,7 @@ class TestCoroutines : BaseCommonActivity(), CoroutineScope by MainScope() {
 
     }
 
-    private suspend fun getData() : String {
+    private suspend fun getData(): String {
         delay(3000)
         return "I'm the data!"
     }

@@ -31,7 +31,7 @@ import java.util.regex.Pattern
  * 通过动画做一个从屏幕下外面慢慢向上移动的组件，和可上下拉的组件
  */
 class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding>(), View.OnClickListener {
-    private val TAG = "greyson_Test2"
+    init { TAG = "greyson_Test2" }
 
     private var isSee = false
 
@@ -106,13 +106,13 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
                 .setOnItemClickListener { _, position ->
                     when (position) {
                         0 -> {
-                            Log.d("greyson", "TestAnimationDialogAct-onCreate: click0")
+                            Log.d(TAG, "TestAnimationDialogAct-onCreate: click0")
                         }
 
-                        1 -> Log.d("greyson", "TestAnimationDialogAct-onCreate: click1")
+                        1 -> Log.d(TAG, "TestAnimationDialogAct-onCreate: click1")
 
                         2 -> {
-                            Log.d("greyson", "TestAnimationDialogAct-onCreate: click2")
+                            Log.d(TAG, "TestAnimationDialogAct-onCreate: click2")
                         }
                     }
                 }
@@ -244,7 +244,7 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
     }
 
     private fun showShareLayout(show: Boolean) = if (show) {
-        println("greyson, height=${binding.shareLayout.height}")
+        println("$TAG, height=${binding.shareLayout.height}")
         binding.shareLayout.animate().setDuration(300).translationY(0f)
                 .withEndAction { binding.blackBgIV.isClickable = true }
                 .start()
@@ -300,10 +300,10 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
             val pattern = Pattern.compile("(?<=station_invite_code:).{6}")
             val matcher = pattern.matcher(text)
 
-            Log.i("greyson", "clip content = $text - groupCount=${matcher.groupCount()}")
+            Log.i(TAG, "clip content = $text - groupCount=${matcher.groupCount()}")
             if (matcher.find()) {
                 val mInviteCode = matcher.group()
-                Log.i("greyson", " group=$mInviteCode")
+                Log.i(TAG, " group=$mInviteCode")
             }
         }
     }

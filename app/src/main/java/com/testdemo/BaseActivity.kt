@@ -14,6 +14,11 @@ import java.util.*
 
 /**
  * Create by Greyson
+ *
+ * 所有Activity的基类。提供一些共性和操作。请尽量不要直接继承该类，而是它的子类 BaseCommonActivity
+ * 和 BaseBindingActivity
+ * @see BaseCommonActivity
+ * @see BaseBindingActivity
  */
 @SuppressLint("Registered")
 abstract class BaseActivity : AppCompatActivity() {
@@ -34,9 +39,11 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected var disableDefaultOrientation = false
 
+    protected var TAG = "greyson"// javaClass.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("greyson", "BaseActivity onCreate()__当前类名：${javaClass.simpleName}")
+        Log.e(TAG, "BaseActivity onCreate()__当前类名：${javaClass.simpleName}")
 
         initialize()
         if (!disableDefaultOrientation) {

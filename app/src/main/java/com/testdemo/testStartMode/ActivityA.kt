@@ -25,6 +25,9 @@ class ActivityA : BaseCommonActivity() {
         textView.text = "start B"
         textView.textSize = Utils.dp2px(20).toFloat()
         textView.gravity = Gravity.CENTER
+        if (Build.VERSION.SDK_INT >= 21) {//ActivityOptions实现Activity动画
+            textView.transitionName = "test_transition"
+        }
 
         textView.setOnClickListener {
             startActivity(Intent(this, ActivityB::class.java)
@@ -34,9 +37,6 @@ class ActivityA : BaseCommonActivity() {
     }
 
     override fun initView() {
-        if (Build.VERSION.SDK_INT >= 21) {//ActivityOptions实现Activity动画
-            textView.transitionName = "test_transition"
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

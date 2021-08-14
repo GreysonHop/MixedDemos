@@ -1,38 +1,42 @@
 package com.testdemo.testCanDragLayout
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.ClipData
-import android.os.Bundle
 import android.util.Log
 import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import com.testdemo.BaseBindingActivity
 import com.testdemo.R
-import kotlinx.android.synthetic.main.test_drag_view_activity.*
+import com.testdemo.databinding.TestDragViewActivityBinding
 
 /**
  * Created by Greyson on 2019/9/14.
  * 将View从一个容器拖曳到另一个容器中
  */
-class TestDragViewActivity : Activity() {
-    private val TAG: String = "greyson"
+@SuppressLint("ClickableViewAccessibility")
+class TestDragViewActivity : BaseBindingActivity<TestDragViewActivityBinding>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.test_drag_view_activity)
+    override fun getViewBinding(): TestDragViewActivityBinding {
+        return TestDragViewActivityBinding.inflate(layoutInflater)
+    }
 
-        myimage1.setOnTouchListener(MyTouchListener())
-        myimage2.setOnTouchListener(MyTouchListener())
-        myimage3.setOnTouchListener(MyTouchListener())
-        myimage4.setOnTouchListener(MyTouchListener())
-        myimage5.setOnTouchListener(MyTouchListener())
+    override fun initView() {
+        binding.apply {
+            myimage1.setOnTouchListener(MyTouchListener())
+            myimage2.setOnTouchListener(MyTouchListener())
+            myimage3.setOnTouchListener(MyTouchListener())
+            myimage4.setOnTouchListener(MyTouchListener())
+            myimage5.setOnTouchListener(MyTouchListener())
 
-        topleft.setOnDragListener(MyDragListener())
-        topright.setOnDragListener(MyDragListener())
-        bottomleft.setOnDragListener(MyDragListener())
-        bottomright.setOnDragListener(MyDragListener())
+            topleft.setOnDragListener(MyDragListener())
+            topright.setOnDragListener(MyDragListener())
+            bottomleft.setOnDragListener(MyDragListener())
+            bottomright.setOnDragListener(MyDragListener())
+        }
     }
 
     inner class MyTouchListener : View.OnTouchListener {
@@ -52,8 +56,8 @@ class TestDragViewActivity : Activity() {
     }
 
     inner class MyDragListener : View.OnDragListener {
-        var enterShape = resources.getDrawable(R.drawable.shape_droptarget)
-        val normalShape = resources.getDrawable(R.drawable.shape)
+        private var enterShape = ContextCompat.getDrawable(this@TestDragViewActivity, R.drawable.shape_droptarget)
+        private val normalShape = resources.getDrawable(R.drawable.shape, theme)
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
             when (event?.action) {
@@ -62,10 +66,10 @@ class TestDragViewActivity : Activity() {
                     Log.i(TAG, "started v = ${v?.id}")
 
                 DragEvent.ACTION_DRAG_ENTERED ->
-                    v?.setBackgroundDrawable(enterShape)
+                    v?.background = enterShape
 
                 DragEvent.ACTION_DRAG_EXITED ->
-                    v?.setBackgroundDrawable(normalShape)
+                    v?.background = normalShape
 
                 DragEvent.ACTION_DROP -> {
                     Log.i(TAG, "drop v = ${v?.id}")
@@ -82,7 +86,7 @@ class TestDragViewActivity : Activity() {
 
                 DragEvent.ACTION_DRAG_ENDED -> {
                     Log.i(TAG, "Ended v = ${v?.id}")
-                    v?.setBackgroundDrawable(normalShape)
+                    v?.background = normalShape
                     (event.localState as View).visibility = View.VISIBLE
                 }
             }

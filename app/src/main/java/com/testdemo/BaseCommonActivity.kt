@@ -1,14 +1,8 @@
 package com.testdemo
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.annotation.AnimRes
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Create by Greyson
@@ -24,11 +18,19 @@ abstract class BaseCommonActivity : BaseActivity() {
         }
     }
 
+    /**
+     * 实现类可重写此方法，返回一个布局的资源ID，用于当前Activity的setContentView()。此方法与[getLayoutView]
+     * 方法实现其中一个即可，前者优先级高。
+     */
     @LayoutRes
-    protected open fun getLayoutResId(): Int {//todo greyson 有没有注解可以标明两个方法中必须有一个被调用
+    protected open fun getLayoutResId(): Int { //todo greyson 有没有注解可以标明两个方法中必须有一个被调用
         return 0
     }
 
+    /**
+     * 实现类可重写此方法，返回一个View，用于当前Activity的setContentView()。此方法与[getLayoutResId]
+     * 方法实现其中一个即可，后者优先级高。
+     */
     protected open fun getLayoutView(): View? {
         return null
     }
