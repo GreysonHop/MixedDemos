@@ -48,6 +48,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
+import com.testdemo.BaseBindingActivity;
 import com.testdemo.R;
 import com.testdemo.databinding.ActTestSpecialEditLayoutBinding;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
@@ -62,8 +63,7 @@ import java.util.Locale;
  * Created by Greyson on 2018/10/15.
  */
 
-public class SpecialEditLayoutAct extends Activity {
-    private ActTestSpecialEditLayoutBinding binding;
+public class SpecialEditLayoutAct extends BaseBindingActivity<ActTestSpecialEditLayoutBinding> {
 
     private PhoneReceiver phoneReceiver;
     //private PopupWindow mPopupWindow;
@@ -77,10 +77,13 @@ public class SpecialEditLayoutAct extends Activity {
     private final int MENU_ID_MY = 10086;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActTestSpecialEditLayoutBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot()); //视图绑定方式
+    public ActTestSpecialEditLayoutBinding getViewBinding() {
+        return ActTestSpecialEditLayoutBinding.inflate(getLayoutInflater());
+    }
+
+
+    @Override
+    protected void initView() {
         // setContentView(R.layout.act_test_special_edit_layout);
 
         // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
@@ -157,19 +160,19 @@ public class SpecialEditLayoutAct extends Activity {
     private void setCustomSelectableTextCallBack() {
         binding.flContent.setOnClickListener((v) -> {
             startActivity(new Intent(this, TestPopupListActivity.class));
-            Log.d("greyson", "onClick() fl_content");
+            Log.d(TAG, "onClick() fl_content");
         });
 
         binding.tvTestClickable.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                Log.d("greyson", "onCreateActionMode mode=" + mode + "_menu=" + menu.size());
+                Log.d(TAG, "onCreateActionMode mode=" + mode + "_menu=" + menu.size());
                 return true;
             }
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                Log.d("greyson", "onPrepareActionMode mode=" + mode + "_menu=" + menu);
+                Log.d(TAG, "onPrepareActionMode mode=" + mode + "_menu=" + menu);
                 if (menu.findItem(MENU_ID_MY) == null) {
                     menu.add(Menu.NONE, MENU_ID_MY, 0, "myMenu)");
                     return true;
@@ -179,7 +182,7 @@ public class SpecialEditLayoutAct extends Activity {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                Log.d("greyson", "onActionItemClicked mode=" + mode + "_menuItem=" + item);
+                Log.d(TAG, "onActionItemClicked mode=" + mode + "_menuItem=" + item);
                 if (item.getItemId() == MENU_ID_MY) {
                     Toast.makeText(SpecialEditLayoutAct.this, "点击了自定义菜单项", Toast.LENGTH_SHORT).show();
                     return true;
@@ -189,7 +192,7 @@ public class SpecialEditLayoutAct extends Activity {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                Log.d("greyson", "onDestroyActionMode mode=" + mode);
+                Log.d(TAG, "onDestroyActionMode mode=" + mode);
             }
         });
 
@@ -271,17 +274,17 @@ public class SpecialEditLayoutAct extends Activity {
         }
 
         LocationManager mManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        // Log.d("greyson", "" + mManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));//这个判断是否必须
+        // Log.d(TAG, "" + mManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));//这个判断是否必须
         Location mLocation = mManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);//GPS_PROVIDER一直返回null?
 
         try {
             double mLat = mLocation.getLatitude();//获取纬度
             double mLng = mLocation.getLongitude();//获取经度
-            Log.d("greyson", "lat= " + mLat + ", lng= " + mLng);
+            Log.d(TAG, "lat= " + mLat + ", lng= " + mLng);
             Geocoder gc = new Geocoder(this, Locale.getDefault());
             List<Address> list = gc.getFromLocation(mLat, mLng, 5);
             for (Address address : list) {
-                Log.d("greyson", "address = " + address);
+                Log.d(TAG, "address = " + address);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -296,7 +299,7 @@ public class SpecialEditLayoutAct extends Activity {
         IntentFilter filters = new IntentFilter();
         filters.addAction("android.intent.action.PHONE_STATE");
         phoneReceiver = new PhoneReceiver(type -> {//0未知 1挂断 2接通、拨打 3响铃
-            Log.d("greyson", "PhoneReceiver: type = " + type);
+            Log.d(TAG, "PhoneReceiver: type = " + type);
             if (type == 3) {
                 Toast.makeText(SpecialEditLayoutAct.this, "TestDemo提醒您，电话来啦！", Toast.LENGTH_SHORT).show();
             }
@@ -316,13 +319,13 @@ public class SpecialEditLayoutAct extends Activity {
                 public void onCallStateChanged(int state, String incomingNumber) {
                     switch (state) {
                         case TelephonyManager.CALL_STATE_IDLE:// 电话挂断
-                            Log.d("greyson", "onCallStateChanged: 空闲...");
+                            Log.d(TAG, "onCallStateChanged: 空闲...");
                             break;
                         case TelephonyManager.CALL_STATE_OFFHOOK: //电话通话的状态
-                            Log.d("greyson", "onCallStateChanged: 通话中...");
+                            Log.d(TAG, "onCallStateChanged: 通话中...");
                             break;
                         case TelephonyManager.CALL_STATE_RINGING: //电话响铃的状态
-                            Log.d("greyson", "onCallStateChanged: 响铃");
+                            Log.d(TAG, "onCallStateChanged: 响铃");
                             break;
                     }
                 }

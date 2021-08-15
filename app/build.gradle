@@ -171,9 +171,11 @@ dependencies {
     implementation files('libs/brokenview.jar')
 
     // 跟创建项目时自带的配置一样
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    androidTestImplementation 'com.android.support.test:rules:1.0.2' // 为了Activity的单元测试而添加
 
     /*    安卓官方架构相关包    */
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

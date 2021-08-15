@@ -39,6 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected var disableDefaultOrientation = false
 
+    @JvmField // 添加这个注解，子类非Kotlin类的情况下才能访问该 TAG 变量。如SpecialEditLayoutAct
     protected var TAG = "greyson"// javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
