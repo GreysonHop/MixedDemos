@@ -15,6 +15,8 @@ import com.testdemo.util.Utils
 
 /**
  * Created by Greyson on 2020/12/14
+ *
+ * 在Android11的虚拟机上发现：普通的后台服务（没有运行任何逻辑），当应用最小化、处于后台时，1分钟后会被销毁。
  */
 class AVChatService : Service() {
     companion object {
@@ -60,11 +62,14 @@ class AVChatService : Service() {
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .build()*/
         if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            Log.d(TAG, "onStartCommand: 有通知权限将启动前台服务，当前应用在前台=${Utils.isAppForeground()}")
             val notification = notifier.buildCallingNotification()
 
             // Notification ID cannot be 0.
+            // 通知被关掉（NotificationManager.cancel()）的时候，前台服务也会跟着销毁
             startForeground(AVChatNotification.CALLING_NOTIFY_ID, notification)
         } else {
+            Log.d(TAG, "onStartCommand: 没有通知权限将stopSelf(); 当前应用在前台=${Utils.isAppForeground()}")
             stopSelf()
         }
         return super.onStartCommand(intent, flags, startId)
@@ -111,6 +116,7 @@ class AVChatService : Service() {
 
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
+        // Activity.TRIM_MEMORY_UI_HIDDEN
         Log.w(TAG, "onTrimMemory(), level=$level")
     }
 

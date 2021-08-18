@@ -64,8 +64,9 @@ class AVChatNotification(private val context: Context) {
     /**
      *  [Intent.setFlags()] 方法可帮助保留用户在通过通知打开应用后的预期导航体验。但您是否要使用这一方法取决于您要启动的 Activity 类型，类型可能包括：
 
-    专用于响应通知的 Activity。用户在正常使用应用时不会无缘无故想导航到这个 Activity，因此该 Activity 会启动一个新任务，而不是添加到应用的现有任务和返回堆栈。这就是以上示例中创建的 Intent 类型。
-    应用的常规应用流程中存在的 Activity。在这种情况下，启动 Activity 时应创建返回堆栈，以便保留用户对返回和向上按钮的预期。
+     * 专用于响应通知的 Activity。用户在正常使用应用时不会无缘无故想导航到这个 Activity，因此该 Activity 会启动
+     * 一个新任务，而不是添加到应用的现有任务和返回堆栈。这就是以上示例中创建的 Intent 类型。
+     * 应用的常规应用流程中存在的 Activity。在这种情况下，启动 Activity 时应创建返回堆栈，以便保留用户对返回和向上按钮的预期。
      */
     fun buildCallingNotification(): Notification? {
         if (callingNotification == null) {

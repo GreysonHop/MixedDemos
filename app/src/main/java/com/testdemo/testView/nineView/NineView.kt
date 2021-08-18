@@ -62,8 +62,8 @@ class NineView : LinearLayout {
 
         for (i in 0 until childCount.coerceAtMost(9)) {
             val childView = getChildAt(i)
-            Log.e("greyson", "NineView-onMeasure's child$i: ${childView.layoutParams.width} _ ${childView.layoutParams.height}")
-            //measureChild(childView, widthMeasureSpec, heightMeasureSpec)
+            // Log.e("greyson", "NineView-onMeasure's child$i: ${childView.layoutParams.width} _ ${childView.layoutParams.height}")
+            // measureChild(childView, widthMeasureSpec, heightMeasureSpec)
             childView.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
                 MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST))
         }
