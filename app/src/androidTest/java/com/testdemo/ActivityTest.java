@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -24,23 +25,24 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
  * 测试Activity和View。区别于{@link ApplicationTest}类，后者是测试业务逻辑的
  */
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class ActivityTest {
 
-    /*@Rule
+    @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void buttonTest() throws Exception {
+    public void buttonTest() {
         onView(withId(R.id.previous))
                 .check(matches(withText("previous")))
                 .perform(click());
         onView(withId(R.id.next))
                 .check(matches(withText("next")));
-    }*/
+    }
 
     //TODO greyson_2021/8/15 现在还跑不起来，提示无法通过Intent启动某个Activity...
-    @Test
+    /*@Test
     public void useAppContext() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Intent intent = new Intent(appContext, MainActivity.class);
@@ -49,5 +51,5 @@ public class ActivityTest {
 
         ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class, false, false);
         activityTestRule.launchActivity(intent);
-    }
+    }*/
 }
