@@ -1,6 +1,7 @@
 package com.testdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -122,12 +123,14 @@ public class ApplicationTest {
 
              //Uri uri = Uri.fromFile(new File(filePath));
              Uri uri1 = Uri.parse(uriPath);
+            mTargetContext.grantUriPermission(mTargetContext.getPackageName(), uri1, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             // Uri uri1 = Uri.parse("file:///sdcard/Documents/test.txt");
             String uri2 = Uri.decode("file:///sdcard/Documents/test.txt");
             Log.d("greyson", "testAndroidQ: " + uri2);
 
             //mTargetContext.getContentResolver().getPersistedUriPermissions()
             InputStream directlyOpenIS = mTargetContext.getContentResolver().openInputStream(uri1);
+            mTargetContext.revokeUriPermission(mTargetContext.getPackageName(), uri1, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             // InputStream is = mTargetContext.openFileInput(filePath);
 
             bufferedInputStream = new BufferedInputStream(directlyOpenIS);
@@ -157,17 +160,19 @@ public class ApplicationTest {
 
     @Test
     public void testGeo() {
-        double longitude = 114.163823; double latitude = 22.412874;
+        // double longitude = 114.163823; double latitude = 22.412874; // 香港坐标
+        double longitude = 128.275412; double latitude = 36.511651; // 韩国坐标
 
         try {
-            Geocoder gc = new Geocoder(mTargetContext, Locale.getDefault());
-            List<Address> addressList = gc.getFromLocation(latitude, longitude, 5);
+            Geocoder gc = new Geocoder(mTargetContext, Locale.US);
+            List<Address> addressList = gc.getFromLocation(latitude, longitude, 3);
             Address address = addressList.get(0);
             boolean isAbroad = false;
             if (address != null) {
                 isAbroad = !TextUtils.equals("CN", address.getLocale().getCountry());
+                Log.d("greyson", "testGeo=" + address.toString() + "\nlocale=" + address.getLocale());
             }
-            Log.d("greyson","isAbroad = " + isAbroad);
+            Log.d("greyson","isAbroad = " + isAbroad + "， local locale=" + Locale.getDefault());
         } catch (Exception e) {
             e.printStackTrace();
         }
