@@ -52,7 +52,7 @@ class NineView : LinearLayout {
                 else -> "UNSPECIFIED"
             }
         }
-        Log.e("greyson", "NineView-onMeasure: mode=${getModeStr(widthMode)} _ size = $widthSize" +
+        Log.w("greyson", "NineView-onMeasure: mode=${getModeStr(widthMode)} _ size = $widthSize" +
                 " \nmode2= ${getModeStr(heightMode)} _ size2= $heightSize")
 
         val column = if (childCount <= 4) 2 else 3 //总共多少列
@@ -62,7 +62,7 @@ class NineView : LinearLayout {
 
         for (i in 0 until childCount.coerceAtMost(9)) {
             val childView = getChildAt(i)
-            // Log.e("greyson", "NineView-onMeasure's child$i: ${childView.layoutParams.width} _ ${childView.layoutParams.height}")
+            // Log.d("greyson", "NineView-onMeasure's child$i: ${childView.layoutParams.width} _ ${childView.layoutParams.height}")
             // measureChild(childView, widthMeasureSpec, heightMeasureSpec)
             childView.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST),
                 MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.AT_MOST))

@@ -24,7 +24,7 @@ class AVChatNotification(private val context: Context) {
         private const val BG_CHANNEL_ID = "avchat_tip_channel_001"
         private const val BG_CHANNEL_NAME = "音视频通话相关的通知"
         private const val BG_CHANNEL_DESC = "如果不打开可能会收不到音视频通话的通知"
-        public const val CALLING_NOTIFY_ID = 0x101
+        const val CALLING_NOTIFY_ID = 0x101
         private const val MISS_CALL_NOTIFY_ID = 0x102
     }
 
@@ -70,18 +70,20 @@ class AVChatNotification(private val context: Context) {
      */
     fun buildCallingNotification(): Notification? {
         if (callingNotification == null) {
-            val localIntent = Intent().apply {
+            /*val localIntent = Intent().apply {
                 setClass(context, TestNineViewAct::class.java)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             }
             val title = displayName
             val content = "测试通知的内容！。。。"
-            val iconId = R.drawable.call_icon_gift
+            val iconId = R.drawable.ic_start_call
             val pendingIntent = PendingIntent.getActivity(context, 0, localIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             callingNotification = makeNotification(pendingIntent, title, content, title, iconId, false, vibrate = false)
                 .apply {
                     flags = flags or Notification.FLAG_NO_CLEAR
-                }
+                }*/
+
+            callingNotification = buildPriorNotification(context, "Incoming call", "(919) 555-1234", R.drawable.contact_image)
         }
         return callingNotification
     }
@@ -95,11 +97,14 @@ class AVChatNotification(private val context: Context) {
             val pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val content = "语音通话"
             val tickerText = "$displayName: 【网络通话】"
-            val iconId = R.drawable.call_icon_gift
+            val iconId = R.drawable.ic_avchat_hangup
             missCallNotification = makeNotification(pendingIntent, displayName, content, tickerText, iconId, true, vibrate = true)
         }
     }
 
+    /**
+     * 创建普通的通知
+     */
     private fun makeNotification(
         pendingIntent: PendingIntent, title: String?, content: String, tickerText: String?,
         iconId: Int, ring: Boolean, vibrate: Boolean
@@ -118,11 +123,35 @@ class AVChatNotification(private val context: Context) {
             .setTicker(tickerText)
             .setAutoCancel(false)
             .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT) //官方表示必须有，兼容7.1及以下
             // .setContentIntent(pendingIntent)
-            .setFullScreenIntent(pendingIntent, false)
-            .setPriority(NotificationCompat.PRIORITY_MAX) //官方表示必须有，兼容7.1及以下
-            // .setCategory()
             .build()
+    }
+
+    /**
+     * 官方创建高优先级通知的方法：
+     */
+    private fun buildPriorNotification(context: Context, title: String?, content: String, iconId: Int) : Notification {
+        val fullScreenIntent = Intent(context, TestNineViewAct::class.java)
+        val fullScreenPendingIntent = PendingIntent.getActivity(context, 0,
+            fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val notificationBuilder =
+            NotificationCompat.Builder(context, BG_CHANNEL_ID)
+                .setSmallIcon(iconId)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+
+                // Use a full-screen intent only for the highest-priority alerts where you
+                // have an associated activity that you would like to launch after the user
+                // interacts with the notification. Also, if your app targets Android 10
+                // or higher, you need to request the USE_FULL_SCREEN_INTENT permission in
+                // order for the platform to invoke this notification.
+                .setFullScreenIntent(fullScreenPendingIntent, true)
+
+        /*val incomingCallNotification =*/ return notificationBuilder.build()
     }
 
     private fun createMessageNotificationChannel() {

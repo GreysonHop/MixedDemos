@@ -48,7 +48,7 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
     private var notifier = AVChatNotification(this)
 
     override fun initView() {
-        Log.d("greyson", "TestDataBindingAct-initView: task = $taskId")
+        Log.d(TAG, "TestDataBindingAct-initView: task = $taskId")
         mBinding = DataBindingUtil.setContentView<ActTestDatabindingBinding>(this, R.layout.act_test_databinding)
             .apply {
                 lifecycleOwner = this@TestDataBindingAct // Specify the current activity as the lifecycle owner.
@@ -103,7 +103,7 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
         override fun run() {
             mBinding?.tvRunText?.text = "running: $runCount"
             runCount++
-            Log.e("greyson", "callTimeout运行，current thread=${Thread.currentThread()}, 应用是否在前台：${Utils.isAppForeground()}, this=$this。")
+            Log.e(TAG, "callTimeout运行，current thread=${Thread.currentThread()}, 应用是否在前台：${Utils.isAppForeground()}, this=$this。")
 
             if (Utils.isAppForeground()) {
                 startActivity(Intent(this@TestDataBindingAct, TestNineViewAct::class.java))
@@ -111,7 +111,7 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(Intent(this@TestDataBindingAct, AVChatService::class.java))
                 } else {
-                    // 在安卓11的虚拟机上，可能在后台直接启动普通的后台服务啊，网上怎么说8.0之后不能？？？
+                    // 在安卓11的虚拟机上，可以在后台直接启动普通的后台服务啊，网上怎么说8.0之后不能？？？
                     startService(Intent(this@TestDataBindingAct, AVChatService::class.java))
                 }
             }
@@ -140,16 +140,16 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
             R.id.btn_notify_cancel -> notifier.activeCallingNotification(false)
 
             R.id.btn_startRun -> {
-                Log.e("greyson", "click startRun, post delayed callTimeout. current thread=${Thread.currentThread()}")
+                Log.e(TAG, "click startRun, post delayed callTimeout. current thread=${Thread.currentThread()}")
                 handler.postDelayed(callTimeout, 3000)
             }
 
             R.id.btn_stopRun -> {
-                Log.e("greyson", "click stopRun, remove callTimeout. current thread=${Thread.currentThread()}")
+                Log.e(TAG, "click stopRun, remove callTimeout. current thread=${Thread.currentThread()}")
                 handler.removeCallbacks(callTimeout)
                 val intent = Intent(this@TestDataBindingAct, AVChatService::class.java)
                 intent.putExtra("order", -1)
-                Log.e("greyson", "stopRun stop AVChatService by startService().")
+                Log.e(TAG, "stopRun stop AVChatService by startService().")
                 startService(intent)
             }
 

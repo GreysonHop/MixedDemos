@@ -44,7 +44,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e(TAG, "BaseActivity onCreate()__当前类名：${javaClass.simpleName}")
+        Log.e(TAG, "onCreate()__当前类名：${javaClass.simpleName}")
 
         initialize()
         if (!disableDefaultOrientation) {
