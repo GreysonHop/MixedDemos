@@ -225,6 +225,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:annotations:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.20") // kotlin反射必须导入的
+
 
     /*    第三方框架整体功能的导包    */
     implementation 'com.google.android.libraries.places:places:2.1.0'

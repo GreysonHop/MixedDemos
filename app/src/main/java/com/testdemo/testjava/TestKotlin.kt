@@ -1,5 +1,8 @@
 package com.testdemo.testjava
 
+import kotlin.reflect.full.*
+import kotlin.reflect.jvm.javaField
+
 open class TestKotlin {
     fun getString(): Int {
         return this.hashCode()
@@ -112,4 +115,13 @@ fun main(args: Array<String>) {
         0f to 0.1f
     }
     println("show me the x[$x] and y[$y]")
+
+    val clazz = TestKotlin::class
+    clazz.declaredFunctions
+    clazz.constructors.forEach { it.call() }
+    String::length.javaField
+
+
+    val f: TestKotlin.() -> Unit = TestKotlin::printThing
+    val fo: () -> Unit = ::foo
 }
