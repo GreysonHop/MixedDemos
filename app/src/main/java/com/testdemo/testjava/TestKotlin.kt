@@ -2,6 +2,8 @@ package com.testdemo.testjava
 
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 open class TestKotlin {
     fun getString(): Int {
@@ -124,4 +126,9 @@ fun main(args: Array<String>) {
 
     val f: TestKotlin.() -> Unit = TestKotlin::printThing
     val fo: () -> Unit = ::foo
+
+}
+
+fun main2() = runBlocking<Unit> {
+    launch {  }
 }
