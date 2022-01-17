@@ -16,8 +16,9 @@ import com.testdemo.R;
  * Created by qijian on 17/1/17.
  */
 public class ShadowLayerView extends View {
-    private Paint mPaint = new Paint();
+    private final Paint mPaint = new Paint();
     private Bitmap mDogBmp;
+    private final Rect dogRect = new Rect(200, 300, 0, 0);
     private int mRadius = 1, mDx = 10, mDy = 10;
     private boolean mSetShadow = true;
 
@@ -41,6 +42,8 @@ public class ShadowLayerView extends View {
         mPaint.setColor(Color.BLACK);
         mPaint.setTextSize(25);
         mDogBmp = BitmapFactory.decodeResource(getResources(), R.drawable.dog);
+        dogRect.right = 200 + mDogBmp.getWidth();
+        dogRect.bottom = 300 + mDogBmp.getHeight();
     }
 
 
@@ -81,6 +84,6 @@ public class ShadowLayerView extends View {
 
         canvas.drawCircle(200, 200, 50, mPaint);
 
-        canvas.drawBitmap(mDogBmp, null, new Rect(200, 300, 200 + mDogBmp.getWidth(), 300 + mDogBmp.getHeight()), mPaint);
+        canvas.drawBitmap(mDogBmp, null, dogRect, mPaint);
     }
 }

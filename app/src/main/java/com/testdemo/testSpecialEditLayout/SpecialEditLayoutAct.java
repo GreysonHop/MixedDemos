@@ -84,8 +84,6 @@ public class SpecialEditLayoutAct extends BaseBindingActivity<ActTestSpecialEdit
 
     @Override
     protected void initView() {
-        // setContentView(R.layout.act_test_special_edit_layout);
-
         // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
 
         binding.tvTestClickable.post(() -> {

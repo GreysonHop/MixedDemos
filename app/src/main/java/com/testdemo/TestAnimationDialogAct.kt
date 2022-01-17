@@ -44,8 +44,6 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
     }
 
     override fun initView() {
-        setContentView(R.layout.act_test_animationdialog)
-
         binding.chronometer.base = SystemClock.elapsedRealtime()
         binding.chronometer.setOnChronometerTickListener {
             Log.i(TAG, "base = ${binding.chronometer.base} - ${binding.chronometer.text}" +
@@ -191,8 +189,8 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
         }
     }
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
+    override fun onClick(v: View) {
+        when (v.id) {
             R.id.dragTV -> {
                 Toast.makeText(this, "drag TV said Hello !!!!!", Toast.LENGTH_SHORT).show()
                 (application as TestApplication).activity = this

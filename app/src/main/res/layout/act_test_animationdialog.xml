@@ -31,36 +31,6 @@
         android:scaleType="fitXY"
         android:src="@drawable/img5" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="545dp"
-        android:layout_marginEnd="20dp"
-        android:layout_gravity="right">
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="20dp"
-            android:elevation="10dp"
-            android:background="@drawable/contact_image" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="505dp"
-        android:layout_marginEnd="200dp"
-        android:layout_gravity="right">
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:elevation="10dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/img5" />
-    </FrameLayout>
-
-
-
     <TextView
         android:id="@+id/anim_btn"
         android:layout_width="wrap_content"
@@ -110,7 +80,7 @@
         android:text="showPopMenu"
         android:translationZ="0dp" />
 
-    <!--模糊的View会一起截图，性能消耗应该很高！-->
+    <!--模糊的View会一直截图，性能消耗应该很高！-->
     <!--<com.wonderkiln.blurkit.BlurLayout
         android:id="@+id/blurLayout"
         android:layout_width="match_parent"
@@ -166,7 +136,6 @@
         android:background="#FF171619"
         android:clickable="false"
         android:longClickable="false"
-        tools:visibility="visible"
         tools:alpha="0.7f"/>
 
     <LinearLayout
