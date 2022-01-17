@@ -13,9 +13,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.GridLayout;
@@ -590,6 +592,22 @@ public class PopMenu {
 
     }*/
 
+    private int getNavigationBarHeight(Context context) {
+        int showNavigationId = context.getResources().getIdentifier("config_showNavigationBar", "bool", "android");
+        // 判断系统是否写入了关于是否显示虚拟导航栏的相关变量,如果为true，表示有虚拟导航栏
+        try {
+            Log.w("greyson1", "showNavigationBar: " + (showNavigationId > 0 && context.getResources().getBoolean(showNavigationId)));
+        } catch (Exception e) {e.printStackTrace();}
+
+        boolean hasPermanentMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
+        int resId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        try {
+            Log.w("greyson1", "NavigationBarHeight: " + (resId > 0 ? context.getResources().getDimensionPixelSize(resId) : -1));
+        } catch (Exception e) {e.printStackTrace();}
+
+        return (resId > 0 && !hasPermanentMenuKey) ? context.getResources().getDimensionPixelSize(resId) : 0;
+    }
+
     public boolean checkDeviceHasNavigationBar(Context context) {
         WindowManager windowManager = ((Activity) context).getWindowManager();
 
@@ -618,16 +636,6 @@ public class PopMenu {
 
 
         return (screenRealHeight - screenHeight) > 0;//screenRealHeight上面方法中有计算
-    }
-
-    private int getNavigationBarHeight(Context context) {
-        int navigationBarHeight = 0;
-        Resources rs = context.getResources();
-        int id = rs.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (id > 0 && checkDeviceHasNavigationBar(context)) {
-            navigationBarHeight = rs.getDimensionPixelSize(id);
-        }
-        return navigationBarHeight;
     }
 
 

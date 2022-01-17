@@ -26,6 +26,20 @@ import com.testdemo.databinding.ActTestDatabindingBinding
 import com.testdemo.testView.nineView.TestNineViewAct
 import com.testdemo.util.AVChatNotification
 import com.testdemo.util.Utils
+import android.app.Notification
+
+import android.app.PendingIntent
+
+import com.testdemo.MainActivity
+
+import android.app.NotificationManager
+
+import android.app.NotificationChannel
+import android.content.Context
+import androidx.core.app.NotificationCompat
+import java.lang.Exception
+import java.lang.reflect.Field
+import java.lang.reflect.Method
 
 
 /**
@@ -135,6 +149,7 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
                 } else {
                     Toast.makeText(this, "没有通知权限！！", Toast.LENGTH_SHORT).show()
                 }
+                setNotificationBadge(11)
             }, 2000)
 
             R.id.btn_notify_cancel -> notifier.activeCallingNotification(false)
@@ -173,4 +188,42 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
         }
     }
 
+    // 一些角标测试
+    fun setNotificationBadge(count: Int): Boolean {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            ?: return false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // 8.0之后添加角标需要NotificationChannel
+            val channel = NotificationChannel(
+                "badge", "badge",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.setShowBadge(true)
+            notificationManager.createNotificationChannel(channel)
+        }
+        val intent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+        val notification: Notification = Notification.Builder(this, "badge")
+            .setContentTitle("应用角标")
+            .setContentText("您有" + count + "条未读消息")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setAutoCancel(false)
+            .setContentIntent(pendingIntent)
+            .setChannelId("badge")
+            .setNumber(count)
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL).build()
+        // 小米
+        try {
+            val field: Field = notification.javaClass.getDeclaredField("extraNotification")
+            val extraNotification: Object = field.get(notification) as Object
+            val method: Method =
+                extraNotification.javaClass.getDeclaredMethod("setMessageCount", Int::class.javaPrimitiveType)
+            method.invoke(extraNotification, count)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        notificationManager.notify(110, notification)
+        return true
+    }
 }
