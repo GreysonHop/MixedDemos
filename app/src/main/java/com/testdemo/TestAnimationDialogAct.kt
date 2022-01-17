@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Outline
 import android.graphics.Paint
 import android.os.CountDownTimer
 import android.os.SystemClock
@@ -13,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.*
 import androidx.core.animation.addListener
 import com.testdemo.util.broken_lib.Utils
@@ -115,6 +117,13 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
                     }
                 }
                 .build()
+
+        binding.ivTestClipToOutline.clipToOutline = true
+        binding.ivTestClipToOutline.outlineProvider = object: ViewOutlineProvider() {
+            override fun getOutline(view: View?, outline: Outline?) {
+                outline?.setOval(0, 0, 50, 50)
+            }
+        }
 
         binding.dragTV.setOnClickListener(this)
 

@@ -19,16 +19,17 @@
         android:layout_height="190dp"
         android:layout_marginTop="475dp" />
 
-
-
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="475dp"
-        android:layout_gravity="right"
-        android:layout_marginEnd="10dp"
+        android:id="@+id/iv_testClipToOutline"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/ic_avchat_hangup"
         android:elevation="10dp"
-        android:background="@drawable/img5" />
+        android:scaleType="fitXY"
+        android:src="@drawable/img5" />
 
     <LinearLayout
         android:layout_width="wrap_content"
