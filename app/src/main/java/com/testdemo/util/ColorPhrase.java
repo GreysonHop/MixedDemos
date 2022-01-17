@@ -1,4 +1,4 @@
-package com.testdemo.color_lib;
+package com.testdemo.util;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;

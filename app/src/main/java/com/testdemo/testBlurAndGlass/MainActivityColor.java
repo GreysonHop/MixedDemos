@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.testdemo.R;
-import com.testdemo.color_lib.ColorPhrase;
+import com.testdemo.util.ColorPhrase;
 
 public class MainActivityColor extends Activity {
     private EditText editText;

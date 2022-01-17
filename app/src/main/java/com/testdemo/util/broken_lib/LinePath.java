@@ -1,4 +1,4 @@
-package com.testdemo.broken_lib;
+package com.testdemo.util.broken_lib;
 
 import android.graphics.Path;
 import android.graphics.Point;

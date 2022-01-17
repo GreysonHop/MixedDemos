@@ -26,9 +26,9 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.testdemo.R;
-import com.testdemo.broken_lib.BrokenCallback;
-import com.testdemo.broken_lib.BrokenTouchListener;
-import com.testdemo.broken_lib.BrokenView;
+import com.testdemo.util.broken_lib.BrokenCallback;
+import com.testdemo.util.broken_lib.BrokenTouchListener;
+import com.testdemo.util.broken_lib.BrokenView;
 
 import java.util.ArrayList;
 import java.util.List;

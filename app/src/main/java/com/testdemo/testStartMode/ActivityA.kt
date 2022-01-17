@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import com.testdemo.BaseCommonActivity
-import com.testdemo.broken_lib.Utils
+import com.testdemo.util.broken_lib.Utils
 
 /**
  * Create by Greyson

@@ -13,9 +13,9 @@ import android.widget.RelativeLayout;
 
 import com.testdemo.R;
 import com.testdemo.blurbehind.BlurBehind;
-import com.testdemo.broken_lib.BrokenCallback;
-import com.testdemo.broken_lib.BrokenTouchListener;
-import com.testdemo.broken_lib.BrokenView;
+import com.testdemo.util.broken_lib.BrokenCallback;
+import com.testdemo.util.broken_lib.BrokenTouchListener;
+import com.testdemo.util.broken_lib.BrokenView;
 
 public class MainActivity_Blur2 extends Activity {
 

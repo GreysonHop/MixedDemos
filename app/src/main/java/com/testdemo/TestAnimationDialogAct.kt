@@ -2,13 +2,11 @@ package com.testdemo
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
@@ -17,7 +15,7 @@ import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.animation.addListener
-import com.testdemo.broken_lib.Utils
+import com.testdemo.util.broken_lib.Utils
 import com.testdemo.databinding.ActTestAnimationdialogBinding
 import com.testdemo.testView.popmenu.PopMenu
 import com.testdemo.testView.popmenu.PopMenuItem
