@@ -25,9 +25,10 @@ public class BlurGlassSoOnActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.button1:
-                Intent intent = new Intent(this, MainActivity_Blur.class);
+                intent = new Intent(this, MainActivity_Blur.class);
                 startActivity(intent);
                 break;
 
