@@ -11,6 +11,7 @@ import android.graphics.Paint
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.ViewGroup
@@ -116,10 +117,18 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
                 }
                 .build()
 
+        // greyson_01/18/2022: setClipToOutline()只能根据提供的Outline类剪切图像，而不能根据自己设置的图片、shape Xml文件
+        // （可能只能影响组件的高度阴影）。
         binding.ivTestClipToOutline.clipToOutline = true
-        binding.ivTestClipToOutline.outlineProvider = object: ViewOutlineProvider() {
-            override fun getOutline(view: View?, outline: Outline?) {
-                outline?.setOval(0, 0, 50, 50)
+        binding.ivTestClipToOutline.outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline?) {
+                val size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35f, resources.displayMetrics).toInt()
+                val radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics)
+                val centerX = view.width / 2
+                val centerY = view.height / 2
+                outline?.setRoundRect(
+                    centerX - size / 2, centerY - size / 2, centerX + size / 2, centerY + size / 2, radius
+                )
             }
         }
 

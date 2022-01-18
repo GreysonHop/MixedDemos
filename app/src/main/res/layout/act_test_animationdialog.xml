@@ -16,29 +16,30 @@
 
     <com.testdemo.testView.ClipImageView
         android:id="@+id/civAvatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:clipShape="@drawable/ic_avatar_l_pattern"
-        android:src="@drawable/dog"
-        android:scaleType="centerCrop"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="130dp"
-        android:layout_gravity="center_horizontal" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/dog"
+        app:clipShape="@drawable/ic_avatar_l_pattern" />
 
     <com.testdemo.testView.shader.ShadowLayerView
         android:id="@+id/shadowlayerview"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:layout_marginTop="475dp" />
+        android:layout_height="130dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp" />
 
     <ImageView
         android:id="@+id/iv_testClipToOutline"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="end"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="60dp"
         android:background="@drawable/ic_avchat_hangup"
-        android:elevation="10dp"
+        android:elevation="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/img5" />
 
@@ -147,8 +148,8 @@
         android:background="#FF171619"
         android:clickable="false"
         android:longClickable="false"
-        tools:visibility="gone"
-        tools:alpha="0.1f"/>
+        tools:alpha="0.1f"
+        tools:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/shareLayout"

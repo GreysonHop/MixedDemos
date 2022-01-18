@@ -18,7 +18,7 @@ import com.testdemo.R;
 public class ShadowLayerView extends View {
     private final Paint mPaint = new Paint();
     private Bitmap mDogBmp;
-    private final Rect dogRect = new Rect(200, 300, 0, 0);
+    private final Rect dogRect = new Rect(400, 30, 0, 0);
     private int mRadius = 1, mDx = 10, mDy = 10;
     private boolean mSetShadow = true;
 
@@ -42,8 +42,8 @@ public class ShadowLayerView extends View {
         mPaint.setColor(Color.BLACK);
         mPaint.setTextSize(25);
         mDogBmp = BitmapFactory.decodeResource(getResources(), R.drawable.dog);
-        dogRect.right = 200 + mDogBmp.getWidth();
-        dogRect.bottom = 300 + mDogBmp.getHeight();
+        dogRect.right = dogRect.left + mDogBmp.getWidth();
+        dogRect.bottom = dogRect.top + mDogBmp.getHeight();
     }
 
 
