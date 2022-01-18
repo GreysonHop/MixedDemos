@@ -82,4 +82,9 @@
         <attr name="radius" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="ClipImageView">
+        <attr name="clipShape" format="reference" />
+        <attr name="enableClip" format="boolean" />
+    </declare-styleable>
+
 </resources>

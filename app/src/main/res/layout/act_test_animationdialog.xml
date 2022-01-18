@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,6 +13,16 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@drawable/galata" />
+
+    <com.testdemo.testView.ClipImageView
+        android:id="@+id/civAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:clipShape="@drawable/ic_avatar_l_pattern"
+        android:src="@drawable/dog"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="130dp"
+        android:layout_gravity="center_horizontal" />
 
     <com.testdemo.testView.shader.ShadowLayerView
         android:id="@+id/shadowlayerview"
@@ -136,7 +147,8 @@
         android:background="#FF171619"
         android:clickable="false"
         android:longClickable="false"
-        tools:alpha="0.7f"/>
+        tools:visibility="gone"
+        tools:alpha="0.1f"/>
 
     <LinearLayout
         android:id="@+id/shareLayout"
