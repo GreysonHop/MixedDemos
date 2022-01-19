@@ -14,11 +14,10 @@ import java.lang.Exception
  *
  * 根据图片非透明区域进行切割的View。
  */
-class ClipImageView : AppCompatImageView {
+class ClipImageView2 : AppCompatImageView {
 
     private var clipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var clipShape: BitmapDrawable? = null
-    private var clipBmp: Bitmap? = null
     private val curRect = RectF(0f, 0f, 0f, 0f)
     private val srcRect = Rect(0, 0, 0, 0)
     private val srcMatrix = Matrix()
@@ -57,7 +56,6 @@ class ClipImageView : AppCompatImageView {
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         Log.v("greyson", "onDetachedFromWindow() ")
-        clipBmp?.recycle()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -76,22 +74,14 @@ class ClipImageView : AppCompatImageView {
         curRect.right = curWidth
         curRect.bottom = curHeight
 
-        clipShape?.let { srcBitmap ->
-            Log.i("greyson", "intrinsicWidth=${srcBitmap.intrinsicWidth}, height=${srcBitmap.intrinsicHeight}")
-            val ratioW2H = srcBitmap.intrinsicWidth.toFloat() / srcBitmap.intrinsicHeight.toFloat()
+        clipShape?.let { bitmapDrawable ->
+            Log.i("greyson", "intrinsicWidth=${bitmapDrawable.intrinsicWidth}, height=${bitmapDrawable.intrinsicHeight}")
+            val ratioW2H = bitmapDrawable.intrinsicWidth.toFloat() / bitmapDrawable.intrinsicHeight.toFloat()
             srcRect.right = (curRect.height() * ratioW2H).toInt()
             srcRect.bottom = curRect.height().toInt()
 
-            val heightScale = curRect.height() / srcBitmap.intrinsicHeight
+            val heightScale = curRect.height() / bitmapDrawable.intrinsicHeight
             srcMatrix.setScale(heightScale, heightScale)
-
-
-            if (clipBmp == null) {
-                // 要剪切的图形，原图可能比较窄，所以需要将图的宽高比例弄成跟当前ImageView的一样。这里是重新绘制到跟ImageView一样宽高的Bitmap上
-                clipBmp = Bitmap.createBitmap(curRect.width().toInt(), curRect.height().toInt(), Bitmap.Config.ALPHA_8)
-                val clipCanvas = Canvas(clipBmp!!)
-                clipCanvas.drawBitmap(srcBitmap.bitmap, srcMatrix, clipPaint)
-            }
 
         }
         Log.v("greyson", "onMeasure(): srcRect=$srcRect, viewRect=$curRect, srcMatrix=$srcMatrix")
@@ -104,15 +94,19 @@ class ClipImageView : AppCompatImageView {
             return
         }
 
-        val layerId = canvas.saveLayer(0f, 0f, curRect.right, curRect.bottom, null)
-
         super.onDraw(canvas)
 
+        // val layerId = canvas.saveLayer(0f, 0f, curRect.right, curRect.bottom, null)
+
         clipPaint.xfermode = curXfermode
+
         // canvas.drawBitmap(srcBitmap.bitmap, srcMatrix, clipPaint)
-        canvas.drawBitmap(clipBmp!!, null, curRect, clipPaint)
+        canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
+        // canvas.drawBitmap(clipBmp!!, null, curRect, clipPaint)
+
         clipPaint.xfermode = null
-        canvas.restoreToCount(layerId)
+
+        // canvas.restoreToCount(layerId)
     }
 
     /**

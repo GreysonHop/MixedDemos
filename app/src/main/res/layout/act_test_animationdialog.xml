@@ -14,7 +14,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/galata" />
 
-    <com.testdemo.testView.ClipImageView
+    <com.testdemo.testView.ClipImageView2
         android:id="@+id/civAvatar"
         android:layout_width="80dp"
         android:layout_height="80dp"

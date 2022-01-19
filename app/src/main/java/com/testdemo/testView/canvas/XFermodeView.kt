@@ -12,12 +12,13 @@ class XFermodeView : View {
     lateinit var dstBitmap: Bitmap
     lateinit var srcBitmap: Bitmap
     lateinit var paint: Paint
-    var modeArray = arrayOf(PorterDuff.Mode.CLEAR, PorterDuff.Mode.SRC, PorterDuff.Mode.DST, PorterDuff.Mode.SRC_OVER
-            , PorterDuff.Mode.DST_OVER, PorterDuff.Mode.SRC_IN, PorterDuff.Mode.DST_IN, PorterDuff.Mode.SRC_OUT
-            , PorterDuff.Mode.DST_OUT, PorterDuff.Mode.SRC_ATOP, PorterDuff.Mode.DST_ATOP, PorterDuff.Mode.XOR
-            , PorterDuff.Mode.DARKEN, PorterDuff.Mode.LIGHTEN, PorterDuff.Mode.MULTIPLY, PorterDuff.Mode.SCREEN
-            , PorterDuff.Mode.ADD, PorterDuff.Mode.OVERLAY)
-    var modeIndex = 5
+    var modeArray = arrayOf(
+        PorterDuff.Mode.SRC, PorterDuff.Mode.SRC_IN, PorterDuff.Mode.SRC_OVER, PorterDuff.Mode.SRC_OUT, PorterDuff.Mode.SRC_ATOP,
+        PorterDuff.Mode.DST, PorterDuff.Mode.DST_IN, PorterDuff.Mode.DST_OVER, PorterDuff.Mode.DST_OUT, PorterDuff.Mode.DST_ATOP,
+        PorterDuff.Mode.XOR, PorterDuff.Mode.DARKEN, PorterDuff.Mode.LIGHTEN, PorterDuff.Mode.MULTIPLY, PorterDuff.Mode.SCREEN,
+        PorterDuff.Mode.ADD, PorterDuff.Mode.OVERLAY, PorterDuff.Mode.CLEAR
+    )
+    var modeIndex = 0
 
     constructor(context: Context?) : super(context) {
         init()
@@ -35,6 +36,7 @@ class XFermodeView : View {
     fun init() {
         setLayerType(LAYER_TYPE_SOFTWARE, null)
         paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20f, resources.displayMetrics)
 
         setOnClickListener {
             modeIndex++
@@ -64,9 +66,6 @@ class XFermodeView : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        paint.textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20f, resources.displayMetrics)
         canvas.drawText(modeArray[modeIndex].toString(), 0f, height.toFloat(), paint)
 
         val layerId = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null, Canvas.ALL_SAVE_FLAG)
