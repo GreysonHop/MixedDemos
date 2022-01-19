@@ -94,19 +94,23 @@ class ClipImageView2 : AppCompatImageView {
             return
         }
 
+//        val layerId = canvas.saveLayer(curRect, clipPaint)
         super.onDraw(canvas)
-
-        // val layerId = canvas.saveLayer(0f, 0f, curRect.right, curRect.bottom, null)
-
-        clipPaint.xfermode = curXfermode
-
-        // canvas.drawBitmap(srcBitmap.bitmap, srcMatrix, clipPaint)
+        clipPaint.xfermode = curXfermode // 配上DST_IN
         canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
-        // canvas.drawBitmap(clipBmp!!, null, curRect, clipPaint)
+        clipPaint.xfermode = null
+//        canvas.restoreToCount(layerId)
 
+        /*super.onDraw(canvas)
+
+        val layerId = canvas.saveLayer(curRect, clipPaint)
+
+        canvas.drawColor(Color.WHITE)
+        clipPaint.xfermode = curXfermode
+        canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
         clipPaint.xfermode = null
 
-        // canvas.restoreToCount(layerId)
+        canvas.restoreToCount(layerId)*/
     }
 
     /**
