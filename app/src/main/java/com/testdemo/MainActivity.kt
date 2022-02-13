@@ -22,6 +22,7 @@ import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.architecture.TestDataBindingAct
 import com.testdemo.fileAccess.FileAccessMenuAct
+import com.testdemo.testAnim.AnimationSetsAct
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testAnim.svgaAnim.TestGiftAnimAct
 import com.testdemo.testMap.TestMapAct
@@ -63,6 +64,7 @@ class MainActivity : ListActivity() {
         super.onCreate(savedInstanceState)
         Log.e("greyson", "MainActivity-onCreate: savedInstanceState = $savedInstanceState, task = $taskId")
 
+        // 每次要在主页增加新的activity只需要在这里增加，不用管那个变量： classNameList
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity::class.java)
         menuListMap["动画实现弹窗"] = TestAnimationDialogAct::class.java
         menuListMap["文件操作相关"] = FileAccessMenuAct::class.java
@@ -88,6 +90,7 @@ class MainActivity : ListActivity() {
         menuListMap["DialogActivity"] = DialogActivity::class.java
         menuListMap["NineView"] = TestNineViewAct::class.java
         menuListMap["多人聊天室"] = TestAVChatActivity::class.java
+        menuListMap["所有动画在此--->"] = AnimationSetsAct::class.java
 
 
         classNameList.addAll(menuListMap.keys)

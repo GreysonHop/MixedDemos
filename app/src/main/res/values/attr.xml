@@ -87,4 +87,5 @@
         <attr name="enableClip" format="boolean" />
     </declare-styleable>
 
+    <item name="anim_sets_frag" type="id" />
 </resources>

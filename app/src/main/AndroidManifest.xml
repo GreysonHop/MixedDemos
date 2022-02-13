@@ -60,6 +60,9 @@
             android:name="com.testdemo.testPictureSelect.CustomGlideConfig"
             android:value="AppGlideModule"/> <!--为什么参考的Demo中是用GlideModule-->
 
+
+        <activity android:name=".testAnim.AnimationSetsAct" />
+
         <activity android:name=".TestActivity2BlurBg" />
         <activity android:name=".TestAnimationDialogAct" />
         <activity android:name=".testCanDragLayout.TestDragViewActivity" />
