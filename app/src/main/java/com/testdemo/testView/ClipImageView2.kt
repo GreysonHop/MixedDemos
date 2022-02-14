@@ -17,7 +17,7 @@ import java.lang.Exception
 class ClipImageView2 : AppCompatImageView {
 
     private var clipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var clipShape: BitmapDrawable? = null
+    private var clipShape: Bitmap? = null
     private val curRect = RectF(0f, 0f, 0f, 0f)
     private val srcRect = Rect(0, 0, 0, 0)
     private val srcMatrix = Matrix()
@@ -45,7 +45,23 @@ class ClipImageView2 : AppCompatImageView {
 
         val attrArray = context.obtainStyledAttributes(attrs, R.styleable.ClipImageView)
         try {
-            this.clipShape = (attrArray.getDrawable(R.styleable.ClipImageView_clipShape) as? BitmapDrawable)
+            val clipShapeDrawable = attrArray.getDrawable(R.styleable.ClipImageView_clipShape)
+            if (clipShapeDrawable != null) {
+                if (clipShapeDrawable is BitmapDrawable) {
+                    clipShape = clipShapeDrawable.bitmap
+                } else
+                {
+                        Log.i("greyson", "")
+                    (clipShape ?: Bitmap.createBitmap(clipShapeDrawable.intrinsicWidth, clipShapeDrawable.intrinsicHeight, Bitmap.Config.RGB_565)).let {
+                        Log.w("greyson", "clipShape is null: ")
+                        val tmpCanvas = Canvas(it)
+                        clipShapeDrawable.draw(tmpCanvas)
+                        clipShape = it
+                    }
+
+                }
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
@@ -75,12 +91,12 @@ class ClipImageView2 : AppCompatImageView {
         curRect.bottom = curHeight
 
         clipShape?.let { bitmapDrawable ->
-            Log.i("greyson", "intrinsicWidth=${bitmapDrawable.intrinsicWidth}, height=${bitmapDrawable.intrinsicHeight}")
-            val ratioW2H = bitmapDrawable.intrinsicWidth.toFloat() / bitmapDrawable.intrinsicHeight.toFloat()
+            Log.i("greyson", "intrinsicWidth=${bitmapDrawable.width}, height=${bitmapDrawable.height}")
+            val ratioW2H = bitmapDrawable.width.toFloat() / bitmapDrawable.height.toFloat()
             srcRect.right = (curRect.height() * ratioW2H).toInt()
             srcRect.bottom = curRect.height().toInt()
 
-            val heightScale = curRect.height() / bitmapDrawable.intrinsicHeight
+            val heightScale = curRect.height() / bitmapDrawable.height
             srcMatrix.setScale(heightScale, heightScale)
 
         }
@@ -94,23 +110,26 @@ class ClipImageView2 : AppCompatImageView {
             return
         }
 
-//        val layerId = canvas.saveLayer(curRect, clipPaint)
-        super.onDraw(canvas)
-        clipPaint.xfermode = curXfermode // 配上DST_IN
-        canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
-        clipPaint.xfermode = null
-//        canvas.restoreToCount(layerId)
-
         /*super.onDraw(canvas)
+
+        clipPaint.xfermode = curXfermode // 配上DST_IN
+
+        val layerDrawSrc = canvas.saveLayer(curRect, clipPaint)
+        canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
+        canvas.restoreToCount(layerDrawSrc)
+
+        clipPaint.xfermode = null*/
+
+        super.onDraw(canvas)
 
         val layerId = canvas.saveLayer(curRect, clipPaint)
 
         canvas.drawColor(Color.WHITE)
         clipPaint.xfermode = curXfermode
-        canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
+        canvas.drawBitmap(srcBitmap, null, srcRect, clipPaint)
         clipPaint.xfermode = null
 
-        canvas.restoreToCount(layerId)*/
+        canvas.restoreToCount(layerId)
     }
 
     /**
@@ -122,7 +141,7 @@ class ClipImageView2 : AppCompatImageView {
     }
 
     fun setClipShape(drawable: BitmapDrawable) {
-        clipShape = drawable
+        clipShape = drawable.bitmap
         postInvalidate()
     }
 }

@@ -621,7 +621,7 @@ public class PeerConnectionHelper {
 
         @Override
         public void onCreateSuccess(SessionDescription origSdp) {
-            Log.v(TAG, "sdp创建成功       " + origSdp.type);
+            Log.v(TAG, "sdp创建成功       " + origSdp.type + "\n, " + origSdp.description);
             //设置本地的SDP
 
             String sdpDescription = origSdp.description;
