@@ -10,7 +10,7 @@ import com.testdemo.R
  */
 class AnimationSetsAct : BaseCommonActivity() {
 
-    override fun getLayoutView(): View? {
+    override fun getLayoutView(): View {
 
         return FrameLayout(this).also {
             it.id = R.id.anim_sets_frag

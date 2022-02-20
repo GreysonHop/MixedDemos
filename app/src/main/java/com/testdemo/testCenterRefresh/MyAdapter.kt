@@ -13,7 +13,12 @@ import java.util.*
  * Created by Greyson on 2018/06/07 .
  */
 class MyAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
     var clickCallBack: ((View, Int) -> Unit)? = null
+
+    fun setNewData(dataList: List<String>) {
+        this.dataList = dataList
+    }
 
     //创建新View，被LayoutManager所调用
     @NonNull
