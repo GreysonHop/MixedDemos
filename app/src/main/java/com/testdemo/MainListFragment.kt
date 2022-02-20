@@ -121,7 +121,7 @@ class MainListFragment : BaseFragment() {
         menuListMap["NineView"] = TestNineViewAct::class.java
         menuListMap["多人聊天室"] = TestAVChatActivity::class.java
         menuListMap["所有动画在此--->"] = AnimationSetsAct::class.java
-        menuListMap["一些绘制相关(draw、canvas)--->"] = AnimationSetsAct::class.java
+        menuListMap["一些绘制相关(draw、canvas)--->"] = OutlineAct::class.java
 
         classNameList.addAll(menuListMap.keys)
 
