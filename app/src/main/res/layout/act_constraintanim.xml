@@ -29,6 +29,17 @@
         app:layout_constraintStart_toEndOf="@+id/cv_poster"
         app:layout_constraintTop_toTopOf="@+id/cv_poster" />
 
+    <com.testdemo.testView.FileEllipsesTextView
+        android:id="@+id/tv_desc"
+        app:layout_constraintStart_toEndOf="@id/cv_poster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_score"
+        android:layout_margin="10dp"
+        android:maxLines="1"
+        android:text="电影简介：这是一部非常那啥那只的电影，介绍会三万里河东入海密码是多少非常非常的长哦哈哈。.mp4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_poster"
         android:layout_width="120dp"

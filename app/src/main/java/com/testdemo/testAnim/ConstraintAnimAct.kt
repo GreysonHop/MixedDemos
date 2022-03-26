@@ -1,5 +1,7 @@
 package com.testdemo.testAnim
 
+import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import com.testdemo.R
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +39,12 @@ class ConstraintAnimAct : BaseCommonActivity() {
             } else {
                 constraintSet1.applyTo(constraintLayout)
                 false
+            }
+        }
+
+        findViewById<TextView>(R.id.tv_desc)?.let { tv ->
+            tv.setOnClickListener {
+                Toast.makeText(this, tv.text, Toast.LENGTH_SHORT).show()
             }
         }
     }

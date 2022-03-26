@@ -14,15 +14,44 @@
         android:scaleType="fitXY"
         android:src="@drawable/galata" />
 
-    <com.testdemo.testView.ClipImageView2
+    <View
+        android:id="@+id/view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="130dp"
+        android:background="@color/black" />
+
+    <com.testdemo.testView.ClipImageViewV1
         android:id="@+id/civAvatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="130dp"
         android:scaleType="centerCrop"
         android:src="@drawable/dog"
+        app:clipShape="@drawable/ic_avatar_r_pattern" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="130dp"
+        android:background="@color/black" />
+
+    <com.testdemo.testView.ClipImageViewV1
+        android:id="@+id/civAvatar2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="130dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/dog"
         app:clipShape="@drawable/ic_avatar_l_pattern" />
+
 
     <com.testdemo.testView.shader.ShadowLayerView
         android:id="@+id/shadowlayerview"
