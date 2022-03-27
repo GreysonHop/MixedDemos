@@ -13,7 +13,7 @@ import java.lang.Exception
  * Create by Greyson
  *
  * 根据图片非透明区域进行切割的View。
- * 2022/3/27 目前只做正文形的，并且对切割图，要么正方，要么瘦高，不适配胖矮
+ * 2022/3/27 目前只做正方形的，并且对切割图，要么正方，要么瘦高，不适配胖矮
  * 此版本修复了图片较窄时、以及适配了2K屏手机上的显示（比如手机像素密度不是480，而图片资源在xxhdpi)
  */
 class ClipImageViewV1 : AppCompatImageView {

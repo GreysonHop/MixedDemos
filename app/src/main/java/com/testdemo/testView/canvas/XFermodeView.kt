@@ -19,6 +19,7 @@ class XFermodeView : View {
         PorterDuff.Mode.ADD, PorterDuff.Mode.OVERLAY, PorterDuff.Mode.CLEAR
     )
     var modeIndex = 0
+    var xfermode = PorterDuffXfermode(modeArray[modeIndex])
 
     constructor(context: Context?) : super(context) {
         init()
@@ -43,6 +44,7 @@ class XFermodeView : View {
             if (modeIndex >= modeArray.size) {
                 modeIndex = 0
             }
+            xfermode = PorterDuffXfermode(modeArray[modeIndex])
             invalidate()
         }
     }
@@ -68,14 +70,14 @@ class XFermodeView : View {
     override fun onDraw(canvas: Canvas) {
         canvas.drawText(modeArray[modeIndex].toString(), 0f, height.toFloat(), paint)
 
-        val layerId = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null, Canvas.ALL_SAVE_FLAG)
-
+        // val layerId = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
+        // 有没有用新图层来绘制效果一样？但如果是自己用Bitmap去作为src的话，不用新图层去绘制xfermode会变成黑色或白色，而不能透明？！
         canvas.drawBitmap(dstBitmap, 0f, 0f, paint)
-        paint.xfermode = PorterDuffXfermode(modeArray[modeIndex])
+        paint.xfermode = xfermode
         canvas.drawBitmap(srcBitmap, width / 4f, width / 4f, paint)
         paint.xfermode = null
 
-        canvas.restoreToCount(layerId)
+        // canvas.restoreToCount(layerId)
 
     }
 

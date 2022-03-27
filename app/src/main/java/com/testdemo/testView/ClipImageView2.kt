@@ -13,22 +13,24 @@ import java.lang.Exception
  * Create by Greyson
  *
  * 根据图片非透明区域进行切割的View。
+ * 2022/3/27 目前只做正方形的，并且对切割图，要么正方，要么瘦高，不适配胖矮
+ * 此版本修复了图片较窄时、以及适配了2K屏手机上的显示（比如手机像素密度不是480，而图片资源在xxhdpi)
  */
 class ClipImageView2 : AppCompatImageView {
+    private val tag = "ClipImageView2"
 
     private var clipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var clipShape: Bitmap? = null
+    private var clipShape: BitmapDrawable? = null
+    private var clipBmp: Bitmap? = null
     private val curRect = RectF(0f, 0f, 0f, 0f)
-    private val srcRect = Rect(0, 0, 0, 0)
-    private val srcMatrix = Matrix()
-    private val curXfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
+    private val curXfermode by lazy { PorterDuffXfermode(PorterDuff.Mode.DST_IN) }
     private var enableClip = true
 
     init {
         clipPaint.style = Paint.Style.FILL
     }
 
-    constructor(context: Context) : this(context, null) //如何在构造器中调用其它构造器？（构造器委托的方式）
+    constructor(context: Context) : this(context, null) // 如何在构造器中调用其它构造器？（构造器委托的方式）
 
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
 
@@ -45,23 +47,7 @@ class ClipImageView2 : AppCompatImageView {
 
         val attrArray = context.obtainStyledAttributes(attrs, R.styleable.ClipImageView)
         try {
-            val clipShapeDrawable = attrArray.getDrawable(R.styleable.ClipImageView_clipShape)
-            if (clipShapeDrawable != null) {
-                if (clipShapeDrawable is BitmapDrawable) {
-                    clipShape = clipShapeDrawable.bitmap
-                } else
-                {
-                        Log.i("greyson", "")
-                    (clipShape ?: Bitmap.createBitmap(clipShapeDrawable.intrinsicWidth, clipShapeDrawable.intrinsicHeight, Bitmap.Config.RGB_565)).let {
-                        Log.w("greyson", "clipShape is null: ")
-                        val tmpCanvas = Canvas(it)
-                        clipShapeDrawable.draw(tmpCanvas)
-                        clipShape = it
-                    }
-
-                }
-            }
-
+            this.clipShape = attrArray.getDrawable(R.styleable.ClipImageView_clipShape) as? BitmapDrawable
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
@@ -69,64 +55,63 @@ class ClipImageView2 : AppCompatImageView {
         }
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        Log.v("greyson", "onDetachedFromWindow() ")
-    }
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        Log.d(tag, "onLayout: changed=$changed, $left-$top-$right-$bottom")
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         if (!enableClip) return
 
-        val curWidth = measuredWidth.toFloat()
-        val curHeight = measuredHeight.toFloat()
-        if (curWidth <= 0 || curHeight <= 0) return
+        curRect.right = width.toFloat()
+        curRect.bottom = height.toFloat()
+        if (curRect.isEmpty) return
 
-        curRect.right = curWidth
-        curRect.bottom = curHeight
+        clipShape?.let { srcDrawable ->
+            Log.d(
+                tag, "onLayout(${this.hashCode()}): srcDrawable, density=${srcDrawable.bitmap.density}" +
+                        ", bounds=${srcDrawable.bounds}, width=${srcDrawable.intrinsicWidth}, height=${srcDrawable.intrinsicHeight}"
+            )
 
-        clipShape?.let { bitmapDrawable ->
-            Log.i("greyson", "intrinsicWidth=${bitmapDrawable.width}, height=${bitmapDrawable.height}")
-            val ratioW2H = bitmapDrawable.width.toFloat() / bitmapDrawable.height.toFloat()
-            srcRect.right = (curRect.height() * ratioW2H).toInt()
-            srcRect.bottom = curRect.height().toInt()
+            if (clipBmp == null) { // 变成正方形，只需要运行一次
+                // 要剪切的图形，原图可能比较窄，所以需要将图的宽高比例弄成正方形的，以高为依据
+                clipBmp = Bitmap.createBitmap(
+                    srcDrawable.intrinsicHeight,
+                    srcDrawable.intrinsicHeight,
+                    Bitmap.Config.ALPHA_8
+                )
 
-            val heightScale = curRect.height() / bitmapDrawable.height
-            srcMatrix.setScale(heightScale, heightScale)
+                val clipCanvas = Canvas(clipBmp!!)
 
+                Log.d(
+                    tag,
+                    "clipCanvas' density=${clipCanvas.density}, width=${clipCanvas.width}, height=${clipCanvas.height}" +
+                            ", displayMetrics' density=${resources.displayMetrics.density}" +
+                            ", densityDpi=${resources.displayMetrics.densityDpi}" +
+                            ", scaledDensity=${resources.displayMetrics.scaledDensity}"
+                )
+
+                clipCanvas.drawBitmap(srcDrawable.bitmap, 0f, 0f, clipPaint)
+            }
         }
-        Log.v("greyson", "onMeasure(): srcRect=$srcRect, viewRect=$curRect, srcMatrix=$srcMatrix")
     }
 
     override fun onDraw(canvas: Canvas) {
-        val srcBitmap = clipShape
+        val srcBitmap = clipBmp
         if (!enableClip || srcBitmap == null) {
             super.onDraw(canvas)
             return
         }
 
-        /*super.onDraw(canvas)
+        Log.d(
+            tag,
+            "onDraw(${this.hashCode()}): srcBitmap=${srcBitmap.width}-${srcBitmap.height}_${srcBitmap.density}" +
+                    ", curRect=$curRect"
+        )
 
-        clipPaint.xfermode = curXfermode // 配上DST_IN
+        val layerId = canvas.saveLayer(curRect, null)
 
-        val layerDrawSrc = canvas.saveLayer(curRect, clipPaint)
-        canvas.drawBitmap(srcBitmap.bitmap, null, srcRect, clipPaint)
-        canvas.restoreToCount(layerDrawSrc)
-
-        clipPaint.xfermode = null*/
-
-        super.onDraw(canvas)
-
-        val layerId = canvas.saveLayer(curRect, clipPaint)
-
-        canvas.drawColor(Color.WHITE)
+        super.onDraw(canvas) // dst
         clipPaint.xfermode = curXfermode
-        canvas.drawBitmap(srcBitmap, null, srcRect, clipPaint)
+        canvas.drawBitmap(srcBitmap, null, curRect, clipPaint) // src，这里源Bitmap会被自动放大
         clipPaint.xfermode = null
 
         canvas.restoreToCount(layerId)
@@ -140,8 +125,13 @@ class ClipImageView2 : AppCompatImageView {
         postInvalidate()
     }
 
+    fun setClipShape(resId: Int) {
+        clipShape = resources.getDrawable(resId, null) as? BitmapDrawable ?: return
+        postInvalidate()
+    }
+
     fun setClipShape(drawable: BitmapDrawable) {
-        clipShape = drawable.bitmap
+        clipShape = drawable
         postInvalidate()
     }
 }
