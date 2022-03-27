@@ -56,16 +56,14 @@ class ClipImageViewV1 : AppCompatImageView {
         }
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+
         if (!enableClip) return
 
-        val curWidth = measuredWidth
-        val curHeight = measuredHeight
-        if (curWidth <= 0 || curHeight <= 0) return
-
-        curRect.right = curWidth.toFloat()
-        curRect.bottom = curHeight.toFloat()
+        curRect.right = width.toFloat()
+        curRect.bottom = height.toFloat()
+        if (curRect.isEmpty) return
 
         clipShape?.let { srcDrawable ->
             Log.w(
@@ -73,23 +71,19 @@ class ClipImageViewV1 : AppCompatImageView {
                         ", bounds=${srcDrawable.bounds}, width=${srcDrawable.intrinsicWidth}, height=${srcDrawable.intrinsicHeight}"
             )
 
-            val sizeScale = curRect.height() / srcDrawable.intrinsicHeight
-            srcMatrix.setScale(sizeScale, sizeScale)
-
             if (clipBmp == null) {
                 // 要剪切的图形，原图可能比较窄，所以需要将图的宽高比例弄成跟当前ImageView的一样。这里是重新绘制到跟ImageView一样宽高的Bitmap上
-                clipBmp = Bitmap.createBitmap(curWidth, curHeight, Bitmap.Config.ALPHA_8)
+                clipBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8)
 
                 val clipCanvas = Canvas(clipBmp!!)
+
+                val sizeScale = curRect.height() / srcDrawable.intrinsicHeight
+                srcMatrix.setScale(sizeScale, sizeScale)
 
                 // 设置的裁剪形状图的密度（具体在哪个Drawable目录下）跟当前手机屏幕像素密度之间有差别的话，进行相应的缩放
                 // 如果图片的密度较小，则画布矩阵会放大，Rect变小，但画布的大小不变！drawBitmap时是根据矩阵的点（猜测），所以图片就等于放大了
                 val densityScale = resources.displayMetrics.densityDpi.toFloat() / srcDrawable.bitmap.density
                 clipCanvas.scale(densityScale, densityScale)
-                Log.w(
-                    tag,
-                    "绘制之前的： clipCanvas density=${clipCanvas.density} —— ${clipCanvas.clipBounds} _ ${clipCanvas.height}"
-                )
 
                 // 如果不用matrix进行缩放，以下两个 drawBitmap 方法都只会将 srcDrawable 的像素点原原本本地画到clipCanvas上，
                 // 根据已知条件判断：clipShape这个Drawable中的Bitmap对象，在读取资源文件时已经根据资源文件所在目录与当前手机像素
