@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -59,7 +63,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testOnCreate() {
+    public void checkMetaData() {
         String data = null;
         try {
             ImageView testBitmap = new ImageView(mTargetContext);
@@ -74,7 +78,8 @@ public class ApplicationTest {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        assertEquals("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI", data);
+        assertThat(data, is(equalTo("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI"))); // google.truth
+        // assertEquals("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI", data); // junit4
     }
 
 

@@ -43,7 +43,7 @@ public class MsgLogMonthView extends View {
     protected Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG |
             Paint.LINEAR_TEXT_FLAG);
 
-    //greyson
+    // greyson
     private MsgLogDate[][] mMonthData = null;
     private String mPressedDay = "-1";//被按中的日期，显示按住的效果
 
