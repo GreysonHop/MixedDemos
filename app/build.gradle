@@ -170,6 +170,7 @@ dependencies {
     implementation project(path: ':ncalendar')
     implementation files('libs/brokenview.jar')
 
+    testImplementation project(path: ':app') // 添加这句单元测试类的目录才能访问到app主目录下的类
     // 谷歌官方单元测试相关：
     testImplementation 'junit:junit:4.13.2'
     // Optional -- Robolectric environment

@@ -17,6 +17,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -35,8 +36,8 @@ import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -58,8 +59,8 @@ public class ApplicationTest {
 
     @Before
     public void setUp() throws Exception {
-        mTargetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        // mTargetContext = ApplicationProvider.getApplicationContext();
+        // mTargetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        mTargetContext = ApplicationProvider.getApplicationContext();
     }
 
     @Test
@@ -78,6 +79,7 @@ public class ApplicationTest {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
         assertThat(data, is(equalTo("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI"))); // google.truth
         // assertEquals("AIzaSyDmWtdkIbK6qdMvVnVQn2vqnjkQkVygnbI", data); // junit4
     }
