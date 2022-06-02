@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
@@ -122,6 +124,32 @@ public class ExampleUnitTest {
         System.out.println("10:30".matches(regex));
         System.out.println("09:49".matches(regex));
         System.out.println("01:10".matches(regex));
+    }
+
+    @Test
+    public void testAnalyzeIP() {
+        assertEquals("cn.bing.com", extractIPFromUrl("https://cn.bing.com/file/search?q=httpurlconnection+header&qs=CT"));
+        assertEquals("cn.bing.com", extractIPFromUrl("http://cn.bing.com/file/search?q=httpurlconnection+header&qs=CT"));
+        assertEquals("10.0.2.101:8887", extractIPFromUrl("https://10.0.2.101:8887/file/search?q=httpurlconnection+header&qs=CT"));
+        assertEquals("10.0.2:8887", extractIPFromUrl("http://10.0.2:8887/file/search?q=httpurlconnection+header&qs=CT"));
+        assertEquals("10.0.2.101", extractIPFromUrl("https://10.0.2.101/file/search?q=httpurlconnection+header&qs=CT"));
+        assertEquals(
+                "43.255.214.50:10000",
+                extractIPFromUrl("https://43.255.214.50:10000/xim/file/6/5991d6d50ffe4c205ec5c80c626bac05/46c15795ac568b0b552d52c67a588eea/file.apk?uid=5C98F1701EBBB7F33C328D5117CD540E&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRUeXBlIjoyLCJjdGltZSI6MTY1Mzk4OTY3NjkwOSwiZGJfa2V5IjoiY2U2YTMyYWRhNjgxNGI3NjQ1MjRjYjcwZjBiNWZkZWUiLCJkZXZpY2VJRCI6ImIxYzYyOWUyYTI2MzhmZThkZDRmOGUzNzU2MGRhNzQ4IiwiZXhwIjowLCJ1aWQiOiI1Qzk4RjE3MDFFQkJCN0YzM0MzMjhENTExN0NENTQwRSJ9.1kEbwPVBwPthWejXfX8Zy06hTzFyY5Tb9055_F5G2U0&appType=2&version=2.2.9&osVersion=30&deviceID=b1c629e2a2638fe8dd4f8e37560da748")
+        );
+    }
+
+    private String extractIPFromUrl(String url) {
+        String regex = "(?<=http(s?)://).+?(?=/)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(url);
+        String result = null;
+        while (matcher.find()) {
+            String s = matcher.group();
+            System.out.println("greyson, extractIPFromUrl: " + s);
+            if (result == null) result = s;
+        }
+        return result;
     }
 
 

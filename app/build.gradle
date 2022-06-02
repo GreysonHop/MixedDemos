@@ -31,6 +31,10 @@ android {
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Default'] // 默认渠道为Default
     }
 
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
     signingConfigs {
         release {
             keyAlias 'testdemo'
@@ -174,7 +178,7 @@ dependencies {
     // 谷歌官方单元测试相关：
     testImplementation 'junit:junit:4.13.2'
     // Optional -- Robolectric environment
-    testImplementation 'androidx.test:core:1.4.0'
+    androidTestImplementation 'androidx.test:core:1.4.0'
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:1.10.19'
     androidTestImplementation 'androidx.test:runner:1.4.0'// AndroidJUnitRunner and JUnit Rules
