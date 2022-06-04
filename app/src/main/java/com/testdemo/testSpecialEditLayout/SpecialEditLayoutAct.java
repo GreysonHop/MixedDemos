@@ -299,7 +299,10 @@ public class SpecialEditLayoutAct extends BaseBindingActivity<ActTestSpecialEdit
         phoneReceiver = new PhoneReceiver(type -> {//0未知 1挂断 2接通、拨打 3响铃
             Log.d(TAG, "PhoneReceiver: type = " + type);
             if (type == 3) {
-                Toast.makeText(SpecialEditLayoutAct.this, "TestDemo提醒您，电话来啦！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        SpecialEditLayoutAct.this,
+                        getString(R.string.app_name) + "提醒您，电话来啦！",
+                        Toast.LENGTH_SHORT).show();
             }
         });
         registerReceiver(phoneReceiver, filters);

@@ -85,7 +85,7 @@ android {
                             ".apk",
                             "-v${defaultConfig.versionName}" + ".apk")
                 } else if (variant.buildType.name == "release") {
-                    outputFileName = "TestDemo_V${variant.versionName}" +
+                    outputFileName = "MixedDemos_V${variant.versionName}" +
                             "_${new Date().format("yyyyMMdd")}_release.apk"
                 }
             }
@@ -168,6 +168,7 @@ repositories {
 }
 
 dependencies {
+    androidTestImplementation project(path: ':app')
     def lifecycle_version = "2.2.0"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
