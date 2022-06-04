@@ -48,8 +48,7 @@ public class DatePickDialog extends Dialog {
 
     @IntDef({MODE_DATE_AND_TIME, MODE_DATE_ONLY, MODE_TIME_ONLY})//todo greyson 为什么加上“flag=true”就能传0和-1等值？
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Modes {
-    }
+    public @interface Modes { }
 
     private boolean hasInit;
     private int mMode;
@@ -136,7 +135,7 @@ public class DatePickDialog extends Dialog {
             lp.width = MATCH_PARENT;
             lp.height = WRAP_CONTENT;
             window.setAttributes(lp);
-//            window.setWindowAnimations(R.style.animBottomMenu);//也可以在style中设置
+            // window.setWindowAnimations(R.style.animBottomMenu);//也可以在style中设置
         }
     }
 

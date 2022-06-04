@@ -34,7 +34,8 @@ abstract class BaseFragment : Fragment() {
                 // suspended if the Lifecycle is not *at least* STARTED.
                 // We could safely run fragment transactions because we know the
                 // code won't run unless the lifecycle is at least STARTED.
-                //TODO greyson_7/22/20 为什么在协程中可以直接更新UI？？？
+                // greyson_7/22/20 为什么在协程中可以直接更新UI？ 2022/4/4 答：因为协程在哪里启动，它就是在哪个线程中运行的，
+                // 说到底kotlin在JVM中的协程只是线程切换框架（至于其它语言的协程不知是什么情况）
                 //loadingView.visibility = View.GONE
                 if (canAccess == false) {
                     if (lifecycle.currentState > Lifecycle.State.STARTED) {}
