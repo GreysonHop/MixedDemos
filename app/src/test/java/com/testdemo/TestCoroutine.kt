@@ -55,4 +55,10 @@ class TestCoroutine {
         job.join() // 等待作业执行结束
         println("testTerminal2: Now I can quit.")
     }
+
+    fun testWithContext() = runBlocking {
+        withContext(Dispatchers.IO) {
+
+        }
+    }
 }

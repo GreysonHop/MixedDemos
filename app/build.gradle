@@ -189,17 +189,17 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.4.0' // 好像跟runner库的作用是相似的。
 
     /*    安卓官方架构相关包    */
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
     // implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" //让模块支持Kotlin编程
     // implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7' //引入协程
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'//与上面的是什么关系？
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'//与上面的是什么关系？
 
-    implementation 'androidx.core:core-ktx:1.3.2' //暂时不知道什么时候该用
+    implementation 'androidx.core:core-ktx:1.6.0' //暂时不知道什么时候该用
 
     // ViewModel开发所需要：
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version" // ViewModel
@@ -236,7 +236,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:annotations:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.20") // kotlin反射必须导入的
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21") // kotlin反射必须导入的
 
 
     /*    第三方框架整体功能的导包    */
