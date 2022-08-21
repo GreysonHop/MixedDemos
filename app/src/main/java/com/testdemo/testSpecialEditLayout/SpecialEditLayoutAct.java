@@ -376,7 +376,7 @@ public class SpecialEditLayoutAct extends BaseBindingActivity<ActTestSpecialEdit
     }
 
     private void setTextClickable() {
-        binding.tvTestClickable.setHighlightColor(getResources().getColor(R.color.transparent));
+        binding.tvTestClickable.setHighlightColor(Color.TRANSPARENT);
         SpannableStringBuilder spannableStBuilder = new SpannableStringBuilder();
         spannableStBuilder.append("回复").append(" ");
         int colorStart = spannableStBuilder.length() - 1;

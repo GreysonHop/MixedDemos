@@ -155,6 +155,7 @@
         <activity android:name="com.testdemo.testView.canvas.TestCanvasActivity" />
         <activity android:name="com.testdemo.testView.doodle.TestDoodleAct" />
         <activity android:name=".testView.nineView.TestNineViewAct" />
+        <activity android:name=".testView.floatView.TestFloatViewActivity" />
 
         <activity android:name=".webrtc.webrtctest.TestAVChatActivity" />
         <activity

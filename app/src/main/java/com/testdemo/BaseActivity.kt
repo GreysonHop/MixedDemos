@@ -84,6 +84,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected abstract fun setContentView()
 
+    /**
+     * 用户初始化视图的回调方法。
+     * 在此之前，你应该实现[setContentView]去设置要展示的View布局
+     */
     protected abstract fun initView()
 
     protected open fun initData() {}

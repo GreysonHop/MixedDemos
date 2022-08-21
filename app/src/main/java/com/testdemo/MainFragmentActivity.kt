@@ -8,13 +8,30 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import androidx.lifecycle.MutableLiveData
 import com.google.android.libraries.places.api.Places
 
 /**
  * Create by Greyson on 2019/9/14
  */
 class MainFragmentActivity : BaseCommonActivity() {
+    companion object {
+        val fragmentData = MutableLiveData<String>()
+    }
 
+    private val exchangeFragObserver: (String) -> Unit = { type ->
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.anim_sets_frag, MainListFragment().apply {
+                arguments = Bundle().also {
+                    it.putString(
+                        MainListFragment.ARGUMENT_TYPE,
+                        type
+                    )
+                }
+            })
+            .commit()
+    }
 
     private val observer = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean) {
@@ -62,10 +79,13 @@ class MainFragmentActivity : BaseCommonActivity() {
         contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.TIME_12_24), true, observer
         )
+
+        fragmentData.observeForever(exchangeFragObserver)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        fragmentData.removeObserver(exchangeFragObserver)
         contentResolver.unregisterContentObserver(observer)
     }
 

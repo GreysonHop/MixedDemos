@@ -1,8 +1,7 @@
 package com.testdemo.architecture
 
 import android.Manifest
-import android.content.ContentValues
-import android.content.Intent
+import android.app.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
@@ -26,17 +25,13 @@ import com.testdemo.databinding.ActTestDatabindingBinding
 import com.testdemo.testView.nineView.TestNineViewAct
 import com.testdemo.util.AVChatNotification
 import com.testdemo.util.Utils
-import android.app.Notification
-
-import android.app.PendingIntent
 
 import com.testdemo.MainActivity
 
-import android.app.NotificationManager
-
-import android.app.NotificationChannel
-import android.content.Context
+import android.content.*
+import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.lang.Exception
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -165,7 +160,9 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
                 val intent = Intent(this@TestDataBindingAct, AVChatService::class.java)
                 intent.putExtra("order", -1)
                 Log.e(TAG, "stopRun stop AVChatService by startService().")
+                bindService(intent, MyServiceConnection(), Service.BIND_AUTO_CREATE)
                 startService(intent)
+                // LocalBroadcastManager.getInstance(this).registerReceiver()
             }
 
             R.id.callLog -> { //插入本地通话记录
@@ -225,5 +222,16 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
         }
         notificationManager.notify(110, notification)
         return true
+    }
+
+
+    inner class MyServiceConnection : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.d(TAG, "onServiceConnected: service=$service, name=$name")
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.d(TAG, "onServiceDisconnected: name=$name")
+        }
     }
 }

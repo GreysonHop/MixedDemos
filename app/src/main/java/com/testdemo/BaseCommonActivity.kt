@@ -10,6 +10,9 @@ import androidx.annotation.LayoutRes
 @SuppressLint("Registered")
 abstract class BaseCommonActivity : BaseActivity() {
 
+    /**
+     * 如果是当前类的子类，请实现[getLayoutResId]或[getLayoutView]来设置当前Activity的内容视图content view
+     */
     final override fun setContentView() {
         if (getLayoutResId() != 0) {
             setContentView(getLayoutResId())

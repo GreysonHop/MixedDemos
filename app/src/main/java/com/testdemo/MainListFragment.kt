@@ -32,6 +32,7 @@ import com.testdemo.testStartMode.ActivityA
 import com.testdemo.testVerticalScrollView.TestMyVerticalViewPageAct
 import com.testdemo.testView.canvas.TestCanvasActivity
 import com.testdemo.testView.doodle.TestDoodleAct
+import com.testdemo.testView.floatView.TestFloatViewActivity
 import com.testdemo.testView.nineView.TestNineViewAct
 import com.testdemo.testView.shader.TestShaderAct
 import com.testdemo.webrtc.webrtctest.TestAVChatActivity
@@ -62,6 +63,9 @@ class MainListFragment : BaseFragment() {
             intent.setClass(it, menuListMap[classNameList[position]] as Class<*>)
             intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
+
+            // TODO: exchange fragment only
+            MainFragmentActivity.fragmentData.value = TYPE_ANIM
         }
     }
 
@@ -122,6 +126,7 @@ class MainListFragment : BaseFragment() {
         menuListMap["多人聊天室"] = TestAVChatActivity::class.java
         menuListMap["所有动画在此--->"] = AnimationSetsAct::class.java
         menuListMap["一些绘制相关(draw、canvas)--->"] = OutlineAct::class.java
+        menuListMap["float view--->"] = TestFloatViewActivity::class.java
 
         classNameList.addAll(menuListMap.keys)
 
