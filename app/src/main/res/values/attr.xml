@@ -88,4 +88,15 @@
     </declare-styleable>
 
     <item name="anim_sets_frag" type="id" />
+
+    <declare-styleable name="CustomDialog">
+        <attr name="titleTxtColor" format="color" />
+        <attr name="titleTxtSize" format="dimension" />
+        <attr name="msgTxtColor" format="color" />
+        <attr name="msgTxtSize" format="dimension" />
+        <attr name="dividerColor" format="color" />
+        <attr name="btnTxtColor" format="color" />
+        <attr name="btnTxtSize" format="dimension" />
+    </declare-styleable>
+
 </resources>

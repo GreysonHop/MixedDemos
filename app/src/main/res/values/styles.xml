@@ -204,4 +204,27 @@
 
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <style name="CustomDialog" parent="android:style/Theme.Dialog">
+        <!--背景颜色及和透明程度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.2</item>
+
+        <!--自定义属性-->
+        <item name="titleTxtColor">#0d0d0d</item>
+        <item name="titleTxtSize">16sp</item>
+        <item name="msgTxtColor">#252525</item>
+        <item name="msgTxtSize">14sp</item>
+        <item name="dividerColor">#EBEBEB</item>
+        <item name="btnTxtColor">#8BCCFD</item>
+        <item name="btnTxtSize">16sp</item>
+    </style>
 </resources>
