@@ -192,7 +192,7 @@ class TestRxJava2 {
 
 
         //直接Observable.just()接.subscribeOn()的话，不能切换线程！使用fromCallable()或defer()
-        /*Observable.defer{ Observable.just(netReq("ni")) }
+        /*Observable.defer { Observable.just(netReq("ni")) }
                 .subscribeOn(Schedulers.newThread())
                 .subscribe { println("result=$it") }*/
     }
