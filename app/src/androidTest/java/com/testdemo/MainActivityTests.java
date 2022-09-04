@@ -1,139 +1,132 @@
 package com.testdemo;
 
+import static junit.framework.TestCase.assertTrue;
+
+import android.app.Instrumentation;
+import android.view.KeyEvent;
+import android.view.View;
+
 /**
  * Create by Greyson on 2022/08/01
  */
-public class MainActivityTests extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MainActivityTests/* extends ActivityInstrumentationTestCase2<MainActivity>*/ {
 
 
+    private MainActivity mMainActivity;
 
-private MainActivity mMainActivity;
+    private Instrumentation mInstrumentation;
 
-private Instrumentation mInstrumentation;
+    private View mToLoginView;
 
-private View mToLoginView;
-
-        privatestaticinti = 0;
-
+    private static int i = 0;
 
 
-// 此构造函数一定要提供
+    // 此构造函数一定要提供
 
-public MainActivityTests() {
-
+    /*public MainActivityTests() {
         super(MainActivity.class);
 
-        }
+    }
 
 
+    @Override
+    protected void setUp() throws Exception {
 
-@Override
+        super.setUp();
 
-   protectedvoid setUp() throws Exception {
+        // 如果要发送键盘事件一定要关闭触摸模式。不然键盘事件将被忽略。
 
-           super.setUp();
+        setActivityInitialTouchMode(false);
 
-           // 如果要发送键盘事件一定要关闭触摸模式。不然键盘事件将被忽略。
+        // 可以发送键盘事件的对象
 
-           setActivityInitialTouchMode(false);
+        mInstrumentation = getInstrumentation();
 
-           // 可以发送键盘事件的对象
+        // 启动avtivity，此函数每执行一次，activity就会启动一次。
 
-           mInstrumentation = getInstrumentation();
+        mMainActivity = getActivity();
 
-           // 启动avtivity，此函数每执行一次，activity就会启动一次。
+        // 输入框
 
-           mMainActivity = getActivity();
+        mUsernameView = (EditText) mMainActivity.findViewById(R.id.username);
 
-           // 输入框
+        // 提交按钮
 
-           mUsernameView = (EditText) mMainActivity.findViewById(R.id.username);
+        mToLoginView = mMainActivity.findViewById(R.id.to_login);
 
-           // 提交按钮
-
-           mToLoginView = mMainActivity.findViewById(R.id.to_login);
-
-           }
+    }
 
 
+    public void testPreConditions() {
 
-           publicvoid testPreConditions() {
+        assertTrue(mToLoginView != null);
 
-           assertTrue(mToLoginView != null);
-
-           }
-
+    }
 
 
-           publicvoid testToLogin() {
+    public void testToLogin() {
 
-           //和UI相关的操作要放在UI线程中执行。
+        //和UI相关的操作要放在UI线程中执行。
 
-           /*
+        *//*
 
-            * instrumentation.runOnMainSync();等同于一下两个函数
+         * instrumentation.runOnMainSync();等同于一下两个函数
 
-            * mActivity.runOnUiThread();//主线程中运行UI操作
+         * mActivity.runOnUiThread();//主线程中运行UI操作
 
-            * mInstrument.waitForIdleSync();//等待UI同步
+         * mInstrument.waitForIdleSync();//等待UI同步
 
-            */
+         *//*
 
-           // mMainActivity.runOnUiThread(new Runnable() {
+        // mMainActivity.runOnUiThread(new Runnable() {
 
-           // public void run() {
+        // public void run() {
 
-           // mUsernameView.requestFocus();
+        // mUsernameView.requestFocus();
 
-           // }
+        // }
 
-           // });
+        // });
 
-           // // 因为测试用例运行在单独的线程上，这里最好要
+        // // 因为测试用例运行在单独的线程上，这里最好要
 
-           // // 同步application，等待其执行完后再运行
+        // // 同步application，等待其执行完后再运行
 
-           // mInstrumentation.waitForIdleSync();
-
-
-
-           mInstrumentation.runOnMainSync(new Runnable() {
+        // mInstrumentation.waitForIdleSync();
 
 
-
-@Override
-
-         publicvoid run() {
-
-                 mUsernameView.requestFocus();//获得焦点
-
-                 }
-
-                 });
-
-                 sendKeys(KeyEvent.KEYCODE_Y, KeyEvent.KEYCODE_U, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_U);//输入字符
+        mInstrumentation.runOnMainSync(new Runnable() {
 
 
+            @Override
 
-                 mInstrumentation.runOnMainSync(new Runnable() {
+            public void run() {
 
-@Override
+                mUsernameView.requestFocus();//获得焦点
 
-         publicvoid run() {
+            }
 
-                 mToLoginView.requestFocus();
+        });
 
-                 mToLoginView.performClick();//执行提交按钮的click事件
-
-                 }
-
-                 });
-
-                 }
+        sendKeys(KeyEvent.KEYCODE_Y, KeyEvent.KEYCODE_U, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_U);//输入字符
 
 
+        mInstrumentation.runOnMainSync(new Runnable() {
 
-                 }
-                 ————————————————
-                 版权声明：本文为CSDN博主「技术至上」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-                 原文链接：https://blog.csdn.net/wenzongliang/article/details/84711950
+            @Override
+
+            public void run() {
+
+                mToLoginView.requestFocus();
+
+                mToLoginView.performClick();//执行提交按钮的click事件
+
+            }
+
+        });
+
+    }
+*/
+
+}
+
