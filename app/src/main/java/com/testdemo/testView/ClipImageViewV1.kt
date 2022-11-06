@@ -16,13 +16,13 @@ import java.lang.Exception
  * 2022/3/27 目前只做正方形的，并且对切割图，要么正方，要么瘦高，不适配胖矮
  * 此版本修复了图片较窄时、以及适配了2K屏手机上的显示（比如手机像素密度不是480，而图片资源在xxhdpi)
  */
-class ClipImageViewV1 : AppCompatImageView {
+class ClipImageViewV1 : AppCompatImageView { // 最新版，用于正式项目中的！
     private val tag = "ClipImageViewV1"
 
     private var clipPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var clipShape: BitmapDrawable? = null
     private var clipBmp: Bitmap? = null
-    private val curRect = RectF(0f, 0f, 0f, 0f)
+    private val curRect = RectF()
     private val srcMatrix = Matrix()
     private val curXfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
     private var enableClip = true
@@ -66,10 +66,10 @@ class ClipImageViewV1 : AppCompatImageView {
         if (curRect.isEmpty) return
 
         clipShape?.let { srcDrawable ->
-            Log.w(
+            /*Log.d(
                 tag, "onMeasure(${this.hashCode()}): srcDrawable, density=${srcDrawable.bitmap.density}" +
                         ", bounds=${srcDrawable.bounds}, width=${srcDrawable.intrinsicWidth}, height=${srcDrawable.intrinsicHeight}"
-            )
+            )*/
 
             if (clipBmp == null) {
                 // 要剪切的图形，原图可能比较窄，所以需要将图的宽高比例弄成跟当前ImageView的一样。这里是重新绘制到跟ImageView一样宽高的Bitmap上
@@ -92,12 +92,12 @@ class ClipImageViewV1 : AppCompatImageView {
                 // clipCanvas.drawBitmap(srcDrawable.bitmap, 0f, 0f, clipPaint)
             }
 
-            Log.w(
+            /*Log.d(
                 tag,
                 "onMeasure(${this.hashCode()}): displayMetrics, density=${resources.displayMetrics.density}" +
                         ", densityDpi=${resources.displayMetrics.densityDpi}" +
                         ", scaledDensity=${resources.displayMetrics.scaledDensity}, srcMatrix=$srcMatrix"
-            )
+            )*/
         }
     }
 
@@ -108,11 +108,11 @@ class ClipImageViewV1 : AppCompatImageView {
             return
         }
 
-        Log.e(
+        /*Log.d(
             tag,
             "onDraw(${this.hashCode()}): $measuredWidth-$measuredHeight" +
                     ", ${srcBitmap.width}-${srcBitmap.height}_${srcBitmap.density}, $curRect"
-        )
+        )*/
         val layerId = canvas.saveLayer(0f, 0f, curRect.right, curRect.bottom, null)
 
         super.onDraw(canvas)
