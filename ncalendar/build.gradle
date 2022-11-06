@@ -18,6 +18,8 @@ android {
             manifestPlaceholders = [hostName: "internal.example.com"]
             // applicationIdSuffix ".debugStaging" //会报错
         }
+        applicationVariants {
+        }
     }
 
 }

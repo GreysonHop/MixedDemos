@@ -168,6 +168,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(path: ':picture_library')
     androidTestImplementation project(path: ':app')
     def lifecycle_version = "2.2.0"
 
@@ -218,7 +219,6 @@ dependencies {
     api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50' //BaseQuickAdapter
     implementation 'com.jcodecraeer:xrecyclerview:1.5.9' //下拉刷新、上拉加载组件
     implementation 'com.lcodecorex:tkrefreshlayout:1.0.7' //各种下拉刷新、Behavior实现的列表外上头组件等效果
-    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.0.0' //仿微信的高级图片选择组件
     implementation 'com.github.yyued:SVGAPlayer-Android:2.1.8' //动态礼物效果播放组件
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.0'//进度条圆角，好像因为什么问题而没采用
     implementation 'com.facebook.rebound:rebound:0.3.8' //引用谷歌的一些动画加速器

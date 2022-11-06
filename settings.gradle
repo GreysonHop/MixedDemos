@@ -1,2 +1,3 @@
 include ':app', ':ncalendar'
 include ':mylibrary'
+include ':ucrop', ':picture_library'
