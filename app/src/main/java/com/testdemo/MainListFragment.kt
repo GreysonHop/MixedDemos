@@ -22,6 +22,7 @@ import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
 import com.testdemo.testCenterRefresh.MyAdapter
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
+import com.testdemo.testEvent.eventdispatch.TouchEventDispatchTest
 import com.testdemo.testFlipView.TestFlipperActivity
 import com.testdemo.testMap.TestMapAct
 import com.testdemo.testNCalendar.TestNCalendarAct
@@ -127,6 +128,7 @@ class MainListFragment : BaseFragment() {
         menuListMap["所有动画在此--->"] = AnimationSetsAct::class.java
         menuListMap["一些绘制相关(draw、canvas)--->"] = OutlineAct::class.java
         menuListMap["float view--->"] = TestFloatViewActivity::class.java
+        menuListMap["测试点击事件的传播 --->"] = TouchEventDispatchTest::class.java
 
         classNameList.addAll(menuListMap.keys)
 

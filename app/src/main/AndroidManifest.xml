@@ -171,6 +171,8 @@
         <activity android:name=".fileAccess.FileAccessMenuAct" />
         <activity android:name=".fileAccess.media.ShowRecentMediaAct" />
 
+        <activity android:name=".testEvent.eventdispatch.TouchEventDispatchTest" />
+
         <service android:name=".architecture.AVChatService" />
 
 <!--     据说能开机启动？   -->
