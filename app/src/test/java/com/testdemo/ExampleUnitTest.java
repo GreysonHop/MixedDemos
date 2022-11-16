@@ -72,25 +72,30 @@ public class ExampleUnitTest {
         }
     }
 
-    private <K, V> HashMap<K, V> getForMap(String jsonStr, Class<K> clazzK, Class<V> clazzV) {
+    /*private <K, V> HashMap<K, V> getForMap(String jsonStr, Class<K> clazzK, Class<V> clazzV) {
         return new Gson().fromJson(jsonStr, new TypeToken<HashMap<K, V>>() {}.getType());
-    }
+    }*/
 
-    public <T> String putForList(List<T> value) {
-        Type listType = new TypeToken<List<T>>() {}.getType();
-        String data = new Gson().toJson(value, value.getClass());
-        return data;
+    private <K, V> HashMap<K, V> getForMap(String jsonStr) {
+        return new Gson().fromJson(jsonStr, new TypeToken<HashMap<K, V>>() {}.getType());
     }
 
     private <T> List<T> getForList(String jsonForList, Class<T> clazz) {
         try {
-            new Gson().fromJson(jsonForList, clazz);
+            // List<T> ret = new Gson().fromJson(jsonForList, clazz);
             List<T> ret = new Gson().fromJson(jsonForList, new TypeToken<List<T>>() {}.getType());
             return ret;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // 将列表数据转成Json字符串
+    public <T> String putForList(List<T> value) {
+        Type listType = new TypeToken<List<T>>() {}.getType();
+        String data = new Gson().toJson(value, listType/*, value.getClass() */);
+        return data;
     }
 
 
