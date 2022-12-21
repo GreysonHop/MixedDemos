@@ -1112,4 +1112,109 @@ class AlgorithmUnitTest {
         return stack.size == 0
     }
 
+
+    @Test
+    fun testMergeTwoLists() {
+        val node1 = ListNode(1).apply {
+            next = ListNode(2)
+            next?.next = ListNode(3)
+            next?.next?.next = ListNode(4)
+            next?.next?.next?.next = ListNode(5)
+        }
+        val node2 = ListNode(1).apply {
+            next = ListNode(2)
+            next?.next = ListNode(3)
+            next?.next?.next = ListNode(4)
+            next?.next?.next?.next = ListNode(5)
+        }
+
+        val ret = mergeTwoLists(node1, node2)
+
+    }
+
+    // 怎么没标明第几题？
+    fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+        var ret: ListNode? = null
+        var lastNode: ListNode? = null
+
+        var main = list1
+        var other = list2
+
+        while (main != null || other != null) {
+            if (main == null) {
+                main = other
+                other = null
+                continue
+            }
+
+            if (other == null) {
+                if (ret == null) {
+                    ret = main
+                    lastNode = ret
+                } else {
+                    lastNode!!.next = main // 输出
+                    lastNode = main
+                }
+                main = main.next
+                continue
+            }
+
+            if (main.`val` <= other.`val`) {
+                if (ret == null) {
+                    ret = main
+                    lastNode = ret
+                } else {
+                    lastNode!!.next = main // 输出
+                    lastNode = main
+                }
+
+                main = main.next
+
+            } else {
+                if (ret == null) {
+                    ret = other
+                    lastNode = ret
+                } else {
+                    lastNode!!.next = other // 输出
+                    lastNode = other
+                }
+
+                val temp = main
+                main = other.next
+                other = temp  // 交换主遍历链条
+            }
+
+        }
+
+        return ret
+    }
+
+    fun getKthMagicNumber(k: Int): Int {
+        val factors = arrayOf(3, 5, 7)
+        val seen = mutableSetOf<Long>()
+        val heap = PriorityQueue<Long>()
+        seen.add(1L)
+        heap.offer(1L)
+        var magic = 0
+        for (i in 0 until k) {
+            // for (int i = 0; i < k; i++) {
+            val curr = heap.poll()
+            magic = curr.toInt()
+            factors.forEach { factor ->
+                val next = curr * factor
+                if (seen.add(next)) {
+                    heap.offer(next);
+                }
+            }
+        }
+        return magic
+    }
+
+
+    fun isFlipedString(s1: String, s2: String): Boolean {
+        if (s1.length != s2.length) return false
+        if (s1.isEmpty()) return true
+
+        return s2 in s1+s1
+    }
 }
