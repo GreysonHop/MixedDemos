@@ -251,10 +251,10 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.64.android'
 
     // 内存泄漏检查工具的三个包，分Debug与否
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.10'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:2.10'
 
-    stagingImplementation('com.squareup.leakcanary:leakcanary-android:1.6.3')
-    stagingImplementation('com.squareup.leakcanary:leakcanary-support-fragment:1.6.3')
+    stagingImplementation('com.squareup.leakcanary:leakcanary-android:2.10')
+//    stagingImplementation('com.squareup.leakcanary:leakcanary-support-fragment:2.10')
 }
