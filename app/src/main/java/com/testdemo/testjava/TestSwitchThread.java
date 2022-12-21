@@ -2,6 +2,9 @@ package com.testdemo.testjava;
 
 import java.util.LinkedList;
 
+/**
+ * 为了模仿、验证Handler消息机制中的从工作线程回到主线程的原理
+ */
 public class TestSwitchThread {
 
     public static void main(String[] args) {
@@ -35,7 +38,7 @@ class App {
                 }
                 Handler handler;
                 if ((handler = messageQueue.poll()) != null) {
-                    handler.onHandleMessage();
+                    handler.onHandleMessage(); // 调用时是否回到主线程？
                     idleSecond = 0;
                 } else {
                     idleSecond++;
@@ -54,7 +57,7 @@ class App {
         public void run() {
             for (int i = 0; i < 20; i++) {
                 System.out.println("MyThread add message = " + Thread.currentThread());
-                messageQueue.add(new Handler() {
+                messageQueue.add(new Handler() { // 在工作线程中添加消息Message对象，这里直接用自己定义的Handler类代替它
                     @Override
                     public void onHandleMessage() {
                         super.onHandleMessage();
