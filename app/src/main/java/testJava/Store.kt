@@ -1,4 +1,4 @@
-package com.testdemo.testjava
+package testJava
 
 /**
  * Create by Greyson

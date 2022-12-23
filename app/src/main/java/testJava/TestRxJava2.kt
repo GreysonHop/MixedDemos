@@ -1,4 +1,4 @@
-package com.testdemo.testjava
+package testJava
 
 import android.annotation.SuppressLint
 import io.reactivex.Observable

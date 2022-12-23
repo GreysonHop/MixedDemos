@@ -1,4 +1,4 @@
-package com.testdemo.testjava
+package testJava
 
 import kotlin.properties.Delegates
 import kotlin.properties.ReadWriteProperty

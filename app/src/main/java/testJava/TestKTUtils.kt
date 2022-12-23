@@ -1,6 +1,6 @@
 @file:JvmName("TestUtils") //Kotlin文件编译成Java文件（类）的名称
 
-package com.testdemo.testjava
+package testJava
 
 import java.util.*
 

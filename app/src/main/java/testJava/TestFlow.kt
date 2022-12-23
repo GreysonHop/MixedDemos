@@ -1,4 +1,4 @@
-package com.testdemo.testjava
+package testJava
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

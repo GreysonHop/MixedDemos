@@ -1,4 +1,4 @@
-package com.testdemo.testjava
+package testJava
 
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
