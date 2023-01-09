@@ -59,7 +59,7 @@
 
 #Glide框架
 -keep public class * implements com.bumptech.glide.module.GlideModule
--keep class com.testdemo.testPictureSelect.CustomGlideConfig
+-keep class com.testdemo.framework.glide.CustomGlideConfig
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class * extends com.bumptech.glide.module.AppGlideModule {
  <init>(...);

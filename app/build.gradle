@@ -232,9 +232,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     // Glide集成OkHttp时需要使用的库，参考官方文档：http://bumptech.github.io/glide/doc/configuration.html#applications
     implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
-    // Glide需要处理注解时的依赖库，用于处理注解并生成java类
-    implementation 'com.github.bumptech.glide:annotations:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0' // 添加 Glide 注解处理器的依赖
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21") // kotlin反射必须导入的
 

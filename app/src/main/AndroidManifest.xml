@@ -42,7 +42,7 @@
             android:required="false" />
 
         <activity
-            android:name=".testView.canvas.TestViewBitmapActivity"
+            android:name=".MainFragmentActivity"
             android:configChanges="locale"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -60,9 +60,9 @@
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
 
-        <meta-data
-            android:name="com.testdemo.testPictureSelect.CustomGlideConfig"
-            android:value="AppGlideModule"/> <!--为什么参考的Demo中是用GlideModule-->
+        <!--<meta-data
+            android:name="com.testdemo.framework.glide.CustomGlideConfig"
+            android:value="GlideModule"/>--> <!--为什么参考的Demo中是用GlideModule？而且4.*的高版本好像不需要这个了！-->
 
 
         <activity android:name=".testAnim.AnimationSetsAct" />

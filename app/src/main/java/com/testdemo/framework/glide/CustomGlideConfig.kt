@@ -1,17 +1,15 @@
-package com.testdemo.testPictureSelect
+package com.testdemo.framework.glide
 
 import android.content.Context
-import android.os.Environment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.cache.DiskLruCacheWrapper
 import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.stream.HttpGlideUrlLoader
-import com.bumptech.glide.load.model.stream.UrlLoader
 import com.bumptech.glide.module.AppGlideModule
-import com.bumptech.glide.module.GlideModule
+import com.bumptech.glide.request.RequestOptions
 import okhttp3.OkHttpClient
 import java.io.File
 import java.io.InputStream
@@ -31,10 +29,10 @@ import javax.net.ssl.X509TrustManager
     android:value="GlideModule" />
  </pre>
  */
-@com.bumptech.glide.annotation.GlideModule
-class CustomGlideConfig : AppGlideModule() {
+// @com.bumptech.glide.annotation.GlideModule
+class CustomGlideConfig {
 
-    override fun applyOptions(context: Context, builder: GlideBuilder) {
+    fun applyOptions(context: Context, builder: GlideBuilder) {
         //设置图片的显示格式ARGB_8888(指图片大小为32bit)
         // builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888)
         builder.setImageDecoderEnabledForBitmaps(true)
@@ -51,9 +49,11 @@ class CustomGlideConfig : AppGlideModule() {
         }
 
         // builder.setMemoryCache()
+        // 例如：全局设置图片格式为RGB_565
+        // builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565))
     }
 
-    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+     fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         val builder = OkHttpClient.Builder()
         builder.sslSocketFactory(sSLSocketFactory, trustManager)
         val okHttpClient = builder.build()
