@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.google.android.libraries.places.api.Places
 
@@ -19,17 +20,23 @@ class MainFragmentActivity : BaseCommonActivity() {
         val fragmentData = MutableLiveData<String>()
     }
 
+    val fragments = mutableMapOf<String, Fragment>()
+
     private val exchangeFragObserver: (String) -> Unit = { type ->
+
+        val frag = fragments[type] ?: MainListFragment().apply {
+            arguments = Bundle().also {
+                it.putString(
+                    MainListFragment.ARGUMENT_TYPE,
+                    type
+                )
+            }
+            fragments[type] = this
+        }
+
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.anim_sets_frag, MainListFragment().apply {
-                arguments = Bundle().also {
-                    it.putString(
-                        MainListFragment.ARGUMENT_TYPE,
-                        type
-                    )
-                }
-            })
+            .replace(R.id.anim_sets_frag, frag)
             .commit()
     }
 
