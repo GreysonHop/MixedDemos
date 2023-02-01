@@ -37,6 +37,7 @@ import com.testdemo.testView.floatView.TestFloatViewActivity
 import com.testdemo.testView.nineView.TestNineViewAct
 import com.testdemo.testView.shader.TestShaderAct
 import com.testdemo.webrtc.webrtctest.TestAVChatActivity
+import testJava.TestCoroutinesInActivity
 
 /**
  * Create by Greyson on 2022/02/20
@@ -129,6 +130,7 @@ class MainListFragment : BaseFragment() {
         menuListMap["一些绘制相关(draw、canvas)--->"] = OutlineAct::class.java
         menuListMap["float view--->"] = TestFloatViewActivity::class.java
         menuListMap["测试点击事件的传播 --->"] = TouchEventDispatchTest::class.java
+        menuListMap["coroutine"] = TestCoroutinesInActivity::class.java
 
         classNameList.addAll(menuListMap.keys)
 
