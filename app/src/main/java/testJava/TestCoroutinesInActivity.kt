@@ -14,14 +14,17 @@ class TestCoroutinesInActivity : BaseCommonActivity(), CoroutineScope by MainSco
     }
 
     override fun initView() {
-        Log.d(TAG, "initView: init view, and get data...")
+        Log.d(TAG, "initView: start.")
 
         launch {
-            getData()
-            Log.d(TAG, "initView: data return, set view")
+            val data = withContext(Dispatchers.IO) {
+                Log.d(TAG, "切换上下文")
+                getData()
+            }
+            Log.d(TAG, "initView: network data($data) return, set view")
         }
 
-        Log.d(TAG, "initView: finish init")
+        Log.d(TAG, "initView: finish.")
     }
 
     private fun test() {
@@ -29,7 +32,17 @@ class TestCoroutinesInActivity : BaseCommonActivity(), CoroutineScope by MainSco
     }
 
     private suspend fun getData(): String {
+        Log.d(TAG, "进入getData()")
+
+        for (i in 0..5) {
+            val random = Math.random()
+            val sec = random.toInt()
+            Log.d(TAG, "模拟IO操作阻塞，阻塞秒数：$sec，random=$random,")
+            Thread.sleep(sec * 1000L)
+        }
+
         delay(3000)
+        Log.d(TAG, "getData()即将退出!")
         return "I'm the data!"
     }
 
