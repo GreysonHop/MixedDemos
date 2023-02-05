@@ -1211,10 +1211,63 @@ class AlgorithmUnitTest {
     }
 
 
-    fun isFlipedString(s1: String, s2: String): Boolean {
+    fun isFlippedString(s1: String, s2: String): Boolean {
         if (s1.length != s2.length) return false
         if (s1.isEmpty()) return true
 
         return s2 in s1+s1
+    }
+
+    @Test
+    fun testArray() {
+        var retError = false
+
+        val dataToBeChecked = getRandom()
+        printArray(dataToBeChecked, "单元测试对象函数返回的数组")
+
+        val compare = IntArray(100) // 参照组
+        dataToBeChecked.forEach { value ->
+            if (compare[value - 1] != 0) {
+                retError = true
+                return@forEach
+            }
+            compare[value - 1] = value
+        }
+        printArray(compare, "验证时对错的参照数组")
+        //
+        for (v in compare) {
+            if (v == 0) {
+                retError = true
+            }
+        }
+
+        assertFalse(retError)
+
+    }
+
+    /**
+     * 生成长度为100的数组，包含1到100、不重复、随机保存
+     */
+    private fun getRandom() : IntArray {
+        val ret = IntArray(100)
+        for (i in ret.indices) {
+            ret[i] = i + 1
+        }
+
+        for (i in ret.indices) {
+
+            val index = (Math.random() * 99).toInt()
+            val temp = ret[i]
+            ret[i] = ret[index]
+            ret[index] = temp
+        }
+
+        return ret
+    }
+
+    private fun printArray(arr: IntArray, title: String? = null) {
+        title?.let { print("$it: ") }
+        arr.forEach { print("$it,") }
+        println()
     }
 }

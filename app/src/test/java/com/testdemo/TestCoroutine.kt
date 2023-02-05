@@ -186,4 +186,28 @@ class TestCoroutine {
         print("两个值加起来等于：$value3。总花费时间：${endTime - startTime}")
     }
 
+    @Test
+    fun testException() = runBlocking {
+        CoroutineScope(Dispatchers.IO).launch {
+            launch {
+//                delay(50)
+                print("正常执行完的子协程。")
+            }
+
+            launch {
+                delay(100)
+                throw Exception("子协程抛出异常！")
+            }
+
+            launch {
+                delay(200)
+                print("最晚执行的子协程在其它子协程抛出异常后，还能执行吗？")
+            }
+
+            print("父协程结束？")
+
+        }
+
+        print("end___")
+    }
 }
