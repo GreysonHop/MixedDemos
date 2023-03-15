@@ -42,7 +42,7 @@
             android:required="false" />
 
         <activity
-            android:name=".MainFragmentActivity"
+            android:name=".MainActivity"
             android:configChanges="locale"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -96,6 +96,9 @@
 
         <activity android:name=".testCenterRefresh.CollapsingToolbarLayoutActivity" />
         <activity android:name=".testCenterRefresh.CollapsingRecyclerActivity" />
+        <activity android:name=".testNestedScroll.TestNestedScrollAct" />
+        <activity android:name=".testNestedScroll.behavior.CustomBehaviorActivity" />
+        <activity android:name=".testNestedScroll.raw.CollapsableScrollAct" />
 
         <activity android:name=".testPictureSelect.TestPictureSelectAct" />
         <activity android:name=".testPictureSelect.PicturePreviewActivity" />

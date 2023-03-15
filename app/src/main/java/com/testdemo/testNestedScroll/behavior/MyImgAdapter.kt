@@ -1,18 +1,17 @@
-package com.testdemo.testCenterRefresh
+package com.testdemo.testNestedScroll.behavior
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.R
-import java.util.*
 
 /**
  * Created by Greyson on 2018/06/07 .
  */
-class MyAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyImgAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyImgAdapter.ViewHolder>() {
 
     var clickCallBack: ((View, Int) -> Unit)? = null
 
@@ -23,17 +22,15 @@ class MyAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyAdapter.Vie
     //创建新View，被LayoutManager所调用
     @NonNull
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(android.R.layout.simple_list_item_1, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_img, viewGroup, false)
         return ViewHolder(view)
     }
 
     //将数据与界面进行绑定的操作
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.mTextView.text = dataList[position]
-        if (dataList[position] == "image") {
-            viewHolder.mTextView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.dog, 0, 0)
-        }
-        viewHolder.mTextView.setOnClickListener { v -> clickCallBack?.invoke(v, position) }
+        viewHolder.mImage.contentDescription = dataList[position]
+        viewHolder.mImage.setImageResource(R.drawable.bg_vip_gold)
+        viewHolder.mImage.setOnClickListener { v -> clickCallBack?.invoke(v, position) }
     }
 
     /*override fun onBindViewHolder(holder: ViewHolder, position: Int, @NonNull payloads: List<Any>) {
@@ -47,7 +44,7 @@ class MyAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyAdapter.Vie
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var mTextView: TextView = view.findViewById(android.R.id.text1)
+        var mImage: ImageView = view.findViewById(R.id.iv_img)
     }
 
 }

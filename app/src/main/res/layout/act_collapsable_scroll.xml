@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.testdemo.testNestedScroll.raw.CollapsableScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/dog"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- horizontal rv 的高度是必需的。不然就在父 View 设置 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@color/blue_date_picker" />
+
+</com.testdemo.testNestedScroll.raw.CollapsableScrollView>
