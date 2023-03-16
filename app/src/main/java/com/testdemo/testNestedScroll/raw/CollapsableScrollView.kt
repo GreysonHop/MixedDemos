@@ -87,7 +87,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
         childScrollable.layoutParams = childScrollable.layoutParams.apply {
-            height = measuredHeight - shrinkViewMinHeight
+            height = measuredHeight
         } // 修改第二个组件，不会改变高度的组件的高度
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -107,11 +107,12 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
     }
 
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
-        Log.d("greyson", "onStartNestedScroll， ")
-        if (type == ViewCompat.TYPE_NON_TOUCH) {
+        val ret = axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
+        Log.d("greyson", "onStartNestedScroll， type=$type, axes=$axes, ret=$ret")
+        /*if (type == ViewCompat.TYPE_NON_TOUCH) {
             return false
-        }
-        return axes and ViewCompat.SCROLL_AXIS_VERTICAL != 0
+        }*/
+        return ret
     }
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
@@ -139,11 +140,18 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
         }
     }
 
-    override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
+    /*override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float): Boolean {
+        Log.d("greyson", "onNestedPreFling: x=$velocityX, y=$velocityY")
         return false
     }
 
+    override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
+        Log.d("greyson", "onNestedFling: x=$velocityX, y=$velocityY")
+        return false
+    }*/
+
     private var state = 0 //
+
     companion object {
         const val STATE_OUT = 3
         const val STATE_EXPANDED = 2
@@ -164,7 +172,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
         val shrinkViewLP = childToShrink.layoutParams
         val curShrinkViewHeight = shrinkViewLP.height
 
-        Log.i("greyson", "onNestedPreScroll: dy=$dy, canScrollVertically=${canScrollVertically(-1)}" +
+        Log.i("greyson", "onNestedPreScroll: dy=$dy, canScrollVertically=${childScrollable.canScrollVertically(-1)}" +
                 ", shrinkViewMinHeight=$shrinkViewMinHeight, shrinkViewMaxHeight=$shrinkViewMaxHeight," +
                 " \nshrinkViewY=$shrinkViewY, scrollViewY=$scrollViewY realShrinkViewHeight=$curShrinkViewHeight")
 
@@ -172,7 +180,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
         val offset = abs(dy)
         if (scrollViewY == 0) { // 伸缩视图完全被移出界面的情况
 
-            if (!scrollUp) {
+            if (!scrollUp && !childScrollable.canScrollVertically(-1)) {
                 childToShrink.y = min(shrinkViewY + offset.toInt(), 0).toFloat()
                 childScrollable.y = min(scrollViewY + offset.toInt(), shrinkViewMinHeight).toFloat()
                 consumed[1] = dy.toInt()
@@ -273,7 +281,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
     }
 
     private fun scrolling(scrollUp: Boolean, offset: Float, event: Int) {
-        shrinkFirstChild?.let {  target ->
+        shrinkFirstChild?.let { target ->
             val targetParent = target.parent
             Log.i("greyson", "scrolling(): shrinkFirstChildOrgWidth=$shrinkFirstChildOrgWidth" +
                     ", ${target.javaClass.name}, parent=${targetParent.javaClass.name}")

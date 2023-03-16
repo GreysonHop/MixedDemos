@@ -28,7 +28,7 @@ class CollapsableScrollAct : BaseCommonActivity() {
         rvVertical.layoutManager = layoutManagerV
 
         val listData = ArrayList<String>()
-        for (i in 0..17) {
+        for (i in 0..27) {
             listData.add("item$i")
         }
         rvVertical.adapter = MyAdapter(listData)
