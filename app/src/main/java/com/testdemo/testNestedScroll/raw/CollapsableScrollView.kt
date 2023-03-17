@@ -1,11 +1,13 @@
 package com.testdemo.testNestedScroll.raw
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.animation.addListener
 import androidx.core.view.NestedScrollingParent2
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +20,7 @@ import kotlin.math.min
  * ScrollView中
  * Created by Greyson on 2023/3/15.
  */
-class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
+class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator.AnimatorUpdateListener {
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -150,7 +152,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
          }*/
 
         if (scrollViewY != shrinkViewMinHeight && scrollViewY != 0 && scrollViewY != shrinkViewMaxHeight) {
-            autoScroll()
+            autoScrollInternal()
         } else {
 //            callBackCalenadarState()
         }
@@ -295,9 +297,65 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
 
     }
 
-    private fun autoScroll() {
-        val scrollViewY = childScrollable.y.toInt()
+    private var shrinkValueAnimator: ValueAnimator = ValueAnimator().apply {
+        duration = 300
+        addUpdateListener(this@CollapsableScrollView)
+    }
+    private var translateValueAnimator: ValueAnimator = ValueAnimator().apply {
+        duration = 300
+        addUpdateListener(this@CollapsableScrollView)
+        addListener (onEnd = {
+            Log.w("greyson", "animate end=$isAutoAnimating")
+            isAutoAnimating = false
+        }, onCancel = {
+            Log.w("greyson", "animate cancel=$isAutoAnimating")
+            isAutoAnimating = false
+        })
+    }
 
+    override fun onAnimationUpdate(animation: ValueAnimator?) {
+        if (animation == shrinkValueAnimator) {
+
+            val animatedValue = animation.animatedValue as Float
+            val layoutParams = childToShrink.layoutParams
+            layoutParams.height = animatedValue.toInt()
+            childToShrink.layoutParams = layoutParams
+
+        } else if (animation == translateValueAnimator) {
+
+            val value = animation.animatedValue as Float
+            val dy = value - childScrollable.y
+            val scrollUp = dy < 0
+            childScrollable.y = value
+            scrolling(scrollUp, -dy, if (scrollUp) EVENT_COLLAPSE else EVENT_EXPAND)
+
+        }
+    }
+
+    var isAutoAnimating = false
+    private fun autoScrollInternal() {
+        val scrollViewY = childScrollable.y.toInt()
+        Log.w("greyson", "autoScrollInternal: isAutoAnimating=$isAutoAnimating")
+        if (scrollViewY > shrinkViewMinHeight && scrollViewY < shrinkViewMaxHeight && !isAutoAnimating) {
+            var startPos = 0
+            var endPos = 0
+            val middle = (shrinkViewMaxHeight - shrinkViewMinHeight) / 2 + shrinkViewMinHeight
+            if (scrollViewY > middle) {
+                shrinkValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMaxHeight.toFloat())
+                translateValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMaxHeight.toFloat())
+
+            } else {
+                shrinkValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMinHeight.toFloat())
+                translateValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMinHeight.toFloat())
+
+            }
+
+            Log.w("greyson", "animate start=$isAutoAnimating")
+            isAutoAnimating = true
+            shrinkValueAnimator.start()
+            translateValueAnimator.start()
+
+        }
 
     }
 
