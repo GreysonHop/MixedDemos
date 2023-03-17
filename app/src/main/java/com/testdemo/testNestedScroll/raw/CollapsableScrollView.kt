@@ -30,8 +30,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
     lateinit var childScrollable: View
 
     private lateinit var shrinkOriLayoutParams: MarginLayoutParams //MarginLayoutParams(0, 0)
-//    private var shrinkFirstChildOrgWidth = 0
-//    private var shrinkFirstChildOrgHeight = 0
+
     private var shrinkViewMinHeight = 0  // 可伸缩 View 的压缩后高度
     private var shrinkViewMaxHeight = 0
 
@@ -95,7 +94,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        if (shrinkViewMinHeight <=0 ) shrinkViewMinHeight = childToShrink.measuredHeight
+        if (shrinkViewMinHeight <= 0) shrinkViewMinHeight = childToShrink.measuredHeight
         if (shrinkViewMaxHeight == 0) shrinkViewMaxHeight = measuredWidth
 
         val shrinkLP = childToShrink.layoutParams as MarginLayoutParams
@@ -144,6 +143,11 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
         //此时 childViewY 必为 3个标志位之一，判断不为这三个数值就自动滑动
         val scrollViewY: Int = childScrollable.y.toInt()
         Log.w("greyson", "onStopNestedScroll=$type, $target, $scrollViewY， ${childScrollable.translationY}")
+
+        /* if (scrollViewY == shrinkViewMaxHeight && childToShrink is RecyclerView) {
+             childToShrink.layoutManager.can
+
+         }*/
 
         if (scrollViewY != shrinkViewMinHeight && scrollViewY != 0 && scrollViewY != shrinkViewMaxHeight) {
             autoScroll()
@@ -230,7 +234,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
 
             } else {
 
-                if (!childScrollable.canScrollVertically(-1)) {
+                if (!childScrollable.canScrollVertically(-1) && !childToShrink.canScrollHorizontally(-1)) {
                     // 向下伸展
                     val height = min(shrinkViewMaxHeight, curShrinkViewHeight + offset.toInt())
                     shrinkViewLP.height = height
@@ -317,7 +321,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2 {
 
                     val parentWidth = targetParent.width
                     val totalWidthOffset = parentWidth - shrinkOriLayoutParams.width
-                    val totalHeightOffset = targetParent.height - shrinkOriLayoutParams.height
+                    val totalHeightOffset = /*targetParent.height*/ shrinkViewMaxHeight - shrinkOriLayoutParams.height
 
                     Log.w("greyson", "scrolling: ratio=$ratioFromMin, parentWid=$parentWidth, offsetFromMin=$offsetFromMin")
 
