@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -52,6 +53,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
     private var shrinkViewMinHeight = 0  // 可伸缩 View 的压缩后高度
     private var shrinkViewMaxHeight = 0
 
+    var init = false //
     var isAutoAnimating = false // 正在执行自动收缩（或伸展）、位移动画
     var willNestFling = false // 当前开始的嵌套滚动是猛抛（fling）导致的
     @Deprecated("just for test")
@@ -64,19 +66,6 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
     private var mIsAnimating = false // 可伸缩视图正在收缩或展开
 
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-        /*val viewGroup = getChildAt(1) as ViewGroup
-        for (index in 0..viewGroup.childCount) {
-            if (viewGroup.getChildAt(index) is RecyclerView) {
-                mScrollingView = viewGroup.getChildAt(index) as RecyclerView
-                break
-            }
-        }*/
-//todo 可能得刷新一下
-    }
-
-    var init = false
     private fun initChildView() {
         if (!init) {
             init = true
@@ -102,6 +91,26 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
 //            }
         }
 
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        val scrollViewY = (childScrollable.y).toInt()
+        val stretchedState = scrollViewY == shrinkViewMaxHeight && ev.y.toInt() <= shrinkViewMaxHeight //
+
+        if (stretchedState || isAutoAnimating) return true
+        return super.onInterceptTouchEvent(ev)
+    }
+
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        /*val viewGroup = getChildAt(1) as ViewGroup
+        for (index in 0..viewGroup.childCount) {
+            if (viewGroup.getChildAt(index) is RecyclerView) {
+                mScrollingView = viewGroup.getChildAt(index) as RecyclerView
+                break
+            }
+        }*/
+//todo 可能得刷新一下
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
