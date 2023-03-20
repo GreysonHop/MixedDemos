@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.core.animation.addListener
 import androidx.core.view.NestedScrollingParent2
 import androidx.core.view.ViewCompat
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.util.broken_lib.Utils
 import kotlin.math.abs
@@ -32,14 +33,14 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
     lateinit var childToShrink: View // 将要被压缩、拉伸的组件
     lateinit var childScrollable: View
 
-    private var shrinkValueAnimator: ValueAnimator = ValueAnimator().apply {
-        duration = 300
-        addUpdateListener(this@CollapsableScrollView)
-    }
+//    private var shrinkValueAnimator: ValueAnimator = ValueAnimator().apply {
+//        duration = 300
+//        addUpdateListener(this@CollapsableScrollView)
+//    }
     private var translateValueAnimator: ValueAnimator = ValueAnimator().apply {
         duration = 300
         addUpdateListener(this@CollapsableScrollView)
-        addListener (onEnd = {
+        addListener(onEnd = {
             Log.w("greyson", "animate end=$isAutoAnimating")
             isAutoAnimating = false
         }, onCancel = {
@@ -48,14 +49,17 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
         })
     }
 
+    private var shrinkViewOriMarginTop = 0
     private lateinit var shrinkOriLayoutParams: MarginLayoutParams //MarginLayoutParams(0, 0)
 
     private var shrinkViewMinHeight = 0  // 可伸缩 View 的压缩后高度
     private var shrinkViewMaxHeight = 0
+    private var scrollViewOriginY = 0 // 横向 RV 的原始 Bottom
 
     var init = false //
     var isAutoAnimating = false // 正在执行自动收缩（或伸展）、位移动画
     var willNestFling = false // 当前开始的嵌套滚动是猛抛（fling）导致的
+
     @Deprecated("just for test")
     var orderTest = 0
 
@@ -71,6 +75,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
             init = true
 
             childToShrink = getChildAt(0)
+            shrinkViewOriMarginTop = childToShrink.marginTop
             childScrollable = getChildAt(1)
         }
 
@@ -95,9 +100,9 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         val scrollViewY = (childScrollable.y).toInt()
-        val stretchedState = scrollViewY == shrinkViewMaxHeight && ev.y.toInt() <= shrinkViewMaxHeight //
-
-        if (stretchedState || isAutoAnimating) return true
+        val shrinkViewCantReact = (scrollViewY > scrollViewOriginY && ev.y.toInt() <= scrollViewY)
+//                || scrollViewY <= scrollViewOriginY && ev.y.toInt() <= scrollViewY
+        if (shrinkViewCantReact) return true
         return super.onInterceptTouchEvent(ev)
     }
 
@@ -130,22 +135,23 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
         if (shrinkViewMaxHeight == 0) shrinkViewMaxHeight = measuredWidth
 
         val shrinkLP = childToShrink.layoutParams as MarginLayoutParams
-        val shrinkTop = shrinkLP.topMargin
-        val scrollTop = shrinkViewMinHeight
+        val shrinkMarginTop = shrinkLP.topMargin // 横向 RV 的实时 MarginTop
+        if (scrollViewOriginY == 0) scrollViewOriginY = shrinkViewMinHeight + shrinkViewOriMarginTop
 
         childToShrink.let {
-            it.layout(0, 0, measuredWidth, it.measuredHeight)
-            it.measuredHeight
+            val shrinkViewBottom = shrinkMarginTop + it.measuredHeight
+            it.layout(0, shrinkMarginTop, measuredWidth, shrinkViewBottom)
         }
-//        Log.i("greyson", "onLayout: shrink's margin start=${shrinkLP.marginStart}" +
-//                ", top=$shrinkTop, end=${shrinkLP.marginEnd}, bot=${shrinkLP.bottomMargin}\n" +
-//                ", height=${shrinkLP.height}, width=${shrinkLP.width}, scrollTop=$scrollTop,\n srollY=${childScrollable.y}-${childScrollable.translationY}")
-// 为什么会有 translationY ？？
+
+        Log.i("greyson", "onLayout: shrink's margin start=${shrinkLP.marginStart}" +
+                ", top=$shrinkMarginTop, end=${shrinkLP.marginEnd}, bot=${shrinkLP.bottomMargin}\n" +
+                ", height=${shrinkLP.height}, width=${shrinkLP.width}, scrollOriginTop=$scrollViewOriginY,\n" +
+                "scrollView's Y=${childScrollable.y}, ty=${childScrollable.translationY}, top=${childScrollable.top}")
 
         childScrollable.layout(0,
-                scrollTop, // 这个一直保持初始值，不能变！！
+                scrollViewOriginY, // 这个一直保持初始值，不能变！！
                 measuredWidth,
-                scrollTop + childScrollable.measuredHeight
+                scrollViewOriginY + childScrollable.measuredHeight
         )
     }
 
@@ -156,7 +162,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
 
         willNestFling = type == ViewCompat.TYPE_NON_TOUCH
         translateValueAnimator.cancel()
-        shrinkValueAnimator.cancel()
+//        shrinkValueAnimator.cancel()
         /*if (type == ViewCompat.TYPE_NON_TOUCH) {
             return false
         }*/
@@ -187,7 +193,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
 
          }*/
 
-        if (scrollViewY != shrinkViewMinHeight && scrollViewY != 0 && scrollViewY != shrinkViewMaxHeight
+        if (scrollViewY != scrollViewOriginY && scrollViewY != 0 && scrollViewY != shrinkViewMaxHeight
                 && !willNestFling) {
             autoScrollInternal()
         } else {
@@ -230,93 +236,75 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
         val shrinkViewY = (childToShrink.y).toInt()
         val scrollViewY = (childScrollable.y).toInt()
 
-        val shrinkViewLP = childToShrink.layoutParams
         val curShrinkViewHeight = childToShrink.height
 
         Log.i("greyson", "onNestedPreScroll: dy=$dy, canScrollVertically=${childScrollable.canScrollVertically(-1)}" +
-                ", \nshrinkViewMinHeight=$shrinkViewMinHeight, shrinkViewMaxHeight=$shrinkViewMaxHeight, ty=${childScrollable.translationY}" +
-                " \nshrinkViewY=$shrinkViewY, scrollViewY=$scrollViewY curShrinkViewHeight=$curShrinkViewHeight")
+//                ", \nshrinkViewMinHeight=$shrinkViewMinHeight, shrinkViewMaxHeight=$shrinkViewMaxHeight, ty=${childScrollable.translationY}" +
+                " \nshrinkViewY=$shrinkViewY, scrollViewY=$scrollViewY curShrinkViewHeight=$curShrinkViewHeight, scrollViewOriginY=$scrollViewOriginY")
 
         val scrollUp = dy > 0
         val offset = abs(dy)
         if (scrollViewY == 0) { // 伸缩视图完全被移出界面的情况
 
             if (!scrollUp && !childScrollable.canScrollVertically(-1)) {
-                childToShrink.y = min(shrinkViewY + offset.toInt(), 0).toFloat()
-                childScrollable.y = min(scrollViewY + offset.toInt(), shrinkViewMinHeight).toFloat()
+                childToShrink.y = min(shrinkViewY + offset.toInt(), shrinkViewOriMarginTop).toFloat()
+                childScrollable.y = min(scrollViewY + offset.toInt(), scrollViewOriginY).toFloat()
                 consumed[1] = dy.toInt()
-                scrolling(scrollUp, offset, EVENT_TRANSLATE_IN)
+                scrollingInternal(scrollUp, offset, EVENT_TRANSLATE_IN)
             }
 
-        } else if (scrollViewY > 0 && scrollViewY < shrinkViewMinHeight) {
+        } else if (scrollViewY > 0 && scrollViewY < scrollViewOriginY) {
             // 伸缩视图正在移出界面，还没到临界点的情况
             if (scrollUp) {
-                childToShrink.y = max(shrinkViewY - offset.toInt(), -curShrinkViewHeight).toFloat()
+                childToShrink.y = max(shrinkViewY - offset.toInt(), -scrollViewOriginY).toFloat()
                 childScrollable.y = max(scrollViewY - offset.toInt(), 0).toFloat()
-                scrolling(scrollUp, offset, EVENT_TRANSLATE_OUT)
+                scrollingInternal(scrollUp, offset, EVENT_TRANSLATE_OUT)
 
             } else {
-                childToShrink.y = min(shrinkViewY + offset.toInt(), 0).toFloat()
-                childScrollable.y = min(scrollViewY + offset.toInt(), shrinkViewMinHeight).toFloat()
-                scrolling(scrollUp, offset, EVENT_TRANSLATE_IN)
+                childToShrink.y = min(shrinkViewY + offset.toInt(), shrinkViewOriMarginTop).toFloat()
+                childScrollable.y = min(scrollViewY + offset.toInt(), scrollViewOriginY).toFloat()
+                scrollingInternal(scrollUp, offset, EVENT_TRANSLATE_IN)
             }
             consumed[1] = dy.toInt()
 
-        } else if (scrollViewY == shrinkViewMinHeight) {
+        } else if (scrollViewY == scrollViewOriginY) {
             // 伸缩视图 压缩状态：
 
             if (scrollUp) {
                 // else 向上不能再压缩。
-                if (shrinkViewY > -shrinkViewMinHeight) {
-                    childToShrink.y = max(shrinkViewY - offset.toInt(), -curShrinkViewHeight).toFloat()
+                if (shrinkViewY > -scrollViewOriginY) {
+                    childToShrink.y = max(shrinkViewY - offset.toInt(), -scrollViewOriginY).toFloat()
                     val scrollViewNewY = max(scrollViewY - offset.toInt(), 0).toFloat()
                     childScrollable.y = scrollViewNewY
 //                    Log.w("greyson", "gestureMove伸缩状态向下: scrollView new y=${scrollViewNewY}, shrink new height=$height, ty=${childScrollable.translationY}")
 
                     consumed[1] = dy.toInt()
-                    scrolling(scrollUp, offset, EVENT_TRANSLATE_OUT)
+                    scrollingInternal(scrollUp, offset, EVENT_TRANSLATE_OUT)
                 }
 
             } else {
 
                 if (!childScrollable.canScrollVertically(-1) && !childToShrink.canScrollHorizontally(-1)) {
-                    // 向下伸展
-                    val height = min(shrinkViewMaxHeight, curShrinkViewHeight + offset.toInt())
-                    shrinkViewLP.height = height
-                    childToShrink.layoutParams = shrinkViewLP
-
-                    val scrollViewNewY = min(scrollViewY + (-dy.toInt()), shrinkViewMaxHeight).toFloat()
-                    childScrollable.y = scrollViewNewY
+                    childScrollable.y = min(scrollViewY + offset.toInt(), shrinkViewMaxHeight).toFloat()
+                    scrollingInternal(scrollUp, offset, EVENT_EXPAND)
 
 //                    Log.w("greyson", "gestureMove伸缩状态向下: scrollView new y=${scrollViewNewY}, shrink new height=$height, ty=${childScrollable.translationY}")
                     consumed[1] = dy.toInt()
-                    scrolling(scrollUp, offset, EVENT_EXPAND)
                 }
 
             }
 
-        } else if (scrollViewY > shrinkViewMinHeight && scrollViewY < shrinkViewMaxHeight) {
+        } else if (scrollViewY > scrollViewOriginY && scrollViewY < shrinkViewMaxHeight) {
             // 伸缩视图在伸展和压缩状态之间变化的情况
 
             if (scrollUp) {
-                val height = max(shrinkViewMinHeight, curShrinkViewHeight - dy.toInt())
-                shrinkViewLP.height = height
-                childToShrink.layoutParams = shrinkViewLP
-
-                val scrollViewNewY = max(scrollViewY - dy.toInt(), shrinkViewMinHeight).toFloat()
-                childScrollable.y = scrollViewNewY
-//                Log.w("greyson", "gestureMove之间身上: scrollView new y=${scrollViewNewY}, shrink new height=$height, ty=${childScrollable.translationY}")
-                scrolling(scrollUp, offset, EVENT_COLLAPSE)
+                childScrollable.y = max(scrollViewY - offset.toInt(), scrollViewOriginY).toFloat()
+                scrollingInternal(scrollUp, offset, EVENT_COLLAPSE)
 
             } else {
-                val height = min(shrinkViewMaxHeight, curShrinkViewHeight + offset.toInt())
-                shrinkViewLP.height = height
-                childToShrink.layoutParams = shrinkViewLP
-
-                val scrollViewNewY = min(scrollViewY + (-dy.toInt()), shrinkViewMaxHeight).toFloat()
+                childScrollable.y = min(scrollViewY + offset.toInt(), shrinkViewMaxHeight).toFloat()
+                scrollingInternal(scrollUp, offset, EVENT_EXPAND)
 //                Log.w("greyson", "gestureMove: scrollView new y=${scrollViewNewY}, shrink new height=$height, ty=${childScrollable.translationY}")
-                childScrollable.y = scrollViewNewY
-                scrolling(scrollUp, offset, EVENT_EXPAND)
 
             }
             consumed[1] = dy.toInt()
@@ -325,15 +313,10 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
             // 伸缩视图 伸展状态：
 
             if (scrollUp) {
-                // 压缩
-                val height = max(shrinkViewMinHeight, curShrinkViewHeight - dy.toInt())
-                shrinkViewLP.height = height
-                childToShrink.layoutParams = shrinkViewLP
-
-                childScrollable.y = max(scrollViewY - dy.toInt(), shrinkViewMinHeight).toFloat()
+                childScrollable.y = max(scrollViewY - offset.toInt(), scrollViewOriginY).toFloat()
+                scrollingInternal(scrollUp, offset, EVENT_COLLAPSE)
 
                 consumed[1] = dy.toInt()
-                scrolling(scrollUp, offset, EVENT_COLLAPSE)
             }
 
         }
@@ -341,20 +324,15 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
     }
 
     override fun onAnimationUpdate(animation: ValueAnimator?) {
-        if (animation == shrinkValueAnimator) {
+        /*if (animation == shrinkValueAnimator) {
 
-            val animatedValue = animation.animatedValue as Float
-            val layoutParams = childToShrink.layoutParams
-            layoutParams.height = animatedValue.toInt()
-            childToShrink.layoutParams = layoutParams
-
-        } else if (animation == translateValueAnimator) {
+        } else */if (animation == translateValueAnimator) {
 
             val value = animation.animatedValue as Float
             val dy = value - childScrollable.y
             val scrollUp = dy < 0
             childScrollable.y = value
-            scrolling(scrollUp, -dy, if (scrollUp) EVENT_COLLAPSE else EVENT_EXPAND)
+            scrollingInternal(scrollUp, abs(dy), if (scrollUp) EVENT_COLLAPSE else EVENT_EXPAND)
 
         }
     }
@@ -362,42 +340,81 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
     private fun autoScrollInternal() {
         val scrollViewY = childScrollable.y.toInt()
 //        Log.w("greyson", "autoScrollInternal: isAutoAnimating=$isAutoAnimating")
-        if (scrollViewY > shrinkViewMinHeight && scrollViewY < shrinkViewMaxHeight && !isAutoAnimating) {
+        if (scrollViewY > scrollViewOriginY && scrollViewY < shrinkViewMaxHeight && !isAutoAnimating) {
             var startPos = 0
             var endPos = 0
-            val middle = (shrinkViewMaxHeight - shrinkViewMinHeight) / 2 + shrinkViewMinHeight
+            val middle = (shrinkViewMaxHeight - scrollViewOriginY) / 2 + scrollViewOriginY
             if (scrollViewY > middle) {
-                shrinkValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMaxHeight.toFloat())
+//                shrinkValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMaxHeight.toFloat())
                 translateValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMaxHeight.toFloat())
 
             } else {
-                shrinkValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMinHeight.toFloat())
-                translateValueAnimator.setFloatValues(scrollViewY.toFloat(), shrinkViewMinHeight.toFloat())
+//                shrinkValueAnimator.setFloatValues(scrollViewY.toFloat(), scrollViewOriginY.toFloat())
+                translateValueAnimator.setFloatValues(scrollViewY.toFloat(), scrollViewOriginY.toFloat())
 
             }
 
             Log.w("greyson", "animate start=$isAutoAnimating")
             isAutoAnimating = true
-            shrinkValueAnimator.start()
+//            shrinkValueAnimator.start()
             translateValueAnimator.start()
 
         }
 
     }
 
-    private fun scrolling(scrollUp: Boolean, offset: Float, event: Int) {
-        shrinkFirstChild?.let { target ->
-            val targetParent = target.parent
+    private fun collapse() {
+
+    }
+
+    private fun scrollingInternal(scrollUp: Boolean, offset: Float, event: Int) {
+        Log.w("greyson", "scrollingInternal: scrollUp=$scrollUp, new offset=$offset, event=$event\n")
+        // 压缩横向 RV 时的一些参数。压缩过程的当前百分比
+        val totalOffset = shrinkViewMaxHeight - scrollViewOriginY
+        val offsetFromMin = childScrollable.y - scrollViewOriginY
+//      val offsetFromMin = shrinkViewMaxHeight - childScrollable.y
+        val ratioFromMin = offsetFromMin / totalOffset.toFloat()
+
+        val shrinkViewLP = childToShrink.layoutParams as MarginLayoutParams
+        val curShrinkViewHeight = childToShrink.height
+        // 横向 RV 自己的动画
+        if (event == EVENT_COLLAPSE) {
+            // 压缩
+            val newMargin = (shrinkViewOriMarginTop * (1 - ratioFromMin)).toInt()
+            val marginOffset = newMargin - shrinkViewLP.topMargin
+
+            val newHeight = (curShrinkViewHeight - offset) - abs(marginOffset)
+            val height = max(shrinkViewMinHeight, newHeight.toInt())
+
+            shrinkViewLP.height = height
+            shrinkViewLP.topMargin = newMargin
+            childToShrink.layoutParams = shrinkViewLP
+            Log.w("greyson", "scrolling collapse: shrink new y=${shrinkViewLP.topMargin}, new height=$height\n")
+
+        } else if (event == EVENT_EXPAND) {
+            // 向下伸展
+            val newMargin = (shrinkViewOriMarginTop * (1 - ratioFromMin)).toInt()
+            val marginOffset = newMargin - shrinkViewLP.topMargin
+
+            val newHeight = (curShrinkViewHeight + offset) + abs(marginOffset)
+            val height = min(shrinkViewMaxHeight, newHeight.toInt())
+
+            shrinkViewLP.height = height
+            shrinkViewLP.topMargin = newMargin
+            childToShrink.layoutParams = shrinkViewLP
+            Log.w("greyson", "scrolling expand: shrink new y=${shrinkViewLP.topMargin}, new height=$height\n")
+
+        }
+
+
+        // 横向 rv 子 View动画
+        if (event == EVENT_COLLAPSE || event == EVENT_EXPAND) {
+
+            shrinkFirstChild?.let { target ->
+                val targetParent = target.parent
 //            Log.i("greyson", "scrolling(): shrinkFirstChildOrgWidth=${shrinkOriLayoutParams.width}" +
 //                    ", ${target.javaClass.name}, parent=${targetParent.javaClass.name}")
-            if (targetParent is ViewGroup) {
-
-                if (event == EVENT_COLLAPSE || event == EVENT_EXPAND) {
-
-                    val totalOffset = shrinkViewMaxHeight - shrinkViewMinHeight
-                    val offsetFromMin = childScrollable.y - shrinkViewMinHeight
-//                val offsetFromMin = shrinkViewMaxHeight - childScrollable.y
-                    val ratioFromMin = offsetFromMin.toFloat() / totalOffset.toFloat()
+                if (targetParent is ViewGroup) {
 
                     val parentWidth = targetParent.width
                     val totalWidthOffset = parentWidth - shrinkOriLayoutParams.width
@@ -408,7 +425,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
                     val targetLP = target.layoutParams as MarginLayoutParams
 
 //                    Log.w("greyson", "targetLP: start=${targetLP.marginStart}, top=${targetLP.topMargin}, end=${targetLP.marginEnd}, bot=${targetLP.bottomMargin}")
-//                    Log.w("greyson", "shrinkOriLayoutParams: start=${shrinkOriLayoutParams.marginStart}, top=${shrinkOriLayoutParams.topMargin}, end=${shrinkOriLayoutParams.marginEnd}, bot=${shrinkOriLayoutParams.bottomMargin}")
+                    Log.w("greyson", "shrinkOriLayoutParams: start=${shrinkOriLayoutParams.marginStart}, top=${shrinkOriLayoutParams.topMargin}, end=${shrinkOriLayoutParams.marginEnd}, bot=${shrinkOriLayoutParams.bottomMargin}")
 
                     // 注意：margin 是从大到小。跟宽度从小到大不一样。所以比率是相反的
                     val newMarginStart = (shrinkOriLayoutParams.marginStart * (1 - ratioFromMin)).toInt()
@@ -420,9 +437,9 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
                     targetLP.topMargin = newMarginTop
                     targetLP.bottomMargin = newMarginBottom
 
-//                    Log.w("greyson", "targetLP new !: start=${targetLP.marginStart}, top=${targetLP.topMargin}, end=${targetLP.marginEnd}, bot=${targetLP.bottomMargin}")
+                    Log.w("greyson", "targetLP new !: start=${targetLP.marginStart}, top=${targetLP.topMargin}, end=${targetLP.marginEnd}, bot=${targetLP.bottomMargin}")
 
-                    // 设置子 View 的宽
+                    // 设置横向 RV 的子 View 的宽高
                     targetLP.width = (totalWidthOffset * ratioFromMin).toInt() + shrinkOriLayoutParams.width
                     targetLP.height = (totalHeightOffset * ratioFromMin).toInt() + shrinkOriLayoutParams.height
 
@@ -432,6 +449,7 @@ class CollapsableScrollView : FrameLayout, NestedScrollingParent2, ValueAnimator
                 }
 
             }
+
         }
     }
 
