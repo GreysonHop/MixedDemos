@@ -6,33 +6,25 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!--<androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/dog"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />-->
+        android:layout_height="match_parent">
 
         <!-- horizontal rv 的高度是必需的。不然就在父 View 设置 -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_horizontal"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:background="@color/grey"
-            android:layout_marginTop="60dp" />
+            android:layout_marginTop="60dp"
+            android:background="@color/grey" />
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rv_horizontal"
+            tools:background="@color/blue_date_picker" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:background="@color/blue_date_picker" />
+    </RelativeLayout>
 
 </com.testdemo.testNestedScroll.raw.CollapsableScrollView>

@@ -2,10 +2,12 @@ package com.testdemo.testNestedScroll.raw
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.animation.addListener
@@ -13,7 +15,6 @@ import androidx.core.view.NestedScrollingParent2
 import androidx.core.view.ViewCompat
 import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
-import com.testdemo.util.broken_lib.Utils
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -32,6 +33,7 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
     private var shrinkFirstChild: View? = null
     lateinit var childToShrink: View // 将要被压缩、拉伸的组件
     lateinit var childScrollable: View
+    lateinit var topLayoutManager: CustomLayoutManager
 
     //    private var shrinkValueAnimator: ValueAnimator = ValueAnimator().apply {
 //        duration = 300
@@ -56,6 +58,13 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
     private var shrinkViewMaxHeight = 0
     private var scrollViewOriginY = 0 // 横向 RV 的原始 Bottom
 
+    var horizontalScrolling = false
+    var verticalScrolling = false
+    var touchSlop = 0
+
+    //    var shouldInitOffset = true // 判断当前是哪个方向滚动，数据是否应该重新收集
+    val offset = IntArray(2)
+    var firstTouchPoint = PointF()
     var init = false //
     var isAutoAnimating = false // 正在执行自动收缩（或伸展）、位移动画
     var willNestFling = false // 当前开始的嵌套滚动是猛抛（fling）导致的
@@ -63,9 +72,6 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
     @Deprecated("just for test")
     var orderTest = 0
 
-    private var mCollapseOffset = Utils.dp2px(100) // 可伸缩视图能收缩的长度
-
-    // private val shrinkViewHeight = Utils.dp2px(300) // 可伸缩 View 的原始高度
     private var mIsCollapse = false // 可伸缩视图是否为收缩状态
     private var mIsAnimating = false // 可伸缩视图正在收缩或展开
 
@@ -98,24 +104,17 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
 
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        val scrollViewY = (childScrollable.y).toInt()
-        val shrinkViewCantReact = (scrollViewY > scrollViewOriginY && ev.y.toInt() <= scrollViewY)
-//                || scrollViewY <= scrollViewOriginY && ev.y.toInt() <= scrollViewY
-        if (shrinkViewCantReact) return true
-        return super.onInterceptTouchEvent(ev)
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+
+        return super.dispatchTouchEvent(ev)
     }
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-        /*val viewGroup = getChildAt(1) as ViewGroup
-        for (index in 0..viewGroup.childCount) {
-            if (viewGroup.getChildAt(index) is RecyclerView) {
-                mScrollingView = viewGroup.getChildAt(index) as RecyclerView
-                break
-            }
-        }*/
-//todo 可能得刷新一下
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        /*val scrollViewY = (childScrollable.y).toInt()
+        val shrinkViewCantReact = (scrollViewY > scrollViewOriginY && ev.y.toInt() <= scrollViewY)
+//                || scrollViewY <= scrollViewOriginY && ev.y.toInt() <= scrollViewY
+        if (shrinkViewCantReact) return true*/
+        return super.onInterceptTouchEvent(ev)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -163,15 +162,50 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
         willNestFling = type == ViewCompat.TYPE_NON_TOUCH
         translateValueAnimator.cancel()
 //        shrinkValueAnimator.cancel()
-        /*if (type == ViewCompat.TYPE_NON_TOUCH) {
-            return false
-        }*/
         return ret
     }
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
+        if (touchSlop == 0) {
+            val vc = ViewConfiguration.get(context)
+            touchSlop = vc.scaledTouchSlop
+        }
+
+        offset[0] += dx
+        offset[1] += dy
+        Log.d("greyson", "onNestedPreScroll: offset=${offset[0]}-${offset[1]}。slop=$touchSlop")
+        if (!verticalScrolling && !horizontalScrolling) {
+            if (abs(offset[1]) > touchSlop) {
+                verticalScrolling = true
+                (childScrollable as? RecyclerView)?.scrollToPosition(0)
+            } else if (abs(offset[0]) > touchSlop) {
+                horizontalScrolling = true
+                // 可能有些动荡，修复一下位置
+            }
+        }
+
+        /*if (ev.actionMasked == MotionEvent.ACTION_DOWN) {
+            firstTouchPoint.y = ev.y
+            firstTouchPoint.x = ev.x
+            horizontalScrolling = false
+            verticalScrolling = false
+
+        } else if (ev.actionMasked == MotionEvent.ACTION_MOVE) {
+            if (touchSlop == 0) {
+                val vc = ViewConfiguration.get(context)
+                touchSlop = vc.scaledTouchSlop
+            }
+
+            if ((ev.y - firstTouchPoint.y) > touchSlop) {
+                horizontalScrolling = false
+                verticalScrolling = true
+            } else if (ev.x - firstTouchPoint.x > touchSlop) {
+                horizontalScrolling = true
+                verticalScrolling = false
+            }
+        }*/
         //跟随手势滑动
-        gestureMove(dy.toFloat(), consumed)
+        gestureMove(dx, dy, consumed)
     }
 
     override fun onNestedScrollAccepted(child: View, target: View, axes: Int, type: Int) {
@@ -184,20 +218,20 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
 
     override fun onStopNestedScroll(target: View, type: Int) {
         //此时 childViewY 必为 3个标志位之一，判断不为这三个数值就自动滑动
-        val scrollViewY: Int = childScrollable.y.toInt()
-        Log.w("greyson", "onStopNestedScroll=$type, $target, $scrollViewY， ${childScrollable.translationY}, willFling=$willNestFling,  order=$orderTest")
+        val scrollViewY = childScrollable.y.toInt()
+        Log.w("greyson", "onStopNestedScroll:type=$type, scrollViewY=$scrollViewY， scrollViewTY=${childScrollable.translationY}, willFling=$willNestFling,  order=$orderTest")
         orderTest += 1
 
-        /* if (scrollViewY == shrinkViewMaxHeight && childToShrink is RecyclerView) {
-             childToShrink.layoutManager.can
-
-         }*/
+        if (!willNestFling) {
+            verticalScrolling = false
+            horizontalScrolling = false
+            offset[0] = 0
+            offset[1] = 1
+        }
 
         if (scrollViewY != scrollViewOriginY && scrollViewY != 0 && scrollViewY != shrinkViewMaxHeight
                 && !willNestFling) {
             autoScrollInternal()
-        } else {
-//            callBackCalenadarState()
         }
         willNestFling = false
     }
@@ -230,7 +264,7 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
         const val EVENT_COLLAPSE = 4
     }
 
-    private fun gestureMove(dy: Float, consumed: IntArray) {
+    private fun gestureMove(dx: Int, dy: Int, consumed: IntArray) {
         /* 能向下滑动${target.canScrollVertically(-1)} */
 
         val shrinkViewY = (childToShrink.y).toInt()
@@ -238,9 +272,18 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
 
         val curShrinkViewHeight = childToShrink.height
 
-        Log.i("greyson", "onNestedPreScroll: dy=$dy, canScrollVertically=${childScrollable.canScrollVertically(-1)}" +
+        Log.i("greyson", "gestureMove: dy=$dy, dx=$dx, canScrollVertically=${childScrollable.canScrollVertically(-1)}" +
 //                ", \nshrinkViewMinHeight=$shrinkViewMinHeight, shrinkViewMaxHeight=$shrinkViewMaxHeight, ty=${childScrollable.translationY}" +
-                " \nshrinkViewY=$shrinkViewY, scrollViewY=$scrollViewY curShrinkViewHeight=$curShrinkViewHeight, scrollViewOriginY=$scrollViewOriginY")
+                " \nshrinkViewY=$shrinkViewY, scrollViewY=$scrollViewY curShrinkViewHeight=$curShrinkViewHeight, scrollViewOriginY=$scrollViewOriginY" +
+                "\n horizontalScrolling=$horizontalScrolling, verticalScrolling=$verticalScrolling")
+
+        if (horizontalScrolling) {
+            consumed[1] = dy
+            return
+        } else if (verticalScrolling) {
+            consumed[0] = dx
+//            return // 纵向滚动还需要执行后面的动画
+        }
 
         val scrollUp = dy > 0
         val offset = abs(dy)
@@ -332,7 +375,7 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
             val dy = value - childScrollable.y
             val scrollUp = dy < 0
             childScrollable.y = value
-            scrollingInternal(scrollUp, abs(dy), if (scrollUp) EVENT_COLLAPSE else EVENT_EXPAND)
+            scrollingInternal(scrollUp, abs(dy.toInt()), if (scrollUp) EVENT_COLLAPSE else EVENT_EXPAND)
 
         }
     }
@@ -363,11 +406,7 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
 
     }
 
-    private fun collapse() {
-
-    }
-
-    private fun scrollingInternal(scrollUp: Boolean, offset: Float, event: Int) {
+    private fun scrollingInternal(scrollUp: Boolean, offset: Int, event: Int) {
         Log.w("greyson", "scrollingInternal: scrollUp=$scrollUp, new offset=$offset, event=$event\n")
         // 压缩横向 RV 时的一些参数。压缩过程的当前百分比
         val totalOffset = shrinkViewMaxHeight - scrollViewOriginY
@@ -445,7 +484,7 @@ class CollapsableRecyclerView : FrameLayout, NestedScrollingParent2, ValueAnimat
 
                     target.layoutParams = targetLP
 
-                    if (targetParent is RecyclerView) targetParent.scrollToPosition(0)
+//                    if (targetParent is RecyclerView) targetParent.scrollToPosition(0)
                 }
 
             }

@@ -16,7 +16,7 @@ class CollapsableScrollAct : BaseCommonActivity() {
     private lateinit var rvHorizon: RecyclerView
 
     override fun getLayoutResId(): Int {
-        return R.layout.act_collapsable_scroll
+        return R.layout.act_collapsable_scroll_backup
     }
 
     override fun initView() {
@@ -38,7 +38,8 @@ class CollapsableScrollAct : BaseCommonActivity() {
         for (i in 0..5) {
             listData2.add("image")
         }
-        val layoutManagerH = LinearLayoutManager(this)
+        val layoutManagerH = CustomLayoutManager(this)
+        layoutManagerH.setScrollMode(CustomLayoutManager.SCROLL_ENABLE_VERTICAL)
         layoutManagerH.orientation = LinearLayoutManager.HORIZONTAL
         rvHorizon.layoutManager = layoutManagerH
         rvHorizon.adapter = MyImgAdapter(listData2)
