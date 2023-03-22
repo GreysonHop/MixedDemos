@@ -14,12 +14,13 @@ import android.view.MenuItem;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.testdemo.R;
+import com.testdemo.util.CommonTextAdapter;
 
 import java.util.ArrayList;
 
 public class CollapsingToolbarLayoutActivity extends Activity {
     private XRecyclerView mRecyclerView;
-    private MyAdapter mAdapter;
+    private CommonTextAdapter mAdapter;
     private ArrayList<String> listData;
     private int refreshTime = 0;
     private int times = 0;
@@ -90,7 +91,7 @@ public class CollapsingToolbarLayoutActivity extends Activity {
         for(int i = 0; i < 15 ;i++){
             listData.add("item" + i);
         }
-        mAdapter = new MyAdapter(listData);
+        mAdapter = new CommonTextAdapter(listData);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

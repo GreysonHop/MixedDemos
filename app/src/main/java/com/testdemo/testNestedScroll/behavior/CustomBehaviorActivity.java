@@ -10,14 +10,15 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.testdemo.BaseCommonActivity;
 import com.testdemo.R;
-import com.testdemo.testCenterRefresh.MyAdapter;
+import com.testdemo.util.CommonTextAdapter;
+import com.testdemo.util.CommonImgAdapter;
 
 import java.util.ArrayList;
 
 public class CustomBehaviorActivity extends BaseCommonActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView mRV_Horizon;
-    private MyAdapter mAdapter;
+    private CommonTextAdapter mAdapter;
     private ArrayList<String> listData;
 
     @Override
@@ -36,7 +37,7 @@ public class CustomBehaviorActivity extends BaseCommonActivity {
         for(int i = 0; i < 18 ;i++){
             listData.add("item" + i);
         }
-        mAdapter = new MyAdapter(listData);
+        mAdapter = new CommonTextAdapter(listData);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -47,7 +48,7 @@ public class CustomBehaviorActivity extends BaseCommonActivity {
         for(int i = 0; i < 6 ;i++){
             listData2.add("image");
         }
-        mRV_Horizon.setAdapter(new MyImgAdapter(listData2));
+        mRV_Horizon.setAdapter(new CommonImgAdapter(listData2));
 
         animate();
     }

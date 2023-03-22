@@ -19,7 +19,7 @@ import com.testdemo.testBlurAndGlass.BlurGlassSoOnActivity
 import com.testdemo.testCanDragLayout.TestDragViewActivity
 import com.testdemo.testCanDragScrollView.DraggableScrollViewAct
 import com.testdemo.testCenterRefresh.CollapsingRecyclerActivity
-import com.testdemo.testCenterRefresh.MyAdapter
+import com.testdemo.util.CommonTextAdapter
 import com.testdemo.testDateMsgLog.DateMsgLogAct
 import com.testdemo.testDatePicker.CreateInfoAct
 import com.testdemo.testEvent.eventdispatch.TouchEventDispatchTest
@@ -45,7 +45,7 @@ import testJava.TestCoroutinesInActivity
  */
 class MainListFragment : BaseFragment() {
 
-    private val adapter = MyAdapter(listOf()).apply {
+    private val adapter = CommonTextAdapter(listOf()).apply {
         clickCallBack = { view, position -> itemClickListener(view, position)}
     }
 

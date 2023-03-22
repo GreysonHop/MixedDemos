@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.BaseCommonActivity
 import com.testdemo.fileAccess.media.ShowRecentMediaAct
-import com.testdemo.testCenterRefresh.MyAdapter
+import com.testdemo.util.CommonTextAdapter
 
 /**
  * Create by Greyson on 2021/05/13
@@ -33,7 +33,7 @@ class FileAccessMenuAct : BaseCommonActivity() {
         menuListMap["仿微信提示最新图片悬浮窗"] = ShowRecentMediaAct::class.java
 
         classNameList.addAll(menuListMap.keys)
-        actList.adapter = MyAdapter(classNameList).also {
+        actList.adapter = CommonTextAdapter(classNameList).also {
             it.clickCallBack = { _, pos ->
                 startActivity(Intent(this, menuListMap[classNameList[pos]] as Class<*>))
             }

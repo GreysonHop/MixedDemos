@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +16,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.SinaRefreshView;
 import com.testdemo.R;
+import com.testdemo.util.CommonTextAdapter;
 
 import java.util.ArrayList;
 
@@ -30,7 +28,7 @@ public class CollapsingRecyclerActivity extends Activity {
 
     private TwinklingRefreshLayout refreshLayout;
     private RecyclerView mRecyclerView;
-    private MyAdapter mAdapter;
+    private CommonTextAdapter mAdapter;
     private ArrayList<String> listData;
     private int refreshTime = 0;
     private int times = 0;
@@ -67,7 +65,7 @@ public class CollapsingRecyclerActivity extends Activity {
         for (int i = 0; i < 15; i++) {
             listData.add("item" + i);
         }
-        mAdapter = new MyAdapter(listData);
+        mAdapter = new CommonTextAdapter(listData);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

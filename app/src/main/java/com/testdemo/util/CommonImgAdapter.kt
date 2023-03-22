@@ -1,4 +1,4 @@
-package com.testdemo.testNestedScroll.behavior
+package com.testdemo.util
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.testdemo.R
 /**
  * Created by Greyson on 2018/06/07 .
  */
-class MyImgAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyImgAdapter.ViewHolder>() {
+class CommonImgAdapter(var dataList: List<String>) : RecyclerView.Adapter<CommonImgAdapter.ViewHolder>() {
 
     var clickCallBack: ((View, Int) -> Unit)? = null
 

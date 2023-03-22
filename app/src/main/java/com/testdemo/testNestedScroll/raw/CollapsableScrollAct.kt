@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.BaseCommonActivity
 import com.testdemo.R
-import com.testdemo.testCenterRefresh.MyAdapter
-import com.testdemo.testNestedScroll.behavior.MyImgAdapter
+import com.testdemo.util.CommonTextAdapter
+import com.testdemo.util.CommonImgAdapter
 
 /**
  * Create by Greyson on 2020/03/21
@@ -31,7 +31,7 @@ class CollapsableScrollAct : BaseCommonActivity() {
         for (i in 0..27) {
             listData.add("item$i")
         }
-        rvVertical.adapter = MyAdapter(listData)
+        rvVertical.adapter = CommonTextAdapter(listData)
 
 
         val listData2 = ArrayList<String>()
@@ -42,6 +42,6 @@ class CollapsableScrollAct : BaseCommonActivity() {
         layoutManagerH.setScrollMode(CustomLayoutManager.SCROLL_ENABLE_VERTICAL)
         layoutManagerH.orientation = LinearLayoutManager.HORIZONTAL
         rvHorizon.layoutManager = layoutManagerH
-        rvHorizon.adapter = MyImgAdapter(listData2)
+        rvHorizon.adapter = CommonImgAdapter(listData2)
     }
 }

@@ -1,4 +1,4 @@
-package com.testdemo.testCenterRefresh
+package com.testdemo.util
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +7,11 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.R
-import java.util.*
 
 /**
  * Created by Greyson on 2018/06/07 .
  */
-class MyAdapter(var dataList: List<String>) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class CommonTextAdapter(var dataList: List<String>) : RecyclerView.Adapter<CommonTextAdapter.ViewHolder>() {
 
     var clickCallBack: ((View, Int) -> Unit)? = null
 
