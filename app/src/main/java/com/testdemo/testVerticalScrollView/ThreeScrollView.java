@@ -52,12 +52,16 @@ public class ThreeScrollView extends ScrollView {
         return (int) (dipValue * scale + 0.5f);
     }
 
-    /**
-     * 回收速度追踪器
-     */
-    private void recycleVelocityTracker() {
+    private void resetVelocityTracker() {
         if (mVelocityTracker != null) {
             mVelocityTracker.clear();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mVelocityTracker != null) {
             mVelocityTracker.recycle();
             mVelocityTracker = null;
         }
@@ -86,7 +90,7 @@ public class ThreeScrollView extends ScrollView {
 
             case MotionEvent.ACTION_UP:
                 if (!mIsDragging) {
-                    recycleVelocityTracker();
+                    resetVelocityTracker();
                 }
 
                 break;
@@ -140,7 +144,7 @@ public class ThreeScrollView extends ScrollView {
                 scrollFromTo(scrollStart, scrollEnd);
                 lastScrolledY = scrollEnd;
 
-                recycleVelocityTracker();
+                resetVelocityTracker();
                 mIsDragging = false;
                 break;
 
