@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.AnimRes
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
@@ -49,8 +52,8 @@ abstract class BaseActivity : AppCompatActivity() {
         initialize()
         if (!disableDefaultOrientation) {
             requestedOrientation =
-                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         setContentView()
@@ -64,16 +67,16 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(
-            if (newBase != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                newBase.createConfigurationContext(
-                    newBase.resources.configuration.apply {
-                        setLocale(Locale.JAPANESE)
-                        setLocales(LocaleList(Locale.JAPANESE))
-                    }
-                )
-            } else {
-                newBase
-            }
+                if (newBase != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    newBase.createConfigurationContext(
+                            newBase.resources.configuration.apply {
+                                setLocale(Locale.JAPANESE)
+                                setLocales(LocaleList(Locale.JAPANESE))
+                            }
+                    )
+                } else {
+                    newBase
+                }
         )
     }
 
@@ -130,5 +133,58 @@ abstract class BaseActivity : AppCompatActivity() {
 
     inline fun <reified T> go(bundle: Bundle) {
         startActivity(Intent(this, T::class.java).putExtras(bundle))
+    }
+
+    /*var isInLightStatusBar = false
+    fun switchDarkStatusBar(on: Boolean) {
+        window?.decorView?.let {
+            it.systemUiVisibility =
+                    if (on) it.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    else it.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }*/
+
+    fun setStatusBar() {
+        window?.apply {
+            navigationBarColor = Color.TRANSPARENT
+            statusBarColor = Color.TRANSPARENT
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+            /*decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN)*/
+
+            /*decorView.setOnApplyWindowInsetsListener { _, insets ->
+                Log.v(TAG, "导航栏的高度：${insets.systemWindowInsetBottom}, 状态栏高度：${insets.systemWindowInsetTop}")
+                val lpTopLine = line_content_top.layoutParams as ViewGroup.MarginLayoutParams
+                val originMargin = line_content_top.getTag(R.id.tag_origin_margin) as? Int
+                lpTopLine.topMargin = insets.systemWindowInsetTop + if (originMargin == null) {
+                    line_content_top.setTag(R.id.tag_origin_margin, lpTopLine.topMargin)
+                    lpTopLine.topMargin
+                } else {
+                    originMargin
+                }
+
+                val lpBottomLine = line_content_bottom.layoutParams as ViewGroup.MarginLayoutParams
+                lpBottomLine.bottomMargin =
+                        insets.systemWindowInsetBottom + line_content_bottom.getTag(R.id.tag_origin_margin)
+                                .let { margin ->
+                                    if (margin is Int) {
+                                        margin
+                                    } else {
+                                        line_content_bottom.setTag(R.id.tag_origin_margin, lpBottomLine.bottomMargin)
+                                        lpBottomLine.bottomMargin
+                                    }
+                                }
+
+                line_content_bottom.layoutParams = lpBottomLine
+                insets
+            }*/
+
+        }
     }
 }

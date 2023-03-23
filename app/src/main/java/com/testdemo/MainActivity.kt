@@ -37,6 +37,7 @@ import com.testdemo.testAnim.activityAnim.DialogActivity
 import com.testdemo.testCenterRefresh.CollapsingToolbarLayoutActivity
 import com.testdemo.testNestedScroll.TestNestedScrollAct
 import com.testdemo.testNestedScroll.behavior.CustomBehaviorActivity
+import com.testdemo.testNestedScroll.coordinate.CoordinatorTestAct
 import com.testdemo.testNestedScroll.raw.CollapsableScrollAct
 import com.testdemo.testVerticalScrollView.TestMyVerticalViewPageAct
 import com.testdemo.testView.doodle.TestDoodleAct
@@ -69,9 +70,9 @@ class MainActivity : ListActivity() {
         Log.e("greyson", "MainActivity-onCreate: savedInstanceState = $savedInstanceState, task = $taskId")
 
         // 每次要在主页增加新的activity只需要在这里增加，不用管那个变量： classNameList
-        menuListMap["behavior->"] = CustomBehaviorActivity::class.java
+        menuListMap["CustomBehavior->"] = CustomBehaviorActivity::class.java
         menuListMap["CollapsableScrollAct->"] = CollapsableScrollAct::class.java
-        menuListMap["nested->"] = TestNestedScrollAct::class.java
+        menuListMap["CoordinatorLayout->"] = CoordinatorTestAct::class.java
         menuListMap.put("高斯模糊和玻璃破碎效果", BlurGlassSoOnActivity::class.java)
         menuListMap["动画实现弹窗"] = TestAnimationDialogAct::class.java
         menuListMap["文件操作相关"] = FileAccessMenuAct::class.java
