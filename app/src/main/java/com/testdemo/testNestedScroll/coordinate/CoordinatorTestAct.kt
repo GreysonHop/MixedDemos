@@ -1,14 +1,11 @@
 package com.testdemo.testNestedScroll.coordinate
 
-import android.R.attr.*
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.View
-import android.view.ViewAnimationUtils
-import android.view.ViewGroup.MarginLayoutParams
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -31,9 +28,6 @@ import com.testdemo.util.CommonFragment
 import com.testdemo.util.CommonFragmentPageAdapter
 import com.testdemo.util.CommonListFragment
 import com.testdemo.util.SystemUiUtils
-import kotlinx.android.synthetic.main.act_coordinator_test.*
-import kotlinx.android.synthetic.main.act_dialog.*
-import kotlinx.android.synthetic.main.activity_main_blur.*
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.ArgbEvaluatorHolder
@@ -43,6 +37,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView
 
 
 class CoordinatorTestAct : BaseCommonActivity() {
@@ -57,6 +52,8 @@ class CoordinatorTestAct : BaseCommonActivity() {
     val magicIndicator: MagicIndicator by lazy { findViewById(R.id.tl_title) }
     val ivSearch: ImageView by lazy { findViewById(R.id.iv_search) }
     val ivTabShadow: ImageView by lazy { findViewById(R.id.iv_tab_shadow) }
+
+    val tabTitleList = arrayListOf<SimplePagerTitleView>()
 
     override fun getLayoutResId(): Int {
         return R.layout.act_coordinator_test
@@ -87,13 +84,14 @@ class CoordinatorTestAct : BaseCommonActivity() {
                     if (position == titleList.lastIndex) { // 最后一个页面
                         contentView.setBackgroundColor(SPECIAL_COLOR)
                         SystemUiUtils.switchLightStatusBar(window.decorView, false)
-                    } else {
-                        contentView.setBackgroundColor(APP_PRIMARY_COLOR)
-                        SystemUiUtils.switchLightStatusBar(window.decorView, true)
-                        ivTabShadow.background.let {
-                            DrawableCompat.setTint(it, APP_PRIMARY_COLOR)
-                            ivTabShadow.setImageDrawable(it)
+                        tabTitleList.forEach {
+                            it.normalColor = Color.WHITE
+                            it.selectedColor = Color.WHITE
+                            it.setTextColor(Color.WHITE)
                         }
+
+                    } else {
+                        switchNormalPage(APP_PRIMARY_COLOR) // 模拟从列表获取背景色
                     }
 
                 } else if (position == titleList.lastIndex - 1) { // 倒数第二个页面在滑动时
@@ -127,6 +125,8 @@ class CoordinatorTestAct : BaseCommonActivity() {
                     if (index == count - 1) {
                         lastTabView = this
                     }
+
+                    tabTitleList.add(this)
                 }
             }
 
@@ -152,8 +152,8 @@ class CoordinatorTestAct : BaseCommonActivity() {
 
     }
 
-    var lastTabView :View? = null
-    var lastIndicator :LinePagerIndicator? = null
+    var lastTabView: View? = null
+    var lastIndicator: LinePagerIndicator? = null
 
     override fun onDestroy() {
         super.onDestroy()
@@ -183,6 +183,21 @@ class CoordinatorTestAct : BaseCommonActivity() {
 
     }
 
+    private fun switchNormalPage(color: Int) {
+        contentView.setBackgroundColor(color)
+        SystemUiUtils.switchLightStatusBar(window.decorView, true)
+        ivTabShadow.background.let {
+            DrawableCompat.setTint(it, color)
+            ivTabShadow.setImageDrawable(it)
+        }
+
+        tabTitleList.forEach {
+            it.normalColor = Color.GRAY
+            it.selectedColor = Color.BLACK
+            it.setTextColor(Color.GRAY)
+        }
+    }
+
     private fun coordinatorListener() {
         ivSearch.setOnClickListener { Toast.makeText(this, "点击搜索", Toast.LENGTH_SHORT).show() }
 
@@ -203,15 +218,17 @@ class CoordinatorTestAct : BaseCommonActivity() {
 //        ivTabShadow.animate().translationX() // 阴影应该是跟着 TabLayout 显示 的。即Tab太短不足以显示 时，就会出现阴影，而不是因为有放大镜就有阴影！
     }
 
+    var isShowingSearchBtn = false
+
     private fun searchBtnShow(appBarLayout: AppBarLayout, verticalOffset: Int) {
         val curX = ivSearch.translationX
         Log.i("greyson", "appBarLayout's offset=$verticalOffset, ${appBarLayout.totalScrollRange}, curX=${curX}")
-        if (curX >= ivSearch.width && verticalOffset <= (-appBarLayout.totalScrollRange / 2f).toInt()) { // 显示
+        if (curX >= ivSearch.width && verticalOffset <= (-appBarLayout.totalScrollRange / 2f).toInt() && !isShowingSearchBtn) { // 显示
 
-            ivSearch.animate().translationX(0f).setUpdateListener {
-                val value = (it.animatedValue as Float)
-                Log.i("greyson", "显示时： value=$value")
-            }.setListener(object : AnimatorListenerAdapter() {
+            Log.w("greyson", "要显示放大镜了！")
+            isShowingSearchBtn = true
+
+            ivSearch.animate().translationX(0f).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
                     ivSearch.visibility = View.VISIBLE
                     ivTabShadow.visibility = View.VISIBLE
@@ -219,29 +236,40 @@ class CoordinatorTestAct : BaseCommonActivity() {
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
-                    (magicIndicator.navigator as CommonNavigator).mScrollView.let {
+                    isShowingSearchBtn = false
+
+                    val navigator = (magicIndicator.navigator as CommonNavigator)
+                    navigator.mScrollView.let {
+                        Log.d("greyson", "显示时-onAnimationEnd: scrollView.width=${it.width}, magicIndicator.width=${magicIndicator.width}")
+
                         val backup = it.scrollX
-                        it.setPadding(0, 0, MeasureUtil.dp2px(baseContext, 18f), 0)
+                        it.setPadding(1, 0, MeasureUtil.dp2px(baseContext, 40f), 0)
                         it.clipToPadding = false
+
+                        it.postDelayed({
+                            Log.w("greyson", "自己滚动: x=$backup")
 //                        it.scrollTo(backup, it.scrollY)
-                        it.scrollX = backup
-                        it.horizontalFadingEdgeLength
+                            it.scrollX = backup
+                        }, 300)
                     }
+
                 }
             }).start()
+            ivSearch.animate()
 
         } else if (curX <= 0 && verticalOffset >= 0) { // 隐藏
+            Log.w("greyson", "要隐藏放大镜了！")
+            isShowingSearchBtn = false
 
-            ivSearch.animate().translationX(ivSearch.width.toFloat()).setUpdateListener {
-                val value = (it.animatedValue as Float)
-                Log.i("greyson", "隐藏时 value=$value")
-            }.setListener(object : AnimatorListenerAdapter() {
+            ivSearch.animate().translationX(ivSearch.width.toFloat()).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     ivSearch.visibility = View.GONE
                     ivTabShadow.visibility = View.GONE
                     (magicIndicator.navigator as CommonNavigator).mScrollView.let {
+                        Log.d("greyson", "隐藏时onAnimationEnd: scrollView.width=${it.width}, magicIndicator.width=${magicIndicator.width}")
+
                         it.setPadding(0, 0, 0, 0)
-                        it.clipToPadding = false
+//                        it.clipToPadding = false
                     }
                 }
             }).start()
