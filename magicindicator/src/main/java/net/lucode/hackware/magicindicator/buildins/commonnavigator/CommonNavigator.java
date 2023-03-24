@@ -28,7 +28,7 @@ import java.util.List;
  * Created by hackware on 2016/6/26.
  */
 public class CommonNavigator extends FrameLayout implements IPagerNavigator, NavigatorHelper.OnNavigatorScrollListener {
-    private HorizontalScrollView mScrollView;
+    public HorizontalScrollView mScrollView;
     private LinearLayout mTitleContainer;
     private LinearLayout mIndicatorContainer;
     private IPagerIndicator mIndicator;

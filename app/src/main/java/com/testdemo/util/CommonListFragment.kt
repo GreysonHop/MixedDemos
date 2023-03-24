@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.testdemo.BaseFragment
+import com.testdemo.testDatePicker.datepicker.utils.MeasureUtil
 
 class CommonListFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return RecyclerView(inflater.context).apply {
             layoutManager = LinearLayoutManager(inflater.context)
+            setPadding(0, MeasureUtil.dp2px(activity, 30f), 0, 0)
+            clipToPadding = false
         }
     }
 

@@ -1,18 +1,23 @@
 package com.testdemo.testNestedScroll.coordinate
 
+import android.R.attr.*
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
@@ -28,6 +33,7 @@ import com.testdemo.util.CommonListFragment
 import com.testdemo.util.SystemUiUtils
 import kotlinx.android.synthetic.main.act_coordinator_test.*
 import kotlinx.android.synthetic.main.act_dialog.*
+import kotlinx.android.synthetic.main.activity_main_blur.*
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.ArgbEvaluatorHolder
@@ -38,7 +44,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTit
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
+
 class CoordinatorTestAct : BaseCommonActivity() {
+    val APP_PRIMARY_COLOR = Color.WHITE
+    val APP_SECONDARY_COLOR = Color.parseColor("#00c853")
+    val SPECIAL_COLOR = Color.parseColor("#FD9001")
 
     val contentView: View by lazy { findViewById(R.id.rl_root) }
     val coordinator: CoordinatorLayout by lazy { findViewById(R.id.coordinator) }
@@ -46,6 +56,7 @@ class CoordinatorTestAct : BaseCommonActivity() {
     val mainViewPage: ViewPager by lazy { findViewById(R.id.vp_main) }
     val magicIndicator: MagicIndicator by lazy { findViewById(R.id.tl_title) }
     val ivSearch: ImageView by lazy { findViewById(R.id.iv_search) }
+    val ivTabShadow: ImageView by lazy { findViewById(R.id.iv_tab_shadow) }
 
     override fun getLayoutResId(): Int {
         return R.layout.act_coordinator_test
@@ -74,21 +85,19 @@ class CoordinatorTestAct : BaseCommonActivity() {
                 Log.i("greyson", "position=$position, offset=$positionOffset, pixel=$positionOffsetPixels")
                 if (positionOffsetPixels == 0) { // 停在某一页面时
                     if (position == titleList.lastIndex) { // 最后一个页面
-                        contentView.setBackgroundColor(Color.LTGRAY)
+                        contentView.setBackgroundColor(SPECIAL_COLOR)
                         SystemUiUtils.switchLightStatusBar(window.decorView, false)
                     } else {
-                        contentView.setBackgroundColor(Color.WHITE)
+                        contentView.setBackgroundColor(APP_PRIMARY_COLOR)
                         SystemUiUtils.switchLightStatusBar(window.decorView, true)
+                        ivTabShadow.background.let {
+                            DrawableCompat.setTint(it, APP_PRIMARY_COLOR)
+                            ivTabShadow.setImageDrawable(it)
+                        }
                     }
 
                 } else if (position == titleList.lastIndex - 1) { // 倒数第二个页面在滑动时
-                    val endColor = Color.LTGRAY
-                    val startColor = Color.WHITE
-                    val offset = endColor - startColor
-                    val curColor = ArgbEvaluatorHolder.eval(positionOffset, startColor, endColor)
-//                    val curColor = (offset * positionOffset + startColor).toInt()
-                    contentView.setBackgroundColor(curColor)
-                    SystemUiUtils.switchLightStatusBar(window.decorView, false)
+                    colorTranslate(positionOffset)
 
                 }
             }
@@ -110,9 +119,14 @@ class CoordinatorTestAct : BaseCommonActivity() {
             override fun getTitleView(context: Context?, index: Int): IPagerTitleView {
                 return ColorTransitionPagerTitleView(context).apply {
                     text = titleList[index]
+                    textSize = 15f
                     normalColor = Color.GRAY
                     selectedColor = Color.BLACK
                     setOnClickListener { mainViewPage.currentItem = index }
+
+                    if (index == count - 1) {
+                        lastTabView = this
+                    }
                 }
             }
 
@@ -125,14 +139,11 @@ class CoordinatorTestAct : BaseCommonActivity() {
                     yOffset = MeasureUtil.dp2px(context, 5f).toFloat()
                     startInterpolator = AccelerateInterpolator()
                     endInterpolator = DecelerateInterpolator(1.6f)
-                    val specialColor = Color.parseColor("#00c853")
-                    val normalColor = Color.WHITE
-                    setColors(normalColor,
-                            normalColor,
-                            Color.parseColor("#00c852"),
-                            Color.parseColor("#00c853"),
-                            Color.parseColor("#00c852"),
-                            specialColor)
+                    val normalColor = APP_SECONDARY_COLOR
+                    val specialColor = APP_PRIMARY_COLOR
+                    setColors(normalColor, normalColor, normalColor, normalColor, normalColor, specialColor)
+
+                    lastIndicator = this
                 }
             }
         }
@@ -141,41 +152,105 @@ class CoordinatorTestAct : BaseCommonActivity() {
 
     }
 
+    var lastTabView :View? = null
+    var lastIndicator :LinePagerIndicator? = null
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ivSearch.animation?.cancel()
+    }
+
+    // 颜色渐变的组件
+    private fun colorTranslate(percent: Float) {
+        val endSpecColor = SPECIAL_COLOR
+        val startSpecColor = APP_PRIMARY_COLOR
+        val curSpecColor = ArgbEvaluatorHolder.eval(percent, startSpecColor, endSpecColor)
+        contentView.setBackgroundColor(curSpecColor)
+        SystemUiUtils.switchLightStatusBar(window.decorView, false)
+
+        ivTabShadow.background.let {
+            DrawableCompat.setTint(it, curSpecColor)
+            ivTabShadow.setImageDrawable(it)
+        }
+
+        val endColor = APP_PRIMARY_COLOR
+        val startColor = APP_SECONDARY_COLOR
+        val curColor = ArgbEvaluatorHolder.eval(percent, startColor, endColor)
+        ivSearch.drawable.let {
+            DrawableCompat.setTint(it, curColor)
+            ivSearch.setImageDrawable(it)
+        }
+
+    }
+
     private fun coordinatorListener() {
-        iv_search.setOnClickListener { Toast.makeText(this, "点击搜索", Toast.LENGTH_SHORT).show() }
+        ivSearch.setOnClickListener { Toast.makeText(this, "点击搜索", Toast.LENGTH_SHORT).show() }
 
         appBar.addOnOffsetChangedListener(OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val curX = iv_search.translationX
-            Log.i("greyson", "appBarLayout's offset=$verticalOffset, ${appBarLayout.totalScrollRange}, curX=${curX}")
+            searchBtnShow(appBarLayout, verticalOffset)
 
-            /*if (curX >= ivSearch.width && verticalOffset <= (-appBarLayout.totalScrollRange / 2f).toInt()) { // 显示
-
-                iv_search.animate().translationX(0f).setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        iv_search.visibility = View.VISIBLE
-                    }
-                }).start()
-
-            } else if (curX <= 0 && verticalOffset >= 0) { // 隐藏
-
-                iv_search.animate().translationX(iv_search.width.toFloat()).setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        iv_search.visibility = View.GONE
-                    }
-                }).start()
-
+            /*val curX = ivSearch.translationX
+            if (ivSearch.visibility == View.GONE && verticalOffset <= (-appBarLayout.totalScrollRange / 2f).toInt()) { // 显示
+                switchSearchBtn()
+            } else if (ivSearch.visibility == View.VISIBLE && curX <= 0 && verticalOffset >= 0) { // 隐藏
+                switchSearchBtn()
             }*/
-
-            if (iv_search.visibility == View.GONE && verticalOffset <= (-appBarLayout.totalScrollRange / 2f).toInt()) { // 显示
-                switchSearchBtn()
-            } else if (iv_search.visibility == View.VISIBLE && curX <= 0 && verticalOffset >= 0) { // 隐藏
-                switchSearchBtn()
-            }
 
         })
     }
 
+    private fun shadowShow() {
+//        ivTabShadow.animate().translationX() // 阴影应该是跟着 TabLayout 显示 的。即Tab太短不足以显示 时，就会出现阴影，而不是因为有放大镜就有阴影！
+    }
+
+    private fun searchBtnShow(appBarLayout: AppBarLayout, verticalOffset: Int) {
+        val curX = ivSearch.translationX
+        Log.i("greyson", "appBarLayout's offset=$verticalOffset, ${appBarLayout.totalScrollRange}, curX=${curX}")
+        if (curX >= ivSearch.width && verticalOffset <= (-appBarLayout.totalScrollRange / 2f).toInt()) { // 显示
+
+            ivSearch.animate().translationX(0f).setUpdateListener {
+                val value = (it.animatedValue as Float)
+                Log.i("greyson", "显示时： value=$value")
+            }.setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) {
+                    ivSearch.visibility = View.VISIBLE
+                    ivTabShadow.visibility = View.VISIBLE
+
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    (magicIndicator.navigator as CommonNavigator).mScrollView.let {
+                        val backup = it.scrollX
+                        it.setPadding(0, 0, MeasureUtil.dp2px(baseContext, 18f), 0)
+                        it.clipToPadding = false
+//                        it.scrollTo(backup, it.scrollY)
+                        it.scrollX = backup
+                        it.horizontalFadingEdgeLength
+                    }
+                }
+            }).start()
+
+        } else if (curX <= 0 && verticalOffset >= 0) { // 隐藏
+
+            ivSearch.animate().translationX(ivSearch.width.toFloat()).setUpdateListener {
+                val value = (it.animatedValue as Float)
+                Log.i("greyson", "隐藏时 value=$value")
+            }.setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    ivSearch.visibility = View.GONE
+                    ivTabShadow.visibility = View.GONE
+                    (magicIndicator.navigator as CommonNavigator).mScrollView.let {
+                        it.setPadding(0, 0, 0, 0)
+                        it.clipToPadding = false
+                    }
+                }
+            }).start()
+
+        }
+    }
+
     private fun switchSearchBtn() {
+        // 补间动画版
         if (ivSearch.visibility == View.GONE) { // to show
             val translateInAnimation = TranslateAnimation(
                     Animation.RELATIVE_TO_SELF, 1.0f,
@@ -183,22 +258,39 @@ class CoordinatorTestAct : BaseCommonActivity() {
                     Animation.RELATIVE_TO_SELF, 0.0f,
                     Animation.RELATIVE_TO_SELF, 0.0f
             )
-            translateInAnimation.duration = 300
+            translateInAnimation.duration = 400
             ivSearch.animation = translateInAnimation
+            ivTabShadow.animation = translateInAnimation
 
             ivSearch.visibility = View.VISIBLE
+            ivTabShadow.visibility = View.VISIBLE
 
         } else {
             val translateOutAnimation = TranslateAnimation(
                     Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f,
                     Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f
-            )
-            translateOutAnimation.duration = 300
-            ivSearch.animation = translateOutAnimation
+            ).apply {
+                duration = 400
+                setAnimationListener(object : AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {}
 
-            ivSearch.visibility = View.GONE
+                    override fun onAnimationEnd(animation: Animation?) {
+                        ivSearch.visibility = View.GONE
+                        ivTabShadow.visibility = View.GONE
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation?) {}
+                })
+            }
+            ivSearch.animation = translateOutAnimation
+            ivTabShadow.animation = translateOutAnimation
+
+            translateOutAnimation.startNow()
 
         }
+
+        /*val animator: Animator = ViewAnimationUtils.createCircularReveal(myView, x, y, 0, radius)
+        animator.duration = 1000*/ // 有没有线性的揭露动画？而不是圆圈的
     }
 
     private fun setupSelfTabLayout() {

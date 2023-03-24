@@ -5,14 +5,14 @@
     android:id="@+id/rl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true" >
+    android:fitsSystemWindows="true">
 
     <net.lucode.hackware.magicindicator.MagicIndicator
         android:id="@+id/tl_title"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/iv_search"/>
+        android:layout_toStartOf="@id/panel_search" />
 
     <!--<com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_title"
@@ -22,15 +22,31 @@
         android:layout_toStartOf="@id/iv_search"
         app:tabGravity="center" />-->
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/iv_search"
+    <ImageView
+        android:id="@+id/iv_tab_shadow"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:layout_alignTop="@id/tl_title"
+        android:layout_alignEnd="@id/tl_title"
+        android:layout_alignBottom="@id/tl_title"
+        android:background="@drawable/bg_grad_transparent_white" />
+
+    <FrameLayout
+        android:id="@+id/panel_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/tl_title"
         android:layout_alignBottom="@id/tl_title"
-        android:layout_marginEnd="15dp"
-        android:layout_toStartOf="@id/iv_sign"
-        android:src="@drawable/quantum_ic_search_grey600_24" />
+        android:layout_toStartOf="@id/iv_sign">
+        <!-- 为了实现遮挡动画，套一层父 View -->
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/iv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/quantum_ic_search_grey600_24"
+            android:tint="@color/Green" />
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/iv_sign"
@@ -39,7 +55,8 @@
         android:layout_alignTop="@id/tl_title"
         android:layout_alignBottom="@id/tl_title"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:src="@drawable/pic_checked" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
