@@ -987,7 +987,8 @@ class AlgorithmUnitTest {
 
         for (i in 1..wholeXor.size) {
             for (j in 1..wholeXor[i].size) {
-                wholeXor[i][j] = matrix[i - 1][j - 1] xor wholeXor[i][j - 1] xor wholeXor[i - 1][j] xor wholeXor[i - 1][j - 1]
+                wholeXor[i][j] =
+                    matrix[i - 1][j - 1] xor wholeXor[i][j - 1] xor wholeXor[i - 1][j] xor wholeXor[i - 1][j - 1]
                 xorResultSet.add(wholeXor[i][j])
             }
         }
@@ -1047,7 +1048,7 @@ class AlgorithmUnitTest {
 
             val targetValue = -nums[first]
 
-            for (second in (first + 1) .. nums.lastIndex) {
+            for (second in (first + 1)..nums.lastIndex) {
                 if (second > first + 1 && nums[second] == nums[second - 1]) {
                     continue
                 }
@@ -1215,7 +1216,7 @@ class AlgorithmUnitTest {
         if (s1.length != s2.length) return false
         if (s1.isEmpty()) return true
 
-        return s2 in s1+s1
+        return s2 in s1 + s1
     }
 
     @Test
@@ -1248,7 +1249,7 @@ class AlgorithmUnitTest {
     /**
      * 生成长度为100的数组，包含1到100、不重复、随机保存
      */
-    private fun getRandom() : IntArray {
+    private fun getRandom(): IntArray {
         val ret = IntArray(100)
         for (i in ret.indices) {
             ret[i] = i + 1
