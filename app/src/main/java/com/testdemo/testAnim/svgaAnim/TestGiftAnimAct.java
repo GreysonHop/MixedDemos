@@ -133,7 +133,7 @@ public class TestGiftAnimAct extends Activity implements View.OnClickListener {
                 final String[] strings = new String[]{"http://public-file.nos-eastchina1.126.net/1541664355000.0068.svga"
                         , "http://public-file.nos-eastchina1.126.net/1541665358000.4536.svga"
                         , "http://public-file.nos-eastchina1.126.net/1541729977000.0105.svga"};
-                new CountDownTimer(60000, 6000) {
+                new CountDownTimer(60_000, 6_000) {
                     public void onTick(long millisUntilFinished) {
                         int index = (int) (millisUntilFinished / 6000) % 3;
                         Log.i("greyson", "millis = " + millisUntilFinished + " -- index = " + index);
