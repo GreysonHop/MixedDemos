@@ -1,11 +1,15 @@
 package testJava
 
-import kotlin.reflect.full.*
-import kotlin.reflect.jvm.javaField
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.reflect.full.declaredFunctions
+import kotlin.reflect.jvm.javaField
 
-open class TestKotlin {
+@Suppress("UNUSED_PARAMETER")
+open class TestKotlin() {
+
+    val innerField = 0
+
     fun getString(): Int {
         return this.hashCode()
     }
@@ -37,7 +41,8 @@ class SunTest : TestKotlin {
 
 //扩展方法
 fun TestKotlin.addMethod(param: String) {
-    println("addition receive param = $param")
+    // 这个拓展方法之所以加上一个变量 innerField 的访问，是为了看拓展方法反编译成 Java 时的代码情况
+    println("addition receive param = $param, parent's field=$innerField")
 }
 
 //扩展变量
@@ -78,10 +83,12 @@ fun foo() {
     println("fun 'run' end.")
 }
 
+@Suppress("UNUSED")
 fun getRunnable(): Runnable {
     return Runnable { /* 不用object的内部类写法 */ }
 }
 
+@Suppress("UNUSED_PARAMETER")
 fun main(args: Array<String>) {
     var a = 1
     val s1 = "a is $a"
@@ -129,6 +136,7 @@ fun main(args: Array<String>) {
 
 }
 
+@Suppress("UNUSED")
 fun main2() = runBlocking<Unit> {
     launch {  }
 }
