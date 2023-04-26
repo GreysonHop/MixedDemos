@@ -155,6 +155,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".testStartMode.ActivityB" />
+        <activity android:name=".test_ipc.ContentProviderAct" />
         <activity android:name=".testAnim.ConstraintAnimAct" />
         <activity
             android:name=".testAnim.activityAnim.DialogActivity"

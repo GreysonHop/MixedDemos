@@ -63,6 +63,7 @@ class TestCoroutine {
         }
     }
 
+    // 子协程报错了，是否会关联到其子协程和父协程，的实验
     @Test
     fun `test supervisorScope2`() = runBlocking {
         try {
@@ -210,4 +211,41 @@ class TestCoroutine {
 
         print("end___")
     }
+
+    // 如何尽可能快地结束协程？就像 Java 线程任务中的快速中断任务，比如 for 循环中有多个耗时操作，那么在进入每个 for 的时候去检测中断信号
+    @Test
+    fun testInterruptCoroutineSoon() = runBlocking {
+        val job = launch(Dispatchers.Default) {
+            for (i in 0..40000) {
+                // 如何做像线程一样的中断
+                print("进入第${i}个任务, $isActive")
+                if (!isActive) break // 类似于 Java 中的 interrupted 状态。
+
+                /*val count = (Math.random() * 10).toLong()
+                delay(100 * count)*/
+
+                // 协程代码必须通过与挂起函数的配合才能被取消。kotlinx.coroutines 中所有挂起函数（带有 suspend 关键字函数）都是
+                // 可以被取消的。suspend 函数会检查协程是否需要取消并在取消时抛出 CancellationException
+                // delay(if (i == 3) 10000 else 9) // 这个 delay 不管延迟多久，都会被 job.cancel() 立即中断掉
+
+                println("第${i}个任务结束")
+            }
+        }
+
+        println("job initially：${job.isActive}")
+        delay(100)
+        println("job after delay: ${job.isActive}")
+        job.cancel()
+        job.isCancelled
+        println("job finally is ${job.isActive}")
+    }
+
+    private fun notSuspendDelay(delay: Int) { // 还没试验
+        val curTime = System.currentTimeMillis()
+        val target = curTime + delay
+        do {
+            val time = System.currentTimeMillis()
+        } while (time >= target)
+    }
+
 }
