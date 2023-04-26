@@ -13,6 +13,55 @@ import kotlin.math.max
  */
 class AlgorithmUnitTest {
 
+    // 力扣上一个相似的思路，比较好理解，可以看一看：
+    // https://leetcode.cn/problems/queue-reconstruction-by-height/solutions/486493/xian-pai-xu-zai-cha-dui-dong-hua-yan-shi-suan-fa-g/
+    // 下面这个链接中的第二种解法跟自己想的一样：
+    // https://leetcode.cn/problems/queue-reconstruction-by-height/solutions/486066/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode-sol/
+    fun reconstructQueue(people: Array<IntArray>): Array<IntArray> {
+        if (people.size <= 1) return people
+
+        val ret = Array(people.size) { IntArray(2) { -1 } }
+
+        people.sortWith(kotlin.Comparator { o1, o2 ->
+            if (o1[0] == o2[0]) {
+                compareValues(o1[1], o2[1])
+            } else {
+                compareValues(o1[0], o2[0])
+            }
+        })
+        people.sortBy { it[0] } // 按身高排序
+
+        people.forEach {
+            // 从身高小的开始遍历，这样的情况下，自己的序号就等于在空队列中的对应序号，因为没人比自己更高。
+            var offset = it[1]
+
+            ret.forEachIndexed { index, ints ->
+                if (ints[0] == -1) { // 说明数据还没被填充
+                    if (offset == 0) {
+                        ret[index] = it
+                        return@forEach
+
+                    } else {
+                        offset--
+                    }
+
+                } else {
+                    if (ints[0] == it[0]) {
+                        // 如果排好序的队列中，存在与自己同样身高的人，自己所在的序号要减1
+                        offset--
+                    }
+
+                }
+
+            }
+        }
+
+        return ret
+
+    }
+
+
+
     @Test
     fun test12() {
         val node = ListNode(1).apply {

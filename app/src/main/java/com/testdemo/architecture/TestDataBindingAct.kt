@@ -70,7 +70,7 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
                 data1 = ObservableField<String>().apply {
                     addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
                         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                            println("greyson:data1=$data1")
+                            println("greyson:data1=$data1, propertyId=$propertyId")
                             liveData1.value = data1?.get()
                         }
                     })

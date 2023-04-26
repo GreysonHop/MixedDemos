@@ -1,6 +1,7 @@
 package testJava
 
 import android.util.Log
+import com.google.android.material.internal.FlowLayout
 import com.testdemo.BaseCommonActivity
 import kotlinx.coroutines.*
 
@@ -14,9 +15,10 @@ class TestCoroutinesInActivity : BaseCommonActivity(), CoroutineScope by MainSco
     }
 
     override fun initView() {
+        // FlowLayout
         Log.d(TAG, "initView: start.")
 
-        launch {
+        launch() {
             val data = withContext(Dispatchers.IO) {
                 Log.d(TAG, "切换上下文")
                 getData()

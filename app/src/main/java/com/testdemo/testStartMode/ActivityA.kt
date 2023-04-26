@@ -29,9 +29,16 @@ class ActivityA : BaseCommonActivity() {
             textView.transitionName = "test_transition"
         }
 
+        val intent = Intent(this, ActivityB::class.java).apply {
+            this.putExtras(Bundle().apply { putBinder("bitmap", TremendousDataBean()) }) // intent 传大于1M的数据
+        }
+
         textView.setOnClickListener {
-            startActivity(Intent(this, ActivityB::class.java)
-                    , ActivityOptionsCompat.makeSceneTransitionAnimation(this, textView, "test_transition").toBundle())
+            startActivity(
+                intent,
+                ActivityOptionsCompat.makeSceneTransitionAnimation(this, textView, "test_transition")
+                    .toBundle()
+            )
         }
         return textView
     }
