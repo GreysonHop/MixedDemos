@@ -31,6 +31,7 @@ import com.testdemo.MainActivity
 import android.content.*
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.lang.Exception
 import java.lang.reflect.Field
@@ -86,8 +87,8 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
                 mediatorData = mediator
             }
 
-        mediator.addSource(liveData1) { value -> mediator.setValue(value) }
-        mediator.addSource(liveData2) { value -> mediator.setValue(value) }
+        mediator.addSource(liveData1) { value -> Log.i(TAG, "监听liveData1, value=$value") /*mediator.setValue(value)*/ }
+        mediator.addSource(liveData2) { value -> Log.i(TAG, "liveData2, value=$value") }
 
         liveData1.observe(this, Observer {
             println("greyson:$it")
@@ -234,4 +235,21 @@ class TestDataBindingAct : BaseCommonActivity(), View.OnClickListener {
             Log.d(TAG, "onServiceDisconnected: name=$name")
         }
     }
+}
+
+/**
+ * 官方提供的一个使用 MediatorLiveData 的例子
+ */
+fun totalLength(inputs: List<LiveData<String>>): LiveData<Int> {
+    val result = MediatorLiveData<Int>()
+
+    val doSum = Observer<String> {
+        result.value = inputs.sumBy { it.value?.length ?: 0 }
+    }
+
+    inputs.forEach {
+        result.addSource(it, doSum)
+    }
+
+    return result
 }

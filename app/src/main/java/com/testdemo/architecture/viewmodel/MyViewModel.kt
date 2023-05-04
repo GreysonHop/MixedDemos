@@ -1,5 +1,6 @@
 package com.testdemo.architecture.viewmodel
 
+import android.content.ClipData
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,4 +40,15 @@ class MyViewModel : ViewModel() {
     fun rememberMeChanged() {
         Log.d("greyson", "rememberMeChanged: $rememberMe")
     }
+
+
+    // 官方推荐实例代码(用 LiveData 更新数据的方式)
+    /*private val itemId = MutableLiveData<String>()
+    val itemData: LiveData<ClipData.Item> = Transformations.switchMap(itemId) {
+        dataSource.getItem(it)
+    }
+
+    fun loadData(id: String) {
+        itemId.value = id
+    }*/
 }
