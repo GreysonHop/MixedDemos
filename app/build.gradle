@@ -79,19 +79,7 @@ android {
             applicationIdSuffix ".debugStaging"
         }
 
-        applicationVariants.all { variant ->
-            variant.outputs.all {
-                if (variant.buildType.name == "debug") {
-                    outputFileName = outputFile.name.replace(
-                            ".apk",
-                            "-v${defaultConfig.versionName}" + ".apk")
-                } else if (variant.buildType.name == "release") {
-                    outputFileName = "MixedDemos_V${variant.versionName}" +
-                            "_${new Date().format("yyyyMMdd")}_release.apk"
-                }
-            }
-        }
-    }
+    } // buildTypes ends
 
     // 测试多渠道打包（网上很多人将产品变种运用于渠道打包）。
     // 参考官网：https://developer.android.google.cn/studio/build/build-variants。
@@ -159,6 +147,19 @@ android {
     /*packagingOptions {//so库冲突时，用下面代码表示只采用第一次读取到的那个
         pickFirst "lib/mips/*.so"
     }*/
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name == "debug") {
+                outputFileName = outputFile.name.replace(
+                        ".apk",
+                        "-v${defaultConfig.versionName}" + ".apk")
+            } else if (variant.buildType.name == "release") {
+                outputFileName = "MixedDemos_V${variant.versionName}" +
+                        "_${new Date().format("yyyyMMdd")}_release.apk"
+            }
+        }
+    }
 }
 
 repositories {
