@@ -27,7 +27,7 @@ android {
         // multiDexEnabled true
 
         resValue "string", "google_search_api_key", (project.findProperty("GOOGLE_SEARCH_API_KEY") ?: "")
-        resValue "string", "google_map_api_key", (project.findProperty("GOOGLE_MAP_API_KEY") ?: "")
+        resValue "string", "google_map_api_key", GOOGLE_MAP_API_KEY
 
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: 'Default'] // 默认渠道为Default
     }
@@ -79,7 +79,7 @@ android {
             applicationIdSuffix ".debugStaging"
         }
 
-    }
+    } // buildTypes ends
 
     // 测试多渠道打包（网上很多人将产品变种运用于渠道打包）。
     // 参考官网：https://developer.android.google.cn/studio/build/build-variants。
