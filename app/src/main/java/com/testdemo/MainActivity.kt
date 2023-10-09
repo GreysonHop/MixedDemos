@@ -67,7 +67,8 @@ class MainActivity : ListActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("greyson", "MainActivity-onCreate: savedInstanceState = $savedInstanceState, task = $taskId")
+        Log.e("greyson", "MainActivity-onCreate: savedInstanceState=$savedInstanceState, " +
+                "taskId=$taskId, mapApiKey=${getString(R.string.google_map_api_key)}, searchKey=${getString(R.string.google_search_api_key)}")
 
         // 每次要在主页增加新的activity只需要在这里增加，不用管那个变量： classNameList
         menuListMap["CustomBehavior->"] = CustomBehaviorActivity::class.java

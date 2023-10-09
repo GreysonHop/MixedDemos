@@ -21,8 +21,6 @@ android {
             versionNameSuffix 'staging'
             signingConfig signingConfigs.debug
         }
-        applicationVariants {
-        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7

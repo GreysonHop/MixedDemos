@@ -3,8 +3,11 @@
 buildscript {
     ext.kotlin_version = '1.6.21'
     repositories {
-        jcenter()
         google()
+        mavenCentral()
+        mavenLocal() //Add local m2 repository of yours
+        jcenter()
+        maven { url 'https://jitpack.io' }
 
         //国内镜像
         /*maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
@@ -26,6 +29,7 @@ allprojects {
         maven { url 'https://jitpack.io' }
         maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
         google()
+        mavenCentral()
         //国内镜像
         /*maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}*/

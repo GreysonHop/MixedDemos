@@ -90,6 +90,7 @@ class TestRecyclerViewAct : AppCompatActivity() {
             addItemDecoration(object: RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                     super.getItemOffsets(outRect, view, parent, state)
+                    Log.d("greyson", "getItemOffsets: outRect=$outRect, state = $state")
 
                 }
             })

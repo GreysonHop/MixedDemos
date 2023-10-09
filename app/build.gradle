@@ -79,18 +79,6 @@ android {
             applicationIdSuffix ".debugStaging"
         }
 
-        applicationVariants.all { variant ->
-            variant.outputs.all {
-                if (variant.buildType.name == "debug") {
-                    outputFileName = outputFile.name.replace(
-                            ".apk",
-                            "-v${defaultConfig.versionName}" + ".apk")
-                } else if (variant.buildType.name == "release") {
-                    outputFileName = "MixedDemos_V${variant.versionName}" +
-                            "_${new Date().format("yyyyMMdd")}_release.apk"
-                }
-            }
-        }
     }
 
     // 测试多渠道打包（网上很多人将产品变种运用于渠道打包）。
@@ -159,13 +147,20 @@ android {
     /*packagingOptions {//so库冲突时，用下面代码表示只采用第一次读取到的那个
         pickFirst "lib/mips/*.so"
     }*/
-}
 
-repositories {
-    mavenCentral()
-    mavenLocal() //Add local m2 repository of yours
-    jcenter()
-    maven { url 'https://jitpack.io' }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name == "debug") {
+                outputFileName = outputFile.name.replace(
+                        ".apk",
+                        "-v${defaultConfig.versionName}" + ".apk")
+            } else if (variant.buildType.name == "release") {
+                outputFileName = "MixedDemos_V${variant.versionName}" +
+                        "_${new Date().format("yyyyMMdd")}_release.apk"
+            }
+        }
+    }
 }
 
 dependencies {
@@ -224,7 +219,7 @@ dependencies {
     implementation 'com.github.yyued:SVGAPlayer-Android:2.1.8' //动态礼物效果播放组件
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.0'//进度条圆角，好像因为什么问题而没采用
     implementation 'com.facebook.rebound:rebound:0.3.8' //引用谷歌的一些动画加速器
-    implementation 'com.wonderkiln:blurkit:1.0.0'
+//    implementation 'io.alterac.blurkit:blurkit:1.1.1'
     implementation 'com.github.GreysonHop:WeChatTag:v2.0.0' //测试自己项目的Gradle导入
 
 

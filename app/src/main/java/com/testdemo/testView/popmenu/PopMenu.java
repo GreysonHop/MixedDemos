@@ -29,7 +29,6 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 import com.testdemo.R;
-import com.wonderkiln.blurkit.BlurKit;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
@@ -418,7 +417,7 @@ public class PopMenu {
         canvas.drawBitmap(mBitmap, 0, 0, paint);
         view.setDrawingCacheEnabled(false);
 
-        BlurKit.getInstance().blur(overlay, 20);
+//        BlurKit.getInstance().blur(overlay, 20);
         return overlay;
     }
 

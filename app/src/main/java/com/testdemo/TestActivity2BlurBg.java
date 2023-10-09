@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.testdemo.blurbehind.Blur;
-import com.wonderkiln.blurkit.BlurLayout;
 
 /**
  * Created by Administrator on 2018/3/6.
@@ -22,7 +21,7 @@ import com.wonderkiln.blurkit.BlurLayout;
 public class TestActivity2BlurBg extends Activity {
 
     private FrameLayout container;
-    private BlurLayout blurLayout;
+//    private BlurLayout blurLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
