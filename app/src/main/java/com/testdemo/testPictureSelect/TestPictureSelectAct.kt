@@ -11,8 +11,8 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import com.luck.picture.lib.entity.LocalMedia
 import com.testdemo.BaseBindingActivity
-import com.testdemo.R
 import com.testdemo.databinding.ActTestPictureSelectBinding
+import com.testdemo.myInflate
 import kotlinx.android.synthetic.main.act_test_picture_select.*
 import kotlinx.android.synthetic.main.nim_picture_panel.*
 import java.io.*
@@ -22,6 +22,9 @@ class TestPictureSelectAct : BaseBindingActivity<ActTestPictureSelectBinding>(),
     // Request code for selecting a PDF document.
     val PICK_PDF_FILE = 2
     private lateinit var panel : PictureSelectPanel
+
+    // TODO: Greyson_2023/10/12 一种ViewBinding实例化的简捷方式。还没投入正式使用。
+    val binding2 by myInflate(ActTestPictureSelectBinding::inflate)
 
     @RequiresApi(26)
     fun openFile(pickerInitialUri: Uri) {
