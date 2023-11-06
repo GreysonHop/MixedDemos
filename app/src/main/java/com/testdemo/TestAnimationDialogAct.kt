@@ -31,7 +31,7 @@ import java.util.regex.Pattern
  * Create by Greyson on 2019/09/15
  * 通过动画做一个从屏幕下外面慢慢向上移动的组件，和可上下拉的组件
  */
-class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding>(), View.OnClickListener {
+class TestAnimationDialogAct : BaseAutoBindingActivity<ActTestAnimationdialogBinding>(), View.OnClickListener {
     init { TAG = "greyson_Test2" }
 
     private var isSee = false
@@ -40,9 +40,6 @@ class TestAnimationDialogAct : BaseBindingActivity<ActTestAnimationdialogBinding
     private var popupMenuView: ListView? = null
     private lateinit var popMenu: PopMenu
 
-    override fun getViewBinding(): ActTestAnimationdialogBinding {
-        return ActTestAnimationdialogBinding.inflate(layoutInflater)
-    }
 
     override fun initView() {
         binding.chronometer.base = SystemClock.elapsedRealtime()

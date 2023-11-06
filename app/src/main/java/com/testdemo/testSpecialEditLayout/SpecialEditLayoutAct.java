@@ -2,7 +2,6 @@ package com.testdemo.testSpecialEditLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,10 +15,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import android.telephony.PhoneStateListener;
@@ -48,7 +45,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
-import com.testdemo.BaseBindingActivity;
+import com.testdemo.BaseAutoBindingActivity;
 import com.testdemo.R;
 import com.testdemo.databinding.ActTestSpecialEditLayoutBinding;
 import com.testdemo.testSpecialEditLayout.popupList.TestPopupListActivity;
@@ -63,7 +60,7 @@ import java.util.Locale;
  * Created by Greyson on 2018/10/15.
  */
 
-public class SpecialEditLayoutAct extends BaseBindingActivity<ActTestSpecialEditLayoutBinding> {
+public class SpecialEditLayoutAct extends BaseAutoBindingActivity<ActTestSpecialEditLayoutBinding> {
 
     private PhoneReceiver phoneReceiver;
     //private PopupWindow mPopupWindow;
@@ -75,11 +72,6 @@ public class SpecialEditLayoutAct extends BaseBindingActivity<ActTestSpecialEdit
     private float mOffsetY;
 
     private final int MENU_ID_MY = 10086;
-
-    @Override
-    public ActTestSpecialEditLayoutBinding getViewBinding() {
-        return ActTestSpecialEditLayoutBinding.inflate(getLayoutInflater());
-    }
 
 
     @Override
