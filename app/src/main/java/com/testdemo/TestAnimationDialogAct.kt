@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.*
 import androidx.core.animation.addListener
+import androidx.core.content.res.ResourcesCompat
 import com.testdemo.util.broken_lib.Utils
 import com.testdemo.databinding.ActTestAnimationdialogBinding
 import com.testdemo.testView.popmenu.PopMenu
@@ -56,7 +57,7 @@ class TestAnimationDialogAct : BaseAutoBindingActivity<ActTestAnimationdialogBin
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE)
         try {
             val date = sdf.parse("2019-10-09 08:29:00")//pay attention on the expire time
-            val expireMilliseconds = date.time
+            val expireMilliseconds = date!!.time
             val currentMilliseconds = System.currentTimeMillis()
             if (expireMilliseconds > currentMilliseconds) {
                 val countDownTimer = object : CountDownTimer(expireMilliseconds - currentMilliseconds, 1000) {
@@ -81,22 +82,22 @@ class TestAnimationDialogAct : BaseAutoBindingActivity<ActTestAnimationdialogBin
                 .addMenuItem(
                     PopMenuItem(
                         getString(R.string.picture_take_picture),
-                        resources.getDrawable(R.mipmap.ic_launcher),
-                        resources.getColor(R.color.textBlack)
+                        ResourcesCompat.getDrawable(resources, R.mipmap.ic_launcher, theme),
+                        ResourcesCompat.getColor(resources, R.color.textBlack, theme)
                     )
                 )
                 .addMenuItem(
                     PopMenuItem(
                         getString(R.string.picture_camera),
-                        resources.getDrawable(R.mipmap.refresh_loading01),
-                        resources.getColor(R.color.textBlack)
+                        ResourcesCompat.getDrawable(resources, R.mipmap.refresh_loading01, theme),
+                        ResourcesCompat.getColor(resources, R.color.textBlack, theme)
                     )
                 )
                 .addMenuItem(
                     PopMenuItem(
                         getString(R.string.picture_done),
-                        resources.getDrawable(R.mipmap.ic_launcher),
-                        resources.getColor(R.color.textBlack)
+                        ResourcesCompat.getDrawable(resources, R.mipmap.ic_launcher, theme),
+                        ResourcesCompat.getColor(resources, R.color.textBlack, theme)
                     )
                 )
                 .setOnItemClickListener { _, position ->
@@ -157,9 +158,9 @@ class TestAnimationDialogAct : BaseAutoBindingActivity<ActTestAnimationdialogBin
     }
 
     private fun timeTick2Second(time: String): Int {
-        var h: String?
-        var m: String?
-        var s: String?
+        val h: String?
+        val m: String?
+        val s: String?
         val index1 = time.indexOf(":")
         val index2 = time.lastIndexOf(":")
 
@@ -235,7 +236,7 @@ class TestAnimationDialogAct : BaseAutoBindingActivity<ActTestAnimationdialogBin
                         menuList.add("周榜单")
                         menuList.add("月榜单")
                         it.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_activated_1, menuList)
-                        it.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                        it.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
                             Toast.makeText(this@TestAnimationDialogAct, "you click $position", Toast.LENGTH_SHORT).show()
                         }
 
@@ -243,7 +244,7 @@ class TestAnimationDialogAct : BaseAutoBindingActivity<ActTestAnimationdialogBin
                         popupWindow.contentView = it
                         popupWindow.width = Utils.dp2px(86)
                         popupWindow.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                        popupWindow.setBackgroundDrawable(resources.getDrawable(R.drawable.bg_popup))
+                        popupWindow.setBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.bg_popup, null))
                         popupWindow.isOutsideTouchable = true
                         popupWindow.isFocusable = true
                         //popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);

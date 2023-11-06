@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.testdemo.BaseBindingActivity
 import com.testdemo.R
 import com.testdemo.databinding.TestDragViewActivityBinding
@@ -57,7 +58,7 @@ class TestDragViewActivity : BaseBindingActivity<TestDragViewActivityBinding>() 
 
     inner class MyDragListener : View.OnDragListener {
         private var enterShape = ContextCompat.getDrawable(this@TestDragViewActivity, R.drawable.shape_droptarget)
-        private val normalShape = resources.getDrawable(R.drawable.shape, theme)
+        private val normalShape = ResourcesCompat.getDrawable(resources, R.drawable.shape, theme)
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
             when (event?.action) {

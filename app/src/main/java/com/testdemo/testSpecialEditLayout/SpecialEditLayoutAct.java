@@ -18,6 +18,7 @@ import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -55,6 +56,7 @@ import com.testdemo.testView.shader.PictureWithTextDrawable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Greyson on 2018/10/15.
@@ -63,9 +65,8 @@ import java.util.Locale;
 public class SpecialEditLayoutAct extends BaseAutoBindingActivity<ActTestSpecialEditLayoutBinding> {
 
     private PhoneReceiver phoneReceiver;
-    //private PopupWindow mPopupWindow;
-    private MenuLinearLayout mMenuLinearLayout;
-
+    /* private PopupWindow mPopupWindow;
+    private MenuLinearLayout mMenuLinearLayout; */
 
     private MenuPopUp menuPopUp;
     private float mOffsetX;
@@ -113,8 +114,8 @@ public class SpecialEditLayoutAct extends BaseAutoBindingActivity<ActTestSpecial
                 .into(binding.ivAvatar);
 
         PictureWithTextDrawable drawable = new PictureWithTextDrawable(
-                getResources().getDrawable(R.drawable.call_icon_gift)
-                , getResources().getDrawable(R.drawable.galata)
+                Objects.requireNonNull(ResourcesCompat.getDrawable(getResources(), R.drawable.call_icon_gift, getTheme()))
+                , Objects.requireNonNull(ResourcesCompat.getDrawable(getResources(), R.drawable.galata, null))
                 , "图片已过期");
         drawable.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics()));
         binding.ivPicture.setImageDrawable(drawable);
@@ -403,10 +404,8 @@ public class SpecialEditLayoutAct extends BaseAutoBindingActivity<ActTestSpecial
     }
 
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_emoji:
-                testSomeMethod();
-                break;
+        if (view.getId() == R.id.iv_emoji) {
+            testSomeMethod();
         }
     }
 
@@ -463,7 +462,7 @@ public class SpecialEditLayoutAct extends BaseAutoBindingActivity<ActTestSpecial
  */
 class PhoneReceiver extends BroadcastReceiver {
     private boolean isListen = false;
-    private PhoneListener phoneListener;
+    private final PhoneListener phoneListener;
 
     public PhoneReceiver(PhoneListener phoneListener) {
         this.phoneListener = phoneListener;
@@ -486,7 +485,7 @@ class PhoneReceiver extends BroadcastReceiver {
         }
     }
 
-    private PhoneStateListener listener = new PhoneStateListener() {
+    private final PhoneStateListener listener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, final String incomingNumber) {
             //state 当前状态 incomingNumber,貌似没有去电的API
