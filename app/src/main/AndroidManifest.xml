@@ -45,6 +45,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="locale"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -183,7 +184,7 @@
         <service android:name=".architecture.AVChatService" />
 
 <!--     据说能开机启动？   -->
-        <receiver android:name="BootBroadcastReceiver">
+        <receiver android:name="BootBroadcastReceiver" android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
                 <category android:name="android.intent.category.LAUNCHER" />
