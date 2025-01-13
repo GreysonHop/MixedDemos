@@ -6,12 +6,12 @@ buildscript {
         google()
         mavenCentral()
         mavenLocal() //Add local m2 repository of yours
-        jcenter()
+//        jcenter()
         maven { url 'https://jitpack.io' }
 
         //国内镜像
-        /*maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
-        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}*/
+        maven{ url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{ url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.4.2'
@@ -25,14 +25,14 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+//        jcenter()
         maven { url 'https://jitpack.io' }
         maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
         google()
         mavenCentral()
         //国内镜像
-        /*maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
-        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}*/
+        maven{ url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{ url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
     }
 }
 
